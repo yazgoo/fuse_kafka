@@ -1,0 +1,3 @@
+language: c
+install: apt-get install libfuse-dev librdkafka-dev
+script: "./build.py"
