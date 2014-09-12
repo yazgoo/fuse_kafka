@@ -5,4 +5,5 @@ before_install:
 install:
     - sudo apt-get update
     - sudo apt-get install libfuse-dev librdkafka-dev
+    - pip install fabricate
 script: "./build.py"
