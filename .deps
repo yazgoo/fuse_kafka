@@ -1,0 +1,21 @@
+{
+    ".deps_version": 2, 
+    "grep \"define VERSION\" fuse_kafka.c": {}, 
+    "tar --transform s,^,0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,^,fuse_kafka-0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=*.tar.gz --exclude=out -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=*.tar.gz --exclude=out -czf /tmp/lolfuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=*.tar.gz --exclude=out -czf fuse_kafka-0.1.3.tar.gz .": {
+        "fuse_kafka-0.1.3.tar.gz": "output-9b854a0c230a15198d4e6045cf0e4714"
+    }, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=*.tar.gz -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=out -czf ../fuse_kafka-0.1.3.tar.gz .": {
+        "../fuse_kafka-0.1.3.tar.gz": "output-c3c407ea96d478906265cb6bbaad8ec8"
+    }, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, --ignore-failed-read --exclude=.git --exclude=fuse_kafka-0.1.3.tar.gz --exclude=out -czf fuse_kafka-0.1.3.tar.gz .": {
+        "fuse_kafka-0.1.3.tar.gz": "output-c2f170eb9b8e2c4fdde84eb2bcd72ba4"
+    }, 
+    "tar --transform s,^.,fuse_kafka-0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar --transform s,a,0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
+    "tar czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}
+}
