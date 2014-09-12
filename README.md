@@ -1,6 +1,5 @@
-Fuse-kafka intercepts all writes to specified directories and send them to
-kafka brokers.
-It is quite suited for log centralization.
+Intercepts all writes to specified directories and send them 
+to apache kafka brokers.  Quite suited for log centralization.
 
 Prerequisites
 =============
