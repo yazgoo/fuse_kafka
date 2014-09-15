@@ -4,6 +4,12 @@ Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://trav
 Intercepts all writes to specified directories and send them 
 to apache kafka brokers.  Quite suited for log centralization.
 
+
+Installing
+==========
+
+Packages for various distros can be install from [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
+
 Prerequisites
 =============
 
@@ -16,20 +22,13 @@ To build, you will need fabricate:
 Building
 ========
 
-building:
-
-    $ ./build.py
-
-testing:
-
+    # building
+    $ ./build.py 
+    # testing
     $ ./build.py dotest
-
-cleaning:
-
+    # cleaning
     $ ./build.py clean
-
-install:
-
+    # installing:
     $ ./build.py install
 
 Usage
@@ -53,7 +52,7 @@ Event format
 
 We use a logstash event, except the message and command are base64 encoded:
 
-    ```json
+    ```javascript
     {"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
     "@message": "aGVsbG8gd29ybGQ=",
     "@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
