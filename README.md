@@ -8,7 +8,7 @@ to apache kafka brokers.  Quite suited for log centralization.
 Installing
 ==========
 
-Packages for various distros can be install from [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
+Packages for various distros can be installed from [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
 
 Prerequisites
 =============
