@@ -1,6 +1,61 @@
 {
+    "./fuse_kafka.test": {
+        ".": "input-5058f1af8388633f609cadb75a75dc9d", 
+        "fuse_kafka.gcda": "output-034aa2fdec084d0f885ababb86010714", 
+        "fuse_kafka.test": "input-a8f03b3995a205e5907c9c32bc3f5a6e", 
+        "out": "output-c68271a63ddbc431c307beb7d2918275", 
+        "out/node": "input-d41d8cd98f00b204e9800998ecf8427e", 
+        "out/tmp_file": "output-c4136bfc8d4ef20c5537a2c855d71e7b", 
+        "out/to": "output-3c4395cf66f90db014ebe5746e2f713b"
+    }, 
     ".deps_version": 2, 
+    "gcc -o fuse_kafka.test fuse_kafka.c -D_FILE_OFFSET_BITS=64 -fprofile-arcs -ftest-coverage -DTEST=\\\"out\\\" -lfuse -ldl -lplc4 -lulockmgr": {
+        ".": "input-5058f1af8388633f609cadb75a75dc9d", 
+        "fuse_kafka.c": "input-de037c6969cecc9676dd58397e64b72f", 
+        "fuse_kafka.gcno": "output-62252eaf9153930207efbfa9d408de37", 
+        "fuse_kafka.test": "output-a8f03b3995a205e5907c9c32bc3f5a6e"
+    }, 
+    "gcov fuse_kafka.c": {
+        "fuse_kafka.c": "input-de037c6969cecc9676dd58397e64b72f", 
+        "fuse_kafka.c.gcov": "output-430764ec9219857e65f5396c43a5d49e", 
+        "fuse_kafka.gcda": "input-034aa2fdec084d0f885ababb86010714", 
+        "fuse_kafka.gcno": "input-62252eaf9153930207efbfa9d408de37"
+    }, 
+    "genhtml fuse_kafka.info -o ./out": {
+        "fuse_kafka.c": "input-de037c6969cecc9676dd58397e64b72f", 
+        "fuse_kafka.info": "input-b20a423d9d8c3d33b1073aeac408d63e", 
+        "out": "input-c68271a63ddbc431c307beb7d2918275", 
+        "out/amber.png": "output-71fbb1103d0eeed78bfdf1a9545ceb4c", 
+        "out/emerald.png": "output-1781757697b39c720661b1cfff4cb3cd", 
+        "out/fuse_kafka": "output-ebff077f3b85f0285a4f2f24bae323f1", 
+        "out/fuse_kafka/fuse_kafka.c.func-sort-c.html": "output-3fa81bafd25525a69d50392f1bf6e950", 
+        "out/fuse_kafka/fuse_kafka.c.func.html": "output-6bcd3e33da682cdd929b34b6b64a8283", 
+        "out/fuse_kafka/fuse_kafka.c.gcov.html": "output-7bf65f620b7f55b737cff3c61c6955fa", 
+        "out/fuse_kafka/index-sort-f.html": "output-606e3689776060a5eb92656eea30b496", 
+        "out/fuse_kafka/index-sort-l.html": "output-39bbc63b570dc631a452e79c1b5cf3f3", 
+        "out/fuse_kafka/index.html": "output-f0878b6459bf80bcc4879c913314abcf", 
+        "out/gcov.css": "output-70c50d9009b8703ffbab32f5d13e5eb1", 
+        "out/glass.png": "output-d0bcded9081d6a0efda48c495867da73", 
+        "out/index-sort-f.html": "output-c20713181b81b31827ec686799d63761", 
+        "out/index-sort-l.html": "output-464c691f3bc10712f69efaf87852849d", 
+        "out/index.html": "output-f1622b5b77f844c30dcce34b9e917557", 
+        "out/ruby.png": "output-bc09c2be56504f8e2d82c5d80bdafc44", 
+        "out/snow.png": "output-3d0fcd32ed86be159672d1fe52f8d3cc", 
+        "out/updown.png": "output-f2be44dc857eee05881fb4886355c5dc"
+    }, 
     "grep \"define VERSION\" fuse_kafka.c": {}, 
+    "lcov -c -d . -o fuse_kafka.info": {
+        ".": "input-5058f1af8388633f609cadb75a75dc9d", 
+        "fuse_kafka.c": "input-de037c6969cecc9676dd58397e64b72f", 
+        "fuse_kafka.gcda": "input-034aa2fdec084d0f885ababb86010714", 
+        "fuse_kafka.gcno": "input-62252eaf9153930207efbfa9d408de37", 
+        "fuse_kafka.info": "output-b20a423d9d8c3d33b1073aeac408d63e"
+    }, 
+    "ls": {}, 
+    "mkdir -p out": {
+        "out": "output-c68271a63ddbc431c307beb7d2918275"
+    }, 
+    "rm -rf out": {}, 
     "tar --transform s,^,0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
     "tar --transform s,^,fuse_kafka-0.1.3, -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 
     "tar --transform s,^.,fuse_kafka-0.1.3, --exclude=.git --exclude=*.tar.gz --exclude=out -czf /tmp/fuse_kafka-0.1.3.tar.gz .": {}, 

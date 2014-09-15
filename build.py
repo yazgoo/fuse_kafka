@@ -29,7 +29,8 @@ def build():
     link()
 def test():
     for source in sources:
-        run(source + ".test")
+        run("ls")
+        run("./" + source + ".test")
         run("gcov", source + ".c")
         run("lcov", "-c", "-d", ".", "-o", source + ".info")
         run("genhtml", source + ".info", "-o", "./out")
