@@ -8,20 +8,13 @@ to apache kafka brokers.  Quite suited for log centralization.
 Installing
 ==========
 
-Packages for various distros can be installed from [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
-
-Prerequisites
-=============
-
-    $ sudo apt-get install librdkafka-dev libfuse-dev
-
-To build, you will need fabricate:
-
-    $ pip install fabricate
+Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
 
 Building
 ========
 
+    # installing prerequisites
+    $ sudo apt-get install librdkafka-dev libfuse-dev
     # building
     $ ./build.py 
     # testing
@@ -41,7 +34,7 @@ mounting:
         --topic logs --fields first_field first_value \
             second_field second_value \
            --directories /var/log /other/path/to/overlay \
-           --tags mytag
+           --tags mytag \
            --brokers mybroker1:9092,mybroker2:9092
 unmounting:
 
