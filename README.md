@@ -10,20 +10,6 @@ Installing
 
 Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
-Installing from sources
-=======================
-
-    # installing prerequisites
-    $ sudo apt-get install librdkafka-dev libfuse-dev
-    # building
-    $ ./build.py 
-    # testing
-    $ ./build.py dotest
-    # cleaning
-    $ ./build.py clean
-    # installing:
-    $ ./build.py install
-
 Usage
 =====
 
@@ -61,3 +47,17 @@ We use a logstash event, except the message and command are base64 encoded:
     "second_field": "second_value" },
 "@tags": ["mytag"]}
 ```
+
+Installing from sources
+=======================
+
+    # installing prerequisites
+    $ sudo apt-get install librdkafka-dev libfuse-dev
+    # building
+    $ ./build.py 
+    # testing
+    $ ./build.py dotest
+    # cleaning
+    $ ./build.py clean
+    # installing:
+    $ ./build.py install
