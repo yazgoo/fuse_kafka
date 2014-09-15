@@ -9,7 +9,8 @@ Group: Development/Tools
 Requires(post): info
 Requires(preun): info
 
-Requires: python, librdkafka-dev, libfuse-dev
+BuildRequires: python, fabricate
+Requires: librdkafka-dev, libfuse-dev
 
 %description 
 Intercepts all writes to specified directories and send them to
