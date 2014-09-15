@@ -6,4 +6,4 @@ install:
     - sudo apt-get update
     - sudo apt-get install libfuse-dev librdkafka-dev
     - sudo pip install fabricate
-script: "./build.py dotest"
+script: "./build.py"
