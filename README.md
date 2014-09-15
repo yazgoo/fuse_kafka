@@ -8,7 +8,7 @@ to apache kafka brokers.  Quite suited for log centralization.
 Installing
 ==========
 
-Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
+Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
 Installing from sources
 =======================
@@ -29,16 +29,20 @@ Usage
 
 mounting:
 
-    $ ./fuse_kafka __mountpoint__ -oallow_other -ononempty \
+```shell
+fuse_kafka __mountpoint__ -oallow_other -ononempty \
         -s -omodules=subdir,subdir=. -- \
         --topic logs --fields first_field first_value \
             second_field second_value \
            --directories /var/log /other/path/to/overlay \
            --tags mytag \
            --brokers mybroker1:9092,mybroker2:9092
+```
 unmounting:
 
-    $ fusermount -u /var/log /other/path/to/overlay
+```shell
+fusermount -u /var/log /other/path/to/overlay
+```
 
 Event format
 ============
