@@ -7,12 +7,16 @@ common_libs = ["fuse", "dl", "plc4", "ulockmgr"]
 libs = common_libs + ["rdkafka",  "z", "rt"]
 flags = ['-D_FILE_OFFSET_BITS=64']
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
-def version():
+def get_version():
     for source in sources:
-        with open(source + ".c") as f:
-            return f.readline().split()[-1][1:-1]
+        f = open(source + ".c")
+        result = f.readline().split()[-1][1:-1]
+        f.close()
+        return result
+def version():
+    print(get_version())
 def package():
-    name = binary_name + "-" + version()
+    name = binary_name + "-" + get_version()
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
             "--exclude=.git", 
