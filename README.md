@@ -1,3 +1,6 @@
+[![Build
+Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://travis-ci.org/yazgoo/fuse_kafka)
+
 Intercepts all writes to specified directories and send them 
 to apache kafka brokers.  Quite suited for log centralization.
 
