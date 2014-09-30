@@ -1,4 +1,11 @@
 .deps
 .*.swp
 .*.swo
+.*.pyc
+.*.o
+.*.gcda
+.*.gcno
+.*.info
+fuse_kafka
+fuse_kafka.test
 out

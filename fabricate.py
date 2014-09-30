@@ -802,70 +802,104 @@ class _Groups(object):
         
     def item_list(self, id):
         """ Return copy of the value list """
-        with self.lock:
+        lock.acquire()
+        try:
             return self.groups[id].items[:]
+        finally:
+            lock.release()
     
     def remove(self, id):
         """ Remove the group """
-        with self.lock:
+        lock.acquire()
+        try:
             del self.groups[id]
+        finally:
+            lock.release()
     
     def remove_item(self, id, val):
-        with self.lock:
+        lock.acquire()
+        try:
             self.groups[id].items.remove(val)
+        finally:
+            lock.release()
             
     def add(self, id, val):
-        with self.lock:
+        lock.acquire()
+        try:
             if id in self.groups:
                 self.groups[id].items.append(val)
             else:
                 self.groups[id] = self.value(val)
             self.groups[id].count += 1
+        finally:
+            lock.release()
 
     def ensure(self, id):
         """if id does not exit, create it without any value"""
-        with self.lock:
+        lock.acquire()
+        try:
             if not id in self.groups:
                 self.groups[id] = self.value()
+        finally:
+            lock.release()
 
     def get_count(self, id):
-        with self.lock:
+        lock.acquire()
+        try:
             if id not in self.groups:
                 return 0
             return self.groups[id].count
+        finally:
+            lock.release()
 
     def dec_count(self, id):
-        with self.lock:
+        lock.acquire()
+        try:
             c = self.groups[id].count - 1
             if c < 0:
                 raise ValueError
             self.groups[id].count = c
             return c
+        finally:
+            lock.release()
     
     def get_ok(self, id):
-        with self.lock:
+        lock.acquire()
+        try:
             return self.groups[id].ok
+        finally:
+            lock.release()
     
     def set_ok(self, id, to):
-        with self.lock:
+        lock.acquire()
+        try:
             self.groups[id].ok = to
+        finally:
+            lock.release()
             
     def ids(self):
-        with self.lock:
+        lock.acquire()
+        try:
             return self.groups.keys()
+        finally:
+            lock.release()
 
     # modification to reserve blocked commands to corresponding groups
     def inc_count_for_blocked(self, id):
-        with self.lock:
+        lock.acquire()
+        try:
             if not id in self.groups:
                 self.groups[id] = self.value()
             self.groups[id].count += 1
             self.groups[id].count_in_false += 1
+        finally:
+            lock.release()
     
     def add_for_blocked(self, id, val):
         # modification of add(), in order to move command from False group
         # to actual group
-        with self.lock:
+        lock.acquire()
+        try:
             # id must be registered before
             self.groups[id].items.append(val)
             # count does not change (already considered 
@@ -874,6 +908,8 @@ class _Groups(object):
             if c < 0:
                 raise ValueError
             self.groups[id].count_in_false = c
+        finally:
+            lock.release()
 
     
 # pool of processes to run parallel jobs, must not be part of any object that

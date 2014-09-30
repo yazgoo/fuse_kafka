@@ -3,7 +3,7 @@ from fabricate import *
 import os
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["fuse", "dl", "plc4", "ulockmgr"]
+common_libs = ["fuse", "dl", "plc4"]#, "ulockmgr"]
 libs = common_libs + ["rdkafka",  "z", "rt"]
 flags = ['-D_FILE_OFFSET_BITS=64']
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
