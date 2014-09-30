@@ -9,7 +9,7 @@ Group: Development/Tools
 Requires(post): info
 Requires(preun): info
 
-BuildRequires: python, fuse-devel, librdkafka-devel
+BuildRequires: python, fuse-devel, librdkafka-devel, zlib
 Requires: librdkafka1, fuse
 
 %description 
