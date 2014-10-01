@@ -40,7 +40,7 @@ def test():
         run("genhtml", source + ".info", "-o", "./out")
 def compile():
     for source in sources:
-        run('gcc', '-c', source+'.c', to_links(libs), flags)
+        run('gcc', '-g', '-c', source+'.c', to_links(libs), flags)
 def compile_test():
     for source in sources:
         run('gcc', '-o', source+'.test', source+'.c', flags,
