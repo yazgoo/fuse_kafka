@@ -6,7 +6,7 @@ static int trace(const char* fmt, ...)
     va_start(ap, fmt);
     vasprintf(&str, fmt, ap);
     va_end(ap);
-    res = actual_kafka_write("./fuse_kafka.log", str, strlen(str), 0, NULL);
+    res = actual_kafka_write("./fuse_kafka.log", str, strlen(str), 0);
     free(str);
     return res;
 }

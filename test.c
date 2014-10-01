@@ -236,3 +236,11 @@ static char* all_tests()
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
+int main(int argc, char** argv)
+{
+    char* result = all_tests();
+    if (result != 0) printf("%s\n", result);
+    else printf("ALL TESTS PASSED\n");
+    printf("Tests run: %d\n", tests_run);
+    return result != 0;
+}

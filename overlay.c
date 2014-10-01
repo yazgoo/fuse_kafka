@@ -1,3 +1,6 @@
+#ifdef HAVE_SETXATTR
+#include <sys/xattr.h>
+#endif
 static int kafka_getattr(const char *path, struct stat *stbuf)
 {
     int res;
@@ -384,6 +387,23 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
     return 0;
 }
 */
+void* kafka_init(struct fuse_conn_info *conn)
+{
+                printf("and we're on\n");
+    config* conf = ((config*) fuse_get_context()->private_data);
+    int directory_fd = conf->directory_fd;
+    fchdir(directory_fd);
+    close(directory_fd);
+    kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
+    if(setup_kafka((kafka_t*) k))
+    {
+        printf("kafka_init: setup_kafka failed\n");
+        return NULL;
+    }
+    k->conf = conf;
+    trace("started\n");
+    return (void*) k;
+}
 
 
 static struct fuse_operations kafka_oper = {

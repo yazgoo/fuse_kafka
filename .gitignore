@@ -6,6 +6,8 @@
 .*.gcda
 .*.gcno
 .*.info
+*.tgz
+kafka*/
 fuse_kafka
 fuse_kafka.test
 out
