@@ -10,6 +10,13 @@ Installing
 
 Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
+
+Quickstart
+==========
+
+```build
+```
+
 Usage
 =====
 
