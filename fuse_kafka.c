@@ -38,7 +38,7 @@ typedef struct _config {
 #define XSTR(s) STR(s)
 #define STR(s) #s
 #define CONFIG_CURRENT(expected) if(!strcmp(name, STR(expected))) \
-{ current_size = &(conf->expected ## _n); conf->expected = argv + i + 1; }
+{ printf("parsing " STR(expected) "\n");current_size = &(conf->expected ## _n); conf->expected = argv + i + 1; }
 #include "util.c"
 #include "kafka_client.c"
 static int actual_kafka_write(const char *path, const char *buf,
@@ -130,8 +130,10 @@ void add_fields_and_tags(config* conf)
 {
     conf->fields_s = array_to_container_string(
             conf->fields, conf->fields_n, '{', '}', ':', ',');
+    printf("fields: %s\n", conf->fields_s);
     conf->tags_s = array_to_container_string(
             conf->tags, conf->tags_n, '[', ']', ',', ',');
+    printf("tags: %s\n", conf->tags_s);
 }
 int parse_arguments(int argc, char** argv, config* conf)
 {
@@ -158,7 +160,11 @@ int parse_arguments(int argc, char** argv, config* conf)
             }
             *current_size = 0;
         }
-        else (*current_size)++;
+        else
+        {
+            printf("\t- %s\n", argv[i]);
+            (*current_size)++;
+        }
     }
     add_fields_and_tags(conf);
     return 1;
@@ -175,7 +181,7 @@ int fuse_kafka_main(int argc, char *argv[])
                 conf.directory_n++)
         {
             argv[1] = conf.directories[conf.directory_n];
-            if(!fork())
+            //if(!fork())
             {
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);

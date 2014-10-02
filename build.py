@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json, base64, subprocess, sys
 from fabricate import *
 import os
 sources = ['fuse_kafka']
@@ -14,6 +15,43 @@ kafka_directory = "kafka_" + scala_version + "-" + kafka_version
 kafka_archive = kafka_directory + ".tgz"
 kafka_bin_directory = kafka_directory + "/bin/"
 kafka_config_directory = kafka_directory + "/config/"
+class FuseKafkaLog:
+    def run_command(self, *command):
+        p = subprocess.Popen(command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT)
+        return iter(p.stdout.readline, b'')
+    def pretty_print(self, string):
+        struct = self.load_fuse_kafka_event(string)
+        print "event:"
+        for key in struct:
+            sys.stdout.write("    " + key + ": ")
+            value = struct[key]
+            if type(value) is dict:
+                print
+                for name in value:
+                    print "        ", name + ':', value[name]
+            elif type(value) is list:
+                print
+                for v in value:
+                    print "        - ", v
+            else:
+                print value
+    def load_fuse_kafka_event(self, string):
+        event = json.loads(string)
+        for item in ["@message", "command"]:
+            event[item] += "=" * ((4 - len(event[item]) % 4) % 4)
+            event[item] = base64.b64decode(event[item])
+        return event
+    def start(self):
+        for line in self.run_command(os.getcwd() + "/"
+                + kafka_bin_directory + 'kafka-console-consumer.sh',
+            "--zookeeper", "localhost:2181",
+            "--topic", "logs"):
+            try:
+                self.pretty_print(line)
+            except ValueError:
+                print line
 def get_version():
     for source in sources:
         f = open(source + ".c")
@@ -54,8 +92,8 @@ def compile_test():
                 test_flags, to_links(common_libs))
 def link():
     objects = [s+'.o' for s in sources]
-    run('gcc', '-static', '-g', sources[0]+'.c', '-o', binary_name, flags, to_links(libs))
-    #run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
+    #run('gcc', '-static', '-g', sources[0]+'.c', '-o', binary_name, flags, to_links(libs))
+    run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
 def install():
     build()
     install_directory = '/usr/bin/'
@@ -76,8 +114,5 @@ def kafka_start():
     run(kafka_bin_directory + 'kafka-server-start.sh',
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
-    run(kafka_bin_directory + 'kafka-console-consumer.sh',
-            kafka_config_directory,
-            "--zookeeper", "localhost:2181",
-            "--topic", "logs")
+    FuseKafkaLog().start()
 main()

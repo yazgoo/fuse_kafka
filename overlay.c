@@ -389,7 +389,6 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
 */
 void* kafka_init(struct fuse_conn_info *conn)
 {
-                printf("and we're on\n");
     config* conf = ((config*) fuse_get_context()->private_data);
     int directory_fd = conf->directory_fd;
     fchdir(directory_fd);
@@ -401,7 +400,6 @@ void* kafka_init(struct fuse_conn_info *conn)
         return NULL;
     }
     k->conf = conf;
-    trace("started\n");
     return (void*) k;
 }
 
