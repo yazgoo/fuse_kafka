@@ -1,4 +1,11 @@
-/** @file */ 
+/** @file 
+ * @brief Utility to send trace from fuse_kafka into kafka 
+ **/ 
+/**
+ * @brief formats and send traces to kafka, behaving like printf
+ * @param fmt the format of the string to send as defined in printf
+ * @return 0 on success
+ **/ 
 static int trace(const char* fmt, ...)
 {
     char* str;

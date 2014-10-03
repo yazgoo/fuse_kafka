@@ -1,4 +1,6 @@
-/** @file */ 
+/** @file 
+ * @brief main fuse_kafka source
+ **/ 
 #define VERSION "0.1.3"
 #define FUSE_USE_VERSION 26
 #ifdef HAVE_CONFIG_H
@@ -21,25 +23,55 @@
 #include <grp.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+/** @brief declare a configuration item, which is a list of string an
+ * and a number of those */
 #define CONFIG_ITEM(name) char** name; size_t name ## _n;
+/**
+ * @brief fuse_kafka configuration
+ **/
 typedef struct _config {
+    /** @brief file descriptor to the directory under the mount */
     int directory_fd;
+    /** @brief number of the directory to mount amongst the directories list */
     size_t directory_n;
+    /** @brief string containing a json like hash of string with
+     * the fields provided for each event */
     char* fields_s;
+    /** @brief string containing a json like array of string with tags
+     * for each event */
     char* tags_s;
+    /** @brief time queue (@see time_queue) used 
+     * in case of quota management */
     time_queue* quota_queue;
+    /** @brief directories amongst which the mounted directory is */
     CONFIG_ITEM(directories)
+    /** @brief TODO not implemented: do actually overlay files actions
+     * to the disk */ 
     CONFIG_ITEM(persist)
+    /** @brief files fnmatch based pattern we don't want saved to kafka */
     CONFIG_ITEM(excluded_files)
+    /** @brief TODO not implented: substitutions to do to on the command
+     * lines */
     CONFIG_ITEM(substitutions)
+    /** @brief kafka brokers to write to */ 
     CONFIG_ITEM(brokers)
+    /** @brief kafka topic to write events to */ 
     CONFIG_ITEM(topic)
+    /** @brief logstash fields to add to each event */
     CONFIG_ITEM(fields)
+    /** @brief logstash tags */
     CONFIG_ITEM(tags)
+    /** @brief arguments being quota and optionnaly size of the quota
+     * queue, default being 20; if those arguments are given, if the
+     * defined quota */
     CONFIG_ITEM(quota)
 } config;
-#define XSTR(s) STR(s)
+/** @brief convert a symbol to a string */
 #define STR(s) #s
+/** @brief check if name matches a configuration name, if so points
+ * current_size pointer to the size of the matched configuration and
+ * sets the address of the string array for that configuration to next
+ * item in argv list */
 #define CONFIG_CURRENT(expected) \
     if(!strcmp(name, STR(expected))) { \
         printf("parsing " STR(expected) "\n"); \
@@ -48,6 +80,15 @@ typedef struct _config {
     }
 #include "util.c"
 #include "kafka_client.c"
+/**
+ * @brief actually does the write to kafka of a string with the given
+ * file path
+ * @param path file path to save to kafka
+ * @param buf write buffer
+ * @param size size of the buffer to write
+ * @param offset starting point in the buffer
+ * @return 0 if the write succeeded, 1 otherwise
+ **/
 static int actual_kafka_write(const char *path, const char *buf,
         size_t size, off_t offset)
 {
@@ -83,6 +124,12 @@ static int actual_kafka_write(const char *path, const char *buf,
     return 0;
 }
 #include "trace.c"
+/**
+ * @brief checks if writes from the given path should be written to
+ * kafka
+ * @param path the write path
+ * @param size the write size
+ **/
 static int should_write_to_kafka(const char* path, size_t size)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
@@ -102,12 +149,21 @@ static int should_write_to_kafka(const char* path, size_t size)
     time_queue_set(conf->quota_queue, (char*)path);
     return i;
 }
+/**
+ * @brief write the data to kafka and to the overlaid fs if it should
+ * be done
+ * @param path file path to save to kafka
+ * @param buf write buffer
+ * @param size size of the buffer to write
+ * @param fi file information @see fuse
+ * @return @see pwrite
+ */
 static int kafka_write(const char *path, const char *buf,
         size_t size, off_t offset, struct fuse_file_info *fi)
 {
     int res;
-    if(should_write_to_kafka(path, size) &&
-            actual_kafka_write(path, buf, size, offset)) return 1;
+    if(should_write_to_kafka(path, size))
+            actual_kafka_write(path, buf, size, offset);
     res = pwrite(fi->fh, buf, size, offset);
     if (res == -1)
         res = -errno;
@@ -115,28 +171,6 @@ static int kafka_write(const char *path, const char *buf,
     return res;
 }
 #include "overlay.c"
-int get_limit(int argc, char** argv)
-{
-    int i = 0;
-    for(; i < argc; i++) if(!strcmp(argv[i], "--")) break;
-    return i;
-}
-char* array_to_container_string(char** array, size_t n, char open_char,
-        char close_char, char sep1, char sep2)
-{
-    int i = 0;
-    char* str = (char*) malloc(3);
-    int k = sprintf(str, "%c", open_char);
-    if(array != NULL)
-        for(i = 0; i < n; i++)
-        {
-            str = realloc(str, k + 1 + strlen(array[i]) + 2 + 2);
-            k += sprintf(str + k, "\"%s\"", array[i]);
-            if(i != n-1) k += sprintf(str + k, "%c ", i % 2 ? sep2 : sep1);
-        }
-    sprintf(str + k, "%c", close_char);
-    return str;
-}
 void add_fields_and_tags(config* conf)
 {
     conf->fields_s = array_to_container_string(

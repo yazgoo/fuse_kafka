@@ -1,11 +1,10 @@
-/** @file */ 
-#include <stdlib.h>
-#include <stdio.h>
-/*
+/** @file
  * A time queue is a datastructure which allows to store time for a
  * finite number of keys. It allows to check if, for a given key, a
  * limit per unit of time is reached or not.
- */
+ **/
+#include <stdlib.h>
+#include <stdio.h>
 typedef struct
 {
     unsigned long* values;
@@ -13,16 +12,16 @@ typedef struct
     unsigned int size, i, quota;
 }
 time_queue;
-/* Internal: generates a djb2 hash 
+/** @brief Internal: generates a djb2 hash 
  *
- * str - the string to hash
+ * @param str the string to hash
  * 
  * Examples
  *
  *     time_queue_hash('hello world')
  *          => 13876786532495509697
  *
- * Return a hash for the string */
+ * @return a hash for the string */
 unsigned long time_queue_hash(unsigned char *str)
 {
     unsigned long hash = 5381;
@@ -30,18 +29,18 @@ unsigned long time_queue_hash(unsigned char *str)
     while (c = *str++) hash = ((hash << 5) + hash) + c;
     return hash;
 }
-/* Public: instantiates a new time queue, free it with
+/** @brief Public: instantiates a new time queue, free it with
  * time_queue_delete
  *
- * size  - the maximum number of items saved in the queue
- * quota - the maximum size allowed per second per hash entry
+ * @param size the maximum number of items saved in the queue
+ * @param quota the maximum size allowed per second per hash entry
  *
  * Examples
  *
  *      time_queue_new(10, 42)
  *          => time_queue*
  *
- * Return a newly allocated pointer to a time queue of the specified
+ * @return a newly allocated pointer to a time queue of the specified
  * size with the specified quota initialized to zero for values, and
  * hashes */
 time_queue* time_queue_new(unsigned int size, unsigned int quota)
@@ -59,19 +58,19 @@ time_queue* time_queue_new(unsigned int size, unsigned int quota)
     }
     return queue;
 }
-/* Internal: get the time
+/** @brief Internal: get the time
  *
- * Return current time in microseconds */
+ * @return current time in microseconds */
 unsigned long time_queue_time()
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
     return tv.tv_sec * 1000000 + tv.tv_usec;
 }
-/* Public: set a time queue key to current time
+/** @brief Public: set a time queue key to current time
  *
- * queue    - the time queue to modify
- * key      - the key to set
+ * @param queue the time queue to modify
+ * @param key the key to set
  * 
  * Examples
  *
@@ -98,10 +97,10 @@ void time_queue_set(time_queue* queue, char* key)
     }
     queue->values[i] = time_queue_time();
 }
-/* Public: get last stored time pointer for given key
+/** @brief Public: get last stored time pointer for given key
  *
- * queue    - the time queue to modify
- * key      - the key to get the value from
+ * @param queue the time queue to modify
+ * @param key the key to get the value from
  *
  * Examples
  *
@@ -110,7 +109,7 @@ void time_queue_set(time_queue* queue, char* key)
  *     time_queue_get(queue, "/existing/key")
  *          => pointer to: 1412074060579654
  *
- * Return a pointer to the time value registered, NULL if there is
+ * @return a pointer to the time value registered, NULL if there is
  * none */
 unsigned long* time_queue_get(time_queue* queue, char* key)
 {
@@ -123,11 +122,11 @@ unsigned long* time_queue_get(time_queue* queue, char* key)
     }
     return NULL;
 }
-/* Internal: checks if the given key overflows the quota
+/** @brief Internal: checks if the given key overflows the quota
  *
- * queue    - the time queue to get data from
- * key      - the key to check
- * size     - the size to compare with the quota
+ * @param queue the time queue to get data from
+ * @param key the key to check
+ * @param size the size to compare with the quota
  *
  * Examples
  * 
@@ -137,7 +136,7 @@ unsigned long* time_queue_get(time_queue* queue, char* key)
  *   time_queue_overflows(queue, "/var/log/lol", 880);
  *      => 1
  *
- * Return 0 if the key does not overflow the quota or no value exists
+ * @return 0 if the key does not overflow the quota or no value exists
  * for this key, 1 overwise */
 int time_queue_overflows(time_queue* queue, char* key, unsigned int size)
 {
@@ -147,9 +146,9 @@ int time_queue_overflows(time_queue* queue, char* key, unsigned int size)
     if(dt == 0) return 1;
     return (((float) size * 1000000 / dt) > ((float)queue->quota));
 }
-/* Public: deletes the time queue structure and allocated content
+/** @brief Public: deletes the time queue structure and allocated content
  *
- * queue - the queue to delete
+ * @param queue the queue to delete
  */
 void time_queue_delete(time_queue* queue)
 {
