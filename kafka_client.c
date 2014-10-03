@@ -1,15 +1,24 @@
-/** @file */ 
+/** @file
+ * @brief kafka client level structures and function
+ **/ 
 #ifndef TEST
 #include <librdkafka/rdkafka.h>
 #else
 #include "kafka_client_test.c"
 #endif // TEST
+/**
+ * @brief a wrapping structure for kafka client and fuse_kafka
+ * configuration
+ **/
 typedef struct _kafka_t
 {
     rd_kafka_t* rk;
     rd_kafka_topic_t* rkt;
     config* conf;
 } kafka_t;
+/**
+ * @brief a librdkafka callback called when a message is delivered
+ **/
 static void msg_delivered (rd_kafka_t *rk,
                          void *payload, size_t len,
                          int error_code,
@@ -18,6 +27,9 @@ static void msg_delivered (rd_kafka_t *rk,
     /*printf("================== message delivered %s\n",
             (char*) payload);*/
 }
+/**
+ * @brief a librdkafka callback called to log stuff from librdkafka
+ **/
 static void logger (const rd_kafka_t *rk, int level,
                  const char *fac, const char *buf) {
         /*struct timeval tv;
@@ -27,6 +39,11 @@ static void logger (const rd_kafka_t *rk, int level,
                 level, fac, rd_kafka_name(rk), buf);*/
 }
 char errstr[512];
+/**
+ * @brief setup_kafka initialises librdkafka based on the config
+ * wrapped in kafka_t
+ * @param k kafka configuration
+ **/
 int setup_kafka(kafka_t* k)
 {
     char* brokers = "localhost:9092";
@@ -64,6 +81,12 @@ int setup_kafka(kafka_t* k)
         printf("topic %s creation failed\n", topic);
     return k->rkt == NULL;
 }
+/**
+ * @brief send a string to kafka
+ * @param k configuration with kafka
+ * @param buf string to serialize
+ * @param len size of the string to save
+ **/
 int send_kafka(kafka_t* k, char* buf, size_t len)
 {
     int r = 0;
