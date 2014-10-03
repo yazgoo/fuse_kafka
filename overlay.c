@@ -1,3 +1,4 @@
+/** @file */ 
 #ifdef HAVE_SETXATTR
 #include <sys/xattr.h>
 #endif
@@ -391,6 +392,7 @@ void* kafka_init(struct fuse_conn_info *conn)
 {
     config* conf = ((config*) fuse_get_context()->private_data);
     int directory_fd = conf->directory_fd;
+    int time_queue_size;
     fchdir(directory_fd);
     close(directory_fd);
     kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
@@ -400,6 +402,12 @@ void* kafka_init(struct fuse_conn_info *conn)
         return NULL;
     }
     k->conf = conf;
+    if(conf->quota_n > 0)
+    {
+        time_queue_size = conf->quota_n > 1 ? atoi(conf->quota[1]):20;
+        conf->quota_queue = time_queue_new(
+                time_queue_size, atoi(conf->quota[0]));
+    }
     return (void*) k;
 }
 

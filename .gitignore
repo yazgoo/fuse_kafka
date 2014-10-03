@@ -9,6 +9,7 @@
 *.tgz
 *.html.1
 *.html
+doc
 kafka*/
 fuse_kafka
 fuse_kafka.test

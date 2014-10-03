@@ -114,4 +114,7 @@ def kafka_start():
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
     FuseKafkaLog().start()
+def doc():
+    run('mkdir', '-p', 'doc')
+    run("doxygen", "Doxyfile")
 main()

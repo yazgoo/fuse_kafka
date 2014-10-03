@@ -1,5 +1,11 @@
+/** @file */ 
 #include <stdlib.h>
 #include <stdio.h>
+/*
+ * A time queue is a datastructure which allows to store time for a
+ * finite number of keys. It allows to check if, for a given key, a
+ * limit per unit of time is reached or not.
+ */
 typedef struct
 {
     unsigned long* values;
@@ -73,10 +79,24 @@ unsigned long time_queue_time()
  */
 void time_queue_set(time_queue* queue, char* key)
 {
-    queue->i += 1;
-    queue->i = queue->i % queue->size;
-    queue->hashes[queue->i] = time_queue_hash(key);
-    queue->values[queue->i] = time_queue_time();
+    int i, found;
+    unsigned long hash = time_queue_hash(key);
+    for(i = found = 0; i < queue->size; i++)
+    {
+        if(hash == queue->hashes[i])
+        {
+            found = 1;
+            break;
+        }
+    }
+    if(!found)
+    {
+        queue->i += 1;
+        queue->i = queue->i % queue->size;
+        i = queue->i;
+        queue->hashes[i] = hash;
+    }
+    queue->values[i] = time_queue_time();
 }
 /* Public: get last stored time pointer for given key
  *
@@ -125,7 +145,7 @@ int time_queue_overflows(time_queue* queue, char* key, unsigned int size)
     if(time == NULL) return 0;
     unsigned long dt = (time_queue_time() - *time);
     if(dt == 0) return 1;
-    return ((size * 1000000 / dt) > (queue->quota));
+    return (((float) size * 1000000 / dt) > ((float)queue->quota));
 }
 /* Public: deletes the time queue structure and allocated content
  *

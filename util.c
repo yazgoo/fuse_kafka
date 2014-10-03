@@ -1,3 +1,4 @@
+/** @file */ 
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
@@ -29,7 +30,6 @@ static char* get_command_line(int pid)
     char* string = (char*) malloc(size);
     char* b64;
     asprintf(&path, "/proc/%d/cmdline", pid);
-    printf("%s\n", path);
     if((f = fopen(path, "r")) != NULL)
     {
         while((c = fgetc(f)) != EOF)

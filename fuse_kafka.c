@@ -1,3 +1,4 @@
+/** @file */ 
 #define VERSION "0.1.3"
 #define FUSE_USE_VERSION 26
 #ifdef HAVE_CONFIG_H
@@ -26,6 +27,7 @@ typedef struct _config {
     size_t directory_n;
     char* fields_s;
     char* tags_s;
+    time_queue* quota_queue;
     CONFIG_ITEM(directories)
     CONFIG_ITEM(persist)
     CONFIG_ITEM(excluded_files)
@@ -34,6 +36,7 @@ typedef struct _config {
     CONFIG_ITEM(topic)
     CONFIG_ITEM(fields)
     CONFIG_ITEM(tags)
+    CONFIG_ITEM(quota)
 } config;
 #define XSTR(s) STR(s)
 #define STR(s) #s
@@ -80,7 +83,7 @@ static int actual_kafka_write(const char *path, const char *buf,
     return 0;
 }
 #include "trace.c"
-static int should_write_to_kafka(const char* path)
+static int should_write_to_kafka(const char* path, size_t size)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
     config* conf = (config*)private_data->conf;
@@ -93,13 +96,17 @@ static int should_write_to_kafka(const char* path)
             return 0;
         }
     }
-    return 1;
+    if(conf->quota_queue == NULL) return 1;
+    if(time_queue_overflows(conf->quota_queue, (char*)path, size)) i = 0;
+    else i = 1;
+    time_queue_set(conf->quota_queue, (char*)path);
+    return i;
 }
 static int kafka_write(const char *path, const char *buf,
         size_t size, off_t offset, struct fuse_file_info *fi)
 {
     int res;
-    if(should_write_to_kafka(path) &&
+    if(should_write_to_kafka(path, size) &&
             actual_kafka_write(path, buf, size, offset)) return 1;
     res = pwrite(fi->fh, buf, size, offset);
     if (res == -1)
@@ -157,6 +164,7 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(topic)
             else CONFIG_CURRENT(fields)
             else CONFIG_CURRENT(tags)
+            else CONFIG_CURRENT(quota)
             else
             {
                 printf("unknown option %s\n", argv[i]);

@@ -1,3 +1,4 @@
+/** @file */ 
 static int trace(const char* fmt, ...)
 {
     char* str;
