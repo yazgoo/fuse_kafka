@@ -20,17 +20,17 @@ First, build it:
 
     $ ./build.py
 
-On another terminal session, start kafka:
-
-    $ ./build.py kafka_start
-    
-On another one, start zookeeper:
+On another terminal session, start zookeeper (this will download kafka):
 
     $ ./build.py zookeeper_start
 
+On another one, start kafka:
+
+    $ ./build.py kafka_start
+
 Overlay a directory (here I mount /tmp/blax):
 
-    $ run __mountpoint__ -oallow_other -ononempty -s \
+    $ ./fuse_kafka  __mountpoint__ -oallow_other -ononempty -s \
         -omodules=subdir,subdir=. -f -- --topic logs --directories \
         /tmp/blax --brokers localhost:9092 --tags lol --fields a b
 

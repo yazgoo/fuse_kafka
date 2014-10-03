@@ -1,3 +1,4 @@
+/** @file */ 
 #define fuse_get_context() test_fuse_get_context()
 int tests_run = 0;
 #define mu_assert(message, test) do { if (!(test)) return message; } while (0)
