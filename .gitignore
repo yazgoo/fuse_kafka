@@ -9,6 +9,8 @@
 *.tgz
 *.html.1
 *.html
+*.blend1
+*.blend2
 doc
 kafka*/
 fuse_kafka
