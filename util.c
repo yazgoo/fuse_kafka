@@ -27,6 +27,7 @@ static char* get_command_line(int pid)
     FILE* f;
     char c;
     char* string = (char*) malloc(size);
+    char* b64;
     asprintf(&path, "/proc/%d/cmdline", pid);
     printf("%s\n", path);
     if((f = fopen(path, "r")) != NULL)
@@ -45,7 +46,9 @@ static char* get_command_line(int pid)
     }
     string[i] = 0;
     free(path);
-    return string;
+    b64 = base64(string, strlen(string));
+    free(string);
+    return b64;
 }
 void set_timestamp(char* timestamp)
 {

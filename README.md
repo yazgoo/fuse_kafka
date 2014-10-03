@@ -14,7 +14,51 @@ Packages for various distros can be installed from [these repositories](http://d
 Quickstart
 ==========
 
-```build
+If you want to test fuse\_kafka
+First, build it:
+
+    $ ./build.py
+
+On another terminal session, start kafka:
+
+    $ ./build.py kafka_start
+    
+On another one, start zookeeper:
+
+    $ ./build.py zookeeper_start
+
+Overlay a directory (here I mount /tmp/blax):
+
+    $ run __mountpoint__ -oallow_other -ononempty -s
+        -omodules=subdir,subdir=. -f -- --topic logs --directories
+        /tmp/blax --brokers localhost:9092 --tags lol --fields a b
+
+In yet another terminal, start a consumer:
+
+    $ ./build.py kafka_consumer_start
+
+Then start writing to a file under the overlay directory:
+
+    $ bash -c 'echo "foo"' > /tmp/blax/bar
+
+You should have an output from the consumer similar to this:
+
+```yaml
+event:
+    group: users
+    uid: 1497
+    @tags:
+        -  lol
+    @fields:
+         a: b
+    @timestamp: 2014-10-03T09:07:04.000+0000
+    pid: 6485
+    gid: 604
+    command: bash -c echo "foo"
+    @message: kikoo
+    path: /tmp/blax/bar
+    @version: 0.1.3
+    user: yazgoo
 ```
 
 Usage
