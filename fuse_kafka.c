@@ -37,8 +37,12 @@ typedef struct _config {
 } config;
 #define XSTR(s) STR(s)
 #define STR(s) #s
-#define CONFIG_CURRENT(expected) if(!strcmp(name, STR(expected))) \
-{ printf("parsing " STR(expected) "\n");current_size = &(conf->expected ## _n); conf->expected = argv + i + 1; }
+#define CONFIG_CURRENT(expected) \
+    if(!strcmp(name, STR(expected))) { \
+        printf("parsing " STR(expected) "\n"); \
+        current_size = &(conf->expected ## _n); \
+        conf->expected = argv + i + 1; \
+    }
 #include "util.c"
 #include "kafka_client.c"
 static int actual_kafka_write(const char *path, const char *buf,
@@ -181,7 +185,7 @@ int fuse_kafka_main(int argc, char *argv[])
                 conf.directory_n++)
         {
             argv[1] = conf.directories[conf.directory_n];
-            //if(!fork())
+            if(!fork())
             {
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
@@ -193,7 +197,6 @@ int fuse_kafka_main(int argc, char *argv[])
     return 0;
 }
 char* cmd = NULL;
-#define RET_CMD(...) { asprintf(&cmd, __VA_ARGS__); system(cmd); free(cmd); }; return 0;
 #ifdef TEST
 #include "test.c"
 #else
