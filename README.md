@@ -15,6 +15,7 @@ Quickstart
 ==========
 
 If you want to test fuse\_kafka
+
 First, build it:
 
     $ ./build.py
@@ -29,9 +30,21 @@ On another one, start zookeeper:
 
 Overlay a directory (here I mount /tmp/blax):
 
-    $ run __mountpoint__ -oallow_other -ononempty -s
-        -omodules=subdir,subdir=. -f -- --topic logs --directories
+    $ run __mountpoint__ -oallow_other -ononempty -s \
+        -omodules=subdir,subdir=. -f -- --topic logs --directories \
         /tmp/blax --brokers localhost:9092 --tags lol --fields a b
+
+If you're not running as root, you might have to make 
+/etc/fuse.conf readable by your user:
+
+    $ chmod a+r /etc/fuse.conf
+
+And allow non-root user to specify the allow\_other option, by adding
+a line with
+
+    user_allow_other
+
+in /etc/fuse.conf
 
 In yet another terminal, start a consumer:
 
@@ -55,7 +68,7 @@ event:
     pid: 6485
     gid: 604
     command: bash -c echo "foo"
-    @message: kikoo
+    @message: foo
     path: /tmp/blax/bar
     @version: 0.1.3
     user: yazgoo
