@@ -74,7 +74,7 @@ def dotest():
     compile_test()
     test()
 def build():
-    #compile()
+    compile()
     link()
 def test():
     for source in sources:
@@ -92,7 +92,6 @@ def compile_test():
                 test_flags, to_links(common_libs))
 def link():
     objects = [s+'.o' for s in sources]
-    #run('gcc', '-static', '-g', sources[0]+'.c', '-o', binary_name, flags, to_links(libs))
     run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
 def install():
     build()
