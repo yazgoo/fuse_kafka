@@ -56,61 +56,53 @@ Then start writing to a file under the overlay directory:
 
 You should have an output from the consumer similar to this:
 
-```yaml
-event:
-    group: users
-    uid: 1497
-    @tags:
-        -  lol
-    @fields:
-         a: b
-    @timestamp: 2014-10-03T09:07:04.000+0000
-    pid: 6485
-    gid: 604
-    command: bash -c echo "foo"
-    @message: foo
-    path: /tmp/blax/bar
-    @version: 0.1.3
-    user: yazgoo
-```
+    event:
+        group: users
+        uid: 1497
+        @tags:
+            -  lol
+        @fields:
+             a: b
+        @timestamp: 2014-10-03T09:07:04.000+0000
+        pid: 6485
+        gid: 604
+        command: bash -c echo "foo"
+        @message: foo
+        path: /tmp/blax/bar
+        @version: 0.1.3
+        user: yazgoo
 
 Usage
 =====
 
 mounting:
 
-```shell
-fuse_kafka __mountpoint__ -oallow_other -ononempty \
-        -s -omodules=subdir,subdir=. -- \
-        --topic logs --fields first_field first_value \
-            second_field second_value \
-           --directories /var/log /other/path/to/overlay \
-           --tags mytag \
-           --brokers mybroker1:9092,mybroker2:9092
-```
+    $ fuse_kafka __mountpoint__ -oallow_other -ononempty \
+            -s -omodules=subdir,subdir=. -- \
+            --topic logs --fields first_field first_value \
+                second_field second_value \
+               --directories /var/log /other/path/to/overlay \
+               --tags mytag \
+               --brokers mybroker1:9092,mybroker2:9092
 unmounting:
 
-```shell
-fusermount -u /var/log /other/path/to/overlay
-```
+    $ fusermount -u /var/log /other/path/to/overlay
 
 Event format
 ============
 
 We use a logstash event, except the message and command are base64 encoded:
 
-```json
-{"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
-"@message": "aGVsbG8gd29ybGQ=",
-"@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
-"root",
-"command": "L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC",
-"@version": "0.1.2",
-"@fields": {
-    "first_field": "first_value",
-    "second_field": "second_value" },
-"@tags": ["mytag"]}
-```
+    {"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
+    "@message": "aGVsbG8gd29ybGQ=",
+    "@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
+    "root",
+    "command": "L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC",
+    "@version": "0.1.2",
+    "@fields": {
+        "first_field": "first_value",
+        "second_field": "second_value" },
+    "@tags": ["mytag"]}
 
 Installing from sources
 =======================

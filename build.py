@@ -54,7 +54,7 @@ class FuseKafkaLog:
                 print line
 def get_version():
     for source in sources:
-        f = open(source + ".c")
+        f = open("src/" + source + ".c")
         result = f.readline().split()[-1][1:-1]
         f.close()
         return result
@@ -80,12 +80,12 @@ def test():
     for source in sources:
         run("ls")
         run("./" + source + ".test")
-        run("gcov", source + ".c")
-        run("lcov", "-c", "-d", ".", "-o", source + ".info")
+        run("gcov", "./src/" + source + ".c")
+        run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
         run("genhtml", source + ".info", "-o", "./out")
 def compile():
     for source in sources:
-        run('gcc', '-g', '-c', source+'.c', flags)
+        run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
     for source in sources:
         run('gcc', '-o', source+'.test', source+'.c', flags,
