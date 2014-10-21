@@ -10,7 +10,9 @@ Requires(post): info
 Requires(preun): info
 
 BuildRequires: python, openssl-devel, fuse-devel, librdkafka-devel, zlib
-Requires: librdkafka1, fuse
+Requires: librdkafka1, fuse, openssl, glibc
+# do not save library versions dependencies:
+AutoReqProv: no
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 %description 
@@ -25,7 +27,7 @@ kafka brokers. It is quite suited for log centralization.
 
 %install
 rm -rf %{buildroot}
-BUILDROOT=%{buildroot} ./build.py install %{buildroot}
+BUILDROOT=%{buildroot} ./build.py install
 
 %post
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir || :
@@ -35,12 +37,11 @@ if [ $1 = 0] ; then
 /sbin/install-info --delete %{_infodir}/%{name}.info %{_infodir}/dir || :
 fi
 
-%files 
-%doc README.md
+%files -n %{name}
 %defattr(-,root,root)
-%{ bindir}/fuse_kafka
-%{ initrddir}/fuse_kafka
-%{ configdir}/fuse_kafka/fuse_kafka.conf
+/usr/bin/fuse_kafka
+/etc/init.d/fuse_kafka
+/etc/fuse_kafka.conf
 
 %changelog
 * Thu Sep 11 2014 yazgoo <yazgoo@nospam.org> 0.1.3

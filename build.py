@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import json, base64, subprocess, sys
+import json, base64, subprocess, sys, glob
 from fabricate import *
 import os
 sources = ['fuse_kafka']
@@ -67,8 +67,11 @@ def package():
     run("tar", "--transform", "s,^.," + name + ",",
             "--exclude=.git", 
             "--exclude=out", "-czf", tar , ".")
+def filter_link(a):
+    if a != "-lcrypto": return a
+    return glob.glob("/usr/lib*/**/libcrypto.a")[0]
 def to_links(libs):
-    return ['-l'+s for s in libs]
+    return [filter_link(a) for a in ['-l'+s for s in libs]]
 def dotest():
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
