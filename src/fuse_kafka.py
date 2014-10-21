@@ -96,9 +96,9 @@ class Configuration:
         parsed configuration """
         result = []
         for key in self.conf.keys():
-            result.append(' --' + key)
+            result.append('--' + str(key))
             for item in self.conf[key]:
-                result.append(item)
+                result.append(str(item))
         return result
     def __str__(self):
         return " ".join(self.args())
@@ -122,9 +122,8 @@ class FuseKafkaService:
         directories = self.configuration.conf['directories']
         for directory in directories:
             self.configuration.conf['directories'] = [directory]
-            print(self.configuration.args())
+            if not os.path.exists(directory): os.makedirs(directory)
             subprocess.Popen(self.prefix + self.configuration.args(), env = env)
-            print str(self.configuration)
     def stop(self):
         """ Stops fuse_kafka processes """
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
@@ -134,6 +133,15 @@ class FuseKafkaService:
         self.start()
     def status(self):
         """ Displays the status of fuse_kafka processes """
-        print("undefined")
+        status = 3
+        with open("/proc/mounts") as f:
+            for line in f.readlines():
+                if line.startswith("fuse_kafka"):
+                    print "listening on " + line.split()[1]
+                    status = 0
+        sys.stdout.write("service is ")
+        if status == 3: sys.stdout.write("not ")
+        print("running")
+        sys.exit(status) 
 if __name__ == "__main__":
     FuseKafkaService().do(sys.argv[1])
