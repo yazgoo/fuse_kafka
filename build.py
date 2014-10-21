@@ -69,7 +69,10 @@ def package():
             "--exclude=out", "-czf", tar , ".")
 def filter_link(a):
     if a != "-lcrypto": return a
-    return glob.glob("/usr/lib*/**/libcrypto.a")[0]
+    result = []
+    for pattern in ["/usr/lib*/libcrypto.a", "/usr/lib*/*/libcrypto.a"]:
+        result += glob.glob(pattern)
+    return result[0]
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def dotest():

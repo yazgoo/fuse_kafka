@@ -117,7 +117,7 @@ class FuseKafkaService:
         """ Starts fuse_kafka processes """
         env = os.environ.copy()
         env["PATH"] = ".:" + env["PATH"]
-        env["LD_LIBRARY_PATH"] += ":/usr/lib"
+        env["LD_LIBRARY_PATH"] = ":/usr/lib"
         self.configuration = Configuration()
         directories = self.configuration.conf['directories']
         for directory in directories:

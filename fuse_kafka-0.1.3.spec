@@ -9,7 +9,7 @@ Group: Development/Tools
 Requires(post): info
 Requires(preun): info
 
-BuildRequires: python, openssl-devel, fuse-devel, librdkafka-devel, zlib
+BuildRequires: python, openssl-static, openssl-devel, fuse-devel, librdkafka-devel, zlib
 Requires: librdkafka1, fuse, openssl, glibc
 # do not save library versions dependencies:
 AutoReqProv: no
