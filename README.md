@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://travis-ci.org/yazgoo/fuse_kafka)
-[![Gitter chat](https://badges.gitter.im/yazgoo/fuse_kafka.png)](https://gitter.im/yazgoo/fuse_kafka)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ![fuse kafka logo](https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/graphics/fuse_kafka_logo.png "Logo")
 
@@ -8,7 +8,6 @@ to apache kafka brokers.  Quite suited for log centralization.
 
 Installing
 ==========
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
