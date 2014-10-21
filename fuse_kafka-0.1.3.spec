@@ -9,8 +9,9 @@ Group: Development/Tools
 Requires(post): info
 Requires(preun): info
 
-BuildRequires: python, fuse-devel, librdkafka-devel, zlib
+BuildRequires: python, openssl-devel, fuse-devel, librdkafka-devel, zlib
 Requires: librdkafka1, fuse
+BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 %description 
 Intercepts all writes to specified directories and send them to
@@ -23,7 +24,8 @@ kafka brokers. It is quite suited for log centralization.
 ./build.py
 
 %install
-./build.py install
+rm -rf %{buildroot}
+BUILDROOT=%{buildroot} ./build.py install %{buildroot}
 
 %post
 /sbin/install-info %{_infodir}/%{name}.info %{_infodir}/dir || :
@@ -35,6 +37,10 @@ fi
 
 %files 
 %doc README.md
+%defattr(-,root,root)
+%{ bindir}/fuse_kafka
+%{ initrddir}/fuse_kafka
+%{ configdir}/fuse_kafka/fuse_kafka.conf
 
 %changelog
 * Thu Sep 11 2014 yazgoo <yazgoo@nospam.org> 0.1.3

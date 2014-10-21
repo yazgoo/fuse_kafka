@@ -95,10 +95,15 @@ def link():
     objects = [s+'.o' for s in sources]
     run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
 def install():
+    root = '/'
+    if os.environ.get('BUILDROOT') != None:
+        root = os.environ.get('BUILDROOT') + "/"
     build()
-    install_directory = '/usr/bin/'
-    init_directory = '/etc/init.d/'
-    conf_directory = '/etc/'
+    install_directory = root + 'usr/bin/'
+    init_directory = root + 'etc/init.d/'
+    conf_directory = root + 'etc/'
+    [run('mkdir', '-p', d) for d in
+            [conf_directory, init_directory, install_directory]]
     run('cp', binary_name, install_directory)
     run('cp', 'src/fuse_kafka.py', init_directory + "fuse_kafka")
     run('cp', 'conf/fuse_kafka.properties',

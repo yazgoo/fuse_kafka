@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://travis-ci.org/yazgoo/fuse_kafka)
+[![Gitter chat](https://badges.gitter.im/yazgoo/fuse_kafka.png)](https://gitter.im/yazgoo/fuse_kafka)
 
 ![fuse kafka logo](https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/graphics/fuse_kafka_logo.png "Logo")
 
