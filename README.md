@@ -14,7 +14,7 @@ Packages for various distros can be installed from [these repositories](http://d
 Quickstart
 ==========
 
-If you want to test fuse\_kafka
+If you want to test fuse\_kafka, using a clone of this repository.
 
 First, build it:
 
@@ -28,14 +28,20 @@ On another one, start kafka:
 
     $ ./build.py kafka_start
 
-Overlay a directory (here I mount /tmp/blax):
+The default configuration is conf/fuse\_kafka.properties.
+An important piece of configuration is:
 
-    $ ./fuse_kafka  __mountpoint__ -oallow_other -ononempty -s \
-        -omodules=subdir,subdir=. -f -- --topic logs --directories \
-        /tmp/blax --brokers localhost:9092 --tags lol --fields a b
+    $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
+    # directories fuse_kafka will listen to (launch script will try to
+    # create them if they don't exist)
+    fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+
+Start fuse\_kafka using the init script:
+
+    $ src/fuse_kafka.py start
 
 If you're not running as root, you might have to make 
-/etc/fuse.conf readable by your user:
+/etc/fuse.conf readable by your user (here to all users):
 
     $ chmod a+r /etc/fuse.conf
 
@@ -46,13 +52,20 @@ a line with
 
 in /etc/fuse.conf
 
-In yet another terminal, start a consumer:
+If fuse\_kafka is running, you should get the following output when
+running:
+
+    $ src/fuse_kafka.py status
+    listening on /tmp/fuse-kafka-test
+    fuse kafka is running
+
+In yet another terminal, start a test consumer:
 
     $ ./build.py kafka_consumer_start
 
 Then start writing to a file under the overlay directory:
 
-    $ bash -c 'echo "foo"' > /tmp/blax/bar
+    $ bash -c 'echo "foo"' > /tmp/fuse-kafka-test/bar
 
 You should have an output from the consumer similar to this:
 
@@ -60,33 +73,27 @@ You should have an output from the consumer similar to this:
         group: users
         uid: 1497
         @tags:
-            -  lol
+            -  test
         @fields:
-             a: b
+             hostname: test
         @timestamp: 2014-10-03T09:07:04.000+0000
         pid: 6485
         gid: 604
         command: bash -c echo "foo"
         @message: foo
-        path: /tmp/blax/bar
+        path: /tmp/fuse-kafka-test/bar
         @version: 0.1.3
         user: yazgoo
 
-Usage
-=====
+When you're done, you can stop fuse\_kafka:
 
-mounting:
+    $ src/fuse_kafka.py stop
 
-    $ fuse_kafka __mountpoint__ -oallow_other -ononempty \
-            -s -omodules=subdir,subdir=. -- \
-            --topic logs --fields first_field first_value \
-                second_field second_value \
-               --directories /var/log /other/path/to/overlay \
-               --tags mytag \
-               --brokers mybroker1:9092,mybroker2:9092
-unmounting:
+Configuration
+=============
 
-    $ fusermount -u /var/log /other/path/to/overlay
+A default configuration file is available in conf/fuse\_kafka.properties.
+An explanation for each parameter is available in this file.
 
 Event format
 ============
