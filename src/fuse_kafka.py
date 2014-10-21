@@ -5,7 +5,7 @@ Startup script for fuse_kafka.
 import sys, getopt, json, glob, os, subprocess
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
-CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka/*", "/etc/*.txt"]
+CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
 class Configuration:
     """ Utility class to load configurations from properties files """
     def get_property(self, path, name):
