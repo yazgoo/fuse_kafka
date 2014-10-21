@@ -55,6 +55,7 @@ class FuseKafkaLog:
 def get_version():
     for source in sources:
         f = open("src/" + source + ".c")
+        [f.readline() for i in range(3)]
         result = f.readline().split()[-1][1:-1]
         f.close()
         return result
@@ -96,9 +97,12 @@ def link():
 def install():
     build()
     install_directory = '/usr/bin/'
-    if not os.access(install_directory, os.W_OK):
-        install_directory = '/tmp/'
+    init_directory = '/etc/init.d/'
+    conf_directory = '/etc/'
     run('cp', binary_name, install_directory)
+    run('cp', 'src/fuse_kafka.py', init_directory + "fuse_kafka")
+    run('cp', 'conf/fuse_kafka.properties',
+            conf_directory + "fuse_kafka.conf")
 def clean():
     autoclean()
 def kafka_download():
