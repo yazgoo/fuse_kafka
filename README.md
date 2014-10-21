@@ -8,6 +8,7 @@ to apache kafka brokers.  Quite suited for log centralization.
 
 Installing
 ==========
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
