@@ -12,6 +12,7 @@
 *.blend1
 *.blend2
 *.pyc
+.nfs*
 doc
 kafka*/
 fuse_kafka
