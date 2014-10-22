@@ -14,7 +14,7 @@ install_CentOS() {
     do add_yum_repo $who $distro_name-6
     done
     add_yum_repo yazgoo $distro_name-6
-    [ "$distro_version" = "6.3" ] && yum update glibc
-    yum install fuse_kafka
+    [ "$distro_version" = "6.3" ] && yum -y update glibc
+    yum -y install fuse_kafka
 }
 install_$distro_name
