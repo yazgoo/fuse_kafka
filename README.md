@@ -11,27 +11,9 @@ Installing
 
 Packages for various distros can be installed from [these repositories](http://download.opensuse.org/repositories/home:/yazgoo/) at [openSUSE Build Service](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka).
 
-For example on centos 6, you should enable edenhill's repo (for librdkafka):
+The following should install the new repositories then install fuse\_kafka:
 
-    # echo \
-    "[edenhill]
-    name=edenhill's repo
-    baseurl=http://download.opensuse.org/repositories/home\:/edenhill/CentOS_CentOS-6
-    gpgcheck=0
-    enabled=1" > /etc/yum.repos.d/edenhill.repo
-
-Then yazgoo's repo (for fuse\_kafka):
-
-    # echo \
-    "[yazgoo]
-    name=yazgoo's repo
-    baseurl=http://download.opensuse.org/repositories/home\:/yazgoo/CentOS-6
-    gpgcheck=0
-    enabled=1" > /etc/yum.repos.d/yazgoo.repo
-
-Then run
-
-    # yum install fuse_kafka
+    $ curl -O https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh && md5sum -c <(echo "9ba04ea483af3e06f769b2510eda5562  setup_packages.sh") && chmod +x setup_packages.sh && ./setup_packages.sh
 
 Quickstart (from sources)
 =========================
