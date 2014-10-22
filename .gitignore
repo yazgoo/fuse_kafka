@@ -11,8 +11,11 @@
 *.html
 *.blend1
 *.blend2
+*.pyc
 doc
 kafka*/
 fuse_kafka
 fuse_kafka.test
 out
+a.out
+log-cleaner.log
