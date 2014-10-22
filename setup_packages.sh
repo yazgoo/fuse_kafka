@@ -1,4 +1,5 @@
 # helper script to install fuse_kafka from OBS packages
+set -x
 distro_version=$(lsb_release -s -r)
 distro_name=$(lsb_release -s -i)
 add_yum_repos() {
