@@ -13,7 +13,10 @@ Packages for various distros can be installed from [these repositories](http://d
 
 The following should install the new repositories then install fuse\_kafka:
 
-    $ curl -O https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh && md5sum -c <(echo "9ba04ea483af3e06f769b2510eda5562  setup_packages.sh") && chmod +x setup_packages.sh && ./setup_packages.sh
+    $ curl -O \
+        https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh \
+        && md5sum -c <(echo "9ba04ea483af3e06f769b2510eda5562  setup_packages.sh") \
+        && chmod +x setup_packages.sh && ./setup_packages.sh
 
 Quickstart (from sources)
 =========================
