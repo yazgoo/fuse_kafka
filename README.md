@@ -15,7 +15,7 @@ The following should install the new repositories then install fuse\_kafka:
 
     # curl -O \
         https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh \
-        && md5sum -c <(echo "c0f7ecaefb7b3b0d3478d7099f25b6cd  setup_packages.sh") \
+        && md5sum -c <(echo "a9c81807fa1f84018f90bbd80e987863  setup_packages.sh") \
         && chmod +x setup_packages.sh && ./setup_packages.sh
 
 Quickstart (from sources)
