@@ -62,7 +62,7 @@ def get_version():
 def version():
     print(get_version())
 def package():
-    name = binary_name + "-" + get_version()
+    name = binary_name + "_" + get_version()
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
             "--exclude=.git", 

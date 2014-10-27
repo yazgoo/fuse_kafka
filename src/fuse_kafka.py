@@ -1,8 +1,17 @@
 #!/usr/bin/env python
+### BEGIN INIT INFO
+# Provides: fuse_kafka
+# Required-Start:
+# Required-Stop:
+# Default-Start:  3 5    
+# Default-Stop:
+# Short-Description: run fuse_kafka
+# Description:
+### END INIT INFO
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import sys, getopt, json, glob, os, subprocess
+import sys, getopt, json, glob, os, subprocess, copy
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
@@ -119,7 +128,7 @@ class FuseKafkaService:
         env["PATH"] = ".:" + env["PATH"]
         env["LD_LIBRARY_PATH"] = ":/usr/lib"
         self.configuration = Configuration()
-        directories = self.configuration.conf['directories']
+        directories = copy.deepcopy(self.configuration.conf['directories'])
         for directory in directories:
             self.configuration.conf['directories'] = [directory]
             if not os.path.exists(directory): os.makedirs(directory)
