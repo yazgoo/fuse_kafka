@@ -20,7 +20,8 @@ class FuseKafkaLog:
         p = subprocess.Popen(command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT)
-        return iter(p.stdout.readline, b'')
+        #return iter(p.stdout.readline, b'')
+        return iter(p.stdout.readline, '')
     def pretty_print(self, string):
         struct = self.load_fuse_kafka_event(string)
         print "event:"
