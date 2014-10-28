@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import json, base64, subprocess, sys, glob
+try:
+    import base64, subprocess, sys, glob, os, json
+except ImportError, e:
+    print "failed importing module", e
 from fabricate import *
-import os
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread"]#, "ulockmgr"]
