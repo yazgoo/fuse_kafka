@@ -17,6 +17,6 @@ doc
 kafka*/
 fuse_kafka
 fuse_kafka.test
-out
+out/*
 a.out
 log-cleaner.log

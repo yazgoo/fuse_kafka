@@ -6,4 +6,7 @@ install:
     - sudo apt-get update
     - sudo apt-get install libfuse-dev librdkafka-dev
     - sudo pip install fabricate
-script: "./build.py"
+script:
+    ./build.py && ./build.py test
+after_success:
+    - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
