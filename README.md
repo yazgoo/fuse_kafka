@@ -99,6 +99,55 @@ When you're done, you can stop fuse\_kafka:
 
     $ src/fuse_kafka.py stop
 
+Quota option test
+=================
+
+First, commment fuse\_kafka\_quota in conf/fuse\_kafka.properties.
+Then, start fuse kafka.
+
+    $ src/fuse_kafka.py start
+
+Let's create a segfaulting program:
+
+    $ cat first.c
+    int main(void)
+    {
+        *((int*)0) = 1;
+    }
+
+    $ gcc first.c
+
+Then start a test consumer, displaying only the path and message\_size-added fields
+
+Launch the segfaulting program in fuse-kafka-test directory:
+
+    $ /path/to/a.out
+
+A new core file should appear in fused directory.
+
+Here is the consumer output:
+
+    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
+    event:
+        message_size-added: 4096
+        path: /tmp/fuse-kafka-test/core
+    ...
+    event:
+        message_size-added: 4096
+        path: /tmp/fuse-kafka-test/core
+
+Here we see many messages.
+
+Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
+launch the segfaulting program,
+        
+    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
+    event:
+        message_size-added: 64
+        path: /tmp/fuse-kafka-test/core
+
+This time, we only receive the first write.
+
 Event format
 ============
 
@@ -114,6 +163,7 @@ We use a logstash event, except the message and command are base64 encoded:
         "first_field": "first_value",
         "second_field": "second_value" },
     "@tags": ["mytag"]}
+
 
 Installing from sources
 =======================

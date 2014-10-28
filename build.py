@@ -28,6 +28,8 @@ class FuseKafkaLog:
         struct = self.load_fuse_kafka_event(string)
         print "event:"
         for key in struct:
+            if self.select != None and not key in self.select:
+                continue
             sys.stdout.write("    " + key + ": ")
             value = struct[key]
             if type(value) is dict:
@@ -45,8 +47,11 @@ class FuseKafkaLog:
         for item in ["@message", "command"]:
             event[item] += "=" * ((4 - len(event[item]) % 4) % 4)
             event[item] = base64.b64decode(event[item])
+        event["message_size-added"] = len(event["@message"])
         return event
     def start(self):
+        if os.environ.get('SELECT') != None:
+            self.select = os.environ.get('SELECT').split()
         for line in self.run_command(os.getcwd() + "/"
                 + kafka_bin_directory + 'kafka-console-consumer.sh',
             "--zookeeper", "localhost:2181",

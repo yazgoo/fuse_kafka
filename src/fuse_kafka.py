@@ -130,9 +130,10 @@ class FuseKafkaService:
         self.configuration = Configuration()
         directories = copy.deepcopy(self.configuration.conf['directories'])
         for directory in directories:
-            self.configuration.conf['directories'] = [directory]
-            if not os.path.exists(directory): os.makedirs(directory)
-            subprocess.Popen(self.prefix + self.configuration.args(), env = env)
+            print directory
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+	subprocess.Popen(self.prefix + self.configuration.args(), env = env)
     def stop(self):
         """ Stops fuse_kafka processes """
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
