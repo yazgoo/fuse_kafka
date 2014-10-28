@@ -18,6 +18,13 @@ The following should install the new repositories then install fuse\_kafka:
         && md5sum -c <(echo "a9c81807fa1f84018f90bbd80e987863  setup_packages.sh") \
         && chmod +x setup_packages.sh && ./setup_packages.sh
 
+Configuration
+=============
+
+A default configuration file is available in conf/fuse\_kafka.properties.
+An explanation for each parameter is available in this file.
+The packages should install it in /etc/fuse\_kafka.conf.
+
 Quickstart (from sources)
 =========================
 
@@ -36,7 +43,7 @@ On another one, start kafka:
     $ ./build.py kafka_start
 
 The default configuration is conf/fuse\_kafka.properties.
-An important piece of configuration is:
+An important piece of configuration is fuse\_kafka\_directories:
 
     $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
     # directories fuse_kafka will listen to (launch script will try to
@@ -53,11 +60,7 @@ If you're not running as root, you might have to make
     $ chmod a+r /etc/fuse.conf
 
 And allow non-root user to specify the allow\_other option, by adding
-a line with
-
-    user_allow_other
-
-in /etc/fuse.conf
+a line with user\_allow\_other in /etc/fuse.conf.
 
 If fuse\_kafka is running, you should get the following output when
 running:
@@ -95,12 +98,6 @@ You should have an output from the consumer similar to this:
 When you're done, you can stop fuse\_kafka:
 
     $ src/fuse_kafka.py stop
-
-Configuration
-=============
-
-A default configuration file is available in conf/fuse\_kafka.properties.
-An explanation for each parameter is available in this file.
 
 Event format
 ============

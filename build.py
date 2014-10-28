@@ -75,7 +75,10 @@ def filter_link(a):
     result = []
     for pattern in ["/usr/lib*/libcrypto.a", "/usr/lib*/*/libcrypto.a"]:
         result += glob.glob(pattern)
-    return result[0]
+    if len(result) > 0:
+        return result[0]
+    else:
+        return a
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def dotest():
