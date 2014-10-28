@@ -1,0 +1,18 @@
+Priority: optional
+Maintainer: unknown <unknown@debian.org>
+Source: fusekafka
+Build-Depends: debhelper (>= 5), python, libssl-dev, libfuse-dev, librdkafka-dev
+Standards-Version: 3.8.2
+Homepage: 
+
+Package: fusekafka--n
+Section: libs
+Architecture: any
+Description: .
+
+Package: fusekafka-bin
+Section: libdevel
+Architecture: any
+Description: Intercepts all writes to specified directories and send them to
+ kafka brokers. It is quite suited for log centralization.
+

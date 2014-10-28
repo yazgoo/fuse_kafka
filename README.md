@@ -18,6 +18,13 @@ The following should install the new repositories then install fuse\_kafka:
         && md5sum -c <(echo "a9c81807fa1f84018f90bbd80e987863  setup_packages.sh") \
         && chmod +x setup_packages.sh && ./setup_packages.sh
 
+Configuration
+=============
+
+A default configuration file is available in conf/fuse\_kafka.properties.
+An explanation for each parameter is available in this file.
+The packages should install it in /etc/fuse\_kafka.conf.
+
 Quickstart (from sources)
 =========================
 
@@ -36,7 +43,7 @@ On another one, start kafka:
     $ ./build.py kafka_start
 
 The default configuration is conf/fuse\_kafka.properties.
-An important piece of configuration is:
+An important piece of configuration is fuse\_kafka\_directories:
 
     $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
     # directories fuse_kafka will listen to (launch script will try to
@@ -53,11 +60,7 @@ If you're not running as root, you might have to make
     $ chmod a+r /etc/fuse.conf
 
 And allow non-root user to specify the allow\_other option, by adding
-a line with
-
-    user_allow_other
-
-in /etc/fuse.conf
+a line with user\_allow\_other in /etc/fuse.conf.
 
 If fuse\_kafka is running, you should get the following output when
 running:
@@ -96,11 +99,54 @@ When you're done, you can stop fuse\_kafka:
 
     $ src/fuse_kafka.py stop
 
-Configuration
-=============
+Quota option test
+=================
 
-A default configuration file is available in conf/fuse\_kafka.properties.
-An explanation for each parameter is available in this file.
+First, commment fuse\_kafka\_quota in conf/fuse\_kafka.properties.
+Then, start fuse kafka.
+
+    $ src/fuse_kafka.py start
+
+Let's create a segfaulting program:
+
+    $ cat first.c
+    int main(void)
+    {
+        *((int*)0) = 1;
+    }
+
+    $ gcc first.c
+
+Then start a test consumer, displaying only the path and message\_size-added fields
+
+Launch the segfaulting program in fuse-kafka-test directory:
+
+    $ /path/to/a.out
+
+A new core file should appear in fused directory.
+
+Here is the consumer output:
+
+    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
+    event:
+        message_size-added: 4096
+        path: /tmp/fuse-kafka-test/core
+    ...
+    event:
+        message_size-added: 4096
+        path: /tmp/fuse-kafka-test/core
+
+Here we see many messages.
+
+Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
+launch the segfaulting program,
+        
+    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
+    event:
+        message_size-added: 64
+        path: /tmp/fuse-kafka-test/core
+
+This time, we only receive the first write.
 
 Event format
 ============
@@ -117,6 +163,7 @@ We use a logstash event, except the message and command are base64 encoded:
         "first_field": "first_value",
         "second_field": "second_value" },
     "@tags": ["mytag"]}
+
 
 Installing from sources
 =======================

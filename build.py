@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import json, base64, subprocess, sys, glob
+try:
+    import base64, subprocess, sys, glob, os, json
+except ImportError, e:
+    print "failed importing module", e
 from fabricate import *
-import os
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread"]#, "ulockmgr"]
@@ -26,6 +28,8 @@ class FuseKafkaLog:
         struct = self.load_fuse_kafka_event(string)
         print "event:"
         for key in struct:
+            if self.select != None and not key in self.select:
+                continue
             sys.stdout.write("    " + key + ": ")
             value = struct[key]
             if type(value) is dict:
@@ -43,8 +47,11 @@ class FuseKafkaLog:
         for item in ["@message", "command"]:
             event[item] += "=" * ((4 - len(event[item]) % 4) % 4)
             event[item] = base64.b64decode(event[item])
+        event["message_size-added"] = len(event["@message"])
         return event
     def start(self):
+        if os.environ.get('SELECT') != None:
+            self.select = os.environ.get('SELECT').split()
         for line in self.run_command(os.getcwd() + "/"
                 + kafka_bin_directory + 'kafka-console-consumer.sh',
             "--zookeeper", "localhost:2181",
@@ -73,7 +80,10 @@ def filter_link(a):
     result = []
     for pattern in ["/usr/lib*/libcrypto.a", "/usr/lib*/*/libcrypto.a"]:
         result += glob.glob(pattern)
-    return result[0]
+    if len(result) > 0:
+        return result[0]
+    else:
+        return a
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def dotest():

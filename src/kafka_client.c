@@ -95,9 +95,9 @@ int send_kafka(kafka_t* k, char* buf, size_t len)
             buf, len,
             NULL, 0, NULL)))
         printf("=========== rd_kafka_produce: failed %d\n", r);
-    fprintf(stderr, "%% Sent %zd bytes to topic "
+    /*fprintf(stderr, "%% Sent %zd bytes to topic "
             "%s\n",
-            len, rd_kafka_topic_name(k->rkt));
+            len, rd_kafka_topic_name(k->rkt));*/
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/
     /*while(rd_kafka_poll(k->rk, 1000) != -1)
