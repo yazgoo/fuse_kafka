@@ -98,9 +98,9 @@ def test():
     for source in sources:
         run("find")
         Builder(AlwaysRunner).run("./" + source + ".test")
-        run("gcov", "./src/" + source + ".c")
-        run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-        run("genhtml", "src/" + source + ".info", "-o", "./out")
+        Builder(AlwaysRunner).run("gcov", "./src/" + source + ".c")
+        Builder(AlwaysRunner).run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+        Builder(AlwaysRunner).run("genhtml", "src/" + source + ".info", "-o", "./out")
 def compile():
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
