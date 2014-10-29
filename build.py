@@ -106,7 +106,7 @@ def compile():
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
     for source in sources:
-        run('gcc', '-o', source+'.test', source+'.c', flags,
+        run('gcc', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
                 test_flags, to_links(common_libs))
 def link():
     objects = [s+'.o' for s in sources]

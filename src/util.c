@@ -48,7 +48,7 @@ static char* get_command_line(int pid)
     char* path;
     FILE* f;
     char c;
-    char* string = (char*) malloc(size);
+    char* command_line = (char*) malloc(size * sizeof(char));
     char* b64;
     asprintf(&path, "/proc/%d/cmdline", pid);
     if((f = fopen(path, "r")) != NULL)
@@ -59,16 +59,17 @@ static char* get_command_line(int pid)
             if(i >= (size - 1))
             {
                 size += 256;
-                char* string = (char*) realloc(string, size);
+                command_line = (char*) realloc(
+                        command_line, size * sizeof(char));
             }
-            string[i++] = c;
+            command_line[i++] = c;
         }
         fclose(f);
     }
-    string[i] = 0;
+    command_line[i] = 0;
     free(path);
-    b64 = base64(string, strlen(string));
-    free(string);
+    b64 = base64(command_line, strlen(command_line));
+    free(command_line);
     return b64;
 }
 /**

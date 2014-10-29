@@ -8,6 +8,9 @@
 #endif
 #define _GNU_SOURCE
 #include <fuse.h>
+#ifdef TEST
+#define fuse_get_context() test_fuse_get_context()
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
