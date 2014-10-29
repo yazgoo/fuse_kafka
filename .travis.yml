@@ -9,6 +9,6 @@ install:
 script:
     - ./build.py clean
     - ./build.py
-    - ./build.py test
+    - ./build.py dotest
 after_success:
     - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
