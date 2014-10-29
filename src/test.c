@@ -248,5 +248,6 @@ int main(int argc, char** argv)
     else printf("ALL TESTS PASSED\n");
     printf("Tests run: %d\n", tests_run);
     close(open(TEST "/to", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH));
+    close(open(TEST "/from", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH));
     return result != 0;
 }
