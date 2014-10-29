@@ -97,7 +97,7 @@ def build():
 def test():
     for source in sources:
         run("find")
-        run("./" + source + ".test")
+        Builder(AlwaysRunner).run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c")
         run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
         run("genhtml", "src/" + source + ".info", "-o", "./out")
