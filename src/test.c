@@ -38,6 +38,7 @@ static char* test_kafka_write()
     conf.fields_s = "{}";
     conf.tags_s = "";
     conf.quota_queue = NULL;
+    conf.quota_n = 0;
     private_data.conf = &conf;
     struct fuse_context* context = fuse_get_context();
     context->pid = getpid();
@@ -157,6 +158,7 @@ static char* test_setup_kafka()
     int argc = sizeof(argv)/sizeof(char*);
     private_data.brokers = brokers;
     private_data.topic = &topic;
+    private_data.quota_n = 0;
     k.rk = &rk;
     fuse_get_context()->private_data = (void*) &private_data;
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;

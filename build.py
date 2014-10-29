@@ -97,7 +97,8 @@ def build():
 def test():
     for source in sources:
         run("find")
-        run("./" + source + ".test")
+        run("gdb", "-batch", "./" + source + ".test", "-ex", 
+                "set verbose on", "-ex" , "run")
         run("gcov", "./src/" + source + ".c")
         run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
         run("genhtml", source + ".info", "-o", "./out")

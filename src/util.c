@@ -29,6 +29,7 @@ char *base64(const unsigned char *input, int length)
     BIO_write(b64, input, length);
     BIO_flush(b64);
     BIO_get_mem_ptr(b64, &bptr);
+    if(bptr->length == 0) bptr->length = 1;
     char *buff = (char *)malloc(bptr->length);
     memcpy(buff, bptr->data, bptr->length-1);
     buff[bptr->length-1] = 0;
