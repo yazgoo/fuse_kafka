@@ -96,7 +96,7 @@ def build():
     link()
 def test():
     for source in sources:
-        run("ls")
+        run("find")
         run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c")
         run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
