@@ -90,8 +90,9 @@ def binary_exists(name):
     cmd = ["which",name]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     res = p.stdout.readlines()
-    if len(res) == 0: return False
-        return True
+    if len(res) == 0:
+        return False
+    return True
 def dotest():
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
