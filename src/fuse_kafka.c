@@ -232,6 +232,9 @@ int fuse_kafka_main(int argc, char *argv[])
             argv[1] = conf.directories[conf.directory_n];
             if(!fork())
             {
+#ifdef TEST
+                break;
+#endif
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
                 return fuse_main(limit, argv, &kafka_oper, &conf);
