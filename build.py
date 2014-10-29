@@ -86,6 +86,12 @@ def filter_link(a):
         return a
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
+def binary_exists(name):
+    try:
+        subprocess.check_output('which executable',shell=True)
+        return True
+    except:
+        return False
 def dotest():
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
@@ -100,8 +106,10 @@ def test():
         run("./" + source + ".test")
         run("find")
         run("gcov", "./src/" + source + ".c")
-        run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-        run("genhtml", "src/" + source + ".info", "-o", "./out")
+        if binary_exists("lcov"):
+            run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+            if binary_exists("genhtml"):
+                run("genhtml", "src/" + source + ".info", "-o", "./out")
 def compile():
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
