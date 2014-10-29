@@ -247,6 +247,7 @@ int main(int argc, char** argv)
     if (result != 0) printf("%s\n", result);
     else printf("ALL TESTS PASSED\n");
     printf("Tests run: %d\n", tests_run);
-    system("find");
+    system("rm -f " TEST "/to");
+    system("ls -ltr out");
     return result != 0;
 }
