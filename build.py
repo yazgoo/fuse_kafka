@@ -100,7 +100,7 @@ def test():
         run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c")
         run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-        run("genhtml", source + ".info", "-o", "./out")
+        run("genhtml", "src/" + source + ".info", "-o", "./out")
 def compile():
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
