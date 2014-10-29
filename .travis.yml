@@ -5,7 +5,7 @@ before_install:
 install:
     - sudo apt-get update
     - sudo apt-get install libfuse-dev librdkafka-dev
-    - sudo pip install fabricate
+    - sudo pip install fabricate cpp-coveralls
 script:
     - ./build.py clean
     - ./build.py

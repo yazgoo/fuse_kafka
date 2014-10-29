@@ -248,6 +248,5 @@ int main(int argc, char** argv)
     else printf("ALL TESTS PASSED\n");
     printf("Tests run: %d\n", tests_run);
     system("rm -f " TEST "/to");
-    system("ls -ltr out");
     return result != 0;
 }

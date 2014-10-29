@@ -88,7 +88,7 @@ def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def binary_exists(name):
     try:
-        subprocess.check_output('which executable',shell=True)
+        subprocess.call(["which", name])
         return True
     except:
         return False
