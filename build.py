@@ -87,11 +87,11 @@ def filter_link(a):
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def binary_exists(name):
-    try:
-        subprocess.call(["which", name])
+    cmd = ["which",name]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    res = p.stdout.readlines()
+    if len(res) == 0: return False
         return True
-    except:
-        return False
 def dotest():
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
