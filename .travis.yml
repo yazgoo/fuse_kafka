@@ -1,3 +1,4 @@
+secure: "VQ5Ozuhthp6XCs0sI/Ieytax7OCn4/mrZMLtfeVHxkjoY6EjJOHmMj7chPD+3oe9rpwGxobCzqRUrB/SIivYQEHBbjAJzYC3Z2Dl6QTE6Is7ZVlGvv4QZtYcrpxDuQi3ZuwT3ULgFYESUJ9okRNSG+iTQddC+AMiZBEHCyfX2e4="
 language: c
 before_install:
     - echo "deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe" | sudo tee -a /etc/apt/sources.list
@@ -12,3 +13,14 @@ script:
     - ./build.py dotest
 after_success:
     - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
+    - git config --global user.name "${GIT_NAME}"
+    - git config --global user.email "${GIT_EMAIL}"
+    - cd doc
+    - git clone https://github.com/yazgoo/fuse_kafka.git .
+    - git checkout gh-pages
+    - cd ..
+    - ./build.py doc
+    - cd doc
+    - git add --all .
+    - git commit -m "auto updating documenation"
+    - git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages
