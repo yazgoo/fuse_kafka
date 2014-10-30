@@ -15,6 +15,7 @@ after_success:
     - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
     - git config --global user.name "${GIT_NAME}"
     - git config --global user.email "${GIT_EMAIL}"
+    - mkdir doc
     - cd doc
     - git clone https://github.com/yazgoo/fuse_kafka.git .
     - git checkout gh-pages
