@@ -1,0 +1,164 @@
+\href{https://travis-ci.org/yazgoo/fuse_kafka}{\tt !\mbox{[}Build Status\mbox{]}(https\-://travis-\/ci.\-org/yazgoo/fuse\-\_\-kafka.\-svg?branch=master)} \href{https://coveralls.io/r/yazgoo/fuse_kafka?branch=master}{\tt !\mbox{[}Coverage Status\mbox{]}(https\-://img.\-shields.\-io/coveralls/yazgoo/fuse\-\_\-kafka.\-svg)} \href{https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge}{\tt !\mbox{[}Gitter\mbox{]}(https\-://badges.\-gitter.\-im/\-Join Chat.\-svg)}
+
+
+
+Intercepts all writes to specified directories and send them to apache kafka brokers. Quite suited for log centralization.
+
+\section*{Installing }
+
+Packages for various distros can be installed from \href{http://download.opensuse.org/repositories/home:/yazgoo/}{\tt these repositories} at \href{https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka}{\tt open\-S\-U\-S\-E Build Service}.
+
+The following should install the new repositories then install fuse\-\_\-kafka\-: \begin{DoxyVerb}# curl -O \
+    https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh \
+    && md5sum -c <(echo "a9c81807fa1f84018f90bbd80e987863  setup_packages.sh") \
+    && chmod +x setup_packages.sh && ./setup_packages.sh
+\end{DoxyVerb}
+
+
+\section*{Configuration }
+
+A default configuration file is available in conf/fuse\-\_\-kafka.\-properties. An explanation for each parameter is available in this file. The packages should install it in /etc/fuse\-\_\-kafka.conf.
+
+\section*{Quickstart (from sources) }
+
+If you want to test fuse\-\_\-kafka, using a clone of this repository.
+
+First, build it\-: \begin{DoxyVerb}$ ./build.py
+\end{DoxyVerb}
+
+
+On another terminal session, start zookeeper (this will download kafka)\-: \begin{DoxyVerb}$ ./build.py zookeeper_start
+\end{DoxyVerb}
+
+
+On another one, start kafka\-: \begin{DoxyVerb}$ ./build.py kafka_start
+\end{DoxyVerb}
+
+
+The default configuration is conf/fuse\-\_\-kafka.\-properties. An important piece of configuration is fuse\-\_\-kafka\-\_\-directories\-: \begin{DoxyVerb}$ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
+# directories fuse_kafka will listen to (launch script will try to
+# create them if they don't exist)
+fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+\end{DoxyVerb}
+
+
+Start fuse\-\_\-kafka using the init script\-: \begin{DoxyVerb}$ src/fuse_kafka.py start
+\end{DoxyVerb}
+
+
+If you're not running as root, you might have to make /etc/fuse.conf readable by your user (here to all users)\-: \begin{DoxyVerb}$ chmod a+r /etc/fuse.conf
+\end{DoxyVerb}
+
+
+And allow non-\/root user to specify the allow\-\_\-other option, by adding a line with user\-\_\-allow\-\_\-other in /etc/fuse.conf.
+
+If fuse\-\_\-kafka is running, you should get the following output when running\-: \begin{DoxyVerb}$ src/fuse_kafka.py status
+listening on /tmp/fuse-kafka-test
+fuse kafka is running
+\end{DoxyVerb}
+
+
+In yet another terminal, start a test consumer\-: \begin{DoxyVerb}$ ./build.py kafka_consumer_start
+\end{DoxyVerb}
+
+
+Then start writing to a file under the overlay directory\-: \begin{DoxyVerb}$ bash -c 'echo "foo"' > /tmp/fuse-kafka-test/bar
+\end{DoxyVerb}
+
+
+You should have an output from the consumer similar to this\-: \begin{DoxyVerb}event:
+    group: users
+    uid: 1497
+    @tags:
+        -  test
+    @fields:
+         hostname: test
+    @timestamp: 2014-10-03T09:07:04.000+0000
+    pid: 6485
+    gid: 604
+    command: bash -c echo "foo"
+    @message: foo
+    path: /tmp/fuse-kafka-test/bar
+    @version: 0.1.3
+    user: yazgoo
+\end{DoxyVerb}
+
+
+When you're done, you can stop fuse\-\_\-kafka\-: \begin{DoxyVerb}$ src/fuse_kafka.py stop
+\end{DoxyVerb}
+
+
+\section*{Quota option test }
+
+First, commment fuse\-\_\-kafka\-\_\-quota in conf/fuse\-\_\-kafka.\-properties. Then, start fuse kafka. \begin{DoxyVerb}$ src/fuse_kafka.py start
+\end{DoxyVerb}
+
+
+Let's create a segfaulting program\-: \begin{DoxyVerb}$ cat first.c
+int main(void)
+{
+    *((int*)0) = 1;
+}
+
+$ gcc first.c
+\end{DoxyVerb}
+
+
+Then start a test consumer, displaying only the path and message\-\_\-size-\/added fields
+
+Launch the segfaulting program in fuse-\/kafka-\/test directory\-: \begin{DoxyVerb}$ /path/to/a.out
+\end{DoxyVerb}
+
+
+A new core file should appear in fused directory.
+
+Here is the consumer output\-: \begin{DoxyVerb}$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+...
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+\end{DoxyVerb}
+
+
+Here we see many messages.
+
+Then, uncomment fuse\-\_\-kafka\-\_\-quota in conf/fuse\-\_\-kafka.\-properties and launch the segfaulting program, \begin{DoxyVerb}$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 64
+    path: /tmp/fuse-kafka-test/core
+\end{DoxyVerb}
+
+
+This time, we only receive the first write.
+
+\section*{Event format }
+
+We use a logstash event, except the message and command are base64 encoded\-: \begin{DoxyVerb}{"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
+"@message": "aGVsbG8gd29ybGQ=",
+"@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
+"root",
+"command": "L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC",
+"@version": "0.1.2",
+"@fields": {
+    "first_field": "first_value",
+    "second_field": "second_value" },
+"@tags": ["mytag"]}
+\end{DoxyVerb}
+
+
+\section*{Installing from sources }
+
+\begin{DoxyVerb}# installing prerequisites
+$ sudo apt-get install librdkafka-dev libfuse-dev
+# building
+$ ./build.py 
+# testing
+$ ./build.py dotest
+# cleaning
+$ ./build.py clean
+# installing:
+$ ./build.py install\end{DoxyVerb}
+ 

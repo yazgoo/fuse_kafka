@@ -1,0 +1,224 @@
+\hypertarget{time__queue_8c}{\section{src/time\-\_\-queue.c File Reference}
+\label{time__queue_8c}\index{src/time\-\_\-queue.\-c@{src/time\-\_\-queue.\-c}}
+}
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtime__queue}{time\-\_\-queue}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned long \hyperlink{time__queue_8c_a1bc48c2d45970dac67074f3673e94e7b}{time\-\_\-queue\-\_\-hash} (unsigned char $\ast$str)
+\begin{DoxyCompactList}\small\item\em Internal\-: generates a djb2 hash. \end{DoxyCompactList}\item 
+\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$ \hyperlink{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}{time\-\_\-queue\-\_\-new} (unsigned int size, unsigned int quota)
+\begin{DoxyCompactList}\small\item\em Public\-: instantiates a new time queue, free it with time\-\_\-queue\-\_\-delete. \end{DoxyCompactList}\item 
+unsigned long \hyperlink{time__queue_8c_a3bec434e48da17f9bbe881622c7da594}{time\-\_\-queue\-\_\-time} ()
+\begin{DoxyCompactList}\small\item\em Internal\-: get the time. \end{DoxyCompactList}\item 
+void \hyperlink{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}{time\-\_\-queue\-\_\-set} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key)
+\begin{DoxyCompactList}\small\item\em Public\-: set a time queue key to current time. \end{DoxyCompactList}\item 
+unsigned long $\ast$ \hyperlink{time__queue_8c_a221a8f617d2287a6168cab25956677cb}{time\-\_\-queue\-\_\-get} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key)
+\begin{DoxyCompactList}\small\item\em Public\-: get last stored time pointer for given key. \end{DoxyCompactList}\item 
+int \hyperlink{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}{time\-\_\-queue\-\_\-overflows} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key, unsigned int size)
+\begin{DoxyCompactList}\small\item\em Internal\-: checks if the given key overflows the quota. \end{DoxyCompactList}\item 
+void \hyperlink{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{time\-\_\-queue\-\_\-delete} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue)
+\begin{DoxyCompactList}\small\item\em Public\-: deletes the time queue structure and allocated content. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A time queue is a datastructure which allows to store time for a finite number of keys. It allows to check if, for a given key, a limit per unit of time is reached or not. 
+
+Definition in file \hyperlink{time__queue_8c_source}{time\-\_\-queue.\-c}.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-delete@{time\-\_\-queue\-\_\-delete}}
+\index{time\-\_\-queue\-\_\-delete@{time\-\_\-queue\-\_\-delete}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-delete}]{\setlength{\rightskip}{0pt plus 5cm}void time\-\_\-queue\-\_\-delete (
+\begin{DoxyParamCaption}
+\item[{{\bf time\-\_\-queue} $\ast$}]{queue}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_aee8286362f0df21f401d96d725cd340b}
+
+
+Public\-: deletes the time queue structure and allocated content. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the queue to delete \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 153 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_a221a8f617d2287a6168cab25956677cb}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-get@{time\-\_\-queue\-\_\-get}}
+\index{time\-\_\-queue\-\_\-get@{time\-\_\-queue\-\_\-get}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long$\ast$ time\-\_\-queue\-\_\-get (
+\begin{DoxyParamCaption}
+\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{char $\ast$}]{key}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_a221a8f617d2287a6168cab25956677cb}
+
+
+Public\-: get last stored time pointer for given key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the time queue to modify \\
+\hline
+{\em key} & the key to get the value from\\
+\hline
+\end{DoxyParams}
+Examples \begin{DoxyVerb}time_queue_get(queue, "/unset/key") 
+     => NULL
+time_queue_get(queue, "/existing/key")
+     => pointer to: 1412074060579654
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+a pointer to the time value registered, N\-U\-L\-L if there is none 
+\end{DoxyReturn}
+
+
+Definition at line 114 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_a1bc48c2d45970dac67074f3673e94e7b}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-hash@{time\-\_\-queue\-\_\-hash}}
+\index{time\-\_\-queue\-\_\-hash@{time\-\_\-queue\-\_\-hash}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-hash}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long time\-\_\-queue\-\_\-hash (
+\begin{DoxyParamCaption}
+\item[{unsigned char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_a1bc48c2d45970dac67074f3673e94e7b}
+
+
+Internal\-: generates a djb2 hash. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & the string to hash\\
+\hline
+\end{DoxyParams}
+Examples \begin{DoxyVerb}time_queue_hash('hello world')
+     => 13876786532495509697
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+a hash for the string 
+\end{DoxyReturn}
+
+
+Definition at line 25 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-new@{time\-\_\-queue\-\_\-new}}
+\index{time\-\_\-queue\-\_\-new@{time\-\_\-queue\-\_\-new}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-new}]{\setlength{\rightskip}{0pt plus 5cm}{\bf time\-\_\-queue}$\ast$ time\-\_\-queue\-\_\-new (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{size, }
+\item[{unsigned int}]{quota}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}
+
+
+Public\-: instantiates a new time queue, free it with time\-\_\-queue\-\_\-delete. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & the maximum number of items saved in the queue \\
+\hline
+{\em quota} & the maximum size allowed per second per hash entry\\
+\hline
+\end{DoxyParams}
+Examples \begin{DoxyVerb} time_queue_new(10, 42)
+     => time_queue*
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+a newly allocated pointer to a time queue of the specified size with the specified quota initialized to zero for values, and hashes 
+\end{DoxyReturn}
+
+
+Definition at line 46 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-overflows@{time\-\_\-queue\-\_\-overflows}}
+\index{time\-\_\-queue\-\_\-overflows@{time\-\_\-queue\-\_\-overflows}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-overflows}]{\setlength{\rightskip}{0pt plus 5cm}int time\-\_\-queue\-\_\-overflows (
+\begin{DoxyParamCaption}
+\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{char $\ast$}]{key, }
+\item[{unsigned int}]{size}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}
+
+
+Internal\-: checks if the given key overflows the quota. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the time queue to get data from \\
+\hline
+{\em key} & the key to check \\
+\hline
+{\em size} & the size to compare with the quota\\
+\hline
+\end{DoxyParams}
+Examples
+
+time\-\_\-queue$\ast$ queue = time\-\_\-queue\-\_\-new(10, 42); time\-\_\-queue\-\_\-set(queue, \char`\"{}/var/log/lol\char`\"{}); sleep(1); time\-\_\-queue\-\_\-overflows(queue, \char`\"{}/var/log/lol\char`\"{}, 880); =$>$ 1
+
+\begin{DoxyReturn}{Returns}
+0 if the key does not overflow the quota or no value exists for this key, 1 overwise 
+\end{DoxyReturn}
+
+
+Definition at line 141 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-set@{time\-\_\-queue\-\_\-set}}
+\index{time\-\_\-queue\-\_\-set@{time\-\_\-queue\-\_\-set}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-set}]{\setlength{\rightskip}{0pt plus 5cm}void time\-\_\-queue\-\_\-set (
+\begin{DoxyParamCaption}
+\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{char $\ast$}]{key}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}
+
+
+Public\-: set a time queue key to current time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the time queue to modify \\
+\hline
+{\em key} & the key to set\\
+\hline
+\end{DoxyParams}
+Examples \begin{DoxyVerb} time_queue_set(queue, "/var/log/blah.log")\end{DoxyVerb}
+ 
+
+Definition at line 79 of file time\-\_\-queue.\-c.
+
+\hypertarget{time__queue_8c_a3bec434e48da17f9bbe881622c7da594}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-time@{time\-\_\-queue\-\_\-time}}
+\index{time\-\_\-queue\-\_\-time@{time\-\_\-queue\-\_\-time}!time_queue.c@{time\-\_\-queue.\-c}}
+\subsubsection[{time\-\_\-queue\-\_\-time}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long time\-\_\-queue\-\_\-time (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{time__queue_8c_a3bec434e48da17f9bbe881622c7da594}
+
+
+Internal\-: get the time. 
+
+\begin{DoxyReturn}{Returns}
+current time in microseconds 
+\end{DoxyReturn}
+
+
+Definition at line 64 of file time\-\_\-queue.\-c.
+

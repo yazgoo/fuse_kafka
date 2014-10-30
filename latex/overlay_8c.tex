@@ -1,0 +1,99 @@
+\hypertarget{overlay_8c}{\section{src/overlay.c File Reference}
+\label{overlay_8c}\index{src/overlay.\-c@{src/overlay.\-c}}
+}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{overlay_8c_a6cd12eae9f312164763b710e63cfa1c0}{static int {\bfseries kafka\-\_\-getattr} (const char $\ast$path, struct stat $\ast$stbuf)}\label{overlay_8c_a6cd12eae9f312164763b710e63cfa1c0}
+
+\item 
+\hypertarget{overlay_8c_ac3b44b4366033edb99c597cfebb43bcf}{static int {\bfseries kafka\-\_\-fgetattr} (const char $\ast$path, struct stat $\ast$stbuf, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_ac3b44b4366033edb99c597cfebb43bcf}
+
+\item 
+\hypertarget{overlay_8c_a296f6c039876832b8a3694851e0d750a}{static int {\bfseries kafka\-\_\-access} (const char $\ast$path, int mask)}\label{overlay_8c_a296f6c039876832b8a3694851e0d750a}
+
+\item 
+\hypertarget{overlay_8c_af69208bbb51623a355a38bf8f089323d}{static int {\bfseries kafka\-\_\-readlink} (const char $\ast$path, char $\ast$buf, size\-\_\-t size)}\label{overlay_8c_af69208bbb51623a355a38bf8f089323d}
+
+\item 
+\hypertarget{overlay_8c_a327448ef0501784480b4a25e27b4d91f}{static int {\bfseries kafka\-\_\-opendir} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a327448ef0501784480b4a25e27b4d91f}
+
+\item 
+\hypertarget{overlay_8c_ad912ba3bb5667bf8840238a49a16af83}{static D\-I\-R $\ast$ {\bfseries get\-\_\-dirp} (struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_ad912ba3bb5667bf8840238a49a16af83}
+
+\item 
+\hypertarget{overlay_8c_ab4019844abbe70346c77616ea0e7db13}{static int {\bfseries kafka\-\_\-readdir} (const char $\ast$path, void $\ast$buf, fuse\-\_\-fill\-\_\-dir\-\_\-t filler, off\-\_\-t offset, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_ab4019844abbe70346c77616ea0e7db13}
+
+\item 
+\hypertarget{overlay_8c_a3712b5bbaffc2d34e483a42f4d283b31}{static int {\bfseries kafka\-\_\-releasedir} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a3712b5bbaffc2d34e483a42f4d283b31}
+
+\item 
+\hypertarget{overlay_8c_a68195dcf7ac2b1c824fc18feec088d62}{static int {\bfseries kafka\-\_\-mknod} (const char $\ast$path, mode\-\_\-t mode, dev\-\_\-t rdev)}\label{overlay_8c_a68195dcf7ac2b1c824fc18feec088d62}
+
+\item 
+\hypertarget{overlay_8c_add7a93741e8bb7250397ee3c1da7750c}{static int {\bfseries kafka\-\_\-mkdir} (const char $\ast$path, mode\-\_\-t mode)}\label{overlay_8c_add7a93741e8bb7250397ee3c1da7750c}
+
+\item 
+\hypertarget{overlay_8c_a3be161e321aa866ef803b174952dfda3}{static int {\bfseries kafka\-\_\-unlink} (const char $\ast$path)}\label{overlay_8c_a3be161e321aa866ef803b174952dfda3}
+
+\item 
+\hypertarget{overlay_8c_a48ddd9c27a701572ff77fba192029dfb}{static int {\bfseries kafka\-\_\-rmdir} (const char $\ast$path)}\label{overlay_8c_a48ddd9c27a701572ff77fba192029dfb}
+
+\item 
+\hypertarget{overlay_8c_a46831c52a9f4d08719caa3b01591658a}{static int {\bfseries kafka\-\_\-symlink} (const char $\ast$from, const char $\ast$to)}\label{overlay_8c_a46831c52a9f4d08719caa3b01591658a}
+
+\item 
+\hypertarget{overlay_8c_a7fb76bef7356d24aa00f8978966a7fd0}{static int {\bfseries kafka\-\_\-rename} (const char $\ast$from, const char $\ast$to)}\label{overlay_8c_a7fb76bef7356d24aa00f8978966a7fd0}
+
+\item 
+\hypertarget{overlay_8c_a0e7b0176ac01eb9979c10ba4e8e239c3}{static int {\bfseries kafka\-\_\-link} (const char $\ast$from, const char $\ast$to)}\label{overlay_8c_a0e7b0176ac01eb9979c10ba4e8e239c3}
+
+\item 
+\hypertarget{overlay_8c_a7e216401ec0751ec5da09257ea9b1b06}{static int {\bfseries kafka\-\_\-chmod} (const char $\ast$path, mode\-\_\-t mode)}\label{overlay_8c_a7e216401ec0751ec5da09257ea9b1b06}
+
+\item 
+\hypertarget{overlay_8c_aef2622d53c4615dbaa64c657fd22d162}{static int {\bfseries kafka\-\_\-chown} (const char $\ast$path, uid\-\_\-t uid, gid\-\_\-t gid)}\label{overlay_8c_aef2622d53c4615dbaa64c657fd22d162}
+
+\item 
+\hypertarget{overlay_8c_a8b235a17bfcbcabc1f7fbfc584ce9585}{static int {\bfseries kafka\-\_\-truncate} (const char $\ast$path, off\-\_\-t size)}\label{overlay_8c_a8b235a17bfcbcabc1f7fbfc584ce9585}
+
+\item 
+\hypertarget{overlay_8c_a9ddfab2b0ed0b477dd6ec5d0f8f2604d}{static int {\bfseries kafka\-\_\-ftruncate} (const char $\ast$path, off\-\_\-t size, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a9ddfab2b0ed0b477dd6ec5d0f8f2604d}
+
+\item 
+\hypertarget{overlay_8c_a43424ce9e44d7cea1913de38fd9ec7bb}{static int {\bfseries kafka\-\_\-utimens} (const char $\ast$path, const struct timespec ts\mbox{[}2\mbox{]})}\label{overlay_8c_a43424ce9e44d7cea1913de38fd9ec7bb}
+
+\item 
+\hypertarget{overlay_8c_ae7111bf7eaafba716aa61a88ea89cce4}{static int {\bfseries kafka\-\_\-create} (const char $\ast$path, mode\-\_\-t mode, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_ae7111bf7eaafba716aa61a88ea89cce4}
+
+\item 
+\hypertarget{overlay_8c_aa261c47d2bfc227d4f309b24c2f20d0a}{static int {\bfseries kafka\-\_\-open} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_aa261c47d2bfc227d4f309b24c2f20d0a}
+
+\item 
+\hypertarget{overlay_8c_a038df5f594b00944eabe1b33c4ff0278}{static int {\bfseries kafka\-\_\-read} (const char $\ast$path, char $\ast$buf, size\-\_\-t size, off\-\_\-t offset, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a038df5f594b00944eabe1b33c4ff0278}
+
+\item 
+\hypertarget{overlay_8c_ad8bf53b5c0f4b0b50562c6862a022dad}{static int {\bfseries kafka\-\_\-statfs} (const char $\ast$path, struct statvfs $\ast$stbuf)}\label{overlay_8c_ad8bf53b5c0f4b0b50562c6862a022dad}
+
+\item 
+\hypertarget{overlay_8c_a0aed34f1045a727e19835e14bdef0453}{static int {\bfseries kafka\-\_\-flush} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a0aed34f1045a727e19835e14bdef0453}
+
+\item 
+\hypertarget{overlay_8c_af6cfcf002867dcba6ebb4ba4bd9f4b11}{static int {\bfseries kafka\-\_\-release} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_af6cfcf002867dcba6ebb4ba4bd9f4b11}
+
+\item 
+\hypertarget{overlay_8c_a76b3b7852187346ee239d9864cf357d7}{static int {\bfseries kafka\-\_\-fsync} (const char $\ast$path, int isdatasync, struct fuse\-\_\-file\-\_\-info $\ast$fi)}\label{overlay_8c_a76b3b7852187346ee239d9864cf357d7}
+
+\item 
+\hypertarget{overlay_8c_a7f2ac021e98769074c82754cf4a004a9}{static int {\bfseries kafka\-\_\-lock} (const char $\ast$path, struct fuse\-\_\-file\-\_\-info $\ast$fi, int cmd, struct flock $\ast$lock)}\label{overlay_8c_a7f2ac021e98769074c82754cf4a004a9}
+
+\item 
+\hypertarget{overlay_8c_aeacca9727bab0819d8cedf09a99fcf28}{void $\ast$ {\bfseries kafka\-\_\-init} (struct fuse\-\_\-conn\-\_\-info $\ast$conn)}\label{overlay_8c_aeacca9727bab0819d8cedf09a99fcf28}
+
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{overlay_8c_aac2107d4172cd89ccf89d3f40d74996c}{static struct fuse\-\_\-operations {\bfseries kafka\-\_\-oper}}\label{overlay_8c_aac2107d4172cd89ccf89d3f40d74996c}
+
+\end{DoxyCompactItemize}

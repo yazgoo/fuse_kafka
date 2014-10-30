@@ -1,0 +1,47 @@
+\hypertarget{trace_8c}{\section{src/trace.c File Reference}
+\label{trace_8c}\index{src/trace.\-c@{src/trace.\-c}}
+}
+
+
+Utility to send trace from fuse\-\_\-kafka into kafka.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \hyperlink{trace_8c_ad94abf599a8e0299bcb5088c87ebbdb8}{trace} (const char $\ast$fmt,...)
+\begin{DoxyCompactList}\small\item\em formats and send traces to kafka, behaving like printf \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Utility to send trace from fuse\-\_\-kafka into kafka. 
+
+Definition in file \hyperlink{trace_8c_source}{trace.\-c}.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{trace_8c_ad94abf599a8e0299bcb5088c87ebbdb8}{\index{trace.\-c@{trace.\-c}!trace@{trace}}
+\index{trace@{trace}!trace.c@{trace.\-c}}
+\subsubsection[{trace}]{\setlength{\rightskip}{0pt plus 5cm}static int trace (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fmt, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}}\label{trace_8c_ad94abf599a8e0299bcb5088c87ebbdb8}
+
+
+formats and send traces to kafka, behaving like printf 
+
+
+\begin{DoxyParams}{Parameters}
+{\em fmt} & the format of the string to send as defined in printf \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success 
+\end{DoxyReturn}
+
+
+Definition at line 9 of file trace.\-c.
+

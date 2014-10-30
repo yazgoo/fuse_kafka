@@ -1,0 +1,81 @@
+\hypertarget{test_8c}{\section{src/test.c File Reference}
+\label{test_8c}\index{src/test.\-c@{src/test.\-c}}
+}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{test_8c_aeec80311534ba44e106083c80ba908c3}{\#define {\bfseries fuse\-\_\-get\-\_\-context}()~test\-\_\-fuse\-\_\-get\-\_\-context()}\label{test_8c_aeec80311534ba44e106083c80ba908c3}
+
+\item 
+\hypertarget{test_8c_aad83ba6b11df552879dd0f0a4ce43407}{\#define {\bfseries mu\-\_\-assert}(message, test)~do \{ if (!(test)) return message; \} while (0)}\label{test_8c_aad83ba6b11df552879dd0f0a4ce43407}
+
+\item 
+\#define {\bfseries mu\-\_\-run\-\_\-test}(test)
+\item 
+\hypertarget{test_8c_abe050be1cca5c04a1bbec5d4bf1c02e6}{\#define {\bfseries T\-E\-S\-T\-\_\-\-F\-U\-N\-C}(x, y,...)~mu\-\_\-assert(\#x \char`\"{} failed\char`\"{}, x(\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) == y);}\label{test_8c_abe050be1cca5c04a1bbec5d4bf1c02e6}
+
+\item 
+\hypertarget{test_8c_a500a80d92af5171c67e255ff9f20035e}{\#define {\bfseries T\-E\-S\-T\-\_\-\-F\-U\-N\-C\-\_\-\-S\-U\-C\-C\-E\-S\-S}(x,...)~mu\-\_\-assert(\#x \char`\"{} failed\char`\"{}, x(\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) == 0);}\label{test_8c_a500a80d92af5171c67e255ff9f20035e}
+
+\item 
+\hypertarget{test_8c_a4fcebc6d90306c6bdffa3b0b6c671882}{\#define {\bfseries T\-E\-S\-T\-\_\-\-F\-U\-N\-C\-\_\-\-F\-A\-I\-L\-U\-R\-E}(x,...)~mu\-\_\-assert(\#x \char`\"{} succeeded\char`\"{}, x(\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) != 0);}\label{test_8c_a4fcebc6d90306c6bdffa3b0b6c671882}
+
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{test_8c_abd4ce2f2b04dd85332081e4baad92fff}{static char $\ast$ {\bfseries get\-\_\-file\-\_\-content} (char $\ast$path)}\label{test_8c_abd4ce2f2b04dd85332081e4baad92fff}
+
+\item 
+\hypertarget{test_8c_a55a56b58cfb6dfd6fbea7ee345a34ef7}{static char $\ast$ {\bfseries test\-\_\-kafka\-\_\-write} ()}\label{test_8c_a55a56b58cfb6dfd6fbea7ee345a34ef7}
+
+\item 
+\hypertarget{test_8c_a33daede4a854ecff80961027d1772986}{int {\bfseries test\-\_\-filler} (void $\ast$buf, const char $\ast$name, const struct stat $\ast$stbuf, off\-\_\-t off)}\label{test_8c_a33daede4a854ecff80961027d1772986}
+
+\item 
+\hypertarget{test_8c_a8d85c9e0947a04b6c419ff4c2c49b981}{static char $\ast$ {\bfseries test\-\_\-passthrough\-\_\-calls} ()}\label{test_8c_a8d85c9e0947a04b6c419ff4c2c49b981}
+
+\item 
+\hypertarget{test_8c_a8ed4104e1ca01484a6a1be12608013bf}{static char $\ast$ {\bfseries test\-\_\-setup\-\_\-kafka} ()}\label{test_8c_a8ed4104e1ca01484a6a1be12608013bf}
+
+\item 
+\hypertarget{test_8c_a60d55b982a7af6b0a1ce30cc7d5b3846}{static char $\ast$ {\bfseries test\-\_\-parse\-\_\-arguments} ()}\label{test_8c_a60d55b982a7af6b0a1ce30cc7d5b3846}
+
+\item 
+\hypertarget{test_8c_af4bfe0fc81afb589287d3710b4971af3}{static char $\ast$ {\bfseries test\-\_\-logging} ()}\label{test_8c_af4bfe0fc81afb589287d3710b4971af3}
+
+\item 
+\hypertarget{test_8c_afcf3349a0c73d983540c56c9d692abdd}{static char $\ast$ {\bfseries test\-\_\-utils} ()}\label{test_8c_afcf3349a0c73d983540c56c9d692abdd}
+
+\item 
+\hypertarget{test_8c_a5778abb510b0149069f4ed1de091f736}{static char $\ast$ {\bfseries all\-\_\-tests} ()}\label{test_8c_a5778abb510b0149069f4ed1de091f736}
+
+\item 
+\hypertarget{test_8c_a3c04138a5bfe5d72780bb7e82a18e627}{int {\bfseries main} (int argc, char $\ast$$\ast$argv)}\label{test_8c_a3c04138a5bfe5d72780bb7e82a18e627}
+
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{test_8c_a91aa4203331e915f2d20dd26579791ee}{int {\bfseries tests\-\_\-run} = 0}\label{test_8c_a91aa4203331e915f2d20dd26579791ee}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{test_8c_a9c8e76cc15deeca6f9afa206f6caca76}{\index{test.\-c@{test.\-c}!mu\-\_\-run\-\_\-test@{mu\-\_\-run\-\_\-test}}
+\index{mu\-\_\-run\-\_\-test@{mu\-\_\-run\-\_\-test}!test.c@{test.\-c}}
+\subsubsection[{mu\-\_\-run\-\_\-test}]{\setlength{\rightskip}{0pt plus 5cm}\#define mu\-\_\-run\-\_\-test(
+\begin{DoxyParamCaption}
+\item[{}]{test}
+\end{DoxyParamCaption}
+)}}\label{test_8c_a9c8e76cc15deeca6f9afa206f6caca76}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{ \textcolor{keywordtype}{char} *message = test(); tests\_run++; \(\backslash\)
+    if (message) return message; \} while (0)
+\end{DoxyCode}
+
+
+Definition at line 5 of file test.\-c.
+
