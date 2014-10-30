@@ -1,0 +1,38 @@
+bonnie++ -d /tmp/fuse-kafka-test/ -r 2048
+Writing a byte at a time...done
+Writing intelligently...done
+Rewriting...done
+Reading a byte at a time...done
+Reading intelligently...done
+start 'em...done...done...done...done...done...
+Create files in sequential order...done.
+Stat files in sequential order...done.
+Delete files in sequential order...done.
+Create files in random order...done.
+Stat files in random order...done.
+Delete files in random order...done.
+Version  1.97       ------Sequential Output------ --Sequential Input- --Random-
+Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+yazgoo-virtualbo 4G    69  45 89558  13 46321   7  4559  85 340827   8 655.4   8
+Latency               137ms    1612ms    1569ms   21334us   54607us     779ms
+Version  1.97       ------Sequential Create------ --------Random Create--------
+yazgoo-virtualbox   -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16 12866  26 +++++ +++ 27317  22 15595  29 +++++ +++ 31799  25
+Latency             26024us    2718us     482us    1740us     156us      81us
+1.97,1.97,yazgoo-virtualbox,1,1414688317,4G,,69,45,89558,13,46321,7,4559,85,340827,8,655.4,8,16,,,,,12866,26,+++++,+++,27317,22,15595,29,+++++,+++,31799,25,137ms,1612ms,1569ms,21334us,54607us,779ms,26024us,2718us,482us,1740us,156us,81us
+
+$ bonnie++ -d /tmp/fuse-kafka-test/ -r 2048 -s0 -n 128
+Create files in sequential order...done.
+Stat files in sequential order...done.
+Delete files in sequential order...done.
+Create files in random order...done.
+Stat files in random order...done.
+Delete files in random order...done.
+Version  1.97       ------Sequential Create------ --------Random Create--------
+yazgoo-virtualbox   -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                128 18483  31 65562  36  7906   8 19973  32 78313  47  9035   9
+Latency             30394us    2331us     585ms   22923us    1574us     567ms
+1.97,1.97,yazgoo-virtualbox,1,1414692064,,,,,,,,,,,,,,,128,,,,,18483,31,65562,36,7906,8,19973,32,78313,47,9035,9,,,,,,,30394us,2331us,585ms,22923us,1574us,567ms
