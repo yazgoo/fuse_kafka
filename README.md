@@ -2,6 +2,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/yazgoo/fuse_kafka.svg)](https://coveralls.io/r/yazgoo/fuse_kafka?branch=master)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Documentation](http://img.shields.io/badge/documentation-%E2%9C%93-blue.svg?style=flat)](http://yazgoo.github.io/fuse_kafka/html/)
+[![Open Build Service](http://img.shields.io/badge/install-packages-yellow.svg?style=flat)](https://build.opensuse.org/package/show/home:yazgoo/fuse_kafka)
 
 ![fuse kafka logo](https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/graphics/fuse_kafka_logo.png "Logo")
 
