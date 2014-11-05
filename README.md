@@ -34,6 +34,16 @@ Quickstart (from sources)
 
 If you want to test fuse\_kafka, using a clone of this repository.
 
+On Debian and Ubuntu, you should install the following:
+
+ *  librdkafka-dev
+ *  librdkafka1
+ *  libzookeeper-mt-dev
+ *  libzookeeper-mt2
+ *  libjansson-dev
+ *  libjansson4
+ *  python
+
 First, build it:
 
     $ ./build.py

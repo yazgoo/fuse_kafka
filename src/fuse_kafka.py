@@ -133,6 +133,7 @@ class FuseKafkaService:
             print directory
             if not os.path.exists(directory):
                 os.makedirs(directory)
+        print(" ".join(self.prefix + self.configuration.args()))
 	subprocess.Popen(self.prefix + self.configuration.args(), env = env)
     def stop(self):
         """ Stops fuse_kafka processes """

@@ -56,6 +56,8 @@ typedef struct _config {
     /** @brief TODO not implented: substitutions to do to on the command
      * lines */
     CONFIG_ITEM(substitutions)
+    /** @brief zookeepers pointing to kafka brokers to write to */ 
+    CONFIG_ITEM(zookeepers)
     /** @brief kafka brokers to write to */ 
     CONFIG_ITEM(brokers)
     /** @brief kafka topic to write events to */ 
@@ -197,6 +199,7 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(persist)
             else CONFIG_CURRENT(excluded_files)
             else CONFIG_CURRENT(substitutions)
+            else CONFIG_CURRENT(zookeepers)
             else CONFIG_CURRENT(brokers)
             else CONFIG_CURRENT(topic)
             else CONFIG_CURRENT(fields)

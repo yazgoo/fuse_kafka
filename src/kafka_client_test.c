@@ -75,4 +75,20 @@ int rd_kafka_produce (rd_kafka_topic_t *rkt, int32_t partitition,
 		      const void *key, size_t keylen,
 		      void *msg_opaque)
 { return test_with()->rd_kafka_produce_returns; }
-
+int rd_kafka_poll (rd_kafka_t *rk, int timeout_ms)
+{
+    return 0;
+}
+typedef void zhandle_t;
+struct String_vector {
+        int32_t count;
+        char * *data;
+};
+#define ZOK 1
+#define ZOO_CHILD_EVENT 4
+zhandle_t *zookeeper_init(const char *host, void* fn,
+        int recv_timeout, void *clientid, void *context, int flags);
+int zoo_get_children(zhandle_t *zh, const char *path, int watch,
+                            struct String_vector *strings);
+int zoo_get(zhandle_t *zh, const char *path, int watch, char *buffer,   
+                   int* buffer_len, void *stat);

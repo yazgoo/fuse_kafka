@@ -6,8 +6,8 @@ except ImportError, e:
 from fabricate import *
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["crypto", "fuse", "dl", "pthread"]#, "ulockmgr"]
-libs = ["rdkafka",  "z", "rt"] + common_libs
+common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
+libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
 flags = ['-D_FILE_OFFSET_BITS=64']
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
 kafka_server = "http://mir2.ovh.net/ftp.apache.org/dist/kafka/"
@@ -18,6 +18,8 @@ kafka_archive = kafka_directory + ".tgz"
 kafka_bin_directory = kafka_directory + "/bin/"
 kafka_config_directory = kafka_directory + "/config/"
 class FuseKafkaLog:
+    def __init__(self):
+        self.select = None
     def run_command(self, *command):
         p = subprocess.Popen(command,
                 stdout=subprocess.PIPE,
