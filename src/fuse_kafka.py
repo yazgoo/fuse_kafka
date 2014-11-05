@@ -11,7 +11,7 @@
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import sys, getopt, json, glob, os, subprocess, copy
+import sys, getopt, json, glob, os, subprocess, copy, time
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
@@ -140,8 +140,9 @@ class FuseKafkaService:
     def restart(self):
         """ Stops and starts fuse_kafka processes """
         self.stop()
+        while self.get_status() == 0: time.sleep(0.1)
         self.start()
-    def status(self):
+    def get_status(self):
         """ Displays the status of fuse_kafka processes """
         status = 3
         with open("/proc/mounts") as f:
@@ -149,6 +150,9 @@ class FuseKafkaService:
                 if line.startswith("fuse_kafka"):
                     print "listening on " + line.split()[1]
                     status = 0
+        return status
+    def status(self):
+        status = self.get_status()
         sys.stdout.write("service is ")
         if status == 3: sys.stdout.write("not ")
         print("running")

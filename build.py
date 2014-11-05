@@ -61,12 +61,23 @@ class FuseKafkaLog:
             except ValueError:
                 print line
 def get_version():
-    for source in sources:
-        f = open("src/" + source + ".c")
-        [f.readline() for i in range(3)]
-        result = f.readline().split()[-1][1:-1]
-        f.close()
-        return result
+    f = open("src/version.h")
+    result = []
+    while True:
+        result = f.readline().split()
+        if len(result) == 3 and result[0] == "#define" and result[1] == "VERSION":
+            break;
+    result = result[-1][1:-1]
+    f.close()
+    return result
+def bump_version():
+    v = os.environ.get('v')
+    if v == None:
+        print("Usage: $ v=" + get_version() + " " + sys.argv[0] + " bump_version")
+        return
+    with open("src/version.h", "w") as version:
+        print "new version is " + v
+        version.write("#define VERSION \""+ v + "\"")
 def version():
     print(get_version())
 def package():

@@ -1,7 +1,7 @@
 /** @file 
  * @brief main fuse_kafka source
  **/ 
-#define VERSION "0.1.3"
+#include "version.h"
 #define FUSE_USE_VERSION 26
 #ifdef HAVE_CONFIG_H
 #include <config.h>
