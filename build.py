@@ -75,9 +75,16 @@ def bump_version():
     if v == None:
         print("Usage: $ v=" + get_version() + " " + sys.argv[0] + " bump_version")
         return
+    previous_v = get_version()
+    for ext in ["spec", "dsc"]:
+        previous_path = "./packaging/fuse_kafka-{}.{}".format(previous_v, ext)
+        path = "./packaging/fuse_kafka-{}.{}".format(v, ext)
+        run("mv", previous_path, path)
+        run("sed", "-i", "s/^\(Version: \).*/\\1{}/".format(v), path)
+        run("git", "add", path)
     with open("src/version.h", "w") as version:
-        print "new version is " + v
-        version.write("#define VERSION \""+ v + "\"")
+        version.write("#define VERSION \""+ v + "\"\n")
+    print "version bumped from {} to {} ".format(previous_v, v)
 def version():
     print(get_version())
 def package():
