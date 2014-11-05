@@ -1,12 +1,29 @@
 language: c
 before_install:
-    - echo "deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-get update -qq
+- echo "deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe" | sudo tee -a /etc/apt/sources.list
+- sudo apt-get update -qq
 install:
-    - sudo apt-get update
-    - sudo apt-get install libfuse-dev librdkafka-dev
-    - sudo pip install fabricate
+- sudo apt-get update
+- sudo apt-get install libfuse-dev librdkafka-dev
+- sudo pip install fabricate cpp-coveralls
 script:
-    ./build.py && ./build.py test
+- ./build.py clean
+- ./build.py
+- ./build.py dotest
 after_success:
-    - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
+- coveralls --exclude bin --exclude tests --gcov-options '\-lp'
+- git config --global user.name "${GIT_NAME}"
+- git config --global user.email "${GIT_EMAIL}"
+- mkdir doc
+- cd doc
+- git clone https://github.com/yazgoo/fuse_kafka.git .
+- git checkout gh-pages
+- cd ..
+- ./build.py doc
+- cd doc
+- git add --all .
+- git commit -m "auto updating documenation"
+- git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages
+env:
+  global:
+    secure: LZlIH/SfgTMAQjUULjIk4j6pxhxVKPRvzRopdDeFnXrRozIeBdUUOePQEMoFYiiu/qAhoROEiO9SupvyX6YE2wGpEm/PIN30HmAXN1OxabpADPjyjbCHycaYb8ejl9xjoA3w68YbT7ezhV/ut1fvuihDZxotqUodXK7n1m7M+K4=

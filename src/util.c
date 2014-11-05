@@ -29,6 +29,7 @@ char *base64(const unsigned char *input, int length)
     BIO_write(b64, input, length);
     BIO_flush(b64);
     BIO_get_mem_ptr(b64, &bptr);
+    if(bptr->length == 0) bptr->length = 1;
     char *buff = (char *)malloc(bptr->length);
     memcpy(buff, bptr->data, bptr->length-1);
     buff[bptr->length-1] = 0;
@@ -48,7 +49,7 @@ static char* get_command_line(int pid)
     char* path;
     FILE* f;
     char c;
-    char* string = (char*) malloc(size);
+    char* command_line = (char*) malloc(size * sizeof(char));
     char* b64;
     asprintf(&path, "/proc/%d/cmdline", pid);
     if((f = fopen(path, "r")) != NULL)
@@ -59,16 +60,17 @@ static char* get_command_line(int pid)
             if(i >= (size - 1))
             {
                 size += 256;
-                char* string = (char*) realloc(string, size);
+                command_line = (char*) realloc(
+                        command_line, size * sizeof(char));
             }
-            string[i++] = c;
+            command_line[i++] = c;
         }
         fclose(f);
     }
-    string[i] = 0;
+    command_line[i] = 0;
     free(path);
-    b64 = base64(string, strlen(string));
-    free(string);
+    b64 = base64(command_line, strlen(command_line));
+    free(command_line);
     return b64;
 }
 /**

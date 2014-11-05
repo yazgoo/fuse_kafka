@@ -1,13 +1,16 @@
 /** @file 
  * @brief main fuse_kafka source
  **/ 
-#define VERSION "0.1.3"
+#include "version.h"
 #define FUSE_USE_VERSION 26
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #define _GNU_SOURCE
 #include <fuse.h>
+#ifdef TEST
+#define fuse_get_context() test_fuse_get_context()
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -229,6 +232,9 @@ int fuse_kafka_main(int argc, char *argv[])
             argv[1] = conf.directories[conf.directory_n];
             if(!fork())
             {
+#ifdef TEST
+                break;
+#endif
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
                 return fuse_main(limit, argv, &kafka_oper, &conf);

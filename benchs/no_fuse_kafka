@@ -1,0 +1,38 @@
+bonnie++ -d /tmp/fuse-kafka-test/ -r 2048
+Writing a byte at a time...done
+Writing intelligently...^[^[[Cdone
+Rewriting...done
+Reading a byte at a time...done
+Reading intelligently...done
+start 'em...done...done...done...done...done...
+Create files in sequential order...done.
+Stat files in sequential order...done.
+Delete files in sequential order...done.
+Create files in random order...done.
+Stat files in random order...done.
+Delete files in random order...done.
+Version  1.97       ------Sequential Output------ --Sequential Input- --Random-
+Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+yazgoo-virtualbo 4G  1022  97 99103  12 93291   4  4846  75 6344066  77  3690  10
+Latency             12721us    1614ms    1538ms    1808us   25710us      68us
+Version  1.97       ------Sequential Create------ --------Random Create--------
+yazgoo-virtualbox   -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++
+Latency             10662us     302us     284us      51us      15us      36us
+1.97,1.97,yazgoo-virtualbox,1,1414687492,4G,,1022,97,99103,12,93291,4,4846,75,6344066,77,3690,10,16,,,,,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,12721us,1614ms,1538ms,1808us,25710us,68us,10662us,302us,284us,51us,15us,36us
+
+$ bonnie++ -d /tmp/fuse-kafka-test/ -r 2048 -s0 -n 128                                                                                                
+Create files in sequential order...done.
+Stat files in sequential order...done.
+Delete files in sequential order...done.
+Create files in random order...done.
+Stat files in random order...done.
+Delete files in random order...done.
+Version  1.97       ------Sequential Create------ --------Random Create--------
+yazgoo-virtualbox   -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                128 84142  64 +++++ +++  7748   5 93009  69 +++++ +++  7929   5
+Latency             56776us     303us     633ms   20153us      19us    1294ms
+1.97,1.97,yazgoo-virtualbox,1,1414691701,,,,,,,,,,,,,,,128,,,,,84142,64,+++++,+++,7748,5,93009,69,+++++,+++,7929,5,,,,,,,56776us,303us,633ms,20153us,19us,1294ms

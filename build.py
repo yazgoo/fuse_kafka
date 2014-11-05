@@ -61,12 +61,30 @@ class FuseKafkaLog:
             except ValueError:
                 print line
 def get_version():
-    for source in sources:
-        f = open("src/" + source + ".c")
-        [f.readline() for i in range(3)]
-        result = f.readline().split()[-1][1:-1]
-        f.close()
-        return result
+    f = open("src/version.h")
+    result = []
+    while True:
+        result = f.readline().split()
+        if len(result) == 3 and result[0] == "#define" and result[1] == "VERSION":
+            break;
+    result = result[-1][1:-1]
+    f.close()
+    return result
+def bump_version():
+    v = os.environ.get('v')
+    if v == None:
+        print("Usage: $ v=" + get_version() + " " + sys.argv[0] + " bump_version")
+        return
+    previous_v = get_version()
+    for ext in ["spec", "dsc"]:
+        previous_path = "./packaging/fuse_kafka-{}.{}".format(previous_v, ext)
+        path = "./packaging/fuse_kafka-{}.{}".format(v, ext)
+        run("mv", previous_path, path)
+        run("sed", "-i", "s/^\(Version: \).*/\\1{}/".format(v), path)
+        run("git", "add", path)
+    with open("src/version.h", "w") as version:
+        version.write("#define VERSION \""+ v + "\"\n")
+    print "version bumped from {} to {} ".format(previous_v, v)
 def version():
     print(get_version())
 def package():
@@ -86,6 +104,13 @@ def filter_link(a):
         return a
 def to_links(libs):
     return [filter_link(a) for a in ['-l'+s for s in libs]]
+def binary_exists(name):
+    cmd = ["which",name]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    res = p.stdout.readlines()
+    if len(res) == 0:
+        return False
+    return True
 def dotest():
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
@@ -96,17 +121,20 @@ def build():
     link()
 def test():
     for source in sources:
-        run("ls")
+        run("find")
         run("./" + source + ".test")
+        run("find")
         run("gcov", "./src/" + source + ".c")
-        run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-        run("genhtml", source + ".info", "-o", "./out")
+        if binary_exists("lcov"):
+            run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+            if binary_exists("genhtml"):
+                run("genhtml", "src/" + source + ".info", "-o", "./out")
 def compile():
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
     for source in sources:
-        run('gcc', '-o', source+'.test', source+'.c', flags,
+        run('gcc', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
                 test_flags, to_links(common_libs))
 def link():
     objects = [s+'.o' for s in sources]

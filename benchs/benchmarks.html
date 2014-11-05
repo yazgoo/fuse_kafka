@@ -1,0 +1,193 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>fuse_kafka benchmarks</title>
+<style>
+body {
+    font-family: 'PT Sans', sans-serif;
+    background: rgb(215, 215, 215);
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+    background: radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+}
+.box {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
+    color: rgb(102, 102, 102);
+    text-shadow: 0 2px 2px rgba(0, 0, 0, .1);
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 20px;
+    line-height: 36px;
+    letter-spacing: -1px;
+    padding: 10px 60px;
+    text-align: center;
+    width: 50%;
+    margin: 0 auto;
+}
+.text_block {
+    background-color: rgb(220, 220, 220);
+    border: 1px solid rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    box-shadow: 0 -2px -6px rgba(0, 0, 0, .9);
+    overflow: hidden;
+    height: 50px;
+    width: 100%;
+    padding: 0;
+    font-size: 15px;
+    line-height: 20px;
+}
+.description {
+    background-color: white;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.conclusion {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    text-align: bottom;
+}
+
+.chart {
+    text-align: center;
+}
+.caption_square {
+    font-size: 15px;
+    border: 2px solid;
+    margin: 2px;
+}
+</style>
+<script src="Chart.js">
+</script>
+</head><body><div id="charts">
+    <div class="chart box">
+        <div id="caption"><a class="caption_square" style="background-color:rgba(220,220,220, 0.5);border-color:rgb(220,220,220);">fuseless</a><a class="caption_square" style="background-color:rgba(151,187,205, 0.5);border-color:rgb(151,187,205);">fuse overlay</a><a class="caption_square" style="background-color:rgba(200,187,205, 0.5);border-color:rgb(200,187,205);">kafka fuse</a></div>
+        <canvas style="width: 500px; height: 400px;" id="canvas" width="500" height="400"></canvas>
+        <div id="title">[9/9] Random delete per second</div>
+        <div id="description" class="text_block description">delete file in random order</div>
+        <div id="conclusion" class="text_block conclusion">these numbers are good enough for a logging FS</div>
+    </div>
+</div>
+<script>
+function get_dataset_configuration(colors, dataset)
+{
+    s = colors.join(",")
+    return {
+fillColor : "rgba(" + colors + ",0.5)",
+          strokeColor : "rgba(" + colors + ",1)",
+          pointColor : "rgba(" + colors + ",1)",
+          pointStrokeColor : "#fff",
+          data : dataset
+    }
+}
+var ctx = document.getElementById('canvas').getContext("2d");
+function ComparisonChart(name, labels, datasets, dnames, description, conclusion)
+{
+    var charts = document.getElementById("charts")
+    var colors = [[220,220,220], [151,187,205], [200,187,205]]
+    var html = "" 
+        datasets_configurations = []
+        for(i in datasets)
+        {
+            html += "<a class='caption_square'"
+                + " style='background-color:rgba("
+                + colors[i].join(",") + ", 0.5);"
+                + "border-color:rgb("
+                + colors[i].join(",") + ");'>" + dnames[i] + "</a>"
+            datasets_configurations.push(
+                get_dataset_configuration(colors[i], datasets[i]))
+        }
+    document.getElementById('title').innerHTML = name;
+    document.getElementById('caption').innerHTML = html;
+    document.getElementById('description').innerHTML = description;
+    document.getElementById('conclusion').innerHTML = conclusion;
+    var data = { labels : labels,
+        datasets : datasets_configurations }
+    var conf = {scaleStartValue: 0,
+        scaleFontFamily : "'sans-serif'"}
+    new Chart(ctx).Bar(data, conf);
+}
+window.chart_i = parseInt(window.location.hash.substring(1));
+function draw_chart(di) {
+    dnames = ["fuseless", "kafka fuse"]
+    overhead = "There's an overhead queuing data to kafka producer. If you need to write quicker to the log dir, you can use the ignore pattern."
+    fuse_overhead = "kafka fuse does nothing. fuse generates overhead because there's a lot of syscall involved. logging directories should not do that mutch seeking/reading."
+    good_enough = "these numbers are good enough for a logging FS"
+    out = [
+        ["Sequential output (K/s)",
+        ["Per char"],
+        [[1022], [69]],
+        dnames, "The file is written using the putc() stdio macro. The loop that does the writing should be small enough to fit into any reasonable I-cache.",
+        overhead
+            ],
+        ["Sequential output (K/s)",
+        ["Per block"],
+        [[99103], [89558]],
+        dnames, "The file is created using write(2)",
+        overhead
+            ],
+        ["Sequential output (K/s)",
+        ["Rewrite"],
+        [[93291], [46321]],
+        dnames, "Each BUFSIZ of the file is read with read(2), dirtied, and rewritten with write(2), requiring an lseek(2). No space allocation done, I/O is well-localized =&gt;  should test effectiveness of the FS cache and speed of data transfer.",
+        fuse_overhead
+            ],
+        ["Sequential input per char (K/s)",
+        ["Per char"],
+        [[4846], [4559]],
+        dnames, "The file is read using the getc() stdio macro. Once again, the inner loop is small. This should exercise only stdio and sequential input.",
+        fuse_overhead
+            ],
+        ["Sequential input per block (K/s)",
+        ["default"],
+        [[6344066], [4559]],
+        dnames, "The file is read using read(2). This should be a very pure test of sequential input performance.",
+        "maybe a filecache overhead: tryied <a href='http://thread.gmane.org/gmane.comp.file-systems.fuse.devel/7389/focus=7391'>Direct IO</a>; Maybe it's due to <a href='http://article.gmane.org/gmane.comp.file-systems.fuse.devel/5431/match=sequential+read'>this</a>. See <a href='http://search.gmane.org/?query=sequential+read&author=&group=gmane.comp.file-systems.fuse.devel&sort=relevance&DEFAULTOP=and&%3E=Next&TOPDOC=10&xP=Zsequenti%09Zread&xFILTERS=Gcomp.file-systems.fuse.devel---A'>this</a>: there is room for improvement via better configuration"
+            ],
+        ["Sequential create per second",
+        [""],
+        [[84142],[18483]],
+        dnames, "Create the files in numeric order, then stat()ing them in readdir() order (the order they are stored in the directory - very likely same order as created)",
+        good_enough
+            ],
+        ["Sequential delete per second",
+        [""],
+        [[7748],[7906]],
+        dnames, "delete the file in the same order as sequential create",
+        good_enough
+            ],
+        ["Random create per second",
+        [""],
+        [[93009],[19973]],
+        dnames, "create file in random order",
+        good_enough
+            ],
+        ["Random delete per second",
+        [""],
+        [[7929],[9035]],
+        dnames, "delete file in random order",
+        good_enough
+            ]
+        ]
+            if(isNaN(window.chart_i)) window.chart_i = 0
+            window.chart_i += di
+            if(window.chart_i == -1) window.chart_i = (out.length - 1);
+            window.chart_i = (window.chart_i % out.length)
+            var i = window.chart_i
+    ComparisonChart("[" + (i+1) + "/" + out.length + "] "
+            + out[i][0], out[i][1], out[i][2],
+            out[i][3], out[i][4], out[i][5])
+        window.location.hash = "#"+i;
+}
+document.onkeydown=function(e){
+    var evtobj=window.event? event : e
+        var code=evtobj.charCode?evtobj.charCode:evtobj.keyCode
+        if(code == 32 || code == 39) draw_chart(1);
+        else if(code == 37) draw_chart(-1);
+}
+draw_chart(0)
+</script>
+</body></html>
