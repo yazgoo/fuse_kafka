@@ -94,6 +94,7 @@ def package():
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
             "--exclude=.git", 
+            "--exclude=.nfs*",
             "--exclude=out", "-czf", tar , ".")
 def filter_link(a):
     if a != "-lcrypto": return a
