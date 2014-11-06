@@ -89,8 +89,21 @@ struct String_vector {
 typedef void (*watcher_fn)(zhandle_t *zh, int type, 
         int state, const char *path,void *watcherCtx);
 zhandle_t *zookeeper_init(const char *host, watcher_fn fn,
-  int recv_timeout, void *clientid, void *context, int flags);
+  int recv_timeout, void *clientid, void *context, int flags)
+{
+    return NULL;
+}
 int zoo_get_children(zhandle_t *zh, const char *path, int watch,
-                            struct String_vector *strings);
+                            struct String_vector *strings)
+{
+    return 1;
+}
 int zoo_get(zhandle_t *zh, const char *path, int watch, char *buffer,   
-                   int* buffer_len, void *stat);
+                   int* buffer_len, void *stat)
+{
+    return 1;
+}
+int deallocate_String_vector(struct String_vector *v)
+{
+    return 1;
+}
