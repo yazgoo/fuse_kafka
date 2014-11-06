@@ -3,19 +3,14 @@
 set -x
 distro_version=$(lsb_release -s -r)
 distro_name=$(lsb_release -s -i)
-add_yum_repo() {
-    cat  > /etc/yum.repos.d/$1.repo << EOF
-[$1]
-name=$1's repo
-baseurl=http://download.opensuse.org/repositories/home\:/$1/$2
-gpgcheck=0
-enabled=1
-EOF
-}
 install_CentOS() {
-    add_yum_repo edenhill ${distro_name}_$distro_name-6
-    add_yum_repo yazgoo $distro_name-6
-    [ "$distro_version" = "6.3" ] && yum -y update glibc
-    yum -y install fuse_kafka
+    cd /etc/yum.repos.d/
+    wget http://download.opensuse.org/repositories/home:yazgoo/CentOS-6/home:yazgoo.repo
+    yum install fuse_kafka
+}
+install_Fedora() {
+    cd /etc/yum.repos.d/
+    wget http://download.opensuse.org/repositories/home:yazgoo/Fedora_${distro_version}/home:yazgoo.repo
+    yum install fuse_kafka
 }
 install_$distro_name

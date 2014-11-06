@@ -86,8 +86,10 @@ struct String_vector {
 };
 #define ZOK 1
 #define ZOO_CHILD_EVENT 4
-zhandle_t *zookeeper_init(const char *host, void* fn,
-        int recv_timeout, void *clientid, void *context, int flags);
+typedef void (*watcher_fn)(zhandle_t *zh, int type, 
+        int state, const char *path,void *watcherCtx);
+zhandle_t *zookeeper_init(const char *host, watcher_fn fn,
+  int recv_timeout, void *clientid, void *context, int flags);
 int zoo_get_children(zhandle_t *zh, const char *path, int watch,
                             struct String_vector *strings);
 int zoo_get(zhandle_t *zh, const char *path, int watch, char *buffer,   
