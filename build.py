@@ -124,9 +124,7 @@ def build():
     link()
 def test():
     for source in sources:
-        run("find")
         run("./" + source + ".test")
-        run("find")
         run("gcov", "./src/" + source + ".c")
         if binary_exists("lcov"):
             run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
