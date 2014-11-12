@@ -2,10 +2,8 @@ language: c
 before_install:
 - echo "deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe" | sudo tee -a /etc/apt/sources.list
 - sudo apt-get update -qq
-- apt-cache search libzookeeper
-- sudo apt-get update
-- sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew" upgrade
 install:
+- sed -i 's/_mt/_st/' build.py
 - sudo apt-get install libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
 - sudo pip install fabricate cpp-coveralls
 script:
