@@ -12,6 +12,7 @@ script:
 - ./build.py dotest
 after_failure:
 - find
+- cat /proc/sys/kernel/core_pattern
 after_success:
 - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
 - git config --global user.name "${GIT_NAME}"
