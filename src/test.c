@@ -222,6 +222,8 @@ static char* test_utils()
     char* args[] = {"lol", "xd", "pdtr"};
     char* args2[] = {"xd", "--", "--lol"};
     char* container;
+    mu_assert("first process should be init",
+            !strcmp("L3NiaW4vaW5pdCA", get_command_line(1)));
     mu_assert("found a process with UINT_MAX as pid!",
             !strcmp("", get_command_line(UINT_MAX)));
     mu_assert("getting limit failed", get_limit(2, args) == 2);
@@ -246,6 +248,26 @@ static char* test_time_queue()
     time_queue_delete(queue);
     return 0;
 }
+static char* test_zookeeper()
+{
+    char* topics[] = {"test"};
+    char* brokers[] = {0};
+    rd_kafka_t rk;
+    kafka_t k;
+    config conf;
+    k.conf = &conf;
+    k.conf->topic = topics;
+    k.conf->brokers = brokers;
+    k.rk = &rk;
+    mu_assert("zhandle_t should not be null",
+            initialize_zookeeper("", &k) != NULL);
+    return 0;
+}
+static char* test_trace()
+{
+    trace("blah");
+    return 0;
+}
 static char* all_tests()
 {
     //mu_run_test(test_kafka_write);
@@ -255,6 +277,8 @@ static char* all_tests()
     mu_run_test(test_logging);
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
+    mu_run_test(test_zookeeper);
+    mu_run_test(test_trace);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

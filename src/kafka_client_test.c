@@ -79,10 +79,12 @@ int rd_kafka_poll (rd_kafka_t *rk, int timeout_ms)
 {
     return 0;
 }
-typedef void zhandle_t;
+typedef struct _zhandle_t {
+    int i;
+} zhandle_t;
 struct String_vector {
         int32_t count;
-        char * *data;
+        char** data;
 };
 #define ZOK 1
 #define ZOO_CHILD_EVENT 4
@@ -91,19 +93,31 @@ typedef void (*watcher_fn)(zhandle_t *zh, int type,
 zhandle_t *zookeeper_init(const char *host, watcher_fn fn,
   int recv_timeout, void *clientid, void *context, int flags)
 {
-    return NULL;
+    zhandle_t* zh = (zhandle_t*) malloc(sizeof(zhandle_t));
+    fn(zh, ZOO_CHILD_EVENT, 0, "/brokers/ids", context);
+    return zh;
 }
 int zoo_get_children(zhandle_t *zh, const char *path, int watch,
                             struct String_vector *strings)
 {
+    strings->count = 2;
+    char* i = (char*) malloc(2 * sizeof(char*));
+    i[0] = '1';
+    i[1] = 0;
+    strings->data = (char**) malloc(sizeof(char**));
+    strings->data[0] = i;
+    strings->data[1] = i;
     return 1;
 }
 int zoo_get(zhandle_t *zh, const char *path, int watch, char *buffer,   
                    int* buffer_len, void *stat)
 {
+    strcpy(buffer, "{\"host\": \"a\", \"port\": 2181}");
     return 1;
 }
 int deallocate_String_vector(struct String_vector *v)
 {
+    free(v->data[0]);
+    free(v->data);
     return 1;
 }

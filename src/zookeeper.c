@@ -118,7 +118,7 @@ static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
     if (zh == NULL)
     {
         fprintf(stderr, "Zookeeper connection not established.");
-        exit(1);
+        //exit(1);
     }
     return zh;
 }
