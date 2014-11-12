@@ -77,8 +77,8 @@ static char* test_passthrough_calls()
     struct statvfs stvfs;
     char* str = (char*) malloc(15);
 #define TEST_FUNC(x, y, ...) mu_assert(#x " failed", x(__VA_ARGS__) == y);
-#define TEST_FUNC_SUCCESS(x, ...) mu_assert(#x " failed", x(__VA_ARGS__) == 0);
-#define TEST_FUNC_FAILURE(x, ...) mu_assert(#x " succeeded", x(__VA_ARGS__) != 0);
+#define TEST_FUNC_SUCCESS(x, y, ...) mu_assert(#x "(" #y ") failed", x(y, ##__VA_ARGS__) == 0);
+#define TEST_FUNC_FAILURE(x, y, ...) mu_assert(#x "(" #y ") succeeded", x(y, ##__VA_ARGS__) != 0);
     TEST_FUNC_SUCCESS(kafka_getattr, "/", &st)
     TEST_FUNC_FAILURE(kafka_getattr, "/non-existing/path", &st)
     TEST_FUNC_FAILURE(kafka_fgetattr, "/", &st, &fi)
