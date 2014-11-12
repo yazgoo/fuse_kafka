@@ -4,6 +4,7 @@ before_install:
 - sudo apt-get update -qq
 - sudo apt-get update
 - export DEBIAN_FRONTEND=noninteractive
+- export DEBIAN_PRIORITY=critical
 - sudo apt-get -q -y upgrade
 install:
 - sudo apt-get install libfuse-dev librdkafka-dev libjansson-dev libzookeeper-mt2 libzookeeper-mt-dev

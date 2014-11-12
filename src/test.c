@@ -231,6 +231,21 @@ static char* test_utils()
     free(container);
     return 0;
 }
+static char* test_time_queue()
+{
+    time_queue* queue = time_queue_new(10, 42);
+    time_queue_set(queue, "a");
+    mu_assert("time queue item should be null",
+            time_queue_get(queue, "") == NULL);
+    mu_assert("time queue does not overflows",
+            time_queue_overflows(queue, "a", 42) == 1);
+    *(time_queue_get(queue, "a")) -= 1000;
+    mu_assert("time queue does not overflows",
+            time_queue_overflows(queue, "a", 42) == 1);
+    time_queue_set(queue, "a");
+    time_queue_delete(queue);
+    return 0;
+}
 static char* all_tests()
 {
     //mu_run_test(test_kafka_write);
@@ -239,6 +254,7 @@ static char* all_tests()
     mu_run_test(test_parse_arguments);
     mu_run_test(test_logging);
     mu_run_test(test_utils);
+    mu_run_test(test_time_queue);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
