@@ -4,6 +4,7 @@ before_install:
 - sudo apt-get update -qq
 install:
 - sudo apt-get update
+- sudo apt-get upgrade
 - sudo apt-get install libfuse-dev librdkafka-dev libjansson-dev libzookeeper-mt2 libzookeeper-mt-dev
 - sudo pip install fabricate cpp-coveralls
 script:
