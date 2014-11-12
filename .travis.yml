@@ -10,6 +10,8 @@ script:
 - ./build.py clean
 - ./build.py
 - ./build.py dotest
+after_failure:
+- find
 after_success:
 - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
 - git config --global user.name "${GIT_NAME}"
