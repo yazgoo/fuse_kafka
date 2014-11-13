@@ -22,22 +22,20 @@ static char* get_file_content(char* path)
     content[st.st_size] = 0;
     return content;
 }
-static char* directories[] = {"/lol/"};
-static void set_config()
-{
-    kafka_t private_data;
-    config conf;
-    conf.directories = directories;
-    conf.directory_n = 0;
-    conf.fields_s = "{}";
-    conf.tags_s = "";
-    conf.quota_queue = NULL;
-    conf.quota_n = 0;
-    private_data.conf = &conf;
-    struct fuse_context* context = fuse_get_context();
-    context->pid = getpid();
+#define SET_CONFIG \
+    static char* directories[] = {"/lol/"};\
+    kafka_t private_data;\
+    config conf;\
+    conf.directories = directories;\
+    conf.directory_n = 0;\
+    conf.fields_s = "{}";\
+    conf.tags_s = "";\
+    conf.quota_queue = NULL;\
+    conf.quota_n = 0;\
+    private_data.conf = &conf;\
+    struct fuse_context* context = fuse_get_context();\
+    context->pid = getpid();\
     context->private_data = (void*) &private_data;
-}
 static char* test_kafka_write()
 {
     FILE* f;
@@ -45,7 +43,7 @@ static char* test_kafka_write()
     struct fuse_file_info file_info;
     char* content;
     char* file_path = "tmp_file";
-    set_config();
+    SET_CONFIG;
     char* cwd;
     cwd = get_current_dir_name();
     chdir(TEST);
@@ -270,7 +268,7 @@ static char* test_zookeeper()
 }
 static char* test_trace()
 {
-    set_config();
+    SET_CONFIG;
     trace("blah");
     return 0;
 }
