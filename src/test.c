@@ -1,7 +1,10 @@
 /** @file */ 
 #define fuse_get_context() test_fuse_get_context()
 int tests_run = 0;
-#define mu_assert(message, test) do { if (!(test)) return message; } while (0)
+#define STRINGIFY(x) #x
+#define mu_assert(message, test) do { if (!(test)) \
+return message; \
+} while (0)
 #define mu_run_test(test) do { char *message = test(); tests_run++; \
     if (message) return message; } while (0)
 extern int tests_run;
@@ -61,7 +64,7 @@ static char* test_kafka_write()
     fuse_get_context()->gid = UINT_MAX;
     fuse_get_context()->uid = UINT_MAX;
     mu_assert("write succeeded as printf setting NULL!",
-            kafka_write(file_path, expected, strlen(expected) + 1, 0, &file_info) == 1);
+            kafka_write(file_path, expected, strlen(expected) + 1, 0, &file_info) <= 0);
     test_with()->asprintf_sets_NULL = 0;
     chdir(cwd);
     return 0;
@@ -274,7 +277,7 @@ static char* test_trace()
 }
 static char* all_tests()
 {
-    //mu_run_test(test_kafka_write);
+    mu_run_test(test_kafka_write);
     mu_run_test(test_passthrough_calls);
     mu_run_test(test_setup_kafka);
     mu_run_test(test_parse_arguments);
@@ -294,7 +297,7 @@ void line()
     int i;
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    for(i = 0; i < w.ws_col; i++) printf("—");
+    for(i = 0; i < w.ws_col; i++) printf("=");
     printf("\n");
 }
 int main(int argc, char** argv)
