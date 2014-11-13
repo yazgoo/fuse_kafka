@@ -27,10 +27,13 @@ static char* get_file_content(char* path)
 }
 #define SET_CONFIG \
     static char* directories[] = {"/lol/"};\
+    static char* excluded_files[] = {"xd"};\
     kafka_t private_data;\
     config conf;\
     conf.directories = directories;\
     conf.directory_n = 0;\
+    conf.excluded_files_n = 1;\
+    conf.excluded_files = excluded_files;\
     conf.fields_s = "{}";\
     conf.tags_s = "";\
     conf.quota_queue = NULL;\
@@ -65,6 +68,8 @@ static char* test_kafka_write()
     fuse_get_context()->uid = UINT_MAX;
     mu_assert("write succeeded as printf setting NULL!",
             kafka_write(file_path, expected, strlen(expected) + 1, 0, &file_info) <= 0);
+    mu_assert("write succeeded as printf setting NULL!",
+            kafka_write(excluded_files[0], expected, strlen(expected) + 1, 0, &file_info) <= 0);
     test_with()->asprintf_sets_NULL = 0;
     chdir(cwd);
     return 0;
@@ -124,8 +129,7 @@ static char* test_passthrough_calls()
     TEST_FUNC_FAILURE(kafka_unlink, TEST "/non-existing/file")
     TEST_FUNC_FAILURE(kafka_chown, TEST "/from", 0, 0)
     TEST_FUNC_FAILURE(kafka_utimens, TEST "/from", ts)
-    // TODO uncomment
-    //TEST_FUNC_FAILURE(kafka_create, TEST "/from", 0, &fi)
+    TEST_FUNC_FAILURE(kafka_create, TEST "/var", 0, &fi)
     fi.flags = O_CREAT;
     TEST_FUNC_SUCCESS(kafka_create, TEST "/node", S_IWUSR |S_IRUSR, &fi)
     fi.flags = 0;
@@ -265,6 +269,13 @@ static char* test_zookeeper()
     k.conf->topic = topics;
     k.conf->brokers = brokers;
     k.rk = &rk;
+    test_with()->rd_kafka_topic_new_returns_NULL = 0;
+    mu_assert("zhandle_t should not be null",
+            initialize_zookeeper("", &k) != NULL);
+    mu_assert("zhandle_t should be null",
+            initialize_zookeeper(NULL, &k) == NULL);
+    test_with()->rd_kafka_topic_new_returns_NULL = 1;
+    test_with()->zoo_get_children_returns = 0;
     mu_assert("zhandle_t should not be null",
             initialize_zookeeper("", &k) != NULL);
     return 0;

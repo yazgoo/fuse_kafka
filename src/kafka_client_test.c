@@ -27,6 +27,7 @@ typedef struct
     int rd_kafka_topic_new_returns_NULL;
     int rd_kafka_brokers_add_returns;
     int rd_kafka_produce_returns;
+    int zoo_get_children_returns;
     int asprintf_sets_NULL;
     int test_filler_returns;
 } test_config;
@@ -36,6 +37,7 @@ static test_config* test_with()
     if(!conf.setup)
     {
         conf.rd_kafka_brokers_add_returns = 1;
+        conf.zoo_get_children_returns = 1;
         conf.setup = 1;
     }
     return &conf;
@@ -68,7 +70,6 @@ rd_kafka_topic_t *rd_kafka_topic_new (rd_kafka_t *rk, const char *topic,
                                           static rd_kafka_topic_t t;
                                           return test_with()->rd_kafka_topic_new_returns_NULL ? NULL:&t;
                                       }
-const char *rd_kafka_topic_name (const rd_kafka_topic_t *rkt) { return 0; }
 int rd_kafka_produce (rd_kafka_topic_t *rkt, int32_t partitition,
 		      int msgflags,
 		      void *payload, size_t len,
@@ -93,6 +94,7 @@ typedef void (*watcher_fn)(zhandle_t *zh, int type,
 zhandle_t *zookeeper_init(const char *host, watcher_fn fn,
   int recv_timeout, void *clientid, void *context, int flags)
 {
+    if(host == NULL) return NULL;
     zhandle_t* zh = (zhandle_t*) malloc(sizeof(zhandle_t));
     fn(zh, ZOO_CHILD_EVENT, 0, "/brokers/ids", context);
     return zh;
@@ -107,7 +109,7 @@ int zoo_get_children(zhandle_t *zh, const char *path, int watch,
     strings->data = (char**) malloc(sizeof(char**));
     strings->data[0] = i;
     strings->data[1] = i;
-    return 1;
+    return test_with()->zoo_get_children_returns;
 }
 int zoo_get(zhandle_t *zh, const char *path, int watch, char *buffer,   
                    int* buffer_len, void *stat)
