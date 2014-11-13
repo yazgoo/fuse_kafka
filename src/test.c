@@ -72,6 +72,9 @@ static char* test_kafka_write()
             kafka_write(excluded_files[0], expected, strlen(expected) + 1, 0, &file_info) <= 0);
     test_with()->asprintf_sets_NULL = 0;
     chdir(cwd);
+    conf.quota_queue = time_queue_new(10, 42);
+    kafka_write(file_path, expected, strlen(expected) + 1, 0, &file_info);
+    time_queue_delete(conf.quota_queue);
     return 0;
 }
 int test_filler(void *buf,
