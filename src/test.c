@@ -308,7 +308,6 @@ static char* all_tests()
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
 #include <sys/ioctl.h>
-#include <stdio.h>
 #include <unistd.h>
 void line()
 {
