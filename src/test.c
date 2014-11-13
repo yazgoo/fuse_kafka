@@ -22,9 +22,9 @@ static char* get_file_content(char* path)
     content[st.st_size] = 0;
     return content;
 }
+static char* directories[] = {"/lol/"};
 static void set_config()
 {
-    char* directories[] = {"/lol/"};
     kafka_t private_data;
     config conf;
     conf.directories = directories;
