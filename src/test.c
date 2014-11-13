@@ -279,7 +279,7 @@ static char* all_tests()
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
-    mu_run_test(test_trace);
+    //mu_run_test(test_trace);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
