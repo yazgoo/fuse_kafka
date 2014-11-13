@@ -162,14 +162,16 @@ static char* test_setup_kafka()
     kafka_t k;
     config private_data;
     char* brokers[1] = {""};
+    char* quota[1] = {"1000000"};
     char* topic = "";
     char* argv[] = {"__mountpoint__", "--", "--directories",
         TEST "a", "--fields", "a", "b", "--tags", "1"};
     int argc = sizeof(argv)/sizeof(char*);
     private_data.brokers = brokers;
     private_data.topic = &topic;
-    private_data.quota_n = 0;
     private_data.zookeepers_n = 0;
+    private_data.quota_n = 1;
+    private_data.quota = quota;
     k.rk = &rk;
     fuse_get_context()->private_data = (void*) &private_data;
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
@@ -275,6 +277,8 @@ static char* test_zookeeper()
     mu_assert("zhandle_t should be null",
             initialize_zookeeper(NULL, &k) == NULL);
     test_with()->rd_kafka_topic_new_returns_NULL = 1;
+    mu_assert("zhandle_t should not be null",
+            initialize_zookeeper("", &k) != NULL);
     test_with()->zoo_get_children_returns = 0;
     mu_assert("zhandle_t should not be null",
             initialize_zookeeper("", &k) != NULL);
