@@ -16,6 +16,7 @@ after_failure:
 - cat /proc/sys/kernel/core_pattern
 - dmesg
 - sudo cat /var/log/messages
+- gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" fuse_kafka.test core*
 after_success:
 - coveralls --exclude bin --exclude tests --gcov-options '\-lp'
 - git config --global user.name "${GIT_NAME}"
