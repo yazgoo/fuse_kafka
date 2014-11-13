@@ -22,16 +22,10 @@ static char* get_file_content(char* path)
     content[st.st_size] = 0;
     return content;
 }
-static char* test_kafka_write()
+static void set_config()
 {
     char* directories[] = {"/lol/"};
-    char* cwd;
-    char* content;
-    const char* expected = "blah";
-    char* file_path = "tmp_file";
-    FILE* f;
     kafka_t private_data;
-    struct fuse_file_info file_info;
     config conf;
     conf.directories = directories;
     conf.directory_n = 0;
@@ -43,6 +37,16 @@ static char* test_kafka_write()
     struct fuse_context* context = fuse_get_context();
     context->pid = getpid();
     context->private_data = (void*) &private_data;
+}
+static char* test_kafka_write()
+{
+    FILE* f;
+    const char* expected = "blah";
+    struct fuse_file_info file_info;
+    char* content;
+    char* file_path = "tmp_file";
+    set_config();
+    char* cwd;
     cwd = get_current_dir_name();
     chdir(TEST);
     f = fopen(file_path, "w");
@@ -266,6 +270,7 @@ static char* test_zookeeper()
 }
 static char* test_trace()
 {
+    set_config();
     trace("blah");
     return 0;
 }
@@ -279,7 +284,7 @@ static char* all_tests()
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
-    //mu_run_test(test_trace);
+    mu_run_test(test_trace);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
