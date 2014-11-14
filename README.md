@@ -194,7 +194,7 @@ Installing from sources
     $ ./build.py install
 
 
-Licencing
+Licensing
 =========
 
 licensed under Apache v 2.0, see LICENSE file
