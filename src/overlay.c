@@ -388,6 +388,13 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
     return 0;
 }
 */
+void kafka_destroy(void* untyped)
+{
+    kafka_t* k = (kafka_t*) untyped;
+    if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
+    rd_kafka_destroy(k->rk);
+    free(k);
+}
 void* kafka_init(struct fuse_conn_info *conn)
 {
     config* conf = ((config*) fuse_get_context()->private_data);
@@ -414,6 +421,7 @@ void* kafka_init(struct fuse_conn_info *conn)
 
 static struct fuse_operations kafka_oper = {
     .init       = kafka_init,
+    .destroy    = kafka_destroy,
     .getattr    = kafka_getattr,
     .fgetattr   = kafka_fgetattr,
     .access     = kafka_access,

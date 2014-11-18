@@ -226,11 +226,17 @@ int parse_arguments(int argc, char** argv, config* conf)
     add_fields_and_tags(conf);
     return 1;
 }
+// global variable used in atexit
+config conf;
+void configuration_clean()
+{
+    free_fields_and_tags(&conf);
+}
 int fuse_kafka_main(int argc, char *argv[])
 {
     int i;
     int limit = get_limit(argc, argv);
-    config conf;
+    atexit(configuration_clean);
     memset(&conf, 0, sizeof(config));
     if(parse_arguments(argc - limit - 1, argv + limit + 1, &conf))
     {
@@ -250,7 +256,6 @@ int fuse_kafka_main(int argc, char *argv[])
         }
     }
     wait(NULL);
-    free_fields_and_tags(&conf);
     return 0;
 }
 char* cmd = NULL;

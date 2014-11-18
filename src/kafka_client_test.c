@@ -60,6 +60,9 @@ rd_kafka_t *rd_kafka_new (rd_kafka_type_t type, rd_kafka_conf_t *conf,
     static rd_kafka_t rk;
     return test_with()->rd_kafka_new_returns_NULL ? NULL:&rk;
 }
+void rd_kafka_destroy(rd_kafka_t* to_destroy)
+{
+}
 void rd_kafka_set_logger (rd_kafka_t *rk, void *f) { }
 void rd_kafka_set_log_level (rd_kafka_t *rk, int level) { }
 int rd_kafka_brokers_add (rd_kafka_t *rk, const char *brokerlist)
