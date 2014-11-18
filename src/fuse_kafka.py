@@ -121,6 +121,8 @@ class FuseKafkaService:
         """
         self.prefix = ["fuse_kafka", "_", "-oallow_other", "-ononempty",
                 "-s", "-omodules=subdir,subdir=.", "-f", "--"]
+        if "FUSE_KAFKA_PREFIX" in os.environ:
+            self.prefix = os.environ["FUSE_KAFKA_PREFIX"].split() + self.prefix
         getattr(self, action)()
     def start(self):
         """ Starts fuse_kafka processes """

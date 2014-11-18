@@ -185,6 +185,11 @@ void add_fields_and_tags(config* conf)
             conf->tags, conf->tags_n, '[', ']', ',', ',');
     printf("tags: %s\n", conf->tags_s);
 }
+void free_fields_and_tags(config* conf)
+{
+    if(conf->fields_s != NULL) free(conf->fields_s);
+    if(conf->tags_s != NULL) free(conf->tags_s);
+}
 int parse_arguments(int argc, char** argv, config* conf)
 {
     int i;
@@ -245,6 +250,7 @@ int fuse_kafka_main(int argc, char *argv[])
         }
     }
     wait(NULL);
+    free_fields_and_tags(&conf);
     return 0;
 }
 char* cmd = NULL;

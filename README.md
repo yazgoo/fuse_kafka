@@ -194,6 +194,15 @@ Installing from sources
     $ ./build.py install
 
 
+Using valgrind or another dynamic analysis tool
+===============================================
+
+The start script allows to specify a command to append when actually
+launching the binary, FUSE\_KAFKA\_PREFIX, which can be used to
+perform analyses while running (like memcheck):
+    
+    FUSE_KAFKA_PREFIX="valgrind --leak-check=yes" ./src/fuse_kafka.py start
+
 Licensing
 =========
 
