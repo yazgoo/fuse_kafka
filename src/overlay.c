@@ -392,7 +392,9 @@ void kafka_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
     if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
+    rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
+    rd_kafka_wait_destroyed(1000);
     free(k);
 }
 void* kafka_init(struct fuse_conn_info *conn)
