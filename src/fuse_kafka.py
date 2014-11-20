@@ -11,10 +11,41 @@
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import sys, getopt, json, glob, os, subprocess, copy, time
+import sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
+class Crontab:
+    """ manages a crontab """
+    def add_line_if_necessary(self, line):
+        """ adds a line to a crontab if it is not there """
+        crontab = subprocess.Popen(["crontab", "-l"],
+                stdout = subprocess.PIPE).communicate()[0]
+        if not line in crontab.split("\n"):
+            subprocess.Popen(["crontab"], stdin = subprocess.PIPE).communicate(
+                    input=crontab + line + "\n")
+class Mountpoints:
+    """Utility class to umount non-responding or non-writable
+    mountpoints"""
+    def access(self, path):
+        """ non-blocking check that a path is accessible """
+        p = multiprocessing.Process(target=os.access, args=(path, os.W_OK))
+        p.start()
+        p.join(2)
+        if p.is_alive():
+            p.terminate()
+            p.join()
+            return False
+        return os.access(path, os.W_OK)
+    def umount_non_accessible(self):
+        """ for eac configured directory, checks if the directory is
+        accessible. If it is not accessible 10 second after the first time
+        it was not, umount it """
+        for path in Configuration().conf['directories']:
+            if not self.access(path):
+                time.sleep(10)
+                if not self.access(path):
+                    subprocess.call(["fusermount", "-uz", path])
 class Configuration:
     """ Utility class to load configurations from properties files """
     def get_property(self, path, name):
@@ -160,5 +191,11 @@ class FuseKafkaService:
         if status == 3: sys.stdout.write("not ")
         print("running")
         sys.exit(status) 
+    def cleanup(self):
+        """ if a fuse kafka mountpoint is not accessible, umount it.
+        Also installs this action in the crontab so it is launched
+        every minute. """
+        Crontab().add_line_if_necessary("* * * * * " + os.path.realpath(__file__) + " cleanup")
+        Mountpoints().umount_non_accessible()
 if __name__ == "__main__":
     FuseKafkaService().do(sys.argv[1])

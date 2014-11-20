@@ -203,6 +203,23 @@ perform analyses while running (like memcheck):
     
     FUSE_KAFKA_PREFIX="valgrind --leak-check=yes" ./src/fuse_kafka.py start
 
+
+Anti hanging
+============
+
+Fuse-kafka must never make your filesystem accesses hang.
+Although this should be considered as a major bug, this might happen
+since the soft is still young.
+You can install a script call in your crontab so that any FS hanging
+is umounted (the check will occur every minute).
+To do so on an installed instance:
+
+    # service fuse_kafka cleanup
+
+To do so on a source based instance:
+
+    $ ./src/fuse_kafka.py cleanup
+
 Licensing
 =========
 
