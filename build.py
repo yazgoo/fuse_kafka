@@ -84,8 +84,9 @@ def bump_version():
         run("mv", previous_path, path)
         run("sed", "-i", "s/^\(Version: \).*/\\1{}/".format(v), path)
         run("git", "add", path)
-    with open("src/version.h", "w") as version:
-        version.write("#define VERSION \""+ v + "\"\n")
+    version = open("src/version.h", "w")
+    version.write("#define VERSION \""+ v + "\"\n")
+    version.close()
     print "version bumped from {} to {} ".format(previous_v, v)
 def version():
     print(get_version())
