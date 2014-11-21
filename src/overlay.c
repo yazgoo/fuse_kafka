@@ -405,6 +405,7 @@ void* kafka_init(struct fuse_conn_info *conn)
     fchdir(directory_fd);
     close(directory_fd);
     kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
+    memset(k, 0, sizeof(kafka_t));
     if(setup_kafka((kafka_t*) k))
     {
         printf("kafka_init: setup_kafka failed\n");
