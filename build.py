@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 try:
-    import base64, subprocess, sys, glob, os, json
+    import base64, subprocess, sys, glob, os, json, thread
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
@@ -170,6 +170,13 @@ def kafka_start():
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
     FuseKafkaLog().start()
+def test_environment_start():
+    t1 = thread.start_new_thread(zookeeper_start, ())
+    t2 = thread.start_new_thread(kafka_start, ())
+    t3 = thread.start_new_thread(kafka_consumer_start, ())
+    t1.join()
+    t2.join()
+    t3.join()
 def doc():
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")

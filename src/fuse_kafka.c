@@ -138,7 +138,7 @@ static int actual_kafka_write(const char *path, const char *buf,
 static int should_write_to_kafka(const char* path, size_t size)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
-    if(private_data->rkt == NULL) return 0;
+    if(private_data == NULL || private_data->rkt == NULL) return 0;
     config* conf = (config*)private_data->conf;
     int i = 0;
     for(i = 0; i < conf->excluded_files_n; i++)

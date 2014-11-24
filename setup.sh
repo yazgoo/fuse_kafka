@@ -4,24 +4,27 @@
 set -x
 while [ $# -gt 1 ]
 do
-    if [ "$1" = "-d" ]
-    then
-            downloaddir=/tmp/fuse_kafka
-            mkdir $downloaddir
-            yum_options="--downloadonly --downloaddir=$downloaddir"
-            shift
-    elif [ "$1" = "-r" ]
+    if [ "$1" = "-r" ]
     then
         remotely="ssh -o LogLevel=ERROR -o \
             UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
             -o BatchMode=yes  -i $2 $3"
         shift; shift; shift
+    elif [ "$1" = "-d" ]
+    then
+            downloaddir=/tmp/fuse_kafka
+            yum_options="--downloadonly --downloaddir=$downloaddir"
+            shift
     elif [ "$1" = "-f" ]
     then
         tar_path=$2
         shift; shift
     fi
 done
+if [ -n "$downloaddir" ]
+    $remotely rm -rf $downloaddir
+    $remotely mkdir $downloaddir
+fi
 distro_version=$($remotely lsb_release -s -r)
 distro_name=$($remotely lsb_release -s -i)
 install_yum() {
