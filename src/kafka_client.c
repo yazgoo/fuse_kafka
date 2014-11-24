@@ -77,7 +77,11 @@ int setup_kafka(kafka_t* k)
     }
     rd_kafka_set_logger(k->rk, logger);
     rd_kafka_set_log_level(k->rk, 7);
-    if (zookeepers != NULL) initialize_zookeeper(zookeepers, k);
+    if (zookeepers != NULL)
+    {
+        initialize_zookeeper(zookeepers, k);
+        return 0;
+    }
     else
     {
         if (rd_kafka_brokers_add(k->rk, brokers) == 0) {
@@ -88,8 +92,8 @@ int setup_kafka(kafka_t* k)
         k->rkt = rd_kafka_topic_new(k->rk, topic, topic_conf);
         if(k->rkt == NULL)
             printf("topic %s creation failed\n", topic);
+        return k->rkt == NULL;
     }
-    return k->rkt == NULL;
 }
 /**
  * @brief send a string to kafka
