@@ -170,9 +170,11 @@ def kafka_start():
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
     FuseKafkaLog().start()
-def test_environment_start():
-    shutil.rmtree('/tmp/kafka-logs')
-    shutil.rmtree('/tmp/zookeeper')
+def quickstart():
+    klog = '/tmp/kafka-logs'
+    zlog = '/tmp/zookeeper'
+    if os.path.exists(klog): shutil.rmtree(klog)
+    if os.path.exists(zlog): shutil.rmtree(zlog)
     p1 = multiprocessing.Process(target=zookeeper_start, args=())
     p2 = multiprocessing.Process(target=kafka_start, args=())
     p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
@@ -187,14 +189,14 @@ def test_environment_start():
     p1.terminate()
     p2.terminate()
     p3.terminate()
+    os.system('pkill -9 -f java.*kafka.consumer.ConsoleConsumer')
     os.system('./src/fuse_kafka.py stop')
-    os.system('pkill -f java.*kafka.consumer.ConsoleConsumer')
     os.system(kafka_bin_directory + 'kafka-server-stop.sh')
     os.system(kafka_bin_directory + 'zookeeper-server-stop.sh')
 def doc():
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
-if len(sys.argv) <= 1 or sys.argv[1] != "test_environment_start":
+if len(sys.argv) <= 1 or sys.argv[1] != "quickstart":
     main()
 else:
     test_environment_start()
