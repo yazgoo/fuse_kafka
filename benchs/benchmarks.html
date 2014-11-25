@@ -64,11 +64,12 @@ body {
 </script>
 </head><body><div id="charts">
     <div class="chart box">
-        <div id="caption"><a class="caption_square" style="background-color:rgba(220,220,220, 0.5);border-color:rgb(220,220,220);">fuseless</a><a class="caption_square" style="background-color:rgba(151,187,205, 0.5);border-color:rgb(151,187,205);">fuse overlay</a><a class="caption_square" style="background-color:rgba(200,187,205, 0.5);border-color:rgb(200,187,205);">kafka fuse</a></div>
+        <div id="caption"><a class="caption_square" style="background-color:rgba(220,220,220, 0.5);border-color:rgb(220,220,220);">fuseless</a><a class="caption_square" style="background-color:rgba(151,187,205, 0.5);border-color:rgb(151,187,205);">fuse overlay</a><a class="caption_square" style="background-color:rgba(200,187,205, 0.5);border-color:rgb(200,187,205);">fuse_kafka</a></div>
         <canvas style="width: 500px; height: 400px;" id="canvas" width="500" height="400"></canvas>
         <div id="title">[9/9] Random delete per second</div>
         <div id="description" class="text_block description">delete file in random order</div>
         <div id="conclusion" class="text_block conclusion">these numbers are good enough for a logging FS</div>
+        Use left/right arrows keys to show next graph.
     </div>
 </div>
 <script>
@@ -112,9 +113,9 @@ function ComparisonChart(name, labels, datasets, dnames, description, conclusion
 }
 window.chart_i = parseInt(window.location.hash.substring(1));
 function draw_chart(di) {
-    dnames = ["fuseless", "kafka fuse"]
+    dnames = ["fuseless", "fuse_kafka"]
     overhead = "There's an overhead queuing data to kafka producer. If you need to write quicker to the log dir, you can use the ignore pattern."
-    fuse_overhead = "kafka fuse does nothing. fuse generates overhead because there's a lot of syscall involved. logging directories should not do that mutch seeking/reading."
+    fuse_overhead = "fuse_kafka does nothing. fuse generates overhead because there's a lot of syscall involved. logging directories should not do that mutch seeking/reading."
     good_enough = "these numbers are good enough for a logging FS"
     out = [
         ["Sequential output (K/s)",
