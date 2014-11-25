@@ -199,4 +199,4 @@ def doc():
 if len(sys.argv) <= 1 or sys.argv[1] != "quickstart":
     main()
 else:
-    test_environment_start()
+    quickstart()
