@@ -32,6 +32,10 @@ The packages should install it in /etc/fuse\_kafka.conf.
 Quickstart (from sources)
 =========================
 
+[Here is a capture of a quickstart](http://playterm.org/r/fusekafka-quickstart-1416935569).
+
+
+
 If you want to test fuse\_kafka, using a clone of this repository.
 
 On Debian and Ubuntu, you should install the following:
