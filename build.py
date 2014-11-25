@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 try:
-    import base64, subprocess, sys, glob, os, json, thread
+    import base64, subprocess, sys, glob, os, json, thread, multiprocessing, shutil
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
@@ -171,13 +171,30 @@ def kafka_start():
 def kafka_consumer_start():
     FuseKafkaLog().start()
 def test_environment_start():
-    t1 = thread.start_new_thread(zookeeper_start, ())
-    t2 = thread.start_new_thread(kafka_start, ())
-    t3 = thread.start_new_thread(kafka_consumer_start, ())
-    t1.join()
-    t2.join()
-    t3.join()
+    shutil.rmtree('/tmp/kafka-logs')
+    shutil.rmtree('/tmp/zookeeper')
+    p1 = multiprocessing.Process(target=zookeeper_start, args=())
+    p2 = multiprocessing.Process(target=kafka_start, args=())
+    p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
+    p1.start()
+    p2.start()
+    p3.start()
+    os.system('./src/fuse_kafka.py start')
+    try:
+        raw_input(">")
+    except:
+        print("done")
+    p1.terminate()
+    p2.terminate()
+    p3.terminate()
+    os.system('./src/fuse_kafka.py stop')
+    os.system('pkill -f java.*kafka.consumer.ConsoleConsumer')
+    os.system(kafka_bin_directory + 'kafka-server-stop.sh')
+    os.system(kafka_bin_directory + 'zookeeper-server-stop.sh')
 def doc():
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
-main()
+if len(sys.argv) <= 1 or sys.argv[1] != "test_environment_start":
+    main()
+else:
+    test_environment_start()
