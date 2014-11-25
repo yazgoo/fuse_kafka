@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 try:
-    import base64, subprocess, sys, glob, os, json, thread, multiprocessing, shutil
+    import base64, subprocess, sys, glob, os, json, thread, multiprocessing, shutil, time
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
@@ -32,16 +32,16 @@ class FuseKafkaLog:
         for key in struct:
             if self.select != None and not key in self.select:
                 continue
-            sys.stdout.write("    " + key + ": ")
+            sys.stdout.write("  " + key + ": ")
             value = struct[key]
             if type(value) is dict:
                 print
                 for name in value:
-                    print "        ", name + ':', value[name]
+                    print "    ", name + ':', value[name]
             elif type(value) is list:
                 print
                 for v in value:
-                    print "        - ", v
+                    print "    - ", v
             else:
                 print value
     def load_fuse_kafka_event(self, string):
@@ -180,8 +180,12 @@ def quickstart():
     p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
     p1.start()
     p2.start()
-    p3.start()
+    result = 1
+    while result != 0:
+        result = os.system(kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper localhost:2181 --partitions 1 --replication-factor 1')
+        time.sleep(0.2)
     os.system('./src/fuse_kafka.py start')
+    p3.start()
     try:
         raw_input(">")
     except:
