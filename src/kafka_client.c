@@ -17,6 +17,8 @@ typedef struct _kafka_t
     rd_kafka_t* rk;
     rd_kafka_topic_t* rkt;
     config* conf;
+    /* were brokers given added to kafka (in zk mode): */
+    char no_brokers;
 } kafka_t;
 #include "zookeeper.c"
 /**

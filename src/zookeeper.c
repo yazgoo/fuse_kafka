@@ -96,7 +96,7 @@ static void watcher(zhandle_t *zh, int type,
     rd_kafka_topic_conf_t *topic_conf;
     if(k->conf == NULL) return;
     char* topic = k->conf->topic[0];
-    if (type == -1 || type == ZOO_CHILD_EVENT && strncmp(
+    if ((k->no_brokers || type == ZOO_CHILD_EVENT) && strncmp(
                 path, BROKER_PATH, sizeof(BROKER_PATH) - 1) == 0)
     {
         brokers[0] = '\0';
@@ -104,6 +104,7 @@ static void watcher(zhandle_t *zh, int type,
         if (brokers[0] != '\0' && k->rk != NULL)
         {
             rd_kafka_brokers_add(k->rk, brokers);
+            k->no_brokers = 0;
             rd_kafka_poll(k->rk, 10);
             topic_conf = rd_kafka_topic_conf_new();
             k->rkt = rd_kafka_topic_new(k->rk, topic, topic_conf);
@@ -114,6 +115,7 @@ static void watcher(zhandle_t *zh, int type,
 }
 static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
 {
+    ((kafka_t*) param)->no_brokers = 1;
     zhandle_t *zh;
     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
     if (zh == NULL)
