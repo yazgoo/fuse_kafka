@@ -96,7 +96,7 @@ static void watcher(zhandle_t *zh, int type,
     rd_kafka_topic_conf_t *topic_conf;
     if(k->conf == NULL) return;
     char* topic = k->conf->topic[0];
-    if ((k->no_brokers || type == ZOO_CHILD_EVENT) && strncmp(
+    if (k->no_brokers || type == ZOO_CHILD_EVENT && strncmp(
                 path, BROKER_PATH, sizeof(BROKER_PATH) - 1) == 0)
     {
         brokers[0] = '\0';
