@@ -22,6 +22,7 @@ do
     fi
 done
 if [ -n "$downloaddir" ]
+then
     $remotely rm -rf $downloaddir
     $remotely mkdir $downloaddir
 fi
