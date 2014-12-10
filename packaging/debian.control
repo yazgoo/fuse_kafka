@@ -1,7 +1,7 @@
 Priority: optional
 Maintainer: unknown <unknown@debian.org>
 Source: fusekafka
-Build-Depends: debhelper (>= 5), python, libssl-dev, libfuse-dev, librdkafka-dev
+Build-Depends: debhelper (>= 5), python, libssl-dev, libfuse-dev, libzookeeper-mt-dev, libjansson-dev, librdkafka-dev
 Standards-Version: 3.8.2
 Homepage: 
 
