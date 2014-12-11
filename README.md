@@ -22,7 +22,7 @@ The following should install the new repositories then install fuse\_kafka:
         && md5sum -c <(echo "bf50da604bcb83b8461a92cdad892970  setup.sh") \
         && chmod +x setup.sh && ./setup.sh
 
-(for more options - e.g. to install on a machine with no access to the repos - see setup.sh)
+(for more options - e.g. to install on a machine with no access to the repos - see 'setup.sh options' section)
 
 Configuration
 =============
@@ -244,6 +244,28 @@ This will generate an archive that will be copied locally.
 You can then install that archive via:
 
     ./setup.sh -f fuse_kafka.tar.bz2
+
+
+Networking tests
+================
+
+A more realistic network setup test can be launched (as root) via:
+
+    sudo ./build.py mininet
+
+This requires [mininet](http://mininet.org).
+
+This will launch kafka, zookeeper, fuse_kafka, and a consumer 
+on their own mininet virtual hosts with their own network stacks.
+fuse_kafka is running on h3 (host number three).
+This will launch a mininet shell.
+For example, if you want to try and write on fuse_kafka host, issue a:
+
+    mininet> h3 echo lol > /tmp/fuse-kafka-test/xd
+
+The consumer log is available via (/tmp/kafka_consumer.log). 
+
+`quit` or `^D` will stop mininet and cleanup the virtual network.
 
 Licensing
 =========
