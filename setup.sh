@@ -2,7 +2,7 @@
 # This is a helper script to install fuse_kafka from OBS packages.
 # If you want to generate a tar with all packages, use -d flag:
 set -x
-while [ $# -gt 1 ]
+while [ $# -gt 0 ]
 do
     if [ "$1" = "-r" ]
     then

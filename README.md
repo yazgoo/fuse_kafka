@@ -18,9 +18,11 @@ Packages for various distros can be installed from [these repositories](http://d
 The following should install the new repositories then install fuse\_kafka:
 
     # curl -O \
-        https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup_packages.sh \
-        && md5sum -c <(echo "123cd73857d94af4dfc64e03d29d9789 setup_packages.sh") \
-        && chmod +x setup_packages.sh && ./setup_packages.sh
+        https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup.sh \
+        && md5sum -c <(echo "bf50da604bcb83b8461a92cdad892970  setup.sh") \
+        && chmod +x setup.sh && ./setup.sh
+
+(for more options - e.g. to install on a machine with no access to the repos - see setup.sh)
 
 Configuration
 =============
@@ -224,9 +226,29 @@ To do so on a source based instance:
 
     $ ./src/fuse_kafka.py cleanup
 
+
+setup.sh options
+================
+
+Here are available options:
+
+ - `-r`: to do a remote install via ssh: `-r private_ssh_key user@host`
+ - `-d`: download and do not install the packages, generating an archive
+ - `-f`: install an archive already built via -d: `-f fuse_kafka.tar.bz2`
+
+For example, this will download packages on a remote server:
+
+    ./setup.sh -r mykey.pem root@myserver -d
+
+This will generate an archive that will be copied locally.
+You can then install that archive via:
+
+    ./setup.sh -f fuse_kafka.tar.bz2
+
 Licensing
 =========
 
 licensed under Apache v 2.0, see LICENSE file
+
 
 
