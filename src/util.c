@@ -117,3 +117,12 @@ char* array_to_container_string(char** array, size_t n, char open_char,
     sprintf(str + k, "%c", close_char);
     return str;
 }
+#define DO_AS_CALLER(action) \
+    struct fuse_context* __context = fuse_get_context(); \
+    gid_t __gid = getegid(); \
+    uid_t __uid = geteuid(); \
+    seteuid(__context->uid); \
+    setegid(__context->gid); \
+    action \
+    setegid(__gid); \
+    seteuid(__uid);

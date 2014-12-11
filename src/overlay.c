@@ -5,7 +5,9 @@
 static int kafka_getattr(const char *path, struct stat *stbuf)
 {
     int res;
-    res = lstat(path, stbuf);
+    DO_AS_CALLER(
+            res = lstat(path, stbuf);
+    )
     if (res == -1)
         return -errno;
 
@@ -19,7 +21,9 @@ static int kafka_fgetattr(const char *path, struct stat *stbuf,
 
     (void) path;
 
-    res = fstat(fi->fh, stbuf);
+    DO_AS_CALLER(
+            res = fstat(fi->fh, stbuf);
+            )
     if (res == -1)
         return -errno;
 
@@ -30,7 +34,9 @@ static int kafka_access(const char *path, int mask)
 {
     int res;
 
-    res = access(path, mask);
+    DO_AS_CALLER(
+            res = access(path, mask);
+            )
     if (res == -1)
         return -errno;
 
@@ -41,7 +47,9 @@ static int kafka_readlink(const char *path, char *buf, size_t size)
 {
     int res;
 
-    res = readlink(path, buf, size - 1);
+    DO_AS_CALLER(
+            res = readlink(path, buf, size - 1);
+            )
     if (res == -1)
         return -errno;
 
@@ -51,7 +59,9 @@ static int kafka_readlink(const char *path, char *buf, size_t size)
 
 static int kafka_opendir(const char *path, struct fuse_file_info *fi)
 {
-    DIR *dp = opendir(path);
+    DO_AS_CALLER(
+            DIR *dp = opendir(path);
+            )
     if (dp == NULL)
         return -errno;
 
@@ -66,39 +76,45 @@ static inline DIR *get_dirp(struct fuse_file_info *fi)
 static int kafka_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
                off_t offset, struct fuse_file_info *fi)
 {
-    DIR *dp = get_dirp(fi);
-    struct dirent *de;
+    DO_AS_CALLER(
+        DIR *dp = get_dirp(fi);
+        struct dirent *de;
 
-    (void) path;
-    seekdir(dp, offset);
-    while ((de = readdir(dp)) != NULL) {
-        struct stat st;
-        memset(&st, 0, sizeof(st));
-        st.st_ino = de->d_ino;
-        st.st_mode = de->d_type << 12;
-        if (filler(buf, de->d_name, &st, telldir(dp)))
-            break;
-    }
+        (void) path;
+        seekdir(dp, offset);
+        while ((de = readdir(dp)) != NULL) {
+            struct stat st;
+            memset(&st, 0, sizeof(st));
+            st.st_ino = de->d_ino;
+            st.st_mode = de->d_type << 12;
+            if (filler(buf, de->d_name, &st, telldir(dp)))
+                break;
+        }
+        )
 
     return 0;
 }
 
 static int kafka_releasedir(const char *path, struct fuse_file_info *fi)
 {
-    DIR *dp = get_dirp(fi);
-    (void) path;
-    closedir(dp);
+    DO_AS_CALLER(
+            DIR *dp = get_dirp(fi);
+            (void) path;
+            closedir(dp);
+            )
     return 0;
 }
 
 static int kafka_mknod(const char *path, mode_t mode, dev_t rdev)
 {
-    int res;
+    DO_AS_CALLER(
+            int res;
 
-    if (S_ISFIFO(mode))
-        res = mkfifo(path, mode);
-    else
-        res = mknod(path, mode, rdev);
+            if (S_ISFIFO(mode))
+            res = mkfifo(path, mode);
+            else
+            res = mknod(path, mode, rdev);
+            )
     if (res == -1)
     {
         printf("%s ", path); perror("mknod ");
@@ -112,7 +128,9 @@ static int kafka_mkdir(const char *path, mode_t mode)
 {
     int res;
 
-    res = mkdir(path, mode);
+    DO_AS_CALLER(
+            res = mkdir(path, mode);
+            )
     if (res == -1)
         return -errno;
 
@@ -123,7 +141,9 @@ static int kafka_unlink(const char *path)
 {
     int res;
 
-    res = unlink(path);
+    DO_AS_CALLER(
+            res = unlink(path);
+            )
     if (res == -1)
         return -errno;
 
@@ -134,7 +154,9 @@ static int kafka_rmdir(const char *path)
 {
     int res;
 
-    res = rmdir(path);
+    DO_AS_CALLER(
+            res = rmdir(path);
+            )
     if (res == -1)
         return -errno;
 
@@ -145,7 +167,9 @@ static int kafka_symlink(const char *from, const char *to)
 {
     int res;
 
-    res = symlink(from, to);
+    DO_AS_CALLER(
+            res = symlink(from, to);
+            )
     if (res == -1)
         return -errno;
 
@@ -156,7 +180,9 @@ static int kafka_rename(const char *from, const char *to)
 {
     int res;
 
-    res = rename(from, to);
+    DO_AS_CALLER(
+            res = rename(from, to);
+            )
     if (res == -1)
         return -errno;
 
@@ -167,7 +193,9 @@ static int kafka_link(const char *from, const char *to)
 {
     int res;
 
-    res = link(from, to);
+    DO_AS_CALLER(
+            res = link(from, to);
+            )
     if (res == -1)
         return -errno;
 
@@ -178,7 +206,9 @@ static int kafka_chmod(const char *path, mode_t mode)
 {
     int res;
 
-    res = chmod(path, mode);
+    DO_AS_CALLER(
+            res = chmod(path, mode);
+            )
     if (res == -1)
         return -errno;
 
@@ -189,7 +219,9 @@ static int kafka_chown(const char *path, uid_t uid, gid_t gid)
 {
     int res;
 
-    res = lchown(path, uid, gid);
+    DO_AS_CALLER(
+            res = lchown(path, uid, gid);
+            )
     if (res == -1)
         return -errno;
 
@@ -200,7 +232,9 @@ static int kafka_truncate(const char *path, off_t size)
 {
     int res;
 
-    res = truncate(path, size);
+    DO_AS_CALLER(
+            res = truncate(path, size);
+            )
     if (res == -1)
         return -errno;
 
@@ -214,7 +248,9 @@ static int kafka_ftruncate(const char *path, off_t size,
 
     (void) path;
 
-    res = ftruncate(fi->fh, size);
+    DO_AS_CALLER(
+            res = ftruncate(fi->fh, size);
+            )
     if (res == -1)
         return -errno;
 
@@ -242,7 +278,9 @@ static int kafka_create(const char *path, mode_t mode, struct fuse_file_info *fi
 {
     int fd;
 
-    fd = open(path, fi->flags, mode);
+    DO_AS_CALLER(
+            fd = open(path, fi->flags, mode);
+            )
     if (fd == -1)
         return -errno;
 
@@ -254,7 +292,9 @@ static int kafka_open(const char *path, struct fuse_file_info *fi)
 {
     int fd;
 
-    fd = open(path, fi->flags);
+    DO_AS_CALLER(
+            fd = open(path, fi->flags);
+            )
     if (fd == -1)
         return -errno;
 
@@ -268,7 +308,9 @@ static int kafka_read(const char *path, char *buf, size_t size, off_t offset,
     int res;
 
     (void) path;
-    res = pread(fi->fh, buf, size, offset);
+    DO_AS_CALLER(
+            res = pread(fi->fh, buf, size, offset);
+            )
     if (res == -1)
         res = -errno;
 
@@ -278,7 +320,9 @@ static int kafka_statfs(const char *path, struct statvfs *stbuf)
 {
     int res;
 
-    res = statvfs(path, stbuf);
+    DO_AS_CALLER(
+            res = statvfs(path, stbuf);
+            )
     if (res == -1)
         return -errno;
 
@@ -295,7 +339,9 @@ static int kafka_flush(const char *path, struct fuse_file_info *fi)
        called multiple times for an open file, this must not really
        close the file.  This is important if used on a network
        filesystem like NFS which flush the data/metadata on close() */
-    res = close(dup(fi->fh));
+    DO_AS_CALLER(
+            res = close(dup(fi->fh));
+            )
     if (res == -1)
         return -errno;
 
@@ -305,7 +351,9 @@ static int kafka_flush(const char *path, struct fuse_file_info *fi)
 static int kafka_release(const char *path, struct fuse_file_info *fi)
 {
     (void) path;
-    close(fi->fh);
+    DO_AS_CALLER(
+            close(fi->fh);
+            )
 
     return 0;
 }
@@ -315,7 +363,7 @@ static int kafka_fsync(const char *path, int isdatasync,
 {
     int res;
     (void) path;
-
+DO_AS_CALLER(
 #ifndef HAVE_FDATASYNC
     (void) isdatasync;
 #else
@@ -324,6 +372,7 @@ static int kafka_fsync(const char *path, int isdatasync,
     else
 #endif
         res = fsync(fi->fh);
+        )
     if (res == -1)
         return -errno;
 
@@ -335,7 +384,9 @@ static int kafka_fsync(const char *path, int isdatasync,
 static int kafka_setxattr(const char *path, const char *name, const char *value,
             size_t size, int flags)
 {
-    int res = lsetxattr(path, name, value, size, flags);
+    DO_AS_CALLER(
+            int res = lsetxattr(path, name, value, size, flags);
+            )
     if (res == -1)
         return -errno;
     return 0;
@@ -344,7 +395,9 @@ static int kafka_setxattr(const char *path, const char *name, const char *value,
 static int kafka_getxattr(const char *path, const char *name, char *value,
             size_t size)
 {
-    int res = lgetxattr(path, name, value, size);
+    DO_AS_CALLER(
+            int res = lgetxattr(path, name, value, size);
+            )
     if (res == -1)
         return -errno;
     return res;
@@ -352,7 +405,9 @@ static int kafka_getxattr(const char *path, const char *name, char *value,
 
 static int kafka_listxattr(const char *path, char *list, size_t size)
 {
-    int res = llistxattr(path, list, size);
+    DO_AS_CALLER(
+            int res = llistxattr(path, list, size);
+            )
     if (res == -1)
         return -errno;
     return res;
@@ -360,7 +415,9 @@ static int kafka_listxattr(const char *path, char *list, size_t size)
 
 static int kafka_removexattr(const char *path, const char *name)
 {
-    int res = lremovexattr(path, name);
+    DO_AS_CALLER(
+            int res = lremovexattr(path, name);
+            )
     if (res == -1)
         return -errno;
     return 0;

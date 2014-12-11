@@ -126,7 +126,7 @@ def build():
 def test():
     for source in sources:
         run("./" + source + ".test")
-        run("gcov", "./src/" + source + ".c")
+        run("gcov", "./src/" + source + ".c","-o", ".")
         if binary_exists("lcov"):
             run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
             if binary_exists("genhtml"):

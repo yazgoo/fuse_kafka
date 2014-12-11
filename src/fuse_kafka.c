@@ -170,7 +170,9 @@ static int kafka_write(const char *path, const char *buf,
     int res;
     if(should_write_to_kafka(path, size))
             actual_kafka_write(path, buf, size, offset);
-    res = pwrite(fi->fh, buf, size, offset);
+    DO_AS_CALLER(
+            res = pwrite(fi->fh, buf, size, offset);
+    )
     if (res == -1)
         res = -errno;
 
