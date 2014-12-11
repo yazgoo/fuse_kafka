@@ -18,8 +18,9 @@ kafka_archive = kafka_directory + ".tgz"
 kafka_bin_directory = kafka_directory + "/bin/"
 kafka_config_directory = kafka_directory + "/config/"
 class FuseKafkaLog:
-    def __init__(self):
+    def __init__(self, zkconnect = "localhost"):
         self.select = None
+        self.zkconnect = zkconnect
     def run_command(self, *command):
         p = subprocess.Popen(command,
                 stdout=subprocess.PIPE,
@@ -56,8 +57,7 @@ class FuseKafkaLog:
             self.select = os.environ.get('SELECT').split()
         for line in self.run_command(os.getcwd() + "/"
                 + kafka_bin_directory + 'kafka-console-consumer.sh',
-            "--zookeeper", "localhost:2181",
-            "--topic", "logs"):
+            "--zookeeper", self.zkconnect, "--topic", "logs"):
             try:
                 self.pretty_print(line)
             except ValueError:
@@ -169,7 +169,11 @@ def kafka_start():
     run(kafka_bin_directory + 'kafka-server-start.sh',
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
-    FuseKafkaLog().start()
+    zkconnect = os.environ.get('zkconnect')
+    if zkconnect == None: zkconnect = "localhost"
+    FuseKafkaLog(zkconnect).start()
+def create_topic_command(zkconnect):
+    return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 1 --replication-factor 1'.format(zkconnect)
 def quickstart():
     klog = '/tmp/kafka-logs'
     zlog = '/tmp/zookeeper'
@@ -182,7 +186,7 @@ def quickstart():
     p2.start()
     result = 1
     while result != 0:
-        result = os.system(kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper localhost:2181 --partitions 1 --replication-factor 1')
+        result = os.system(create_topic_command('localhost'))
         time.sleep(0.2)
     os.system('./src/fuse_kafka.py start')
     p3.start()
@@ -200,7 +204,58 @@ def quickstart():
 def doc():
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
-if len(sys.argv) <= 1 or sys.argv[1] != "quickstart":
+class TestMininet():
+    def __init__(self):
+        import tempfile
+        from mininet.topo import Topo
+        from mininet.net import Mininet
+        from mininet.cli import CLI
+        from mininet.node import OVSController
+        class SingleSwitchTopo(Topo):
+            "Single Switch Topology"
+            def __init__(self, count=1, **params):
+                Topo.__init__(self, **params)
+                hosts = [ self.addHost('h%d' % i) for i in range(1, count + 1) ]
+                s1 = self.addSwitch('s1')
+                for h in hosts: self.addLink(h, s1)
+        net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
+        net.start()
+        kafka_download()
+        kafka = net.get('h1')
+        zookeeper = net.get('h2')
+        fuse_kafka = net.get('h3')
+        client = net.get('h4')
+        launch = kafka_bin_directory + '{}-server-start.sh '
+        zookeeper.cmd("rm -rf /tmp/zookeeper")
+        zookeeper.cmd(launch.format("zookeeper") 
+            + kafka_config_directory + 'zookeeper.properties > /tmp/zookeeper.log &')
+        kafka_config = tempfile.NamedTemporaryFile(delete=False)
+        kafka_config.write("zookeeper.connect={}\n".format(zookeeper.IP()))
+        kafka_config.write("broker.id=0\n")
+        kafka_config.write("host.name={}\n".format(kafka.IP()))
+        kafka_config.close()
+        zookeeper.cmd("rm -rf /tmp/kafka-logs")
+        kafka.cmd(launch.format("kafka") + kafka_config.name + ' > /tmp/kafka.log &')
+        cwd = os.getcwd() + "/"
+        conf = "/tmp/conf"
+        fuse_kafka.cmd("mkdir -p {}".format(conf))
+        fuse_kafka.cmd("cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
+        fuse_kafka.cmd("sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
+                .format(zookeeper.IP(), conf))
+        fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka".format(cwd, conf))
+        result = kafka.cmd(create_topic_command(zookeeper.IP()) + " > /tmp/create_topic.log")
+        print result
+        client.cmd("zkconnect={} ./build.py kafka_consumer_start > /tmp/kafka_consumer.log &"
+                .format(zookeeper.IP()));
+        fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start"'.format(conf, cwd))
+        CLI(net)
+        fuse_kafka.cmd('src/fuse_kafka.py stop')
+        [ host.cmd('pkill -9 java') for host in [client, kafka, zookeeper]]
+        net.stop()
+def mininet():
+    TestMininet()
+if len(sys.argv) <= 1 or (sys.argv[1] != "quickstart" and sys.argv[1] != "mininet"):
     main()
 else:
-    quickstart()
+    if sys.argv[1] == "quickstart": quickstart()
+    else: mininet()
