@@ -1,0 +1,54 @@
+\hypertarget{classfuse__kafka_1_1Mountpoints}{\section{fuse\-\_\-kafka.\-Mountpoints \-Class \-Reference}
+\label{classfuse__kafka_1_1Mountpoints}\index{fuse\-\_\-kafka.\-Mountpoints@{fuse\-\_\-kafka.\-Mountpoints}}
+}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classfuse__kafka_1_1Mountpoints_aa7c2851dd09c409e0a884c7af0bebf5d}{access}
+\item 
+def \hyperlink{classfuse__kafka_1_1Mountpoints_a44329f578179f3d0af0ddf6db71f0e8e}{umount\-\_\-non\-\_\-accessible}
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\begin{DoxyVerb}Utility class to umount non-responding or non-writable
+mountpoints\end{DoxyVerb}
+ 
+
+\-Definition at line 27 of file fuse\-\_\-kafka.\-py.
+
+
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classfuse__kafka_1_1Mountpoints_aa7c2851dd09c409e0a884c7af0bebf5d}{\index{fuse\-\_\-kafka\-::\-Mountpoints@{fuse\-\_\-kafka\-::\-Mountpoints}!access@{access}}
+\index{access@{access}!fuse_kafka::Mountpoints@{fuse\-\_\-kafka\-::\-Mountpoints}}
+\subsubsection[{access}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Mountpoints.\-access} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{path}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1Mountpoints_aa7c2851dd09c409e0a884c7af0bebf5d}
+\begin{DoxyVerb}non-blocking check that a path is accessible \end{DoxyVerb}
+ 
+
+\-Definition at line 30 of file fuse\-\_\-kafka.\-py.
+
+\hypertarget{classfuse__kafka_1_1Mountpoints_a44329f578179f3d0af0ddf6db71f0e8e}{\index{fuse\-\_\-kafka\-::\-Mountpoints@{fuse\-\_\-kafka\-::\-Mountpoints}!umount\-\_\-non\-\_\-accessible@{umount\-\_\-non\-\_\-accessible}}
+\index{umount\-\_\-non\-\_\-accessible@{umount\-\_\-non\-\_\-accessible}!fuse_kafka::Mountpoints@{fuse\-\_\-kafka\-::\-Mountpoints}}
+\subsubsection[{umount\-\_\-non\-\_\-accessible}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Mountpoints.\-umount\-\_\-non\-\_\-accessible} (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1Mountpoints_a44329f578179f3d0af0ddf6db71f0e8e}
+\begin{DoxyVerb}for eac configured directory, checks if the directory is
+accessible. If it is not accessible 10 second after the first time
+it was not, umount it \end{DoxyVerb}
+ 
+
+\-Definition at line 40 of file fuse\-\_\-kafka.\-py.
+
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+src/fuse\-\_\-kafka.\-py\end{DoxyCompactItemize}

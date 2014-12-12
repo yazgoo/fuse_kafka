@@ -1,7 +1,7 @@
-\hypertarget{classfuse__kafka_1_1FuseKafkaService}{\section{fuse\-\_\-kafka.\-Fuse\-Kafka\-Service Class Reference}
+\hypertarget{classfuse__kafka_1_1FuseKafkaService}{\section{fuse\-\_\-kafka.\-Fuse\-Kafka\-Service \-Class \-Reference}
 \label{classfuse__kafka_1_1FuseKafkaService}\index{fuse\-\_\-kafka.\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka.\-Fuse\-Kafka\-Service}}
 }
-\subsection*{Public Member Functions}
+\subsection*{\-Public \-Member \-Functions}
 \begin{DoxyCompactItemize}
 \item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a08ccfab12ff2c998f5bc466de9c9afa4}{do}
@@ -12,9 +12,14 @@ def \hyperlink{classfuse__kafka_1_1FuseKafkaService_ad17bb7d3209b7242defee5aa54c
 \item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a7cc4774d8ed31ffe42ca2f955501ee45}{restart}
 \item 
-def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042ada3d1}{status}
+def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a6e9278183d970e683d7060610bb9bc6f}{get\-\_\-status}
+\item 
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042ada3d1}{def {\bfseries status}}\label{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042ada3d1}
+
+\item 
+def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a9cf98c6a35fb986e6877dfdca61630c0}{cleanup}
 \end{DoxyCompactItemize}
-\subsection*{Data Fields}
+\subsection*{\-Data \-Fields}
 \begin{DoxyCompactItemize}
 \item 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_ae104081d0b1ec3c4c44cfd4ccf75b01e}{{\bfseries prefix}}\label{classfuse__kafka_1_1FuseKafkaService_ae104081d0b1ec3c4c44cfd4ccf75b01e}
@@ -25,18 +30,32 @@ def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042a
 \end{DoxyCompactItemize}
 
 
-\subsection{Detailed Description}
+\subsection{\-Detailed \-Description}
 \begin{DoxyVerb}Utility class to run multiple fuse_kafka processes as one service \end{DoxyVerb}
  
 
-Definition at line 114 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 145 of file fuse\-\_\-kafka.\-py.
 
 
 
-\subsection{Member Function Documentation}
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a9cf98c6a35fb986e6877dfdca61630c0}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!cleanup@{cleanup}}
+\index{cleanup@{cleanup}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
+\subsubsection[{cleanup}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-cleanup} (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1FuseKafkaService_a9cf98c6a35fb986e6877dfdca61630c0}
+\begin{DoxyVerb}if a fuse kafka mountpoint is not accessible, umount it.
+Also installs this action in the crontab so it is launched
+every minute. \end{DoxyVerb}
+ 
+
+\-Definition at line 194 of file fuse\-\_\-kafka.\-py.
+
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a08ccfab12ff2c998f5bc466de9c9afa4}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!do@{do}}
 \index{do@{do}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{do}]{\setlength{\rightskip}{0pt plus 5cm}def fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-do (
+\subsubsection[{do}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-do} (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
 \item[{}]{action}
@@ -44,14 +63,28 @@ Definition at line 114 of file fuse\-\_\-kafka.\-py.
 )}}\label{classfuse__kafka_1_1FuseKafkaService_a08ccfab12ff2c998f5bc466de9c9afa4}
 \begin{DoxyVerb}Actually run an action 
 
-action - the action name\end{DoxyVerb}
+action - the action name
+
+\end{DoxyVerb}
  
 
-Definition at line 116 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 147 of file fuse\-\_\-kafka.\-py.
+
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a6e9278183d970e683d7060610bb9bc6f}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!get\-\_\-status@{get\-\_\-status}}
+\index{get\-\_\-status@{get\-\_\-status}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
+\subsubsection[{get\-\_\-status}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-get\-\_\-status} (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1FuseKafkaService_a6e9278183d970e683d7060610bb9bc6f}
+\begin{DoxyVerb}Displays the status of fuse_kafka processes \end{DoxyVerb}
+ 
+
+\-Definition at line 179 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a7cc4774d8ed31ffe42ca2f955501ee45}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!restart@{restart}}
 \index{restart@{restart}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{restart}]{\setlength{\rightskip}{0pt plus 5cm}def fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-restart (
+\subsubsection[{restart}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-restart} (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
@@ -59,11 +92,11 @@ Definition at line 116 of file fuse\-\_\-kafka.\-py.
 \begin{DoxyVerb}Stops and starts fuse_kafka processes \end{DoxyVerb}
  
 
-Definition at line 140 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 174 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!start@{start}}
 \index{start@{start}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}def fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-start (
+\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-start} (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
@@ -71,23 +104,11 @@ Definition at line 140 of file fuse\-\_\-kafka.\-py.
 \begin{DoxyVerb}Starts fuse_kafka processes \end{DoxyVerb}
  
 
-Definition at line 125 of file fuse\-\_\-kafka.\-py.
-
-\hypertarget{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042ada3d1}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!status@{status}}
-\index{status@{status}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{status}]{\setlength{\rightskip}{0pt plus 5cm}def fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-status (
-\begin{DoxyParamCaption}
-\item[{}]{self}
-\end{DoxyParamCaption}
-)}}\label{classfuse__kafka_1_1FuseKafkaService_a0289d64b6f56aef8b710466042ada3d1}
-\begin{DoxyVerb}Displays the status of fuse_kafka processes \end{DoxyVerb}
- 
-
-Definition at line 144 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 158 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_ad17bb7d3209b7242defee5aa54ca828e}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!stop@{stop}}
 \index{stop@{stop}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{stop}]{\setlength{\rightskip}{0pt plus 5cm}def fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-stop (
+\subsubsection[{stop}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-stop} (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
@@ -95,10 +116,10 @@ Definition at line 144 of file fuse\-\_\-kafka.\-py.
 \begin{DoxyVerb}Stops fuse_kafka processes \end{DoxyVerb}
  
 
-Definition at line 137 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 171 of file fuse\-\_\-kafka.\-py.
 
 
 
-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
 \item 
 src/fuse\-\_\-kafka.\-py\end{DoxyCompactItemize}

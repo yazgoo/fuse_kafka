@@ -1,4 +1,4 @@
-\hypertarget{util_8c}{\section{src/util.c File Reference}
+\hypertarget{util_8c}{\section{src/util.c \-File \-Reference}
 \label{util_8c}\index{src/util.\-c@{src/util.\-c}}
 }
 
@@ -6,11 +6,16 @@
 utility functions  
 
 
-{\ttfamily \#include $<$openssl/bio.\-h$>$}\\*
-{\ttfamily \#include $<$openssl/evp.\-h$>$}\\*
-{\ttfamily \#include $<$openssl/pem.\-h$>$}\\*
-{\ttfamily \#include $<$stdlib.\-h$>$}\\*
-\subsection*{Functions}
+{\ttfamily \#include $<$openssl/bio.\-h$>$}\*
+{\ttfamily \#include $<$openssl/evp.\-h$>$}\*
+{\ttfamily \#include $<$openssl/pem.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+\subsection*{\-Defines}
+\begin{DoxyCompactItemize}
+\item 
+\#define {\bfseries \-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R}(action)
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
 \begin{DoxyCompactItemize}
 \item 
 \hypertarget{util_8c_a11bd144d7d44914099a3aeddf1c8567d}{int {\bfseries strcmp} (const char $\ast$s1, const char $\ast$s2)}\label{util_8c_a11bd144d7d44914099a3aeddf1c8567d}
@@ -21,7 +26,7 @@ char $\ast$ \hyperlink{util_8c_afb4e6c2974525e7bca75f0a0c1ef94d9}{base64} (const
 static char $\ast$ \hyperlink{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}{get\-\_\-command\-\_\-line} (int pid)
 \begin{DoxyCompactList}\small\item\em get the command line corresponding to a process \end{DoxyCompactList}\item 
 void \hyperlink{util_8c_a9cc3c9ae892455a66de3012f5b6fb8e0}{set\-\_\-timestamp} (char $\ast$timestamp)
-\begin{DoxyCompactList}\small\item\em get a string representing the time in I\-S\-O8601 format \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em get a string representing the time in \-I\-S\-O8601 format \end{DoxyCompactList}\item 
 int \hyperlink{util_8c_adb849059403e0b01c44605d63d205daa}{get\-\_\-limit} (int argc, char $\ast$$\ast$argv)
 \begin{DoxyCompactList}\small\item\em look for the limit \char`\"{}-\/-\/\char`\"{} in argv  argument number  arguments \end{DoxyCompactList}\item 
 \hypertarget{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}{char $\ast$ \hyperlink{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}{array\-\_\-to\-\_\-container\-\_\-string} (char $\ast$$\ast$array, size\-\_\-t n, char open\-\_\-char, char close\-\_\-char, char sep1, char sep2)}\label{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}
@@ -29,17 +34,42 @@ int \hyperlink{util_8c_adb849059403e0b01c44605d63d205daa}{get\-\_\-limit} (int a
 \begin{DoxyCompactList}\small\item\em get a concatenated string from an array of string \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
-\subsection{Detailed Description}
+\subsection{\-Detailed \-Description}
 utility functions 
 
-Definition in file \hyperlink{util_8c_source}{util.\-c}.
+\-Definition in file \hyperlink{util_8c_source}{util.\-c}.
 
 
 
-\subsection{Function Documentation}
+\subsection{\-Define \-Documentation}
+\hypertarget{util_8c_a98e007fff26482fe9dbd783a71eed117}{\index{util.\-c@{util.\-c}!\-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R@{\-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R}}
+\index{\-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R@{\-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R}!util.c@{util.\-c}}
+\subsubsection[{\-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define \-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R(
+\begin{DoxyParamCaption}
+\item[{}]{action}
+\end{DoxyParamCaption}
+)}}\label{util_8c_a98e007fff26482fe9dbd783a71eed117}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+struct fuse_context* __context = fuse_get_context(); \
+    gid_t __gid = getegid(); \
+    uid_t __uid = geteuid(); \
+    seteuid(__context->uid); \
+    setegid(__context->gid); \
+    action \
+    setegid(__gid); \
+    seteuid(__uid);
+\end{DoxyCode}
+
+
+\-Definition at line 120 of file util.\-c.
+
+
+
+\subsection{\-Function \-Documentation}
 \hypertarget{util_8c_afb4e6c2974525e7bca75f0a0c1ef94d9}{\index{util.\-c@{util.\-c}!base64@{base64}}
 \index{base64@{base64}!util.c@{util.\-c}}
-\subsubsection[{base64}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ base64 (
+\subsubsection[{base64}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ {\bf base64} (
 \begin{DoxyParamCaption}
 \item[{const unsigned char $\ast$}]{input, }
 \item[{int}]{length}
@@ -50,45 +80,45 @@ Definition in file \hyperlink{util_8c_source}{util.\-c}.
 convert the input to base64 
 
 
-\begin{DoxyParams}{Parameters}
+\begin{DoxyParams}{\-Parameters}
 {\em input} & the input string \\
 \hline
 {\em size} & of the input string \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+\begin{DoxyReturn}{\-Returns}
 a newly allocated string with the base64 data which should be free'd by the user 
 \end{DoxyReturn}
 
 
-Definition at line 21 of file util.\-c.
+\-Definition at line 21 of file util.\-c.
 
 \hypertarget{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}{\index{util.\-c@{util.\-c}!get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}}
 \index{get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}!util.c@{util.\-c}}
-\subsubsection[{get\-\_\-command\-\_\-line}]{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ get\-\_\-command\-\_\-line (
+\subsubsection[{get\-\_\-command\-\_\-line}]{\setlength{\rightskip}{0pt plus 5cm}static char$\ast$ {\bf get\-\_\-command\-\_\-line} (
 \begin{DoxyParamCaption}
 \item[{int}]{pid}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [static]}}}\label{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}\label{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}
 
 
 get the command line corresponding to a process 
 
 
-\begin{DoxyParams}{Parameters}
+\begin{DoxyParams}{\-Parameters}
 {\em pid} & process id \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+\begin{DoxyReturn}{\-Returns}
 a base64 encoded string with the process command line, or an empty string if it could not be extrcated 
 \end{DoxyReturn}
 
 
-Definition at line 45 of file util.\-c.
+\-Definition at line 45 of file util.\-c.
 
 \hypertarget{util_8c_adb849059403e0b01c44605d63d205daa}{\index{util.\-c@{util.\-c}!get\-\_\-limit@{get\-\_\-limit}}
 \index{get\-\_\-limit@{get\-\_\-limit}!util.c@{util.\-c}}
-\subsubsection[{get\-\_\-limit}]{\setlength{\rightskip}{0pt plus 5cm}int get\-\_\-limit (
+\subsubsection[{get\-\_\-limit}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf get\-\_\-limit} (
 \begin{DoxyParamCaption}
 \item[{int}]{argc, }
 \item[{char $\ast$$\ast$}]{argv}
@@ -98,33 +128,33 @@ Definition at line 45 of file util.\-c.
 
 look for the limit \char`\"{}-\/-\/\char`\"{} in argv  argument number  arguments 
 
-\begin{DoxyReturn}{Returns}
+\begin{DoxyReturn}{\-Returns}
 the index of the limit, argc if it is not found 
 \end{DoxyReturn}
 
 
-Definition at line 95 of file util.\-c.
+\-Definition at line 95 of file util.\-c.
 
 \hypertarget{util_8c_a9cc3c9ae892455a66de3012f5b6fb8e0}{\index{util.\-c@{util.\-c}!set\-\_\-timestamp@{set\-\_\-timestamp}}
 \index{set\-\_\-timestamp@{set\-\_\-timestamp}!util.c@{util.\-c}}
-\subsubsection[{set\-\_\-timestamp}]{\setlength{\rightskip}{0pt plus 5cm}void set\-\_\-timestamp (
+\subsubsection[{set\-\_\-timestamp}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf set\-\_\-timestamp} (
 \begin{DoxyParamCaption}
 \item[{char $\ast$}]{timestamp}
 \end{DoxyParamCaption}
 )}}\label{util_8c_a9cc3c9ae892455a66de3012f5b6fb8e0}
 
 
-get a string representing the time in I\-S\-O8601 format 
+get a string representing the time in \-I\-S\-O8601 format 
 
 
-\begin{DoxyParams}{Parameters}
+\begin{DoxyParams}{\-Parameters}
 {\em timestamp} & string to set to the given time \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
+\begin{DoxyReturn}{\-Returns}
 void 
 \end{DoxyReturn}
 
 
-Definition at line 81 of file util.\-c.
+\-Definition at line 81 of file util.\-c.
 

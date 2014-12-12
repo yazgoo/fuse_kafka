@@ -1,0 +1,139 @@
+\hypertarget{classbuild_1_1FuseKafkaLog}{\section{build.\-Fuse\-Kafka\-Log \-Class \-Reference}
+\label{classbuild_1_1FuseKafkaLog}\index{build.\-Fuse\-Kafka\-Log@{build.\-Fuse\-Kafka\-Log}}
+}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbuild_1_1FuseKafkaLog_a2f38cc2ad0ba6471725a2b07ca0d8c9d}{def {\bfseries \-\_\-\-\_\-init\-\_\-\-\_\-}}\label{classbuild_1_1FuseKafkaLog_a2f38cc2ad0ba6471725a2b07ca0d8c9d}
+
+\item 
+def \hyperlink{classbuild_1_1FuseKafkaLog_ab32a24d28f6d70a85fdd010de42e4b92}{run\-\_\-command}
+\item 
+def \hyperlink{classbuild_1_1FuseKafkaLog_a2f482d5c0fae01448b3e9014af3f046e}{pretty\-\_\-print}
+\item 
+def \hyperlink{classbuild_1_1FuseKafkaLog_a0aee00e8760ca9f8fb4b45b87bde5c14}{load\-\_\-fuse\-\_\-kafka\-\_\-event}
+\item 
+def \hyperlink{classbuild_1_1FuseKafkaLog_a88eb29c1007677e7ae6e92e8adb80b9e}{start}
+\end{DoxyCompactItemize}
+\subsection*{\-Data \-Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classbuild_1_1FuseKafkaLog_a59a9a6be5d7a9b6bb73c75fafabf3b8f}{{\bfseries select}}\label{classbuild_1_1FuseKafkaLog_a59a9a6be5d7a9b6bb73c75fafabf3b8f}
+
+\item 
+\hypertarget{classbuild_1_1FuseKafkaLog_a4459ad2364f435ec006a35373169bc8b}{{\bfseries zkconnect}}\label{classbuild_1_1FuseKafkaLog_a4459ad2364f435ec006a35373169bc8b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\begin{DoxyVerb}Utility to read messages from kafka based on fuse kafka format \end{DoxyVerb}
+ 
+
+\-Definition at line 21 of file build.\-py.
+
+
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classbuild_1_1FuseKafkaLog_a0aee00e8760ca9f8fb4b45b87bde5c14}{\index{build\-::\-Fuse\-Kafka\-Log@{build\-::\-Fuse\-Kafka\-Log}!load\-\_\-fuse\-\_\-kafka\-\_\-event@{load\-\_\-fuse\-\_\-kafka\-\_\-event}}
+\index{load\-\_\-fuse\-\_\-kafka\-\_\-event@{load\-\_\-fuse\-\_\-kafka\-\_\-event}!build::FuseKafkaLog@{build\-::\-Fuse\-Kafka\-Log}}
+\subsubsection[{load\-\_\-fuse\-\_\-kafka\-\_\-event}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Fuse\-Kafka\-Log.\-load\-\_\-fuse\-\_\-kafka\-\_\-event} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{string}
+\end{DoxyParamCaption}
+)}}\label{classbuild_1_1FuseKafkaLog_a0aee00e8760ca9f8fb4b45b87bde5c14}
+\begin{DoxyVerb}Decodes a json logstash/fuse_kafka event string, i.e.:
+- does a json decoding
+- decodes @message and command fields 
+- adds message_size-added field 
+
+string - the JSON input logstash/fuse_kafka event
+
+Example
+    
+    build.FuseKafkaLog().load_fuse_kafka_event(
+      '{"command": "bXkgY29tbWFuZGU=", "@message": "bXkgbWVzc2FnZQ=="}')
+
+    => {'message_size-added': 10,
+u'command': 'my commande',
+u'@message': 'my message'}
+
+Returns the decoded json object
+\end{DoxyVerb}
+ 
+
+\-Definition at line 75 of file build.\-py.
+
+\hypertarget{classbuild_1_1FuseKafkaLog_a2f482d5c0fae01448b3e9014af3f046e}{\index{build\-::\-Fuse\-Kafka\-Log@{build\-::\-Fuse\-Kafka\-Log}!pretty\-\_\-print@{pretty\-\_\-print}}
+\index{pretty\-\_\-print@{pretty\-\_\-print}!build::FuseKafkaLog@{build\-::\-Fuse\-Kafka\-Log}}
+\subsubsection[{pretty\-\_\-print}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Fuse\-Kafka\-Log.\-pretty\-\_\-print} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{string}
+\end{DoxyParamCaption}
+)}}\label{classbuild_1_1FuseKafkaLog_a2f482d5c0fae01448b3e9014af3f046e}
+\begin{DoxyVerb}Displays a json logstash/fuse_kafka event in a user friendly fashion
+
+string - the JSON input logstash/fuse_kafka event
+
+Example
+
+    pretty_print('{"command": "bXkgY29tbWFuZA==", "@message": "bXkgbWVzc2FnZQ==", '
++ '"fields": {"a": "v"}, "tags": ["tag"]}')
+
+    prints:
+
+event:
+  message_size-added: 0
+  fields:
+     a: v
+  command: my command
+  @message: my message
+  tags:
+    -  tag
+\end{DoxyVerb}
+ 
+
+\-Definition at line 37 of file build.\-py.
+
+\hypertarget{classbuild_1_1FuseKafkaLog_ab32a24d28f6d70a85fdd010de42e4b92}{\index{build\-::\-Fuse\-Kafka\-Log@{build\-::\-Fuse\-Kafka\-Log}!run\-\_\-command@{run\-\_\-command}}
+\index{run\-\_\-command@{run\-\_\-command}!build::FuseKafkaLog@{build\-::\-Fuse\-Kafka\-Log}}
+\subsubsection[{run\-\_\-command}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Fuse\-Kafka\-Log.\-run\-\_\-command} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{command}
+\end{DoxyParamCaption}
+)}}\label{classbuild_1_1FuseKafkaLog_ab32a24d28f6d70a85fdd010de42e4b92}
+\begin{DoxyVerb}Run an interactive command line
+
+command - the command to run as an argument array
+
+Returns an iterator to the command stdout
+\end{DoxyVerb}
+ 
+
+\-Definition at line 26 of file build.\-py.
+
+\hypertarget{classbuild_1_1FuseKafkaLog_a88eb29c1007677e7ae6e92e8adb80b9e}{\index{build\-::\-Fuse\-Kafka\-Log@{build\-::\-Fuse\-Kafka\-Log}!start@{start}}
+\index{start@{start}!build::FuseKafkaLog@{build\-::\-Fuse\-Kafka\-Log}}
+\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Fuse\-Kafka\-Log.\-start} (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classbuild_1_1FuseKafkaLog_a88eb29c1007677e7ae6e92e8adb80b9e}
+\begin{DoxyVerb}Launches a kafka console consumer and pretty prints 
+    fuse_kafka/logstash events from this consumer
+
+- SELECT (environment variable): if defined, lists what field 
+    names should be retrieved (whitespace separated)
+\end{DoxyVerb}
+ 
+
+\-Definition at line 100 of file build.\-py.
+
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+build.\-py\end{DoxyCompactItemize}
