@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+""" Builds unit test binary """
 try:
     import base64, subprocess, sys, glob, os, json, thread, multiprocessing, shutil, time
 except ImportError, e:
@@ -18,16 +19,42 @@ kafka_archive = kafka_directory + ".tgz"
 kafka_bin_directory = kafka_directory + "/bin/"
 kafka_config_directory = kafka_directory + "/config/"
 class FuseKafkaLog:
+    """ Utility to read messages from kafka based on fuse kafka format """
     def __init__(self, zkconnect = "localhost"):
         self.select = None
         self.zkconnect = zkconnect
     def run_command(self, *command):
+        """ Run an interactive command line
+
+        command - the command to run as an argument array
+
+        Returns an iterator to the command stdout
+        """
         p = subprocess.Popen(command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT)
-        #return iter(p.stdout.readline, b'')
         return iter(p.stdout.readline, '')
     def pretty_print(self, string):
+        """ Displays a json logstash/fuse_kafka event in a user friendly fashion
+        
+        string - the JSON input logstash/fuse_kafka event
+
+        Example
+
+            pretty_print('{"command": "bXkgY29tbWFuZA==", "@message": "bXkgbWVzc2FnZQ==", '
+                + '"fields": {"a": "v"}, "tags": ["tag"]}')
+
+            prints:
+
+                event:
+                  message_size-added: 0
+                  fields:
+                     a: v
+                  command: my command
+                  @message: my message
+                  tags:
+                    -  tag
+        """
         struct = self.load_fuse_kafka_event(string)
         print "event:"
         for key in struct:
@@ -46,6 +73,24 @@ class FuseKafkaLog:
             else:
                 print value
     def load_fuse_kafka_event(self, string):
+        """ Decodes a json logstash/fuse_kafka event string, i.e.:
+                - does a json decoding
+                - decodes @message and command fields 
+                - adds message_size-added field 
+        
+        string - the JSON input logstash/fuse_kafka event
+
+        Example
+            
+            build.FuseKafkaLog().load_fuse_kafka_event(
+              '{"command": "bXkgY29tbWFuZGU=", "@message": "bXkgbWVzc2FnZQ=="}')
+
+            => {'message_size-added': 10,
+                u'command': 'my commande',
+                u'@message': 'my message'}
+
+        Returns the decoded json object
+        """
         event = json.loads(string)
         for item in ["@message", "command"]:
             event[item] += "=" * ((4 - len(event[item]) % 4) % 4)
@@ -53,6 +98,12 @@ class FuseKafkaLog:
         event["message_size-added"] = len(event["@message"])
         return event
     def start(self):
+        """ Launches a kafka console consumer and pretty prints 
+            fuse_kafka/logstash events from this consumer
+
+        - SELECT (environment variable): if defined, lists what field 
+            names should be retrieved (whitespace separated)
+        """
         if os.environ.get('SELECT') != None:
             self.select = os.environ.get('SELECT').split()
         for line in self.run_command(os.getcwd() + "/"
@@ -63,6 +114,7 @@ class FuseKafkaLog:
             except ValueError:
                 print line
 def get_version():
+    """ Returns the current version for fuse_kafka based on src/version.h """
     f = open("src/version.h")
     result = []
     while True:
@@ -73,6 +125,18 @@ def get_version():
     f.close()
     return result
 def bump_version():
+    """ Changes the version number if v variable if specified:
+            - The version number is changed in src/version.h
+            - New packaging files are created with their version bumped
+        displays a Usage message otherwise
+
+    Example
+
+        $ ./build.py bump_version
+        Usage: $ v=0.1.4 ./build.py bump_version
+
+    - v (environment variable): the new version
+    """
     v = os.environ.get('v')
     if v == None:
         print("Usage: $ v=" + get_version() + " " + sys.argv[0] + " bump_version")
@@ -89,8 +153,23 @@ def bump_version():
     version.close()
     print "version bumped from {} to {} ".format(previous_v, v)
 def version():
+    """ Displays the current version number
+
+    Example
+
+        $ ./build.py version
+        0.1.4
+    """
     print(get_version())
 def package():
+    """ Generates a tar.gz corresponding to current directory in the parent directory,
+    excluding .git, .nfs*, out directory
+
+    Example
+
+        ./build.py package
+        tar --transform s,^.,fuse_kafka-0.1.4, --exclude=.git --exclude=.nfs* --exclude=out -czf ../fuse_kafka-0.1.4.tar.gz .
+    """
     name = binary_name + "-" + get_version()
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
@@ -98,6 +177,18 @@ def package():
             "--exclude=.nfs*",
             "--exclude=out", "-czf", tar , ".")
 def filter_link(a):
+    """ Filter function for link flags:
+    takes a link flag and modifies it if necessary, i.e.
+    in the link is -lcrypto, returns a static library path instead
+
+    Examples:
+        filter_link('-lblah')
+        => '-lblah'
+        filter_link('-lcrypto')
+        => '/usr/lib/x86_64-linux-gnu/libcrypto.a'
+
+    Returns the new gcc option
+    """
     if a != "-lcrypto": return a
     result = []
     for pattern in ["/usr/lib*/libcrypto.a", "/usr/lib*/*/libcrypto.a"]:
@@ -107,8 +198,20 @@ def filter_link(a):
     else:
         return a
 def to_links(libs):
+    """ Convert a library list to gcc link flags Prepends -l to a given list 
+
+    Examples:
+
+        to_links(['curl', 'au'])
+        => ['-lcurl', '-lau']
+
+    Returns the new converted list
+    """
     return [filter_link(a) for a in ['-l'+s for s in libs]]
 def binary_exists(name):
+    """ Checks if a binary exists (requires 'which' utility)
+    Returns true if the binary exists
+    """
     cmd = ["which",name]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     res = p.stdout.readlines()
@@ -116,14 +219,17 @@ def binary_exists(name):
         return False
     return True
 def dotest():
+    """ Compile, Run unit tests generating reports in out directory """
     run('rm', '-rf', 'out')
     run('mkdir', '-p', 'out')
     compile_test()
     test()
 def build():
+    """ Builds fuse_kafka binary """
     compile()
     link()
 def test():
+    """ Run unit tests, generating coverage reports in out directory """
     for source in sources:
         run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c","-o", ".")
@@ -132,16 +238,27 @@ def test():
             if binary_exists("genhtml"):
                 run("genhtml", "src/" + source + ".info", "-o", "./out")
 def compile():
+    """ Compiles *.c files in source directory """
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
+    """ Builds unit test binary """
     for source in sources:
         run('gcc', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
                 test_flags, to_links(common_libs))
 def link():
+    """ Finalize the binary generation by linking all object files """
     objects = [s+'.o' for s in sources]
     run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
 def install():
+    """ installs fuse kafka on current system, i.e. installs:
+        - fuse_kafka binary in $BUILDROOT/usr/bin
+        - fuse_kafka init script in $BUILDROOT/etc/init.d
+        - fuse_kafka configuration $BUILDROOT/etc
+
+    - BUILDROOT (environment variable): the target directory where to install fuse_kafka, 
+        if not specified, will be filesystem root ('/')
+    """
     root = '/'
     if os.environ.get('BUILDROOT') != None:
         root = os.environ.get('BUILDROOT') + "/"
@@ -156,25 +273,42 @@ def install():
     run('cp', 'conf/fuse_kafka.properties',
             conf_directory + "fuse_kafka.conf")
 def clean():
+    """ Cleanups file generated by this script """
     autoclean()
 def kafka_download():
+    """ Downloads kafka binary distribution archive and uncompresses it """
     run('wget', kafka_server + kafka_version + "/" + kafka_archive)
     run('tar', 'xzf', kafka_archive)
 def zookeeper_start():
+    """ Does kafka_dowload() and starts zookeeper server """
     kafka_download()
     run(kafka_bin_directory + 'zookeeper-server-start.sh',
             kafka_config_directory + 'zookeeper.properties')
 def kafka_start():
+    """ Does kafka_dowload() and starts kafka server """
     kafka_download()
     run(kafka_bin_directory + 'kafka-server-start.sh',
             kafka_config_directory + 'server.properties')
 def kafka_consumer_start():
+    """ Starts a kafka logstash/fuse_kafka events consumer
+        (pretty printing events)
+    
+    - zkconnect (environment variable): if specified, launches the kafka
+        consumer based on this zookeeper cluster address, otherwise looks for a 
+        zookeeper on localhost
+    """
     zkconnect = os.environ.get('zkconnect')
     if zkconnect == None: zkconnect = "localhost"
     FuseKafkaLog(zkconnect).start()
 def create_topic_command(zkconnect):
+    """
+    Return a command line for creating a new logging topic on kafka cluster
+
+    - zkconnect: the zookeeper cluster endpoint to kafka
+    """
     return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 1 --replication-factor 1'.format(zkconnect)
 def quickstart():
+    """ Launches kafka, zookeeper, fuse_kafka and a console consumer locally """
     klog = '/tmp/kafka-logs'
     zlog = '/tmp/zookeeper'
     if os.path.exists(klog): shutil.rmtree(klog)
@@ -202,14 +336,15 @@ def quickstart():
     os.system(kafka_bin_directory + 'kafka-server-stop.sh')
     os.system(kafka_bin_directory + 'zookeeper-server-stop.sh')
 def doc():
+    """ generates the project documentation """
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
 class TestMininet():
-    def __init__(self):
-        import tempfile
+    """ Utility to create a virtual network to test fuse kafka resiliancy """
+    def start_network(self):
+        """ starts-up a single switch topology """
         from mininet.topo import Topo
         from mininet.net import Mininet
-        from mininet.cli import CLI
         from mininet.node import OVSController
         class SingleSwitchTopo(Topo):
             "Single Switch Topology"
@@ -218,44 +353,85 @@ class TestMininet():
                 hosts = [ self.addHost('h%d' % i) for i in range(1, count + 1) ]
                 s1 = self.addSwitch('s1')
                 for h in hosts: self.addLink(h, s1)
-        net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
-        net.start()
-        kafka_download()
-        kafka = net.get('h1')
-        zookeeper = net.get('h2')
-        fuse_kafka = net.get('h3')
-        client = net.get('h4')
-        launch = kafka_bin_directory + '{}-server-start.sh '
-        zookeeper.cmd("rm -rf /tmp/zookeeper")
-        zookeeper.cmd(launch.format("zookeeper") 
-            + kafka_config_directory + 'zookeeper.properties > /tmp/zookeeper.log &')
+        self.net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
+        self.net.start()
+    def shell(self):
+        """ launches mininet CLI """
+        from mininet.cli import CLI
+        CLI(self.net)
+    def clients_initialize(self):
+        """ initializes clients variables based on hosts """
+        self.kafka = self.net.get('h1')
+        self.zookeeper = self.net.get('h2')
+        self.fuse_kafka = self.net.get('h3')
+        self.client = self.net.get('h4')
+        self.java_clients = [self.client, self.kafka, self.zookeeper]
+    def data_directories_cleanup(self):
+        """ cleanups generated directory """
+        self.zookeeper.cmd("rm -rf /tmp/zookeeper /tmp/kafka-logs")
+    def zookeeper_start(self):
+        """ starts zookeeper server """
+        self.zookeeper.cmd(self.launch.format("zookeeper") 
+            + kafka_config_directory
+            + 'zookeeper.properties > /tmp/zookeeper.log &')
+    def kafka_start(self):
+        """ starts kafka server and creates logging topic """
+        import tempfile
         kafka_config = tempfile.NamedTemporaryFile(delete=False)
-        kafka_config.write("zookeeper.connect={}\n".format(zookeeper.IP()))
+        kafka_config.write("zookeeper.connect={}\n".format(self.zookeeper.IP()))
         kafka_config.write("broker.id=0\n")
-        kafka_config.write("host.name={}\n".format(kafka.IP()))
+        kafka_config.write("host.name={}\n".format(self.kafka.IP()))
         kafka_config.close()
-        zookeeper.cmd("rm -rf /tmp/kafka-logs")
-        kafka.cmd(launch.format("kafka") + kafka_config.name + ' > /tmp/kafka.log &')
+        self.kafka.cmd(self.launch.format("kafka")
+                + kafka_config.name + ' > /tmp/kafka.log &')
+        self.kafka.cmd(create_topic_command(
+            self.zookeeper.IP()) + " > /tmp/create_topic.log")
+    def fuse_kafka_start(self):
+        """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
         conf = "/tmp/conf"
-        fuse_kafka.cmd("mkdir -p {}".format(conf))
-        fuse_kafka.cmd("cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
-        fuse_kafka.cmd("sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
-                .format(zookeeper.IP(), conf))
-        fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka".format(cwd, conf))
-        result = kafka.cmd(create_topic_command(zookeeper.IP()) + " > /tmp/create_topic.log")
-        print result
-        client.cmd("zkconnect={} ./build.py kafka_consumer_start > /tmp/kafka_consumer.log &"
-                .format(zookeeper.IP()));
-        fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start"'.format(conf, cwd))
-        CLI(net)
-        fuse_kafka.cmd('src/fuse_kafka.py stop')
-        [ host.cmd('pkill -9 java') for host in [client, kafka, zookeeper]]
-        net.stop()
+        self.fuse_kafka.cmd("mkdir -p {}".format(conf))
+        self.fuse_kafka.cmd("cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
+        self.fuse_kafka.cmd("sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
+                .format(self.zookeeper.IP(), conf))
+        self.fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka".format(cwd, conf))
+        self.fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start"'.format(conf, cwd))
+    def consumer_start(self):
+        """ starts fuse_kafka consumer """
+        self.client.cmd(("zkconnect={} ./build.py kafka_consumer_start "
+                + "> /tmp/kafka_consumer.log &").format(self.zookeeper.IP()));
+    def teardown(self):
+        """ stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
+        stops the virtual topology """
+        self.fuse_kafka.cmd('src/fuse_kafka.py stop')
+        for host in self.java_clients: host.cmd('pkill -9 java') 
+        self.data_directories_cleanup()
+        self.net.stop()
+    def setup(self):
+        """ starts the topology, downloads kafka, does a data directory
+        cleanup in case of previous run """
+        self.launch = kafka_bin_directory + '{}-server-start.sh '
+        self.start_network()
+        kafka_download()
+        self.clients_initialize()
+        self.data_directories_cleanup()
+    def components_start(self):
+        """ starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer """
+        self.zookeeper_start()
+        self.kafka_start()
+        self.fuse_kafka_start()
+        self.consumer_start()
+    def __init__(self):
+        """ runs the topology with a mininet shell """
+        self.setup()
+        self.components_start()
+        self.shell()
+        self.teardown()
 def mininet():
     TestMininet()
-if len(sys.argv) <= 1 or (sys.argv[1] != "quickstart" and sys.argv[1] != "mininet"):
-    main()
-else:
-    if sys.argv[1] == "quickstart": quickstart()
-    else: mininet()
+if __name__ == "__main__":
+    if len(sys.argv) <= 1 or (sys.argv[1] != "quickstart" and sys.argv[1] != "mininet"):
+        main()
+    else:
+        if sys.argv[1] == "quickstart": quickstart()
+        else: mininet()
