@@ -35,6 +35,7 @@ Quickstart (from sources)
 =========================
 
 [Here is a capture of a quickstart](http://playterm.org/r/fusekafka-quickstart-1416935569).
+([Download it](http://abdessel.iiens.net/fuse_kafka/ttyrecord) - use ttyplay to view)
 
 
 
