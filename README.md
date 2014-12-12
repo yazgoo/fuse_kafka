@@ -268,6 +268,12 @@ The consumer log is available via (/tmp/kafka_consumer.log).
 
 `quit` or `^D` will stop mininet and cleanup the virtual network.
 
+
+Logstash input plugin
+=====================
+
+A logstash input plugin to read from kafka is available in src/kafka.rb
+
 Licensing
 =========
 
