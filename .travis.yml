@@ -27,6 +27,7 @@ after_success:
 - git clone https://github.com/yazgoo/fuse_kafka.git .
 - git checkout gh-pages
 - cd ..
+- sudo apt-get install doxygen
 - ./build.py doc
 - cd doc
 - git add --all .
