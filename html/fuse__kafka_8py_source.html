@@ -233,8 +233,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00150"></a>00150 <span class="stringliteral">        action - the action name</span>
 <a name="l00151"></a>00151 <span class="stringliteral"></span>
 <a name="l00152"></a>00152 <span class="stringliteral">        &quot;&quot;&quot;</span>
-<a name="l00153"></a>00153         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> = [<span class="stringliteral">&quot;fuse_kafka&quot;</span>, <span class="stringliteral">&quot;_&quot;</span>, <span class="stringliteral">&quot;-oallow_other&quot;</span>, <span class="stringliteral">&quot;-ononempty&quot;</span>,
-<a name="l00154"></a>00154                 <span class="stringliteral">&quot;-s&quot;</span>, <span class="stringliteral">&quot;-omodules=subdir,subdir=.&quot;</span>, <span class="stringliteral">&quot;-f&quot;</span>, <span class="stringliteral">&quot;--&quot;</span>]
+<a name="l00153"></a>00153         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> = [<span class="stringliteral">&quot;fuse_kafka&quot;</span>, <span class="stringliteral">&quot;_&quot;</span>, <span class="stringliteral">&quot;-oallow_other&quot;</span>,
+<a name="l00154"></a>00154                 <span class="stringliteral">&quot;-ononempty&quot;</span>, <span class="stringliteral">&quot;-omodules=subdir,subdir=.&quot;</span>, <span class="stringliteral">&quot;-f&quot;</span>, <span class="stringliteral">&quot;--&quot;</span>]
 <a name="l00155"></a>00155         <span class="keywordflow">if</span> <span class="stringliteral">&quot;FUSE_KAFKA_PREFIX&quot;</span> <span class="keywordflow">in</span> os.environ:
 <a name="l00156"></a>00156             self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> = os.environ[<span class="stringliteral">&quot;FUSE_KAFKA_PREFIX&quot;</span>].split() + self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a>
 <a name="l00157"></a>00157         getattr(self, action)()
@@ -246,42 +246,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00163"></a>00163         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#afd89f62981d0dcbb3efee6f56c949642">configuration</a> = <a class="code" href="classfuse__kafka_1_1Configuration.html">Configuration</a>()
 <a name="l00164"></a>00164         directories = copy.deepcopy(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#afd89f62981d0dcbb3efee6f56c949642">configuration</a>.conf[<span class="stringliteral">&#39;directories&#39;</span>])
 <a name="l00165"></a>00165         <span class="keywordflow">for</span> directory <span class="keywordflow">in</span> directories:
-<a name="l00166"></a>00166             <span class="keywordflow">print</span> directory
+<a name="l00166"></a>00166             print(<span class="stringliteral">&quot;starting fuse_kafka on {}&quot;</span>.format(directory))
 <a name="l00167"></a>00167             <span class="keywordflow">if</span> <span class="keywordflow">not</span> os.path.exists(directory):
 <a name="l00168"></a>00168                 os.makedirs(directory)
-<a name="l00169"></a>00169         print(<span class="stringliteral">&quot; &quot;</span>.join(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> + self.configuration.args()))
-<a name="l00170"></a>00170     subprocess.Popen(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> + self.configuration.args(), env = env)
-<a name="l00171"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">00171</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">stop</a>(self):
-<a name="l00172"></a>00172         <span class="stringliteral">&quot;&quot;&quot; Stops fuse_kafka processes &quot;&quot;&quot;</span>
-<a name="l00173"></a>00173         subprocess.call([<span class="stringliteral">&quot;pkill&quot;</span>, <span class="stringliteral">&quot;-f&quot;</span>, <span class="stringliteral">&quot; &quot;</span>.join(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a>)])
-<a name="l00174"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a7cc4774d8ed31ffe42ca2f955501ee45">00174</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a7cc4774d8ed31ffe42ca2f955501ee45">restart</a>(self):
-<a name="l00175"></a>00175         <span class="stringliteral">&quot;&quot;&quot; Stops and starts fuse_kafka processes &quot;&quot;&quot;</span>
-<a name="l00176"></a>00176         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">stop</a>()
-<a name="l00177"></a>00177         <span class="keywordflow">while</span> self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>() == 0: time.sleep(0.1)
-<a name="l00178"></a>00178         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a2d8e0d317d293fa8f932e3e8882549f5">start</a>()
-<a name="l00179"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">00179</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>(self):
-<a name="l00180"></a>00180         <span class="stringliteral">&quot;&quot;&quot; Displays the status of fuse_kafka processes &quot;&quot;&quot;</span>
-<a name="l00181"></a>00181         status = 3
-<a name="l00182"></a>00182         with open(<span class="stringliteral">&quot;/proc/mounts&quot;</span>) <span class="keyword">as</span> f:
-<a name="l00183"></a>00183             <span class="keywordflow">for</span> line <span class="keywordflow">in</span> f.readlines():
-<a name="l00184"></a>00184                 <span class="keywordflow">if</span> line.startswith(<span class="stringliteral">&quot;fuse_kafka&quot;</span>):
-<a name="l00185"></a>00185                     <span class="keywordflow">print</span> <span class="stringliteral">&quot;listening on &quot;</span> + line.split()[1]
-<a name="l00186"></a>00186                     status = 0
-<a name="l00187"></a>00187         <span class="keywordflow">return</span> status
-<a name="l00188"></a>00188     <span class="keyword">def </span>status(self):
-<a name="l00189"></a>00189         status = self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>()
-<a name="l00190"></a>00190         sys.stdout.write(<span class="stringliteral">&quot;service is &quot;</span>)
-<a name="l00191"></a>00191         <span class="keywordflow">if</span> status == 3: sys.stdout.write(<span class="stringliteral">&quot;not &quot;</span>)
-<a name="l00192"></a>00192         print(<span class="stringliteral">&quot;running&quot;</span>)
-<a name="l00193"></a>00193         sys.exit(status) 
-<a name="l00194"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a9cf98c6a35fb986e6877dfdca61630c0">00194</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a9cf98c6a35fb986e6877dfdca61630c0">cleanup</a>(self):
-<a name="l00195"></a>00195         <span class="stringliteral">&quot;&quot;&quot; if a fuse kafka mountpoint is not accessible, umount it.</span>
-<a name="l00196"></a>00196 <span class="stringliteral">        Also installs this action in the crontab so it is launched</span>
-<a name="l00197"></a>00197 <span class="stringliteral">        every minute. &quot;&quot;&quot;</span>
-<a name="l00198"></a>00198         <a class="code" href="classfuse__kafka_1_1Crontab.html">Crontab</a>().add_line_if_necessary(<span class="stringliteral">&quot;* * * * * &quot;</span> + os.path.realpath(__file__) + <span class="stringliteral">&quot; cleanup&quot;</span>)
-<a name="l00199"></a>00199         <a class="code" href="classfuse__kafka_1_1Mountpoints.html">Mountpoints</a>().umount_non_accessible()
-<a name="l00200"></a>00200 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
-<a name="l00201"></a>00201     <a class="code" href="classfuse__kafka_1_1FuseKafkaService.html">FuseKafkaService</a>().<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a08ccfab12ff2c998f5bc466de9c9afa4">do</a>(sys.argv[1])
+<a name="l00169"></a>00169         subprocess.Popen(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a> + self.configuration.args(), env = env)
+<a name="l00170"></a>00170         <span class="keywordflow">if</span> self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>() == 0:
+<a name="l00171"></a>00171             print(<span class="stringliteral">&quot;fuse_kafka started&quot;</span>)
+<a name="l00172"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">00172</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">stop</a>(self):
+<a name="l00173"></a>00173         <span class="stringliteral">&quot;&quot;&quot; Stops fuse_kafka processes &quot;&quot;&quot;</span>
+<a name="l00174"></a>00174         subprocess.call([<span class="stringliteral">&quot;pkill&quot;</span>, <span class="stringliteral">&quot;-f&quot;</span>, <span class="stringliteral">&quot; &quot;</span>.join(self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ae104081d0b1ec3c4c44cfd4ccf75b01e">prefix</a>)])
+<a name="l00175"></a>00175         <span class="keywordflow">if</span> self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>() != 0:
+<a name="l00176"></a>00176             print(<span class="stringliteral">&quot;fuse_kafka stoped&quot;</span>)
+<a name="l00177"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a7cc4774d8ed31ffe42ca2f955501ee45">00177</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a7cc4774d8ed31ffe42ca2f955501ee45">restart</a>(self):
+<a name="l00178"></a>00178         <span class="stringliteral">&quot;&quot;&quot; Stops and starts fuse_kafka processes &quot;&quot;&quot;</span>
+<a name="l00179"></a>00179         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">stop</a>()
+<a name="l00180"></a>00180         <span class="keywordflow">while</span> self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>() == 0: time.sleep(0.1)
+<a name="l00181"></a>00181         self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a2d8e0d317d293fa8f932e3e8882549f5">start</a>()
+<a name="l00182"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">00182</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>(self):
+<a name="l00183"></a>00183         <span class="stringliteral">&quot;&quot;&quot; Displays the status of fuse_kafka processes &quot;&quot;&quot;</span>
+<a name="l00184"></a>00184         status = 3
+<a name="l00185"></a>00185         with open(<span class="stringliteral">&quot;/proc/mounts&quot;</span>) <span class="keyword">as</span> f:
+<a name="l00186"></a>00186             <span class="keywordflow">for</span> line <span class="keywordflow">in</span> f.readlines():
+<a name="l00187"></a>00187                 <span class="keywordflow">if</span> line.startswith(<span class="stringliteral">&quot;fuse_kafka&quot;</span>):
+<a name="l00188"></a>00188                     <span class="keywordflow">print</span> <span class="stringliteral">&quot;listening on &quot;</span> + line.split()[1]
+<a name="l00189"></a>00189                     status = 0
+<a name="l00190"></a>00190         <span class="keywordflow">return</span> status
+<a name="l00191"></a>00191     <span class="keyword">def </span>status(self):
+<a name="l00192"></a>00192         status = self.<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a>()
+<a name="l00193"></a>00193         sys.stdout.write(<span class="stringliteral">&quot;service is &quot;</span>)
+<a name="l00194"></a>00194         <span class="keywordflow">if</span> status == 3: sys.stdout.write(<span class="stringliteral">&quot;not &quot;</span>)
+<a name="l00195"></a>00195         print(<span class="stringliteral">&quot;running&quot;</span>)
+<a name="l00196"></a>00196         sys.exit(status) 
+<a name="l00197"></a><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a9cf98c6a35fb986e6877dfdca61630c0">00197</a>     <span class="keyword">def </span><a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a9cf98c6a35fb986e6877dfdca61630c0">cleanup</a>(self):
+<a name="l00198"></a>00198         <span class="stringliteral">&quot;&quot;&quot; if a fuse kafka mountpoint is not accessible, umount it.</span>
+<a name="l00199"></a>00199 <span class="stringliteral">        Also installs this action in the crontab so it is launched</span>
+<a name="l00200"></a>00200 <span class="stringliteral">        every minute. &quot;&quot;&quot;</span>
+<a name="l00201"></a>00201         <a class="code" href="classfuse__kafka_1_1Crontab.html">Crontab</a>().add_line_if_necessary(<span class="stringliteral">&quot;* * * * * &quot;</span> + os.path.realpath(__file__) + <span class="stringliteral">&quot; cleanup&quot;</span>)
+<a name="l00202"></a>00202         <a class="code" href="classfuse__kafka_1_1Mountpoints.html">Mountpoints</a>().umount_non_accessible()
+<a name="l00203"></a>00203 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
+<a name="l00204"></a>00204     <a class="code" href="classfuse__kafka_1_1FuseKafkaService.html">FuseKafkaService</a>().<a class="code" href="classfuse__kafka_1_1FuseKafkaService.html#a08ccfab12ff2c998f5bc466de9c9afa4">do</a>(sys.argv[1])
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -300,7 +303,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 12 2014 16:36:16 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 15 2014 14:49:43 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

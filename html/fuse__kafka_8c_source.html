@@ -130,173 +130,169 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00076"></a>00076 <span class="preprocessor"></span>
 <a name="l00080"></a><a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b">00080</a> <span class="preprocessor">#define CONFIG_CURRENT(expected) \</span>
 <a name="l00081"></a>00081 <span class="preprocessor">    if(!strcmp(name, STR(expected))) { \</span>
-<a name="l00082"></a>00082 <span class="preprocessor">        printf(&quot;parsing &quot; STR(expected) &quot;\n&quot;); \</span>
-<a name="l00083"></a>00083 <span class="preprocessor">        current_size = &amp;(conf-&gt;expected ## _n); \</span>
-<a name="l00084"></a>00084 <span class="preprocessor">        conf-&gt;expected = argv + i + 1; \</span>
-<a name="l00085"></a>00085 <span class="preprocessor">    }</span>
-<a name="l00086"></a>00086 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="util_8c.html" title="utility functions">util.c</a>&quot;</span>
-<a name="l00087"></a>00087 <span class="preprocessor">#include &quot;<a class="code" href="kafka__client_8c.html" title="kafka client level structures and function">kafka_client.c</a>&quot;</span>
-<a name="l00097"></a><a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230">00097</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230" title="actually does the write to kafka of a string with the given file path">actual_kafka_write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,
-<a name="l00098"></a>00098         <span class="keywordtype">size_t</span> size, off_t offset)
-<a name="l00099"></a>00099 {
-<a name="l00100"></a>00100     <span class="keywordtype">char</span>* ret = NULL;
-<a name="l00101"></a>00101     (void) path;
-<a name="l00102"></a>00102     <span class="keywordtype">char</span> timestamp[] = <span class="stringliteral">&quot;YYYY-MM-ddTHH:mm:ss.SSS+0000&quot;</span>;
-<a name="l00103"></a>00103     <span class="keywordtype">char</span>* text = <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a>(buf, size);
-<a name="l00104"></a>00104     <span class="keyword">struct </span>fuse_context* context = fuse_get_context();
-<a name="l00105"></a>00105     <span class="keyword">struct </span>group* sgroup = getgrgid(context-&gt;gid);
-<a name="l00106"></a>00106     <span class="keyword">struct </span>passwd* suser = getpwuid(context-&gt;uid);
-<a name="l00107"></a>00107     <span class="keywordtype">char</span>* user = suser == NULL ? <span class="stringliteral">&quot;&quot;</span>:suser-&gt;pw_name;
-<a name="l00108"></a>00108     <span class="keywordtype">char</span>* group = sgroup == NULL ? <span class="stringliteral">&quot;&quot;</span>:sgroup-&gt;gr_name;
-<a name="l00109"></a>00109     <span class="keywordtype">char</span>* command = <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(context-&gt;pid);
-<a name="l00110"></a>00110     <span class="keywordtype">char</span>* format = <span class="stringliteral">&quot;{\&quot;path\&quot;: \&quot;%s%s\&quot;, \&quot;pid\&quot;: %d, \&quot;uid\&quot;: %d, &quot;</span>
-<a name="l00111"></a>00111         <span class="stringliteral">&quot;\&quot;gid\&quot;: %d, \&quot;@message\&quot;: \&quot;%s\&quot;, \&quot;@timestamp\&quot;: \&quot;%s\&quot;,&quot;</span>
-<a name="l00112"></a>00112         <span class="stringliteral">&quot;\&quot;user\&quot;: \&quot;%s\&quot;, \&quot;group\&quot;: \&quot;%s\&quot;, \&quot;command\&quot;: \&quot;%s\&quot;,&quot;</span>
-<a name="l00113"></a>00113         <span class="stringliteral">&quot;\&quot;@version\&quot;: \&quot;%s\&quot;, \&quot;@fields\&quot;: %s, \&quot;@tags\&quot;: %s}&quot;</span>;
-<a name="l00114"></a>00114     <a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a> *private_data = (<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) fuse_get_context()-&gt;private_data;
-<a name="l00115"></a>00115     config* conf = (config*)private_data-&gt;conf;
-<a name="l00116"></a>00116     <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(timestamp);
-<a name="l00117"></a>00117     asprintf(&amp;ret, format, conf-&gt;directories[conf-&gt;<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>],
-<a name="l00118"></a>00118             path + 1, context-&gt;pid, context-&gt;uid, context-&gt;gid,
-<a name="l00119"></a>00119             text, timestamp, user, group, command, VERSION,
-<a name="l00120"></a>00120             conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a>, conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a>);
-<a name="l00121"></a>00121     free(command);
-<a name="l00122"></a>00122     free(text);
-<a name="l00123"></a>00123     <span class="keywordflow">if</span> (ret == NULL) {
-<a name="l00124"></a>00124         fprintf(stderr, <span class="stringliteral">&quot;Error in asprintf\n&quot;</span>);
-<a name="l00125"></a>00125         <span class="keywordflow">return</span> 1;
-<a name="l00126"></a>00126     }
-<a name="l00127"></a>00127     <a class="code" href="kafka__client_8c.html#a3438f364ace1f612d88cbf9cbc68c9a6" title="send a string to kafka">send_kafka</a>(context-&gt;private_data, ret, strlen(ret));
-<a name="l00128"></a>00128     free(ret);
-<a name="l00129"></a>00129     <span class="keywordflow">return</span> 0;
-<a name="l00130"></a>00130 }
-<a name="l00131"></a>00131 <span class="preprocessor">#include &quot;<a class="code" href="trace_8c.html" title="Utility to send trace from fuse_kafka into kafka.">trace.c</a>&quot;</span>
-<a name="l00138"></a><a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3">00138</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3" title="checks if writes from the given path should be written to kafka">should_write_to_kafka</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">size_t</span> size)
-<a name="l00139"></a>00139 {
-<a name="l00140"></a>00140     <a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a> *private_data = (<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) fuse_get_context()-&gt;private_data;
-<a name="l00141"></a>00141     <span class="keywordflow">if</span>(private_data == NULL || private_data-&gt;rkt == NULL) <span class="keywordflow">return</span> 0;
-<a name="l00142"></a>00142     config* conf = (config*)private_data-&gt;conf;
-<a name="l00143"></a>00143     <span class="keywordtype">int</span> i = 0;
-<a name="l00144"></a>00144     <span class="keywordflow">for</span>(i = 0; i &lt; conf-&gt;excluded_files_n; i++)
-<a name="l00145"></a>00145     {
-<a name="l00146"></a>00146         <span class="keywordtype">char</span>* pattern = conf-&gt;excluded_files[i];
-<a name="l00147"></a>00147         <span class="keywordflow">if</span>(!fnmatch(pattern, path, 0))
-<a name="l00148"></a>00148         {
-<a name="l00149"></a>00149             <span class="keywordflow">return</span> 0;
-<a name="l00150"></a>00150         }
-<a name="l00151"></a>00151     }
-<a name="l00152"></a>00152     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a> == NULL) <span class="keywordflow">return</span> 1;
-<a name="l00153"></a>00153     <span class="keywordflow">if</span>(<a class="code" href="time__queue_8c.html#aee2a32b0025bf23894265fe5b21ad59f" title="Internal: checks if the given key overflows the quota.">time_queue_overflows</a>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a>, (<span class="keywordtype">char</span>*)path, size)) i = 0;
-<a name="l00154"></a>00154     <span class="keywordflow">else</span> i = 1;
-<a name="l00155"></a>00155     <a class="code" href="time__queue_8c.html#afaa0f98d3731f4998abbf385990b9b3b" title="Public: set a time queue key to current time.">time_queue_set</a>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a>, (<span class="keywordtype">char</span>*)path);
-<a name="l00156"></a>00156     <span class="keywordflow">return</span> i;
-<a name="l00157"></a>00157 }
-<a name="l00167"></a><a class="code" href="fuse__kafka_8c.html#a48ba4bf8f069d68a01fb5ec60ed8ce6c">00167</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#a48ba4bf8f069d68a01fb5ec60ed8ce6c" title="write the data to kafka and to the overlaid fs if it should be done">kafka_write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,
-<a name="l00168"></a>00168         <span class="keywordtype">size_t</span> size, off_t offset, <span class="keyword">struct</span> fuse_file_info *fi)
-<a name="l00169"></a>00169 {
-<a name="l00170"></a>00170     <span class="keywordtype">int</span> res;
-<a name="l00171"></a>00171     <span class="keywordflow">if</span>(<a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3" title="checks if writes from the given path should be written to kafka">should_write_to_kafka</a>(path, size))
-<a name="l00172"></a>00172             <a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230" title="actually does the write to kafka of a string with the given file path">actual_kafka_write</a>(path, buf, size, offset);
-<a name="l00173"></a>00173     DO_AS_CALLER(
-<a name="l00174"></a>00174             res = pwrite(fi-&gt;fh, buf, size, offset);
-<a name="l00175"></a>00175     )
-<a name="l00176"></a>00176     <span class="keywordflow">if</span> (res == -1)
-<a name="l00177"></a>00177         res = -errno;
-<a name="l00178"></a>00178 
-<a name="l00179"></a>00179     <span class="keywordflow">return</span> res;
-<a name="l00180"></a>00180 }
-<a name="l00181"></a>00181 <span class="preprocessor">#include &quot;<a class="code" href="overlay_8c.html">overlay.c</a>&quot;</span>
-<a name="l00182"></a>00182 <span class="keywordtype">void</span> add_fields_and_tags(config* conf)
-<a name="l00183"></a>00183 {
-<a name="l00184"></a>00184     conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a> = <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(
-<a name="l00185"></a>00185             conf-&gt;fields, conf-&gt;fields_n, <span class="charliteral">&#39;{&#39;</span>, <span class="charliteral">&#39;}&#39;</span>, <span class="charliteral">&#39;:&#39;</span>, <span class="charliteral">&#39;,&#39;</span>);
-<a name="l00186"></a>00186     printf(<span class="stringliteral">&quot;fields: %s\n&quot;</span>, conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a>);
-<a name="l00187"></a>00187     conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a> = <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(
-<a name="l00188"></a>00188             conf-&gt;tags, conf-&gt;tags_n, <span class="charliteral">&#39;[&#39;</span>, <span class="charliteral">&#39;]&#39;</span>, <span class="charliteral">&#39;,&#39;</span>, <span class="charliteral">&#39;,&#39;</span>);
-<a name="l00189"></a>00189     printf(<span class="stringliteral">&quot;tags: %s\n&quot;</span>, conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a>);
-<a name="l00190"></a>00190 }
-<a name="l00191"></a>00191 <span class="keywordtype">void</span> free_fields_and_tags(config* conf)
-<a name="l00192"></a>00192 {
-<a name="l00193"></a>00193     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a> != NULL) free(conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a>);
-<a name="l00194"></a>00194     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a> != NULL) free(conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a>);
-<a name="l00195"></a>00195 }
-<a name="l00196"></a>00196 <span class="keywordtype">int</span> parse_arguments(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, config* conf)
-<a name="l00197"></a>00197 {
-<a name="l00198"></a>00198     <span class="keywordtype">int</span> i;
-<a name="l00199"></a>00199     <span class="keywordtype">size_t</span>* current_size;
-<a name="l00200"></a>00200     <span class="keywordtype">char</span>* name;
-<a name="l00201"></a>00201     <span class="keywordflow">for</span>(i = 0; i &lt; argc; i++)
-<a name="l00202"></a>00202     {
-<a name="l00203"></a>00203         <span class="keywordflow">if</span>(strlen(argv[i]) &gt; 2 &amp;&amp; argv[i][0] == <span class="charliteral">&#39;-&#39;</span> &amp;&amp; argv[i][1] == <span class="charliteral">&#39;-&#39;</span>)
-<a name="l00204"></a>00204         {
-<a name="l00205"></a>00205             name = argv[i] + 2;
-<a name="l00206"></a>00206             <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(directories)
-<a name="l00207"></a>00207             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(persist)
-<a name="l00208"></a>00208             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(excluded_files)
-<a name="l00209"></a>00209             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(substitutions)
-<a name="l00210"></a>00210             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(zookeepers)
-<a name="l00211"></a>00211             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(brokers)
-<a name="l00212"></a>00212             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(topic)
-<a name="l00213"></a>00213             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(fields)
-<a name="l00214"></a>00214             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(tags)
-<a name="l00215"></a>00215             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(quota)
-<a name="l00216"></a>00216             else
-<a name="l00217"></a>00217             {
-<a name="l00218"></a>00218                 printf(<span class="stringliteral">&quot;unknown option %s\n&quot;</span>, argv[i]);
-<a name="l00219"></a>00219                 <span class="keywordflow">return</span> 0;
-<a name="l00220"></a>00220             }
-<a name="l00221"></a>00221             *current_size = 0;
-<a name="l00222"></a>00222         }
-<a name="l00223"></a>00223         <span class="keywordflow">else</span>
-<a name="l00224"></a>00224         {
-<a name="l00225"></a>00225             printf(<span class="stringliteral">&quot;\t- %s\n&quot;</span>, argv[i]);
-<a name="l00226"></a>00226             (*current_size)++;
-<a name="l00227"></a>00227         }
-<a name="l00228"></a>00228     }
-<a name="l00229"></a>00229     add_fields_and_tags(conf);
-<a name="l00230"></a>00230     <span class="keywordflow">return</span> 1;
-<a name="l00231"></a>00231 }
-<a name="l00232"></a>00232 <span class="comment">// global variable used in atexit</span>
-<a name="l00233"></a>00233 config conf;
-<a name="l00234"></a>00234 <span class="keywordtype">void</span> configuration_clean()
+<a name="l00082"></a>00082 <span class="preprocessor">        current_size = &amp;(conf-&gt;expected ## _n); \</span>
+<a name="l00083"></a>00083 <span class="preprocessor">        conf-&gt;expected = argv + i + 1; \</span>
+<a name="l00084"></a>00084 <span class="preprocessor">    }</span>
+<a name="l00085"></a>00085 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="util_8c.html" title="utility functions">util.c</a>&quot;</span>
+<a name="l00086"></a>00086 <span class="preprocessor">#include &quot;<a class="code" href="kafka__client_8c.html" title="kafka client level structures and function">kafka_client.c</a>&quot;</span>
+<a name="l00096"></a><a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230">00096</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230" title="actually does the write to kafka of a string with the given file path">actual_kafka_write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,
+<a name="l00097"></a>00097         <span class="keywordtype">size_t</span> size, off_t offset)
+<a name="l00098"></a>00098 {
+<a name="l00099"></a>00099     <span class="keywordtype">char</span>* ret = NULL;
+<a name="l00100"></a>00100     (void) path;
+<a name="l00101"></a>00101     <span class="keywordtype">char</span> timestamp[] = <span class="stringliteral">&quot;YYYY-MM-ddTHH:mm:ss.SSS+0000&quot;</span>;
+<a name="l00102"></a>00102     <span class="keywordtype">char</span>* text = <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a>(buf, size);
+<a name="l00103"></a>00103     <span class="keyword">struct </span>fuse_context* context = fuse_get_context();
+<a name="l00104"></a>00104     <span class="keyword">struct </span>group* sgroup = getgrgid(context-&gt;gid);
+<a name="l00105"></a>00105     <span class="keyword">struct </span>passwd* suser = getpwuid(context-&gt;uid);
+<a name="l00106"></a>00106     <span class="keywordtype">char</span>* user = suser == NULL ? <span class="stringliteral">&quot;&quot;</span>:suser-&gt;pw_name;
+<a name="l00107"></a>00107     <span class="keywordtype">char</span>* group = sgroup == NULL ? <span class="stringliteral">&quot;&quot;</span>:sgroup-&gt;gr_name;
+<a name="l00108"></a>00108     <span class="keywordtype">char</span>* command = <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(context-&gt;pid);
+<a name="l00109"></a>00109     <span class="keywordtype">char</span>* format = <span class="stringliteral">&quot;{\&quot;path\&quot;: \&quot;%s%s\&quot;, \&quot;pid\&quot;: %d, \&quot;uid\&quot;: %d, &quot;</span>
+<a name="l00110"></a>00110         <span class="stringliteral">&quot;\&quot;gid\&quot;: %d, \&quot;@message\&quot;: \&quot;%s\&quot;, \&quot;@timestamp\&quot;: \&quot;%s\&quot;,&quot;</span>
+<a name="l00111"></a>00111         <span class="stringliteral">&quot;\&quot;user\&quot;: \&quot;%s\&quot;, \&quot;group\&quot;: \&quot;%s\&quot;, \&quot;command\&quot;: \&quot;%s\&quot;,&quot;</span>
+<a name="l00112"></a>00112         <span class="stringliteral">&quot;\&quot;@version\&quot;: \&quot;%s\&quot;, \&quot;@fields\&quot;: %s, \&quot;@tags\&quot;: %s}&quot;</span>;
+<a name="l00113"></a>00113     <a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a> *private_data = (<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) fuse_get_context()-&gt;private_data;
+<a name="l00114"></a>00114     config* conf = (config*)private_data-&gt;conf;
+<a name="l00115"></a>00115     <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(timestamp);
+<a name="l00116"></a>00116     asprintf(&amp;ret, format, conf-&gt;directories[conf-&gt;<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>],
+<a name="l00117"></a>00117             path + 1, context-&gt;pid, context-&gt;uid, context-&gt;gid,
+<a name="l00118"></a>00118             text, timestamp, user, group, command, VERSION,
+<a name="l00119"></a>00119             conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a>, conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a>);
+<a name="l00120"></a>00120     free(command);
+<a name="l00121"></a>00121     free(text);
+<a name="l00122"></a>00122     <span class="keywordflow">if</span> (ret == NULL) {
+<a name="l00123"></a>00123         fprintf(stderr, <span class="stringliteral">&quot;Error in asprintf\n&quot;</span>);
+<a name="l00124"></a>00124         <span class="keywordflow">return</span> 1;
+<a name="l00125"></a>00125     }
+<a name="l00126"></a>00126     <a class="code" href="kafka__client_8c.html#a3438f364ace1f612d88cbf9cbc68c9a6" title="send a string to kafka">send_kafka</a>(context-&gt;private_data, ret, strlen(ret));
+<a name="l00127"></a>00127     free(ret);
+<a name="l00128"></a>00128     <span class="keywordflow">return</span> 0;
+<a name="l00129"></a>00129 }
+<a name="l00130"></a>00130 <span class="preprocessor">#include &quot;<a class="code" href="trace_8c.html" title="Utility to send trace from fuse_kafka into kafka.">trace.c</a>&quot;</span>
+<a name="l00137"></a><a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3">00137</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3" title="checks if writes from the given path should be written to kafka">should_write_to_kafka</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">size_t</span> size)
+<a name="l00138"></a>00138 {
+<a name="l00139"></a>00139     <a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a> *private_data = (<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) fuse_get_context()-&gt;private_data;
+<a name="l00140"></a>00140     <span class="keywordflow">if</span>(private_data == NULL || private_data-&gt;rkt == NULL) <span class="keywordflow">return</span> 0;
+<a name="l00141"></a>00141     config* conf = (config*)private_data-&gt;conf;
+<a name="l00142"></a>00142     <span class="keywordtype">int</span> i = 0;
+<a name="l00143"></a>00143     <span class="keywordflow">for</span>(i = 0; i &lt; conf-&gt;excluded_files_n; i++)
+<a name="l00144"></a>00144     {
+<a name="l00145"></a>00145         <span class="keywordtype">char</span>* pattern = conf-&gt;excluded_files[i];
+<a name="l00146"></a>00146         <span class="keywordflow">if</span>(!fnmatch(pattern, path, 0))
+<a name="l00147"></a>00147         {
+<a name="l00148"></a>00148             <span class="keywordflow">return</span> 0;
+<a name="l00149"></a>00149         }
+<a name="l00150"></a>00150     }
+<a name="l00151"></a>00151     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a> == NULL) <span class="keywordflow">return</span> 1;
+<a name="l00152"></a>00152     <span class="keywordflow">if</span>(<a class="code" href="time__queue_8c.html#aee2a32b0025bf23894265fe5b21ad59f" title="Internal: checks if the given key overflows the quota.">time_queue_overflows</a>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a>, (<span class="keywordtype">char</span>*)path, size)) i = 0;
+<a name="l00153"></a>00153     <span class="keywordflow">else</span> i = 1;
+<a name="l00154"></a>00154     <a class="code" href="time__queue_8c.html#afaa0f98d3731f4998abbf385990b9b3b" title="Public: set a time queue key to current time.">time_queue_set</a>(conf-&gt;<a class="code" href="struct__config.html#a145aaea5a1685bb59a5187bb4f2c5829" title="time queue (">quota_queue</a>, (<span class="keywordtype">char</span>*)path);
+<a name="l00155"></a>00155     <span class="keywordflow">return</span> i;
+<a name="l00156"></a>00156 }
+<a name="l00166"></a><a class="code" href="fuse__kafka_8c.html#a48ba4bf8f069d68a01fb5ec60ed8ce6c">00166</a> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="fuse__kafka_8c.html#a48ba4bf8f069d68a01fb5ec60ed8ce6c" title="write the data to kafka and to the overlaid fs if it should be done">kafka_write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,
+<a name="l00167"></a>00167         <span class="keywordtype">size_t</span> size, off_t offset, <span class="keyword">struct</span> fuse_file_info *fi)
+<a name="l00168"></a>00168 {
+<a name="l00169"></a>00169     <span class="keywordtype">int</span> res;
+<a name="l00170"></a>00170     <span class="keywordflow">if</span>(<a class="code" href="fuse__kafka_8c.html#a1074ef70b5ba196bf5e05a1eb95b28a3" title="checks if writes from the given path should be written to kafka">should_write_to_kafka</a>(path, size))
+<a name="l00171"></a>00171             <a class="code" href="fuse__kafka_8c.html#ae94a1fbb20170cb6392a6921b3ddc230" title="actually does the write to kafka of a string with the given file path">actual_kafka_write</a>(path, buf, size, offset);
+<a name="l00172"></a>00172     DO_AS_CALLER(
+<a name="l00173"></a>00173             res = pwrite(fi-&gt;fh, buf, size, offset);
+<a name="l00174"></a>00174     )
+<a name="l00175"></a>00175     <span class="keywordflow">if</span> (res == -1)
+<a name="l00176"></a>00176         res = -errno;
+<a name="l00177"></a>00177 
+<a name="l00178"></a>00178     <span class="keywordflow">return</span> res;
+<a name="l00179"></a>00179 }
+<a name="l00180"></a>00180 <span class="preprocessor">#include &quot;<a class="code" href="overlay_8c.html">overlay.c</a>&quot;</span>
+<a name="l00181"></a>00181 <span class="keywordtype">void</span> add_fields_and_tags(config* conf)
+<a name="l00182"></a>00182 {
+<a name="l00183"></a>00183     conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a> = <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(
+<a name="l00184"></a>00184             conf-&gt;fields, conf-&gt;fields_n, <span class="charliteral">&#39;{&#39;</span>, <span class="charliteral">&#39;}&#39;</span>, <span class="charliteral">&#39;:&#39;</span>, <span class="charliteral">&#39;,&#39;</span>);
+<a name="l00185"></a>00185     conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a> = <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(
+<a name="l00186"></a>00186             conf-&gt;tags, conf-&gt;tags_n, <span class="charliteral">&#39;[&#39;</span>, <span class="charliteral">&#39;]&#39;</span>, <span class="charliteral">&#39;,&#39;</span>, <span class="charliteral">&#39;,&#39;</span>);
+<a name="l00187"></a>00187 }
+<a name="l00188"></a>00188 <span class="keywordtype">void</span> free_fields_and_tags(config* conf)
+<a name="l00189"></a>00189 {
+<a name="l00190"></a>00190     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a> != NULL) free(conf-&gt;<a class="code" href="struct__config.html#a1aba07f207e5a58583f1e0a9ac674454" title="string containing a json like hash of string with the fields provided for each event">fields_s</a>);
+<a name="l00191"></a>00191     <span class="keywordflow">if</span>(conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a> != NULL) free(conf-&gt;<a class="code" href="struct__config.html#a863b76129d6ac5e58f319afef6960bad" title="string containing a json like array of string with tags for each event">tags_s</a>);
+<a name="l00192"></a>00192 }
+<a name="l00193"></a>00193 <span class="keywordtype">int</span> parse_arguments(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, config* conf)
+<a name="l00194"></a>00194 {
+<a name="l00195"></a>00195     <span class="keywordtype">int</span> i;
+<a name="l00196"></a>00196     <span class="keywordtype">size_t</span>* current_size;
+<a name="l00197"></a>00197     <span class="keywordtype">char</span>* name;
+<a name="l00198"></a>00198     <span class="keywordflow">for</span>(i = 0; i &lt; argc; i++)
+<a name="l00199"></a>00199     {
+<a name="l00200"></a>00200         <span class="keywordflow">if</span>(strlen(argv[i]) &gt; 2 &amp;&amp; argv[i][0] == <span class="charliteral">&#39;-&#39;</span> &amp;&amp; argv[i][1] == <span class="charliteral">&#39;-&#39;</span>)
+<a name="l00201"></a>00201         {
+<a name="l00202"></a>00202             name = argv[i] + 2;
+<a name="l00203"></a>00203             <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(directories)
+<a name="l00204"></a>00204             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(persist)
+<a name="l00205"></a>00205             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(excluded_files)
+<a name="l00206"></a>00206             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(substitutions)
+<a name="l00207"></a>00207             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(zookeepers)
+<a name="l00208"></a>00208             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(brokers)
+<a name="l00209"></a>00209             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(topic)
+<a name="l00210"></a>00210             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(fields)
+<a name="l00211"></a>00211             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(tags)
+<a name="l00212"></a>00212             else <a class="code" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b" title="check if name matches a configuration name, if so points current_size pointer to the size of the matc...">CONFIG_CURRENT</a>(quota)
+<a name="l00213"></a>00213             else
+<a name="l00214"></a>00214             {
+<a name="l00215"></a>00215                 printf(<span class="stringliteral">&quot;unknown option %s\n&quot;</span>, argv[i]);
+<a name="l00216"></a>00216                 <span class="keywordflow">return</span> 0;
+<a name="l00217"></a>00217             }
+<a name="l00218"></a>00218             *current_size = 0;
+<a name="l00219"></a>00219         }
+<a name="l00220"></a>00220         <span class="keywordflow">else</span>
+<a name="l00221"></a>00221         {
+<a name="l00222"></a>00222             (*current_size)++;
+<a name="l00223"></a>00223         }
+<a name="l00224"></a>00224     }
+<a name="l00225"></a>00225     add_fields_and_tags(conf);
+<a name="l00226"></a>00226     <span class="keywordflow">return</span> 1;
+<a name="l00227"></a>00227 }
+<a name="l00228"></a>00228 <span class="comment">// global variable used in atexit</span>
+<a name="l00229"></a>00229 config conf;
+<a name="l00230"></a>00230 <span class="keywordtype">void</span> configuration_clean()
+<a name="l00231"></a>00231 {
+<a name="l00232"></a>00232     free_fields_and_tags(&amp;conf);
+<a name="l00233"></a>00233 }
+<a name="l00234"></a>00234 <span class="keywordtype">int</span> fuse_kafka_main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])
 <a name="l00235"></a>00235 {
-<a name="l00236"></a>00236     free_fields_and_tags(&amp;conf);
-<a name="l00237"></a>00237 }
-<a name="l00238"></a>00238 <span class="keywordtype">int</span> fuse_kafka_main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])
-<a name="l00239"></a>00239 {
-<a name="l00240"></a>00240     <span class="keywordtype">int</span> i;
-<a name="l00241"></a>00241     <span class="keywordtype">int</span> limit = <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(argc, argv);
-<a name="l00242"></a>00242     atexit(configuration_clean);
-<a name="l00243"></a>00243     memset(&amp;conf, 0, <span class="keyword">sizeof</span>(config));
-<a name="l00244"></a>00244     <span class="keywordflow">if</span>(parse_arguments(argc - limit - 1, argv + limit + 1, &amp;conf))
-<a name="l00245"></a>00245     {
-<a name="l00246"></a>00246         <span class="keywordflow">for</span>(conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a> = 0; conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a> &lt; conf.directories_n;
-<a name="l00247"></a>00247                 conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>++)
-<a name="l00248"></a>00248         {
-<a name="l00249"></a>00249             argv[1] = conf.directories[conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>];
-<a name="l00250"></a>00250             <span class="keywordflow">if</span>(!fork())
-<a name="l00251"></a>00251             {
-<a name="l00252"></a>00252 <span class="preprocessor">#ifdef TEST</span>
-<a name="l00253"></a>00253 <span class="preprocessor"></span>                <span class="keywordflow">break</span>;
-<a name="l00254"></a>00254 <span class="preprocessor">#endif</span>
-<a name="l00255"></a>00255 <span class="preprocessor"></span>                conf.<a class="code" href="struct__config.html#a01ffc24a715f72975a6b72af990e72fa" title="file descriptor to the directory under the mount">directory_fd</a> = open(conf.directories[conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>],
-<a name="l00256"></a>00256                         O_RDONLY);
-<a name="l00257"></a>00257                 <span class="keywordflow">return</span> fuse_main(limit, argv, &amp;kafka_oper, &amp;conf);
-<a name="l00258"></a>00258             }
-<a name="l00259"></a>00259         }
-<a name="l00260"></a>00260     }
-<a name="l00261"></a>00261     wait(NULL);
-<a name="l00262"></a>00262     <span class="keywordflow">return</span> 0;
-<a name="l00263"></a>00263 }
-<a name="l00264"></a>00264 <span class="keywordtype">char</span>* cmd = NULL;
-<a name="l00265"></a>00265 <span class="preprocessor">#ifdef TEST</span>
-<a name="l00266"></a>00266 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="test_8c.html">test.c</a>&quot;</span>
-<a name="l00267"></a>00267 <span class="preprocessor">#else</span>
-<a name="l00268"></a>00268 <span class="preprocessor"></span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
-<a name="l00269"></a>00269 {
-<a name="l00270"></a>00270     fuse_kafka_main(argc, argv);
-<a name="l00271"></a>00271 }
-<a name="l00272"></a>00272 <span class="preprocessor">#endif</span>
+<a name="l00236"></a>00236     <span class="keywordtype">int</span> i;
+<a name="l00237"></a>00237     <span class="keywordtype">int</span> limit = <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(argc, argv);
+<a name="l00238"></a>00238     atexit(configuration_clean);
+<a name="l00239"></a>00239     memset(&amp;conf, 0, <span class="keyword">sizeof</span>(config));
+<a name="l00240"></a>00240     <span class="keywordflow">if</span>(parse_arguments(argc - limit - 1, argv + limit + 1, &amp;conf))
+<a name="l00241"></a>00241     {
+<a name="l00242"></a>00242         <span class="keywordflow">for</span>(conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a> = 0; conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a> &lt; conf.directories_n;
+<a name="l00243"></a>00243                 conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>++)
+<a name="l00244"></a>00244         {
+<a name="l00245"></a>00245             argv[1] = conf.directories[conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>];
+<a name="l00246"></a>00246             <span class="keywordflow">if</span>(!fork())
+<a name="l00247"></a>00247             {
+<a name="l00248"></a>00248 <span class="preprocessor">#ifdef TEST</span>
+<a name="l00249"></a>00249 <span class="preprocessor"></span>                <span class="keywordflow">break</span>;
+<a name="l00250"></a>00250 <span class="preprocessor">#endif</span>
+<a name="l00251"></a>00251 <span class="preprocessor"></span>                conf.<a class="code" href="struct__config.html#a01ffc24a715f72975a6b72af990e72fa" title="file descriptor to the directory under the mount">directory_fd</a> = open(conf.directories[conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a>],
+<a name="l00252"></a>00252                         O_RDONLY);
+<a name="l00253"></a>00253                 <span class="keywordflow">return</span> fuse_main(limit, argv, &amp;kafka_oper, &amp;conf);
+<a name="l00254"></a>00254             }
+<a name="l00255"></a>00255         }
+<a name="l00256"></a>00256     }
+<a name="l00257"></a>00257     wait(NULL);
+<a name="l00258"></a>00258     <span class="keywordflow">return</span> 0;
+<a name="l00259"></a>00259 }
+<a name="l00260"></a>00260 <span class="keywordtype">char</span>* cmd = NULL;
+<a name="l00261"></a>00261 <span class="preprocessor">#ifdef TEST</span>
+<a name="l00262"></a>00262 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="test_8c.html">test.c</a>&quot;</span>
+<a name="l00263"></a>00263 <span class="preprocessor">#else</span>
+<a name="l00264"></a>00264 <span class="preprocessor"></span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00265"></a>00265 {
+<a name="l00266"></a>00266     fuse_kafka_main(argc, argv);
+<a name="l00267"></a>00267 }
+<a name="l00268"></a>00268 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -315,7 +311,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 12 2014 16:36:15 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 15 2014 14:49:43 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

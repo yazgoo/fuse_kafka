@@ -111,7 +111,6 @@ main fuse\-\_\-kafka source
 {\bfseries \-Value\-:}
 \begin{DoxyCode}
 if(!strcmp(name, STR(expected))) { \
-        printf("parsing " STR(expected) "\n"); \
         current_size = &(conf->expected ## _n); \
         conf->expected = argv + i + 1; \
     }
@@ -157,7 +156,7 @@ actually does the write to kafka of a string with the given file path
 \end{DoxyReturn}
 
 
-\-Definition at line 97 of file fuse\-\_\-kafka.\-c.
+\-Definition at line 96 of file fuse\-\_\-kafka.\-c.
 
 \hypertarget{fuse__kafka_8c_a48ba4bf8f069d68a01fb5ec60ed8ce6c}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!kafka\-\_\-write@{kafka\-\_\-write}}
 \index{kafka\-\_\-write@{kafka\-\_\-write}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
@@ -196,7 +195,7 @@ pwrite
 \end{DoxySeeAlso}
 
 
-\-Definition at line 167 of file fuse\-\_\-kafka.\-c.
+\-Definition at line 166 of file fuse\-\_\-kafka.\-c.
 
 \hypertarget{fuse__kafka_8c_a1074ef70b5ba196bf5e05a1eb95b28a3}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!should\-\_\-write\-\_\-to\-\_\-kafka@{should\-\_\-write\-\_\-to\-\_\-kafka}}
 \index{should\-\_\-write\-\_\-to\-\_\-kafka@{should\-\_\-write\-\_\-to\-\_\-kafka}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
@@ -219,5 +218,5 @@ checks if writes from the given path should be written to kafka
 \end{DoxyParams}
 
 
-\-Definition at line 138 of file fuse\-\_\-kafka.\-c.
+\-Definition at line 137 of file fuse\-\_\-kafka.\-c.
 
