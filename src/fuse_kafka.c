@@ -79,7 +79,6 @@ typedef struct _config {
  * item in argv list */
 #define CONFIG_CURRENT(expected) \
     if(!strcmp(name, STR(expected))) { \
-        printf("parsing " STR(expected) "\n"); \
         current_size = &(conf->expected ## _n); \
         conf->expected = argv + i + 1; \
     }
@@ -183,10 +182,8 @@ void add_fields_and_tags(config* conf)
 {
     conf->fields_s = array_to_container_string(
             conf->fields, conf->fields_n, '{', '}', ':', ',');
-    printf("fields: %s\n", conf->fields_s);
     conf->tags_s = array_to_container_string(
             conf->tags, conf->tags_n, '[', ']', ',', ',');
-    printf("tags: %s\n", conf->tags_s);
 }
 void free_fields_and_tags(config* conf)
 {
@@ -222,7 +219,6 @@ int parse_arguments(int argc, char** argv, config* conf)
         }
         else
         {
-            printf("\t- %s\n", argv[i]);
             (*current_size)++;
         }
     }

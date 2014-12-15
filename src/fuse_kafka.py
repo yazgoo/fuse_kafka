@@ -150,8 +150,8 @@ class FuseKafkaService:
         action - the action name
 
         """
-        self.prefix = ["fuse_kafka", "_", "-oallow_other", "-ononempty",
-                "-s", "-omodules=subdir,subdir=.", "-f", "--"]
+        self.prefix = ["fuse_kafka", "_", "-oallow_other",
+                "-ononempty", "-omodules=subdir,subdir=.", "-f", "--"]
         if "FUSE_KAFKA_PREFIX" in os.environ:
             self.prefix = os.environ["FUSE_KAFKA_PREFIX"].split() + self.prefix
         getattr(self, action)()
@@ -163,14 +163,17 @@ class FuseKafkaService:
         self.configuration = Configuration()
         directories = copy.deepcopy(self.configuration.conf['directories'])
         for directory in directories:
-            print directory
+            print("starting fuse_kafka on {}".format(directory))
             if not os.path.exists(directory):
                 os.makedirs(directory)
-        print(" ".join(self.prefix + self.configuration.args()))
-	subprocess.Popen(self.prefix + self.configuration.args(), env = env)
+        subprocess.Popen(self.prefix + self.configuration.args(), env = env)
+        if self.get_status() == 0:
+            print("fuse_kafka started")
     def stop(self):
         """ Stops fuse_kafka processes """
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
+        if self.get_status() != 0:
+            print("fuse_kafka stoped")
     def restart(self):
         """ Stops and starts fuse_kafka processes """
         self.stop()
