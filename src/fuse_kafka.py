@@ -186,7 +186,7 @@ class FuseKafkaService:
         with open("/proc/mounts") as f:
             for line in f.readlines():
                 if line.startswith("fuse_kafka"):
-                    print "listening on " + line.split()[1]
+                    print("listening on " + line.split()[1])
                     status = 0
         return status
     def status(self):
