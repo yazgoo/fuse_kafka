@@ -7,7 +7,7 @@ before_install:
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
 - sudo apt-get update
-- sudo apt-get install python2.6 python2.7 python3.3 python3.4 python
+- sudo apt-get install tox python2.6 python2.7 python3.3 python3.4 python
 install:
 - sed -i 's/_mt/_st/' build.py
 - sudo apt-get install python-coverage libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
