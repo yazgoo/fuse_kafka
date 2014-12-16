@@ -347,6 +347,10 @@ def doc():
     run("doxygen", "Doxyfile")
 class TestMininet():
     """ Utility to create a virtual network to test fuse kafka resiliancy """
+    def impersonate(self, uid = 0, gid = 0):
+        """ changes effective group and user ids """
+        os.setegid(gid)
+        os.seteuid(uid)
     def start_network(self):
         """ starts-up a single switch topology """
         from mininet.topo import Topo
@@ -361,6 +365,8 @@ class TestMininet():
                 for h in hosts: self.addLink(h, s1)
         self.net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
         self.net.start()
+        stat = os.stat(".")
+        self.impersonate(stat.st_uid, stat.st_gid)
     def shell(self):
         """ launches mininet CLI """
         from mininet.cli import CLI
@@ -390,6 +396,7 @@ class TestMininet():
         kafka_config.close()
         self.kafka.cmd(self.launch.format("kafka")
                 + kafka_config.name + ' > /tmp/kafka.log &')
+        time.sleep(2)
         self.kafka.cmd(create_topic_command(
             self.zookeeper.IP()) + " > /tmp/create_topic.log")
     def fuse_kafka_start(self):
@@ -412,6 +419,7 @@ class TestMininet():
         self.fuse_kafka.cmd('src/fuse_kafka.py stop')
         for host in self.java_clients: host.cmd('pkill -9 java') 
         self.data_directories_cleanup()
+        self.impersonate()
         self.net.stop()
     def setup(self):
         """ starts the topology, downloads kafka, does a data directory
