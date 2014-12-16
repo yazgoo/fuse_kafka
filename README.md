@@ -120,6 +120,7 @@ When you're done, you can stop fuse\_kafka:
 
     $ src/fuse_kafka.py stop
 
+
 Quota option test
 =================
 
@@ -273,6 +274,19 @@ Logstash input plugin
 =====================
 
 A logstash input plugin to read from kafka is available in src/kafka.rb
+
+Unit testing
+============
+
+To launch unit tests, issue a:
+
+    ./build.py dotest
+
+To test against multiple python versions (provided tox is installed), issue a:
+
+    tox
+
+(see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 
 Licensing
 =========
