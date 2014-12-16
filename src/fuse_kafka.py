@@ -84,7 +84,7 @@ class Configuration:
 
         Returns the path list with excluded directories
         """
-        return [path for path in paths if not includes_subdir(prefixes,
+        return [path for path in paths if not self.includes_subdir(prefixes,
             os.path.realpath(path))]
     def __init__(self, configurations = CONFIGURATIONS_PATHS):
         self.configurations = configurations
@@ -144,16 +144,17 @@ class Configuration:
         return " ".join(self.args())
 class FuseKafkaService:
     """ Utility class to run multiple fuse_kafka processes as one service """
+    def __init__(self):
+        self.prefix = ["fuse_kafka", "_", "-oallow_other",
+                "-ononempty", "-omodules=subdir,subdir=.", "-f", "--"]
+        if "FUSE_KAFKA_PREFIX" in os.environ:
+            self.prefix = os.environ["FUSE_KAFKA_PREFIX"].split() + self.prefix
     def do(self, action):
         """ Actually run an action 
 
         action - the action name
 
         """
-        self.prefix = ["fuse_kafka", "_", "-oallow_other",
-                "-ononempty", "-omodules=subdir,subdir=.", "-f", "--"]
-        if "FUSE_KAFKA_PREFIX" in os.environ:
-            self.prefix = os.environ["FUSE_KAFKA_PREFIX"].split() + self.prefix
         getattr(self, action)()
     def start(self):
         """ Starts fuse_kafka processes """

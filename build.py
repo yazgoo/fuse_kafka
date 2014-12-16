@@ -221,14 +221,14 @@ def binary_exists(name):
 def dotest():
     """ Compile, Run unit tests generating reports in out directory """
     run('rm', '-rf', 'out')
-    run('mkdir', '-p', 'out')
+    for d in ["c", "python"]: run('mkdir', '-p', 'out/' + d)
     compile_test()
     test()
 def build():
     """ Builds fuse_kafka binary """
     compile()
     link()
-def test():
+def c_test():
     """ Run unit tests, generating coverage reports in out directory """
     for source in sources:
         run("./" + source + ".test")
@@ -236,7 +236,13 @@ def test():
         if binary_exists("lcov"):
             run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
             if binary_exists("genhtml"):
-                run("genhtml", "src/" + source + ".info", "-o", "./out")
+                run("genhtml", "src/" + source + ".info", "-o", "./out/c")
+def python_test():
+    run("python-coverage", "run", "src/fuse_kafka_test.py")
+    run("python-coverage", "html", "-d", "out/python")
+def test():
+    c_test()
+    python_test()
 def compile():
     """ Compiles *.c files in source directory """
     for source in sources:
