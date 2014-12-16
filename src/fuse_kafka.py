@@ -163,7 +163,7 @@ class FuseKafkaService:
         self.configuration = Configuration()
         directories = copy.deepcopy(self.configuration.conf['directories'])
         for directory in directories:
-            print("starting fuse_kafka on {}".format(directory))
+            print("starting fuse_kafka on " + directory)
             if not os.path.exists(directory):
                 os.makedirs(directory)
         subprocess.Popen(self.prefix + self.configuration.args(), env = env)
