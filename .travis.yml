@@ -5,6 +5,8 @@ before_install:
 - ulimit -c unlimited -S
 - sudo apt-get install gdb
 - sudo apt-get install mininet/precise-backports
+- sudo apt-get install module-assistant
+- sudo m-a a-i openvswitch-datapath
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
 - sudo apt-get update
