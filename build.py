@@ -347,8 +347,12 @@ def doc():
     run("doxygen", "Doxyfile")
 class TestMininet():
     """ Utility to create a virtual network to test fuse kafka resiliancy """
-    def impersonate(self, uid = 0, gid = 0):
+    def impersonate(self, uid = None, gid = None):
         """ changes effective group and user ids """
+        if uid == None:
+            uid = os.getuid()
+        if gid == None:
+            gid = os.getuid()
         print('impersonating uid: {}, gid: {}'.format(uid, gid))
         os.setegid(gid)
         os.seteuid(uid)
@@ -381,48 +385,55 @@ class TestMininet():
         self.fuse_kafka = self.net.get('h3')
         self.client = self.net.get('h4')
         self.java_clients = [self.client, self.kafka, self.zookeeper]
+    def cmd(self, where, cmd):
+        import pwd
+        command = "su {} -c '{}'".format(
+                pwd.getpwuid(os.stat(".").st_uid).pw_name, cmd)
+        print(command)
+        where.cmd(command)
     def data_directories_cleanup(self):
         """ cleanups generated directory """
-        self.zookeeper.cmd("rm -rf /tmp/kafka-logs /tmp/zookeeper")
+        self.cmd(self.zookeeper, "rm -rf /tmp/kafka-logs /tmp/zookeeper")
     def zookeeper_start(self):
         """ starts zookeeper server """
-        self.zookeeper.cmd(self.launch.format("zookeeper") 
+        self.cmd(self.zookeeper, self.launch.format("zookeeper") 
             + kafka_config_directory
             + 'zookeeper.properties > {} &'.format(self.log_path('zookeeper')))
     def kafka_start(self):
         """ starts kafka server and creates logging topic """
         import tempfile
-        kafka_config = tempfile.NamedTemporaryFile(delete=False)
-        kafka_config.write("zookeeper.connect={}\n".format(self.zookeeper.IP()))
-        kafka_config.write("broker.id=0\n")
-        kafka_config.write("host.name={}\n".format(self.kafka.IP()))
-        kafka_config.close()
-        self.kafka.cmd(self.launch.format("kafka")
-                + kafka_config.name + ' > {} &'.format(self.log_path('kafka')))
+        self.kafka_config = tempfile.NamedTemporaryFile(delete=False)
+        self.kafka_config.write("zookeeper.connect={}\n".format(self.zookeeper.IP()))
+        self.kafka_config.write("broker.id=0\n")
+        self.kafka_config.write("host.name={}\n".format(self.kafka.IP()))
+        self.kafka_config.close()
+        self.cmd(self.kafka, self.launch.format("kafka")
+                + self.kafka_config.name + ' > {} &'.format(self.log_path('kafka')))
         time.sleep(1)
-        self.kafka.cmd(create_topic_command(
+        self.cmd(self.kafka, create_topic_command(
             self.zookeeper.IP()) + " > {}".format(self.log_path('create_topic')))
     def fuse_kafka_start(self):
         """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
         conf = "/tmp/conf"
-        self.fuse_kafka.cmd("mkdir -p {}".format(conf))
-        self.fuse_kafka.cmd("cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
-        self.fuse_kafka.cmd("sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
+        self.cmd(self.fuse_kafka, "mkdir -p {}".format(conf))
+        self.cmd(self.fuse_kafka, "cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
+        self.cmd(self.fuse_kafka, "sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
                 .format(self.zookeeper.IP(), conf))
-        self.fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka"
+        self.cmd(self.fuse_kafka, "ln -s {}/fuse_kafka {}/../fuse_kafka"
                 .format(cwd, conf))
-        self.fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start" > {}'
+        self.cmd(self.fuse_kafka, 'bash -c "cd {}/..;{}src/fuse_kafka.py start" > {}'
                 .format(conf, cwd, self.log_path('fuse_kafka')))
     def consumer_start(self):
         """ starts fuse_kafka consumer """
-        self.client.cmd(("zkconnect={} ./build.py kafka_consumer_start "
+        self.cmd(self.client, ("zkconnect={} ./build.py kafka_consumer_start "
                 + "> {} &").format(self.zookeeper.IP(), self.log_path('consumer')));
     def teardown(self):
         """ stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
         stops the virtual topology """
-        self.fuse_kafka.cmd('src/fuse_kafka.py stop')
-        for host in self.java_clients: host.cmd('pkill -9 java') 
+        self.cmd(self.fuse_kafka, 'src/fuse_kafka.py stop')
+        for host in self.java_clients: self.cmd(host, 'pkill -9 java') 
+        os.remove(self.kafka_config.name)
         self.data_directories_cleanup()
         self.impersonate()
         self.net.stop()
