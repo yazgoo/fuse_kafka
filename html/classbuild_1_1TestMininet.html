@@ -121,10 +121,14 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">teardown</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">setup</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">tearDown</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">setUp</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38fc197036598a9a97e5900260de259d"></a><!-- doxytag: member="build::TestMininet::get_consumed_events" ref="a38fc197036598a9a97e5900260de259d" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>get_consumed_events</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49460fccee66fd9161039a6c4b487e47"></a><!-- doxytag: member="build::TestMininet::write_to_log" ref="a49460fccee66fd9161039a6c4b487e47" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>write_to_log</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">__init__</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">test_basic</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af25a115402073806776bb044166582c5"></a><!-- doxytag: member="build::TestMininet::net" ref="af25a115402073806776bb044166582c5" args="" -->
@@ -141,33 +145,15 @@ Data Fields</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>java_clients</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af204dd0350ebd9e7852ab138ebfc4ff8"></a><!-- doxytag: member="build::TestMininet::kafka_config" ref="af204dd0350ebd9e7852ab138ebfc4ff8" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>kafka_config</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af92602e538061b48fc4324a5c4abdbdc"></a><!-- doxytag: member="build::TestMininet::consumer" ref="af92602e538061b48fc4324a5c4abdbdc" args="" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>consumer</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0409fdeedd0876acc047a7df996676dc"></a><!-- doxytag: member="build::TestMininet::launch" ref="a0409fdeedd0876acc047a7df996676dc" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>launch</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><div class="fragment"><pre class="fragment">Utility to create a virtual network to test fuse kafka resiliancy </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00348">348</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
-</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="abab12f1966a20b7aacd47dcad5b978b1"></a><!-- doxytag: member="build::TestMininet::__init__" ref="abab12f1966a20b7aacd47dcad5b978b1" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">build.TestMininet.__init__</a> </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<div class="fragment"><pre class="fragment">runs the topology with a mininet shell </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00454">454</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
-
-</div>
-</div>
-<hr/><h2>Member Function Documentation</h2>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00357">357</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="aa222c3691d93c73ac4e047e163fa791c"></a><!-- doxytag: member="build::TestMininet::clients_initialize" ref="aa222c3691d93c73ac4e047e163fa791c" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +169,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">initializes clients variables based on hosts </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00381">381</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00393">393</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -202,7 +188,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00448">448</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00483">483</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -221,7 +207,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts fuse_kafka consumer </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00427">427</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00438">438</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -240,7 +226,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">cleanups generated directory </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00394">394</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00406">406</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -259,7 +245,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts fuse_kafka </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00415">415</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00426">426</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -277,13 +263,7 @@ Data Fields</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>uid</em> = <code>None</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>gid</em> = <code>None</code>&#160;</td>
+          <td class="paramname"><em>inital_user</em> = <code>True</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -294,7 +274,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">changes effective group and user ids </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00350">350</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00359">359</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -313,16 +293,16 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts kafka server and creates logging topic </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00402">402</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00414">414</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a9efe3ef9358f1f2c6078c415fe50b2df"></a><!-- doxytag: member="build::TestMininet::setup" ref="a9efe3ef9358f1f2c6078c415fe50b2df" args="" -->
+<a class="anchor" id="a9aaae0dd51d2509a40d597bdb90d375a"></a><!-- doxytag: member="build::TestMininet::setUp" ref="a9aaae0dd51d2509a40d597bdb90d375a" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">build.TestMininet.setup</a> </td>
+          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">build.TestMininet.setUp</a> </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em></td><td>)</td>
@@ -333,7 +313,7 @@ Data Fields</h2></td></tr>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts the topology, downloads kafka, does a data directory
 cleanup in case of previous run </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00440">440</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00458">458</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -352,7 +332,7 @@ cleanup in case of previous run </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">launches mininet CLI </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00377">377</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00389">389</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -371,16 +351,16 @@ cleanup in case of previous run </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts-up a single switch topology </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00359">359</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00372">372</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab81a1d9ca2fcdee77ebcbf243fea4eb5"></a><!-- doxytag: member="build::TestMininet::teardown" ref="ab81a1d9ca2fcdee77ebcbf243fea4eb5" args="" -->
+<a class="anchor" id="a12a916934ea6a0ebf8e8e530f66575ac"></a><!-- doxytag: member="build::TestMininet::tearDown" ref="a12a916934ea6a0ebf8e8e530f66575ac" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">build.TestMininet.teardown</a> </td>
+          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">build.TestMininet.tearDown</a> </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em></td><td>)</td>
@@ -391,7 +371,26 @@ cleanup in case of previous run </pre></div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
 stops the virtual topology </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00431">431</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00449">449</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa46c35fb764e203cc34a456c021ef7e"></a><!-- doxytag: member="build::TestMininet::test_basic" ref="afa46c35fb764e203cc34a456c021ef7e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def <a class="el" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">build.TestMininet.test_basic</a> </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<div class="fragment"><pre class="fragment">runs the topology with a mininet shell </pre></div> 
+<p>Definition at line <a class="el" href="build_8py_source.html#l00489">489</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -410,7 +409,7 @@ stops the virtual topology </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts zookeeper server </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00397">397</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00409">409</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -435,7 +434,7 @@ stops the virtual topology </pre></div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 17 2014 07:39:05 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Dec 17 2014 15:38:24 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

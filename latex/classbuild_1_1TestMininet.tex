@@ -28,13 +28,19 @@ def \hyperlink{classbuild_1_1TestMininet_a731ba3e4c942e40ebf114bfd1b01a287}{fuse
 \item 
 def \hyperlink{classbuild_1_1TestMininet_a8239e151542b50fc2152cfd431a71095}{consumer\-\_\-start}
 \item 
-def \hyperlink{classbuild_1_1TestMininet_ab81a1d9ca2fcdee77ebcbf243fea4eb5}{teardown}
+def \hyperlink{classbuild_1_1TestMininet_a12a916934ea6a0ebf8e8e530f66575ac}{tear\-Down}
 \item 
-def \hyperlink{classbuild_1_1TestMininet_a9efe3ef9358f1f2c6078c415fe50b2df}{setup}
+def \hyperlink{classbuild_1_1TestMininet_a9aaae0dd51d2509a40d597bdb90d375a}{set\-Up}
+\item 
+\hypertarget{classbuild_1_1TestMininet_a38fc197036598a9a97e5900260de259d}{def {\bfseries get\-\_\-consumed\-\_\-events}}\label{classbuild_1_1TestMininet_a38fc197036598a9a97e5900260de259d}
+
+\item 
+\hypertarget{classbuild_1_1TestMininet_a49460fccee66fd9161039a6c4b487e47}{def {\bfseries write\-\_\-to\-\_\-log}}\label{classbuild_1_1TestMininet_a49460fccee66fd9161039a6c4b487e47}
+
 \item 
 def \hyperlink{classbuild_1_1TestMininet_a595237e962e2bc7b55329097775624c8}{components\-\_\-start}
 \item 
-def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+def \hyperlink{classbuild_1_1TestMininet_afa46c35fb764e203cc34a456c021ef7e}{test\-\_\-basic}
 \end{DoxyCompactItemize}
 \subsection*{\-Data \-Fields}
 \begin{DoxyCompactItemize}
@@ -60,6 +66,9 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \hypertarget{classbuild_1_1TestMininet_af204dd0350ebd9e7852ab138ebfc4ff8}{{\bfseries kafka\-\_\-config}}\label{classbuild_1_1TestMininet_af204dd0350ebd9e7852ab138ebfc4ff8}
 
 \item 
+\hypertarget{classbuild_1_1TestMininet_af92602e538061b48fc4324a5c4abdbdc}{{\bfseries consumer}}\label{classbuild_1_1TestMininet_af92602e538061b48fc4324a5c4abdbdc}
+
+\item 
 \hypertarget{classbuild_1_1TestMininet_a0409fdeedd0876acc047a7df996676dc}{{\bfseries launch}}\label{classbuild_1_1TestMininet_a0409fdeedd0876acc047a7df996676dc}
 
 \end{DoxyCompactItemize}
@@ -69,22 +78,7 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}Utility to create a virtual network to test fuse kafka resiliancy \end{DoxyVerb}
  
 
-\-Definition at line 348 of file build.\-py.
-
-
-
-\subsection{\-Constructor \& \-Destructor \-Documentation}
-\hypertarget{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
-\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!build::TestMininet@{build\-::\-Test\-Mininet}}
-\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-\_\-\-\_\-init\-\_\-\-\_\-} (
-\begin{DoxyParamCaption}
-\item[{}]{self}
-\end{DoxyParamCaption}
-)}}\label{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}
-\begin{DoxyVerb}runs the topology with a mininet shell \end{DoxyVerb}
- 
-
-\-Definition at line 454 of file build.\-py.
+\-Definition at line 357 of file build.\-py.
 
 
 
@@ -99,7 +93,7 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}initializes clients variables based on hosts \end{DoxyVerb}
  
 
-\-Definition at line 381 of file build.\-py.
+\-Definition at line 393 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a595237e962e2bc7b55329097775624c8}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!components\-\_\-start@{components\-\_\-start}}
 \index{components\-\_\-start@{components\-\_\-start}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -111,7 +105,7 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer \end{DoxyVerb}
  
 
-\-Definition at line 448 of file build.\-py.
+\-Definition at line 483 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a8239e151542b50fc2152cfd431a71095}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!consumer\-\_\-start@{consumer\-\_\-start}}
 \index{consumer\-\_\-start@{consumer\-\_\-start}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -123,7 +117,7 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}starts fuse_kafka consumer \end{DoxyVerb}
  
 
-\-Definition at line 427 of file build.\-py.
+\-Definition at line 438 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a83b14b12435ff9ffa7332fc2b8e197ae}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!data\-\_\-directories\-\_\-cleanup@{data\-\_\-directories\-\_\-cleanup}}
 \index{data\-\_\-directories\-\_\-cleanup@{data\-\_\-directories\-\_\-cleanup}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -135,7 +129,7 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}cleanups generated directory \end{DoxyVerb}
  
 
-\-Definition at line 394 of file build.\-py.
+\-Definition at line 406 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a731ba3e4c942e40ebf114bfd1b01a287}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!fuse\-\_\-kafka\-\_\-start@{fuse\-\_\-kafka\-\_\-start}}
 \index{fuse\-\_\-kafka\-\_\-start@{fuse\-\_\-kafka\-\_\-start}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -147,21 +141,20 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}starts fuse_kafka \end{DoxyVerb}
  
 
-\-Definition at line 415 of file build.\-py.
+\-Definition at line 426 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a8e289e361dade20ec1ad1c4e21cadd1a}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!impersonate@{impersonate}}
 \index{impersonate@{impersonate}!build::TestMininet@{build\-::\-Test\-Mininet}}
 \subsubsection[{impersonate}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-impersonate} (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
-\item[{}]{uid = {\ttfamily \-None}, }
-\item[{}]{gid = {\ttfamily \-None}}
+\item[{}]{inital\-\_\-user = {\ttfamily \-True}}
 \end{DoxyParamCaption}
 )}}\label{classbuild_1_1TestMininet_a8e289e361dade20ec1ad1c4e21cadd1a}
 \begin{DoxyVerb}changes effective group and user ids \end{DoxyVerb}
  
 
-\-Definition at line 350 of file build.\-py.
+\-Definition at line 359 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_abea6fef76c2d624f8ab4f9834fa30825}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!kafka\-\_\-start@{kafka\-\_\-start}}
 \index{kafka\-\_\-start@{kafka\-\_\-start}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -173,20 +166,20 @@ def \hyperlink{classbuild_1_1TestMininet_abab12f1966a20b7aacd47dcad5b978b1}{\-\_
 \begin{DoxyVerb}starts kafka server and creates logging topic \end{DoxyVerb}
  
 
-\-Definition at line 402 of file build.\-py.
+\-Definition at line 414 of file build.\-py.
 
-\hypertarget{classbuild_1_1TestMininet_a9efe3ef9358f1f2c6078c415fe50b2df}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!setup@{setup}}
-\index{setup@{setup}!build::TestMininet@{build\-::\-Test\-Mininet}}
-\subsubsection[{setup}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-setup} (
+\hypertarget{classbuild_1_1TestMininet_a9aaae0dd51d2509a40d597bdb90d375a}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!set\-Up@{set\-Up}}
+\index{set\-Up@{set\-Up}!build::TestMininet@{build\-::\-Test\-Mininet}}
+\subsubsection[{set\-Up}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-set\-Up} (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
-)}}\label{classbuild_1_1TestMininet_a9efe3ef9358f1f2c6078c415fe50b2df}
+)}}\label{classbuild_1_1TestMininet_a9aaae0dd51d2509a40d597bdb90d375a}
 \begin{DoxyVerb}starts the topology, downloads kafka, does a data directory
 cleanup in case of previous run \end{DoxyVerb}
  
 
-\-Definition at line 440 of file build.\-py.
+\-Definition at line 458 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_a7ae01ec8dc3e0a8d7768884a56dd2e96}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!shell@{shell}}
 \index{shell@{shell}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -198,7 +191,7 @@ cleanup in case of previous run \end{DoxyVerb}
 \begin{DoxyVerb}launches mininet CLI \end{DoxyVerb}
  
 
-\-Definition at line 377 of file build.\-py.
+\-Definition at line 389 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_ae28256d061cb92ca35a47abfa3352c6f}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!start\-\_\-network@{start\-\_\-network}}
 \index{start\-\_\-network@{start\-\_\-network}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -210,20 +203,32 @@ cleanup in case of previous run \end{DoxyVerb}
 \begin{DoxyVerb}starts-up a single switch topology \end{DoxyVerb}
  
 
-\-Definition at line 359 of file build.\-py.
+\-Definition at line 372 of file build.\-py.
 
-\hypertarget{classbuild_1_1TestMininet_ab81a1d9ca2fcdee77ebcbf243fea4eb5}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!teardown@{teardown}}
-\index{teardown@{teardown}!build::TestMininet@{build\-::\-Test\-Mininet}}
-\subsubsection[{teardown}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-teardown} (
+\hypertarget{classbuild_1_1TestMininet_a12a916934ea6a0ebf8e8e530f66575ac}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!tear\-Down@{tear\-Down}}
+\index{tear\-Down@{tear\-Down}!build::TestMininet@{build\-::\-Test\-Mininet}}
+\subsubsection[{tear\-Down}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-tear\-Down} (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
-)}}\label{classbuild_1_1TestMininet_ab81a1d9ca2fcdee77ebcbf243fea4eb5}
+)}}\label{classbuild_1_1TestMininet_a12a916934ea6a0ebf8e8e530f66575ac}
 \begin{DoxyVerb}stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
 stops the virtual topology \end{DoxyVerb}
  
 
-\-Definition at line 431 of file build.\-py.
+\-Definition at line 449 of file build.\-py.
+
+\hypertarget{classbuild_1_1TestMininet_afa46c35fb764e203cc34a456c021ef7e}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!test\-\_\-basic@{test\-\_\-basic}}
+\index{test\-\_\-basic@{test\-\_\-basic}!build::TestMininet@{build\-::\-Test\-Mininet}}
+\subsubsection[{test\-\_\-basic}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf build.\-Test\-Mininet.\-test\-\_\-basic} (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}}\label{classbuild_1_1TestMininet_afa46c35fb764e203cc34a456c021ef7e}
+\begin{DoxyVerb}runs the topology with a mininet shell \end{DoxyVerb}
+ 
+
+\-Definition at line 489 of file build.\-py.
 
 \hypertarget{classbuild_1_1TestMininet_aa3eddff2c619b28456be8a68dfe0c8cd}{\index{build\-::\-Test\-Mininet@{build\-::\-Test\-Mininet}!zookeeper\-\_\-start@{zookeeper\-\_\-start}}
 \index{zookeeper\-\_\-start@{zookeeper\-\_\-start}!build::TestMininet@{build\-::\-Test\-Mininet}}
@@ -235,7 +240,7 @@ stops the virtual topology \end{DoxyVerb}
 \begin{DoxyVerb}starts zookeeper server \end{DoxyVerb}
  
 
-\-Definition at line 397 of file build.\-py.
+\-Definition at line 409 of file build.\-py.
 
 
 
