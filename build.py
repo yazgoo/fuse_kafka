@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """ Builds unit test binary """
 try:
-    import base64, subprocess, sys, glob, os, json, thread, multiprocessing, shutil, time
+    import base64, subprocess, sys, glob, os, json, thread
+    import multiprocessing, shutil, time, unittest
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
@@ -94,7 +95,7 @@ class FuseKafkaLog:
         event = json.loads(string)
         for item in ["@message", "command"]:
             event[item] += "=" * ((4 - len(event[item]) % 4) % 4)
-            event[item] = base64.b64decode(event[item])
+            event[item] = base64.b64decode(event[item] + "==")
         event["message_size-added"] = len(event["@message"])
         return event
     def start(self):
@@ -345,14 +346,18 @@ def doc():
     """ generates the project documentation """
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
-class TestMininet():
+class TestMininet(unittest.TestCase):
     """ Utility to create a virtual network to test fuse kafka resiliancy """
-    def impersonate(self, uid = None, gid = None):
+    def impersonate(self, inital_user = True):
         """ changes effective group and user ids """
-        if uid == None:
+        uid = gid = None
+        if inital_user:
             uid = os.getuid()
-        if gid == None:
             gid = os.getuid()
+        else:
+            stat = os.stat(".")
+            uid = stat.st_uid
+            gid = stat.st_gid
         print('impersonating uid: {}, gid: {}'.format(uid, gid))
         os.setegid(gid)
         os.seteuid(uid)
@@ -370,8 +375,7 @@ class TestMininet():
                 for h in hosts: self.addLink(h, s1)
         self.net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
         self.net.start()
-        stat = os.stat(".")
-        self.impersonate(stat.st_uid, stat.st_gid)
+        self.impersonate(False)
     def log_path(self, name):
         return "/tmp/{}.log".format(name)
     def shell(self):
@@ -390,7 +394,7 @@ class TestMininet():
         command = "su {} -c '{}'".format(
                 pwd.getpwuid(os.stat(".").st_uid).pw_name, cmd)
         print(command)
-        where.cmd(command)
+        return where.cmd(command)
     def data_directories_cleanup(self):
         """ cleanups generated directory """
         self.cmd(self.zookeeper, "rm -rf /tmp/kafka-logs /tmp/zookeeper")
@@ -398,7 +402,7 @@ class TestMininet():
         """ starts zookeeper server """
         self.cmd(self.zookeeper, self.launch.format("zookeeper") 
             + kafka_config_directory
-            + 'zookeeper.properties > {} &'.format(self.log_path('zookeeper')))
+            + 'zookeeper.properties > {} 2>&1 &'.format(self.log_path('zookeeper')))
     def kafka_start(self):
         """ starts kafka server and creates logging topic """
         import tempfile
@@ -408,10 +412,9 @@ class TestMininet():
         self.kafka_config.write("host.name={}\n".format(self.kafka.IP()))
         self.kafka_config.close()
         self.cmd(self.kafka, self.launch.format("kafka")
-                + self.kafka_config.name + ' > {} &'.format(self.log_path('kafka')))
-        time.sleep(1)
+                + self.kafka_config.name + ' > {} 2>&1 &'.format(self.log_path('kafka')))
         self.cmd(self.kafka, create_topic_command(
-            self.zookeeper.IP()) + " > {}".format(self.log_path('create_topic')))
+            self.zookeeper.IP()) + " > {} 2>&1 ".format(self.log_path('create_topic')))
     def fuse_kafka_start(self):
         """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
@@ -422,13 +425,20 @@ class TestMininet():
                 .format(self.zookeeper.IP(), conf))
         self.cmd(self.fuse_kafka, "ln -s {}/fuse_kafka {}/../fuse_kafka"
                 .format(cwd, conf))
-        self.cmd(self.fuse_kafka, 'bash -c "cd {}/..;{}src/fuse_kafka.py start" > {}'
+        self.cmd(self.fuse_kafka, 'bash -c "cd {}/..;{}src/fuse_kafka.py start > {} 2>&1"'
                 .format(conf, cwd, self.log_path('fuse_kafka')))
     def consumer_start(self):
         """ starts fuse_kafka consumer """
-        self.cmd(self.client, ("zkconnect={} ./build.py kafka_consumer_start "
-                + "> {} &").format(self.zookeeper.IP(), self.log_path('consumer')));
-    def teardown(self):
+        if os.path.exists(self.log_path('consumer')):
+            os.remove(self.log_path('consumer'))
+        command = os.getcwd() + "/" + kafka_bin_directory
+        command += "kafka-console-consumer.sh --zookeeper "
+        command += self.zookeeper.IP() + " --topic logs"
+        print(command)
+        self.impersonate() # popen require setns()
+        self.consumer = self.client.popen(command)
+        self.impersonate(False)
+    def tearDown(self):
         """ stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
         stops the virtual topology """
         self.cmd(self.fuse_kafka, 'src/fuse_kafka.py stop')
@@ -437,7 +447,7 @@ class TestMininet():
         self.data_directories_cleanup()
         self.impersonate()
         self.net.stop()
-    def setup(self):
+    def setUp(self):
         """ starts the topology, downloads kafka, does a data directory
         cleanup in case of previous run """
         self.launch = kafka_bin_directory + '{}-server-start.sh '
@@ -445,23 +455,45 @@ class TestMininet():
         kafka_download()
         self.clients_initialize()
         self.data_directories_cleanup()
+        self.components_start()
+        # wait for fuse-kafka to be ready
+        time.sleep(2)
+    def get_consumed_events(self, expected_number):
+        from mininet.util import pmonitor
+        events = []
+        log = FuseKafkaLog()
+        popens = {}
+        popens[self.client] = self.consumer
+        for host, line in pmonitor(popens):
+            events.append(log.load_fuse_kafka_event(line))
+            if len(events) >= expected_number:
+                break
+        self.assertEqual(expected_number, len(events))
+        return events
+    def write_to_log(self, what = "test"):
+        self.cmd(self.fuse_kafka, "echo -n {} > /tmp/fuse-kafka-test/xd 2>&1".format(what))
     def components_start(self):
         """ starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer """
         self.zookeeper_start()
         self.kafka_start()
         self.fuse_kafka_start()
         self.consumer_start()
-    def __init__(self):
+    def test_basic(self):
         """ runs the topology with a mininet shell """
-        self.setup()
-        self.components_start()
-        self.shell()
-        self.teardown()
-def mininet():
-    TestMininet()
+        for message in ["hello", "world"]:
+            self.write_to_log(message)
+            events = self.get_consumed_events(1)
+            self.assertEqual(message, events[0]["@message"])
+        expected = ["foo", "bar"]
+        for message in expected:
+            self.write_to_log(message)
+        actual = [event["@message"] for event in self.get_consumed_events(2)]
+        self.assertEqual(sorted(expected), sorted(actual))
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or (sys.argv[1] != "quickstart" and sys.argv[1] != "mininet"):
         main()
     else:
         if sys.argv[1] == "quickstart": quickstart()
-        else: mininet()
+        else:
+            sys.argv.pop(0)
+            unittest.main()

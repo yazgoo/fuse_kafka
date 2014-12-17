@@ -4,6 +4,7 @@ before_install:
 - sudo apt-get update -qq
 - ulimit -c unlimited -S
 - sudo apt-get install gdb
+- sudo apt-get install mininet
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
 - sudo apt-get update
@@ -18,6 +19,7 @@ script:
 - ./build.py
 - ./build.py dotest
 - tox # to test fuse_kafka against multiple python versions
+- ./build.py mininet # to test fuse_kafka in a more like integrated environment
 after_failure:
 - find
 - cat /proc/sys/kernel/core_pattern
