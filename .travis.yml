@@ -19,7 +19,7 @@ script:
 - ./build.py
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
-- sudo mn -c
+- sudo killall ovs-controller
 - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
 after_failure:
 - find
