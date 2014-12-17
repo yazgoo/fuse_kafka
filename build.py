@@ -315,8 +315,8 @@ def create_topic_command(zkconnect):
     return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 1 --replication-factor 1'.format(zkconnect)
 def quickstart():
     """ Launches kafka, zookeeper, fuse_kafka and a console consumer locally """
-    klog = '/tmp/kafka-logs'
-    zlog = '/tmp/zookeeper'
+    klog = '/tmp/kafka.log'
+    zlog = '/tmp/zookeeper.log'
     if os.path.exists(klog): shutil.rmtree(klog)
     if os.path.exists(zlog): shutil.rmtree(zlog)
     p1 = multiprocessing.Process(target=zookeeper_start, args=())
@@ -349,6 +349,7 @@ class TestMininet():
     """ Utility to create a virtual network to test fuse kafka resiliancy """
     def impersonate(self, uid = 0, gid = 0):
         """ changes effective group and user ids """
+        print('impersonating uid: {}, gid: {}'.format(uid, gid))
         os.setegid(gid)
         os.seteuid(uid)
     def start_network(self):
@@ -367,6 +368,8 @@ class TestMininet():
         self.net.start()
         stat = os.stat(".")
         self.impersonate(stat.st_uid, stat.st_gid)
+    def log_path(self, name):
+        return "/tmp/{}.log".format(name)
     def shell(self):
         """ launches mininet CLI """
         from mininet.cli import CLI
@@ -380,12 +383,12 @@ class TestMininet():
         self.java_clients = [self.client, self.kafka, self.zookeeper]
     def data_directories_cleanup(self):
         """ cleanups generated directory """
-        self.zookeeper.cmd("rm -rf /tmp/zookeeper /tmp/kafka-logs")
+        self.zookeeper.cmd("rm -rf /tmp/kafka-logs /tmp/zookeeper")
     def zookeeper_start(self):
         """ starts zookeeper server """
         self.zookeeper.cmd(self.launch.format("zookeeper") 
             + kafka_config_directory
-            + 'zookeeper.properties > /tmp/zookeeper.log &')
+            + 'zookeeper.properties > {} &'.format(self.log_path('zookeeper')))
     def kafka_start(self):
         """ starts kafka server and creates logging topic """
         import tempfile
@@ -395,10 +398,10 @@ class TestMininet():
         kafka_config.write("host.name={}\n".format(self.kafka.IP()))
         kafka_config.close()
         self.kafka.cmd(self.launch.format("kafka")
-                + kafka_config.name + ' > /tmp/kafka.log &')
-        time.sleep(2)
+                + kafka_config.name + ' > {} &'.format(self.log_path('kafka')))
+        time.sleep(1)
         self.kafka.cmd(create_topic_command(
-            self.zookeeper.IP()) + " > /tmp/create_topic.log")
+            self.zookeeper.IP()) + " > {}".format(self.log_path('create_topic')))
     def fuse_kafka_start(self):
         """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
@@ -407,12 +410,14 @@ class TestMininet():
         self.fuse_kafka.cmd("cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
         self.fuse_kafka.cmd("sed -i 's/127.0.0.1/{}/' {}/fuse_kafka.properties"
                 .format(self.zookeeper.IP(), conf))
-        self.fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka".format(cwd, conf))
-        self.fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start"'.format(conf, cwd))
+        self.fuse_kafka.cmd("ln -s {}/fuse_kafka {}/../fuse_kafka"
+                .format(cwd, conf))
+        self.fuse_kafka.cmd('bash -c "cd {}/..;{}src/fuse_kafka.py start" > {}'
+                .format(conf, cwd, self.log_path('fuse_kafka')))
     def consumer_start(self):
         """ starts fuse_kafka consumer """
         self.client.cmd(("zkconnect={} ./build.py kafka_consumer_start "
-                + "> /tmp/kafka_consumer.log &").format(self.zookeeper.IP()));
+                + "> {} &").format(self.zookeeper.IP(), self.log_path('consumer')));
     def teardown(self):
         """ stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
         stops the virtual topology """
