@@ -6,7 +6,7 @@ before_install:
 - sudo apt-get install gdb
 - sudo apt-get install mininet/precise-backports
 - apt-cache search linux-headers
-- sudo apt-get install linux-headers-2.6.32 module-assistant
+- sudo apt-get install linux-headers-3.13.0-32 module-assistant
 - sudo m-a a-i openvswitch-datapath
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
@@ -47,6 +47,7 @@ after_success:
 - git commit -m "auto updating documenation"
 - git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages
 env:
+  - KERNEL=3.13.0-32
   global:
     secure: LZlIH/SfgTMAQjUULjIk4j6pxhxVKPRvzRopdDeFnXrRozIeBdUUOePQEMoFYiiu/qAhoROEiO9SupvyX6YE2wGpEm/PIN30HmAXN1OxabpADPjyjbCHycaYb8ejl9xjoA3w68YbT7ezhV/ut1fvuihDZxotqUodXK7n1m7M+K4=
 notifications:
