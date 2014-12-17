@@ -430,113 +430,124 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00347"></a>00347     run(<span class="stringliteral">&quot;doxygen&quot;</span>, <span class="stringliteral">&quot;Doxyfile&quot;</span>)
 <a name="l00348"></a><a class="code" href="classbuild_1_1TestMininet.html">00348</a> <span class="keyword">class </span><a class="code" href="classbuild_1_1TestMininet.html">TestMininet</a>():
 <a name="l00349"></a>00349     <span class="stringliteral">&quot;&quot;&quot; Utility to create a virtual network to test fuse kafka resiliancy &quot;&quot;&quot;</span>
-<a name="l00350"></a><a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">00350</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(self, uid = 0, gid = 0):
+<a name="l00350"></a><a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">00350</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(self, uid = None, gid = None):
 <a name="l00351"></a>00351         <span class="stringliteral">&quot;&quot;&quot; changes effective group and user ids &quot;&quot;&quot;</span>
-<a name="l00352"></a>00352         print(<span class="stringliteral">&#39;impersonating uid: {}, gid: {}&#39;</span>.format(uid, gid))
-<a name="l00353"></a>00353         os.setegid(gid)
-<a name="l00354"></a>00354         os.seteuid(uid)
-<a name="l00355"></a><a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">00355</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>(self):
-<a name="l00356"></a>00356         <span class="stringliteral">&quot;&quot;&quot; starts-up a single switch topology &quot;&quot;&quot;</span>
-<a name="l00357"></a>00357         <span class="keyword">from</span> mininet.topo <span class="keyword">import</span> Topo
-<a name="l00358"></a>00358         <span class="keyword">from</span> mininet.net <span class="keyword">import</span> Mininet
-<a name="l00359"></a>00359         <span class="keyword">from</span> mininet.node <span class="keyword">import</span> OVSController
-<a name="l00360"></a>00360         <span class="keyword">class </span>SingleSwitchTopo(Topo):
-<a name="l00361"></a>00361             <span class="stringliteral">&quot;Single Switch Topology&quot;</span>
-<a name="l00362"></a>00362             <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">__init__</a>(self, count=1, **params):
-<a name="l00363"></a>00363                 Topo.__init__(self, **params)
-<a name="l00364"></a>00364                 hosts = [ self.addHost(<span class="stringliteral">&#39;h%d&#39;</span> % i) <span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(1, count + 1) ]
-<a name="l00365"></a>00365                 s1 = self.addSwitch(<span class="stringliteral">&#39;s1&#39;</span>)
-<a name="l00366"></a>00366                 <span class="keywordflow">for</span> h <span class="keywordflow">in</span> hosts: self.addLink(h, s1)
-<a name="l00367"></a>00367         self.<a class="code" href="classbuild_1_1TestMininet.html#af25a115402073806776bb044166582c5">net</a> = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
-<a name="l00368"></a>00368         self.net.start()
-<a name="l00369"></a>00369         stat = os.stat(<span class="stringliteral">&quot;.&quot;</span>)
-<a name="l00370"></a>00370         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(stat.st_uid, stat.st_gid)
-<a name="l00371"></a>00371     <span class="keyword">def </span>log_path(self, name):
-<a name="l00372"></a>00372         <span class="keywordflow">return</span> <span class="stringliteral">&quot;/tmp/{}.log&quot;</span>.format(name)
-<a name="l00373"></a><a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">00373</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">shell</a>(self):
-<a name="l00374"></a>00374         <span class="stringliteral">&quot;&quot;&quot; launches mininet CLI &quot;&quot;&quot;</span>
-<a name="l00375"></a>00375         <span class="keyword">from</span> mininet.cli <span class="keyword">import</span> CLI
-<a name="l00376"></a>00376         CLI(self.<a class="code" href="classbuild_1_1TestMininet.html#af25a115402073806776bb044166582c5">net</a>)
-<a name="l00377"></a><a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">00377</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>(self):
-<a name="l00378"></a>00378         <span class="stringliteral">&quot;&quot;&quot; initializes clients variables based on hosts &quot;&quot;&quot;</span>
-<a name="l00379"></a>00379         self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a> = self.net.get(<span class="stringliteral">&#39;h1&#39;</span>)
-<a name="l00380"></a>00380         self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a> = self.net.get(<span class="stringliteral">&#39;h2&#39;</span>)
-<a name="l00381"></a>00381         self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a> = self.net.get(<span class="stringliteral">&#39;h3&#39;</span>)
-<a name="l00382"></a>00382         self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a> = self.net.get(<span class="stringliteral">&#39;h4&#39;</span>)
-<a name="l00383"></a>00383         self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a> = [self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a>, self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>, self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>]
-<a name="l00384"></a><a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">00384</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>(self):
-<a name="l00385"></a>00385         <span class="stringliteral">&quot;&quot;&quot; cleanups generated directory &quot;&quot;&quot;</span>
-<a name="l00386"></a>00386         self.zookeeper.cmd(<span class="stringliteral">&quot;rm -rf /tmp/kafka-logs /tmp/zookeeper&quot;</span>)
-<a name="l00387"></a><a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">00387</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>(self):
-<a name="l00388"></a>00388         <span class="stringliteral">&quot;&quot;&quot; starts zookeeper server &quot;&quot;&quot;</span>
-<a name="l00389"></a>00389         self.zookeeper.cmd(self.launch.format(<span class="stringliteral">&quot;zookeeper&quot;</span>) 
-<a name="l00390"></a>00390             + kafka_config_directory
-<a name="l00391"></a>00391             + <span class="stringliteral">&#39;zookeeper.properties &gt; {} &amp;&#39;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;zookeeper&#39;</span>)))
-<a name="l00392"></a><a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">00392</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>(self):
-<a name="l00393"></a>00393         <span class="stringliteral">&quot;&quot;&quot; starts kafka server and creates logging topic &quot;&quot;&quot;</span>
-<a name="l00394"></a>00394         <span class="keyword">import</span> tempfile
-<a name="l00395"></a>00395         kafka_config = tempfile.NamedTemporaryFile(delete=<span class="keyword">False</span>)
-<a name="l00396"></a>00396         kafka_config.write(<span class="stringliteral">&quot;zookeeper.connect={}\n&quot;</span>.format(self.zookeeper.IP()))
-<a name="l00397"></a>00397         kafka_config.write(<span class="stringliteral">&quot;broker.id=0\n&quot;</span>)
-<a name="l00398"></a>00398         kafka_config.write(<span class="stringliteral">&quot;host.name={}\n&quot;</span>.format(self.kafka.IP()))
-<a name="l00399"></a>00399         kafka_config.close()
-<a name="l00400"></a>00400         self.kafka.cmd(self.launch.format(<span class="stringliteral">&quot;kafka&quot;</span>)
-<a name="l00401"></a>00401                 + kafka_config.name + <span class="stringliteral">&#39; &gt; {} &amp;&#39;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;kafka&#39;</span>)))
-<a name="l00402"></a>00402         time.sleep(1)
-<a name="l00403"></a>00403         self.kafka.cmd(create_topic_command(
-<a name="l00404"></a>00404             self.zookeeper.IP()) + <span class="stringliteral">&quot; &gt; {}&quot;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;create_topic&#39;</span>)))
-<a name="l00405"></a><a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">00405</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>(self):
-<a name="l00406"></a>00406         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka &quot;&quot;&quot;</span>
-<a name="l00407"></a>00407         cwd = os.getcwd() + <span class="stringliteral">&quot;/&quot;</span>
-<a name="l00408"></a>00408         conf = <span class="stringliteral">&quot;/tmp/conf&quot;</span>
-<a name="l00409"></a>00409         self.fuse_kafka.cmd(<span class="stringliteral">&quot;mkdir -p {}&quot;</span>.format(conf))
-<a name="l00410"></a>00410         self.fuse_kafka.cmd(<span class="stringliteral">&quot;cp {}conf/fuse_kafka.properties {}&quot;</span>.format(cwd, conf))
-<a name="l00411"></a>00411         self.fuse_kafka.cmd(<span class="stringliteral">&quot;sed -i &#39;s/127.0.0.1/{}/&#39; {}/fuse_kafka.properties&quot;</span>
-<a name="l00412"></a>00412                 .format(self.zookeeper.IP(), conf))
-<a name="l00413"></a>00413         self.fuse_kafka.cmd(<span class="stringliteral">&quot;ln -s {}/fuse_kafka {}/../fuse_kafka&quot;</span>
-<a name="l00414"></a>00414                 .format(cwd, conf))
-<a name="l00415"></a>00415         self.fuse_kafka.cmd(<span class="stringliteral">&#39;bash -c &quot;cd {}/..;{}src/fuse_kafka.py start&quot; &gt; {}&#39;</span>
-<a name="l00416"></a>00416                 .format(conf, cwd, self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;fuse_kafka&#39;</span>)))
-<a name="l00417"></a><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">00417</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>(self):
-<a name="l00418"></a>00418         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka consumer &quot;&quot;&quot;</span>
-<a name="l00419"></a>00419         self.client.cmd((<span class="stringliteral">&quot;zkconnect={} ./build.py kafka_consumer_start &quot;</span>
-<a name="l00420"></a>00420                 + <span class="stringliteral">&quot;&gt; {} &amp;&quot;</span>).format(self.zookeeper.IP(), self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>)));
-<a name="l00421"></a><a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">00421</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">teardown</a>(self):
-<a name="l00422"></a>00422         <span class="stringliteral">&quot;&quot;&quot; stops fuse_kafka, zookeeper, kafka, cleans their working directory and </span>
-<a name="l00423"></a>00423 <span class="stringliteral">        stops the virtual topology &quot;&quot;&quot;</span>
-<a name="l00424"></a>00424         self.fuse_kafka.cmd(<span class="stringliteral">&#39;src/fuse_kafka.py stop&#39;</span>)
-<a name="l00425"></a>00425         <span class="keywordflow">for</span> host <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a>: host.cmd(<span class="stringliteral">&#39;pkill -9 java&#39;</span>) 
-<a name="l00426"></a>00426         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
-<a name="l00427"></a>00427         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>()
-<a name="l00428"></a>00428         self.net.stop()
-<a name="l00429"></a><a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">00429</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">setup</a>(self):
-<a name="l00430"></a>00430         <span class="stringliteral">&quot;&quot;&quot; starts the topology, downloads kafka, does a data directory</span>
-<a name="l00431"></a>00431 <span class="stringliteral">        cleanup in case of previous run &quot;&quot;&quot;</span>
-<a name="l00432"></a>00432         self.<a class="code" href="classbuild_1_1TestMininet.html#a0409fdeedd0876acc047a7df996676dc">launch</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-start.sh &#39;</span>
-<a name="l00433"></a>00433         self.<a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>()
-<a name="l00434"></a>00434         kafka_download()
-<a name="l00435"></a>00435         self.<a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>()
-<a name="l00436"></a>00436         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
-<a name="l00437"></a><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">00437</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>(self):
-<a name="l00438"></a>00438         <span class="stringliteral">&quot;&quot;&quot; starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer &quot;&quot;&quot;</span>
-<a name="l00439"></a>00439         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
-<a name="l00440"></a>00440         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
-<a name="l00441"></a>00441         self.<a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>()
-<a name="l00442"></a>00442         self.<a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>()
-<a name="l00443"></a><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">00443</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">__init__</a>(self):
-<a name="l00444"></a>00444         <span class="stringliteral">&quot;&quot;&quot; runs the topology with a mininet shell &quot;&quot;&quot;</span>
-<a name="l00445"></a>00445         self.<a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">setup</a>()
-<a name="l00446"></a>00446         self.<a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>()
-<a name="l00447"></a>00447         self.<a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">shell</a>()
-<a name="l00448"></a>00448         self.<a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">teardown</a>()
-<a name="l00449"></a>00449 <span class="keyword">def </span>mininet():
-<a name="l00450"></a>00450     <a class="code" href="classbuild_1_1TestMininet.html">TestMininet</a>()
-<a name="l00451"></a>00451 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
-<a name="l00452"></a>00452     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> (sys.argv[1] != <span class="stringliteral">&quot;quickstart&quot;</span> <span class="keywordflow">and</span> sys.argv[1] != <span class="stringliteral">&quot;mininet&quot;</span>):
-<a name="l00453"></a>00453         main()
-<a name="l00454"></a>00454     <span class="keywordflow">else</span>:
-<a name="l00455"></a>00455         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
-<a name="l00456"></a>00456         <span class="keywordflow">else</span>: mininet()
+<a name="l00352"></a>00352         <span class="keywordflow">if</span> uid == <span class="keywordtype">None</span>:
+<a name="l00353"></a>00353             uid = os.getuid()
+<a name="l00354"></a>00354         <span class="keywordflow">if</span> gid == <span class="keywordtype">None</span>:
+<a name="l00355"></a>00355             gid = os.getuid()
+<a name="l00356"></a>00356         print(<span class="stringliteral">&#39;impersonating uid: {}, gid: {}&#39;</span>.format(uid, gid))
+<a name="l00357"></a>00357         os.setegid(gid)
+<a name="l00358"></a>00358         os.seteuid(uid)
+<a name="l00359"></a><a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">00359</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>(self):
+<a name="l00360"></a>00360         <span class="stringliteral">&quot;&quot;&quot; starts-up a single switch topology &quot;&quot;&quot;</span>
+<a name="l00361"></a>00361         <span class="keyword">from</span> mininet.topo <span class="keyword">import</span> Topo
+<a name="l00362"></a>00362         <span class="keyword">from</span> mininet.net <span class="keyword">import</span> Mininet
+<a name="l00363"></a>00363         <span class="keyword">from</span> mininet.node <span class="keyword">import</span> OVSController
+<a name="l00364"></a>00364         <span class="keyword">class </span>SingleSwitchTopo(Topo):
+<a name="l00365"></a>00365             <span class="stringliteral">&quot;Single Switch Topology&quot;</span>
+<a name="l00366"></a>00366             <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">__init__</a>(self, count=1, **params):
+<a name="l00367"></a>00367                 Topo.__init__(self, **params)
+<a name="l00368"></a>00368                 hosts = [ self.addHost(<span class="stringliteral">&#39;h%d&#39;</span> % i) <span class="keywordflow">for</span> i <span class="keywordflow">in</span> range(1, count + 1) ]
+<a name="l00369"></a>00369                 s1 = self.addSwitch(<span class="stringliteral">&#39;s1&#39;</span>)
+<a name="l00370"></a>00370                 <span class="keywordflow">for</span> h <span class="keywordflow">in</span> hosts: self.addLink(h, s1)
+<a name="l00371"></a>00371         self.<a class="code" href="classbuild_1_1TestMininet.html#af25a115402073806776bb044166582c5">net</a> = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
+<a name="l00372"></a>00372         self.net.start()
+<a name="l00373"></a>00373         stat = os.stat(<span class="stringliteral">&quot;.&quot;</span>)
+<a name="l00374"></a>00374         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(stat.st_uid, stat.st_gid)
+<a name="l00375"></a>00375     <span class="keyword">def </span>log_path(self, name):
+<a name="l00376"></a>00376         <span class="keywordflow">return</span> <span class="stringliteral">&quot;/tmp/{}.log&quot;</span>.format(name)
+<a name="l00377"></a><a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">00377</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">shell</a>(self):
+<a name="l00378"></a>00378         <span class="stringliteral">&quot;&quot;&quot; launches mininet CLI &quot;&quot;&quot;</span>
+<a name="l00379"></a>00379         <span class="keyword">from</span> mininet.cli <span class="keyword">import</span> CLI
+<a name="l00380"></a>00380         CLI(self.<a class="code" href="classbuild_1_1TestMininet.html#af25a115402073806776bb044166582c5">net</a>)
+<a name="l00381"></a><a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">00381</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>(self):
+<a name="l00382"></a>00382         <span class="stringliteral">&quot;&quot;&quot; initializes clients variables based on hosts &quot;&quot;&quot;</span>
+<a name="l00383"></a>00383         self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a> = self.net.get(<span class="stringliteral">&#39;h1&#39;</span>)
+<a name="l00384"></a>00384         self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a> = self.net.get(<span class="stringliteral">&#39;h2&#39;</span>)
+<a name="l00385"></a>00385         self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a> = self.net.get(<span class="stringliteral">&#39;h3&#39;</span>)
+<a name="l00386"></a>00386         self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a> = self.net.get(<span class="stringliteral">&#39;h4&#39;</span>)
+<a name="l00387"></a>00387         self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a> = [self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a>, self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>, self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>]
+<a name="l00388"></a>00388     <span class="keyword">def </span>cmd(self, where, cmd):
+<a name="l00389"></a>00389         <span class="keyword">import</span> pwd
+<a name="l00390"></a>00390         command = <span class="stringliteral">&quot;su {} -c &#39;{}&#39;&quot;</span>.format(
+<a name="l00391"></a>00391                 pwd.getpwuid(os.stat(<span class="stringliteral">&quot;.&quot;</span>).st_uid).pw_name, cmd)
+<a name="l00392"></a>00392         print(command)
+<a name="l00393"></a>00393         where.cmd(command)
+<a name="l00394"></a><a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">00394</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>(self):
+<a name="l00395"></a>00395         <span class="stringliteral">&quot;&quot;&quot; cleanups generated directory &quot;&quot;&quot;</span>
+<a name="l00396"></a>00396         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>, <span class="stringliteral">&quot;rm -rf /tmp/kafka-logs /tmp/zookeeper&quot;</span>)
+<a name="l00397"></a><a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">00397</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>(self):
+<a name="l00398"></a>00398         <span class="stringliteral">&quot;&quot;&quot; starts zookeeper server &quot;&quot;&quot;</span>
+<a name="l00399"></a>00399         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>, self.launch.format(<span class="stringliteral">&quot;zookeeper&quot;</span>) 
+<a name="l00400"></a>00400             + kafka_config_directory
+<a name="l00401"></a>00401             + <span class="stringliteral">&#39;zookeeper.properties &gt; {} &amp;&#39;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;zookeeper&#39;</span>)))
+<a name="l00402"></a><a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">00402</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>(self):
+<a name="l00403"></a>00403         <span class="stringliteral">&quot;&quot;&quot; starts kafka server and creates logging topic &quot;&quot;&quot;</span>
+<a name="l00404"></a>00404         <span class="keyword">import</span> tempfile
+<a name="l00405"></a>00405         self.<a class="code" href="classbuild_1_1TestMininet.html#af204dd0350ebd9e7852ab138ebfc4ff8">kafka_config</a> = tempfile.NamedTemporaryFile(delete=<span class="keyword">False</span>)
+<a name="l00406"></a>00406         self.kafka_config.write(<span class="stringliteral">&quot;zookeeper.connect={}\n&quot;</span>.format(self.zookeeper.IP()))
+<a name="l00407"></a>00407         self.kafka_config.write(<span class="stringliteral">&quot;broker.id=0\n&quot;</span>)
+<a name="l00408"></a>00408         self.kafka_config.write(<span class="stringliteral">&quot;host.name={}\n&quot;</span>.format(self.kafka.IP()))
+<a name="l00409"></a>00409         self.kafka_config.close()
+<a name="l00410"></a>00410         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>, self.launch.format(<span class="stringliteral">&quot;kafka&quot;</span>)
+<a name="l00411"></a>00411                 + self.<a class="code" href="classbuild_1_1TestMininet.html#af204dd0350ebd9e7852ab138ebfc4ff8">kafka_config</a>.name + <span class="stringliteral">&#39; &gt; {} &amp;&#39;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;kafka&#39;</span>)))
+<a name="l00412"></a>00412         time.sleep(1)
+<a name="l00413"></a>00413         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>, create_topic_command(
+<a name="l00414"></a>00414             self.zookeeper.IP()) + <span class="stringliteral">&quot; &gt; {}&quot;</span>.format(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;create_topic&#39;</span>)))
+<a name="l00415"></a><a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">00415</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>(self):
+<a name="l00416"></a>00416         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka &quot;&quot;&quot;</span>
+<a name="l00417"></a>00417         cwd = os.getcwd() + <span class="stringliteral">&quot;/&quot;</span>
+<a name="l00418"></a>00418         conf = <span class="stringliteral">&quot;/tmp/conf&quot;</span>
+<a name="l00419"></a>00419         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;mkdir -p {}&quot;</span>.format(conf))
+<a name="l00420"></a>00420         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;cp {}conf/fuse_kafka.properties {}&quot;</span>.format(cwd, conf))
+<a name="l00421"></a>00421         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;sed -i &#39;s/127.0.0.1/{}/&#39; {}/fuse_kafka.properties&quot;</span>
+<a name="l00422"></a>00422                 .format(self.zookeeper.IP(), conf))
+<a name="l00423"></a>00423         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;ln -s {}/fuse_kafka {}/../fuse_kafka&quot;</span>
+<a name="l00424"></a>00424                 .format(cwd, conf))
+<a name="l00425"></a>00425         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;bash -c &quot;cd {}/..;{}src/fuse_kafka.py start&quot; &gt; {}&#39;</span>
+<a name="l00426"></a>00426                 .format(conf, cwd, self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;fuse_kafka&#39;</span>)))
+<a name="l00427"></a><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">00427</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>(self):
+<a name="l00428"></a>00428         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka consumer &quot;&quot;&quot;</span>
+<a name="l00429"></a>00429         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a>, (<span class="stringliteral">&quot;zkconnect={} ./build.py kafka_consumer_start &quot;</span>
+<a name="l00430"></a>00430                 + <span class="stringliteral">&quot;&gt; {} &amp;&quot;</span>).format(self.zookeeper.IP(), self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>)));
+<a name="l00431"></a><a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">00431</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">teardown</a>(self):
+<a name="l00432"></a>00432         <span class="stringliteral">&quot;&quot;&quot; stops fuse_kafka, zookeeper, kafka, cleans their working directory and </span>
+<a name="l00433"></a>00433 <span class="stringliteral">        stops the virtual topology &quot;&quot;&quot;</span>
+<a name="l00434"></a>00434         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;src/fuse_kafka.py stop&#39;</span>)
+<a name="l00435"></a>00435         <span class="keywordflow">for</span> host <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a>: self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(host, <span class="stringliteral">&#39;pkill -9 java&#39;</span>) 
+<a name="l00436"></a>00436         os.remove(self.<a class="code" href="classbuild_1_1TestMininet.html#af204dd0350ebd9e7852ab138ebfc4ff8">kafka_config</a>.name)
+<a name="l00437"></a>00437         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
+<a name="l00438"></a>00438         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>()
+<a name="l00439"></a>00439         self.net.stop()
+<a name="l00440"></a><a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">00440</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">setup</a>(self):
+<a name="l00441"></a>00441         <span class="stringliteral">&quot;&quot;&quot; starts the topology, downloads kafka, does a data directory</span>
+<a name="l00442"></a>00442 <span class="stringliteral">        cleanup in case of previous run &quot;&quot;&quot;</span>
+<a name="l00443"></a>00443         self.<a class="code" href="classbuild_1_1TestMininet.html#a0409fdeedd0876acc047a7df996676dc">launch</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-start.sh &#39;</span>
+<a name="l00444"></a>00444         self.<a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>()
+<a name="l00445"></a>00445         kafka_download()
+<a name="l00446"></a>00446         self.<a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>()
+<a name="l00447"></a>00447         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
+<a name="l00448"></a><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">00448</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>(self):
+<a name="l00449"></a>00449         <span class="stringliteral">&quot;&quot;&quot; starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer &quot;&quot;&quot;</span>
+<a name="l00450"></a>00450         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
+<a name="l00451"></a>00451         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
+<a name="l00452"></a>00452         self.<a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>()
+<a name="l00453"></a>00453         self.<a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>()
+<a name="l00454"></a><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">00454</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#abab12f1966a20b7aacd47dcad5b978b1">__init__</a>(self):
+<a name="l00455"></a>00455         <span class="stringliteral">&quot;&quot;&quot; runs the topology with a mininet shell &quot;&quot;&quot;</span>
+<a name="l00456"></a>00456         self.<a class="code" href="classbuild_1_1TestMininet.html#a9efe3ef9358f1f2c6078c415fe50b2df">setup</a>()
+<a name="l00457"></a>00457         self.<a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>()
+<a name="l00458"></a>00458         self.<a class="code" href="classbuild_1_1TestMininet.html#a7ae01ec8dc3e0a8d7768884a56dd2e96">shell</a>()
+<a name="l00459"></a>00459         self.<a class="code" href="classbuild_1_1TestMininet.html#ab81a1d9ca2fcdee77ebcbf243fea4eb5">teardown</a>()
+<a name="l00460"></a>00460 <span class="keyword">def </span>mininet():
+<a name="l00461"></a>00461     <a class="code" href="classbuild_1_1TestMininet.html">TestMininet</a>()
+<a name="l00462"></a>00462 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
+<a name="l00463"></a>00463     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> (sys.argv[1] != <span class="stringliteral">&quot;quickstart&quot;</span> <span class="keywordflow">and</span> sys.argv[1] != <span class="stringliteral">&quot;mininet&quot;</span>):
+<a name="l00464"></a>00464         main()
+<a name="l00465"></a>00465     <span class="keywordflow">else</span>:
+<a name="l00466"></a>00466         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
+<a name="l00467"></a>00467         <span class="keywordflow">else</span>: mininet()
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -555,7 +566,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 17 2014 06:18:36 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Dec 17 2014 07:39:04 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
