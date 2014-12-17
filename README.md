@@ -195,7 +195,7 @@ Installing from sources
     # building
     $ ./build.py 
     # testing
-    $ ./build.py dotest
+    $ ./build.py test
     # cleaning
     $ ./build.py clean
     # installing:
@@ -280,7 +280,7 @@ Unit testing
 
 To launch unit tests, issue a:
 
-    ./build.py dotest
+    ./build.py test
 
 To test against multiple python versions (provided tox is installed), issue a:
 

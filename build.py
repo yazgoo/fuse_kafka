@@ -219,12 +219,12 @@ def binary_exists(name):
     if len(res) == 0:
         return False
     return True
-def dotest():
+def test():
     """ Compile, Run unit tests generating reports in out directory """
     run('rm', '-rf', 'out')
     for d in ["c", "python"]: run('mkdir', '-p', 'out/' + d)
     compile_test()
-    test()
+    test_run()
 def build():
     """ Builds fuse_kafka binary """
     compile()
@@ -241,7 +241,7 @@ def c_test():
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("python-coverage", "html", "-d", "out/python")
-def test():
+def test_run():
     c_test()
     python_test()
 def compile():
@@ -346,6 +346,14 @@ def doc():
     """ generates the project documentation """
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
+def test_all():
+    clean()
+    build()
+    test()
+    # to test fuse_kafka against multiple python versions
+    run("tox")
+    # to test fuse_kafka in a more like integrated environment
+    os.system("sudo ./build.py mininet")
 class TestMininet(unittest.TestCase):
     """ Utility to create a virtual network to test fuse kafka resiliancy """
     def impersonate(self, inital_user = True):
@@ -490,10 +498,11 @@ class TestMininet(unittest.TestCase):
         actual = [event["@message"] for event in self.get_consumed_events(2)]
         self.assertEqual(sorted(expected), sorted(actual))
 if __name__ == "__main__":
-    if len(sys.argv) <= 1 or (sys.argv[1] != "quickstart" and sys.argv[1] != "mininet"):
+    if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
     else:
         if sys.argv[1] == "quickstart": quickstart()
+        if sys.argv[1] == "test_all": test_all()
         else:
             sys.argv.pop(0)
             unittest.main()
