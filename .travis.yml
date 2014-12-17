@@ -20,6 +20,7 @@ script:
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
 - sudo killall ovs-controller
+- sudo service openvswitch-switch start
 - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
 after_failure:
 - find
