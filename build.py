@@ -346,14 +346,6 @@ def doc():
     """ generates the project documentation """
     run('mkdir', '-p', 'doc')
     run("doxygen", "Doxyfile")
-def test_all():
-    clean()
-    build()
-    test()
-    # to test fuse_kafka against multiple python versions
-    run("tox")
-    # to test fuse_kafka in a more like integrated environment
-    os.system("sudo ./build.py mininet")
 class TestMininet(unittest.TestCase):
     """ Utility to create a virtual network to test fuse kafka resiliancy """
     def impersonate(self, inital_user = True):
@@ -502,7 +494,6 @@ if __name__ == "__main__":
         main()
     else:
         if sys.argv[1] == "quickstart": quickstart()
-        if sys.argv[1] == "test_all": test_all()
         else:
             sys.argv.pop(0)
             unittest.main()
