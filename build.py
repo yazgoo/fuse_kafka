@@ -394,6 +394,7 @@ class TestMininet(unittest.TestCase):
         import pwd
         command = "su {} -c '{}'".format(
                 pwd.getpwuid(os.stat(".").st_uid).pw_name, cmd)
+        print(command)
         return where.cmd(command)
     def data_directories_cleanup(self):
         """ cleanups generated directory """
@@ -402,7 +403,7 @@ class TestMininet(unittest.TestCase):
         """ starts zookeeper server """
         self.cmd(self.zookeeper, self.launch.format("zookeeper") 
             + kafka_config_directory
-            + 'zookeeper.properties > {} 2>&1 &'.format(self.log_path('zookeeper')))
+            + 'zookeeper.properties >> {} 2>&1 &'.format(self.log_path('zookeeper')))
     def kafka_start(self):
         """ starts kafka server and creates logging topic """
         import tempfile
@@ -421,7 +422,7 @@ class TestMininet(unittest.TestCase):
         self.cmd(self.kafka, self.stop.format("kafka"))
     def zookeeper_stop(self):
         """ stops zookeeper server """
-        self.cmd(self.zookeeper, self.stop.format("zookeeper"))
+        self.cmd(self.zookeeper, "pkill -9 -f zookeeper.properties")
     def fuse_kafka_start(self):
         """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
@@ -467,6 +468,10 @@ class TestMininet(unittest.TestCase):
         self.components_start()
         # wait for fuse-kafka to be ready
         time.sleep(2)
+    def check(self):
+        self.assertTrue(os.path.exists(self.fuse_kafka_path),
+                "you must build fuse kafka to run tests")
+        os.stat("/tmp/fuse-kafka-test")
     def get_consumed_events(self, expected_number):
         from mininet.util import pmonitor
         events = []
@@ -474,7 +479,7 @@ class TestMininet(unittest.TestCase):
         popens = {}
         popens[self.client] = self.consumer
         for host, line in pmonitor(popens):
-            print("line:" + line)
+            self.consumer.poll()
             events.append(log.load_fuse_kafka_event(line))
             if len(events) >= expected_number:
                 break
@@ -490,8 +495,7 @@ class TestMininet(unittest.TestCase):
         self.consumer_start()
     def test_basic(self):
         """ runs the topology with a mininet shell """
-        self.assertTrue(os.path.exists(self.fuse_kafka_path),
-                "you must build fuse kafka to run tests")
+        self.check()
         for message in ["hello", "world"]:
             self.write_to_log(message)
             events = self.get_consumed_events(1)
@@ -502,17 +506,17 @@ class TestMininet(unittest.TestCase):
         actual = [event["@message"] for event in self.get_consumed_events(2)]
         self.assertEqual(sorted(expected), sorted(actual))
     def test_shutting_down_kafka(self):
+        self.check()
         self.kafka_stop()
         self.write_to_log()
         self.kafka_start()
         self.get_consumed_events(1)
-#    def test_shutting_down_zookeeper(self):
-#        self.zookeeper_stop()
-#        time.sleep(1)
-#        self.zookeeper_start()
-#        self.write_to_log()
-#        time.sleep(100)
-#        self.get_consumed_events(1)
+    def test_shutting_down_zookeeper(self):
+        self.check()
+        self.write_to_log()
+        self.zookeeper_stop()
+        self.zookeeper_start()
+        self.get_consumed_events(1)
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
