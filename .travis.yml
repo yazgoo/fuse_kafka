@@ -9,6 +9,7 @@ before_install:
 # openvswitch
 - sudo service openvswitch-controller stop
 - sudo update-rc.d openvswitch-controller disable
+- sudo apt-get install linux-headers-generic
 - sudo dpkg-reconfigure openvswitch-datapath-dkms
 - sudo service openvswitch-switch restart
 # prerequisites for tox:
