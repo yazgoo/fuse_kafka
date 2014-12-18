@@ -389,6 +389,7 @@ class TestMininet(unittest.TestCase):
         self.zookeeper = self.net.get('h2')
         self.fuse_kafka = self.net.get('h3')
         self.client = self.net.get('h4')
+        self.switch = self.net.get('s1')
         self.java_clients = [self.client, self.kafka, self.zookeeper]
     def cmd(self, where, cmd):
         import pwd
@@ -513,10 +514,23 @@ class TestMininet(unittest.TestCase):
         self.get_consumed_events(1)
     def test_shutting_down_zookeeper(self):
         self.check()
-        self.write_to_log()
         self.zookeeper_stop()
+        self.write_to_log()
         self.zookeeper_start()
         self.get_consumed_events(1)
+    def test_bringing_down_kafka(self):
+        self.check()
+        self.kafka_stop()
+        self.write_to_log()
+        self.kafka_start()
+        self.get_consumed_events(1)
+    def test_stopping_switch(self):
+        self.check()
+        self.switch.stop()
+        print(repr(self.switch))
+        self.switch.start(self.net.controllers)
+        self.write_to_log()
+        #self.get_consumed_events(1)
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
