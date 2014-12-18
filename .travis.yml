@@ -6,10 +6,6 @@ before_install:
 - sudo apt-get install gdb
 - sudo apt-get install mininet/precise-backports
 - apt-cache search linux-headers
-# openvswitch for mininet
-- sudo killall ovs-controller
-- sudo ./openvswitch_setup.sh
-# - sudo service openvswitch-switch start
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
 - sudo apt-get update
