@@ -284,8 +284,10 @@ def clean():
     autoclean()
 def kafka_download():
     """ Downloads kafka binary distribution archive and uncompresses it """
-    run('wget', kafka_server + kafka_version + "/" + kafka_archive)
-    run('tar', 'xzf', kafka_archive)
+    if not os.path.exists(kafka_archive):
+        os.system('wget ' + kafka_server + kafka_version + "/" + kafka_archive)
+    if not os.path.exists(kafka_directory):
+        os.system('tar xzf ' + kafka_archive)
 def zookeeper_start():
     """ Does kafka_dowload() and starts zookeeper server """
     kafka_download()
@@ -358,7 +360,6 @@ class TestMininet(unittest.TestCase):
             stat = os.stat(".")
             uid = stat.st_uid
             gid = stat.st_gid
-        print('impersonating uid: {}, gid: {}'.format(uid, gid))
         os.setegid(gid)
         os.seteuid(uid)
     def start_network(self):
@@ -393,7 +394,6 @@ class TestMininet(unittest.TestCase):
         import pwd
         command = "su {} -c '{}'".format(
                 pwd.getpwuid(os.stat(".").st_uid).pw_name, cmd)
-        print(command)
         return where.cmd(command)
     def data_directories_cleanup(self):
         """ cleanups generated directory """
@@ -406,18 +406,26 @@ class TestMininet(unittest.TestCase):
     def kafka_start(self):
         """ starts kafka server and creates logging topic """
         import tempfile
-        self.kafka_config = tempfile.NamedTemporaryFile(delete=False)
-        self.kafka_config.write("zookeeper.connect={}\n".format(self.zookeeper.IP()))
-        self.kafka_config.write("broker.id=0\n")
-        self.kafka_config.write("host.name={}\n".format(self.kafka.IP()))
-        self.kafka_config.close()
+        if not hasattr(self, 'kafka_config'):
+            self.kafka_config = tempfile.NamedTemporaryFile(delete=False)
+            self.kafka_config.write("zookeeper.connect={}\n".format(self.zookeeper.IP()))
+            self.kafka_config.write("broker.id=0\n")
+            self.kafka_config.write("host.name={}\n".format(self.kafka.IP()))
+            self.kafka_config.close()
         self.cmd(self.kafka, self.launch.format("kafka")
                 + self.kafka_config.name + ' > {} 2>&1 &'.format(self.log_path('kafka')))
         self.cmd(self.kafka, create_topic_command(
             self.zookeeper.IP()) + " > {} 2>&1 ".format(self.log_path('create_topic')))
+    def kafka_stop(self):
+        """ stops kafka server """
+        self.cmd(self.kafka, self.stop.format("kafka"))
+    def zookeeper_stop(self):
+        """ stops zookeeper server """
+        self.cmd(self.zookeeper, self.stop.format("zookeeper"))
     def fuse_kafka_start(self):
         """ starts fuse_kafka """
         cwd = os.getcwd() + "/"
+        self.fuse_kafka_path = '{}/fuse_kafka'.format(cwd)
         conf = "/tmp/conf"
         self.cmd(self.fuse_kafka, "mkdir -p {}".format(conf))
         self.cmd(self.fuse_kafka, "cp {}conf/fuse_kafka.properties {}".format(cwd, conf))
@@ -434,15 +442,15 @@ class TestMininet(unittest.TestCase):
         command = os.getcwd() + "/" + kafka_bin_directory
         command += "kafka-console-consumer.sh --zookeeper "
         command += self.zookeeper.IP() + " --topic logs"
-        print(command)
         self.impersonate() # popen require setns()
         self.consumer = self.client.popen(command)
         self.impersonate(False)
     def tearDown(self):
         """ stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
         stops the virtual topology """
-        self.cmd(self.fuse_kafka, 'src/fuse_kafka.py stop')
         for host in self.java_clients: self.cmd(host, 'pkill -9 java') 
+        self.consumer.kill()
+        self.cmd(self.fuse_kafka, 'src/fuse_kafka.py stop')
         os.remove(self.kafka_config.name)
         self.data_directories_cleanup()
         self.impersonate()
@@ -451,6 +459,7 @@ class TestMininet(unittest.TestCase):
         """ starts the topology, downloads kafka, does a data directory
         cleanup in case of previous run """
         self.launch = kafka_bin_directory + '{}-server-start.sh '
+        self.stop = kafka_bin_directory + '{}-server-stop.sh '
         self.start_network()
         kafka_download()
         self.clients_initialize()
@@ -465,6 +474,7 @@ class TestMininet(unittest.TestCase):
         popens = {}
         popens[self.client] = self.consumer
         for host, line in pmonitor(popens):
+            print("line:" + line)
             events.append(log.load_fuse_kafka_event(line))
             if len(events) >= expected_number:
                 break
@@ -480,6 +490,8 @@ class TestMininet(unittest.TestCase):
         self.consumer_start()
     def test_basic(self):
         """ runs the topology with a mininet shell """
+        self.assertTrue(os.path.exists(self.fuse_kafka_path),
+                "you must build fuse kafka to run tests")
         for message in ["hello", "world"]:
             self.write_to_log(message)
             events = self.get_consumed_events(1)
@@ -489,6 +501,18 @@ class TestMininet(unittest.TestCase):
             self.write_to_log(message)
         actual = [event["@message"] for event in self.get_consumed_events(2)]
         self.assertEqual(sorted(expected), sorted(actual))
+    def test_shutting_down_kafka(self):
+        self.kafka_stop()
+        self.write_to_log()
+        self.kafka_start()
+        self.get_consumed_events(1)
+#    def test_shutting_down_zookeeper(self):
+#        self.zookeeper_stop()
+#        time.sleep(1)
+#        self.zookeeper_start()
+#        self.write_to_log()
+#        time.sleep(100)
+#        self.get_consumed_events(1)
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
