@@ -4,14 +4,6 @@ before_install:
 - sudo apt-get update -qq
 - ulimit -c unlimited -S
 - sudo apt-get install gdb
-- sudo apt-get install mininet/precise-backports
-- apt-cache search linux-headers
-# openvswitch
-- sudo service openvswitch-controller stop
-- sudo update-rc.d openvswitch-controller disable
-- sudo apt-get install linux-headers-generic
-- sudo dpkg-reconfigure openvswitch-datapath-dkms
-- sudo service openvswitch-switch restart
 # prerequisites for tox:
 - sudo add-apt-repository -y ppa:fkrull/deadsnakes
 - sudo apt-get update
@@ -26,7 +18,7 @@ script:
 - ./build.py
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
-- sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
+# - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
 after_failure:
 - find
 - cat /proc/sys/kernel/core_pattern
