@@ -21,6 +21,7 @@ script:
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
 - sudo service openvswitch-controller stop
+- service openvswitch-switch restart
 - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
 after_failure:
 - find
