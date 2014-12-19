@@ -373,7 +373,8 @@ class TestMininet(unittest.TestCase):
                 Topo.__init__(self, **params)
                 hosts = [ self.addHost('h%d' % i) for i in range(1, count + 1) ]
                 s1 = self.addSwitch('s1')
-                for h in hosts: self.addLink(h, s1)
+                for h in hosts:
+                    self.addLink(h, s1)
         self.net = Mininet(topo = SingleSwitchTopo(4), controller = OVSController)
         self.net.start()
         self.impersonate(False)
@@ -389,6 +390,7 @@ class TestMininet(unittest.TestCase):
         self.zookeeper = self.net.get('h2')
         self.fuse_kafka = self.net.get('h3')
         self.client = self.net.get('h4')
+        self.hosts = [self.kafka, self.zookeeper, self.fuse_kafka, self.client]
         self.switch = self.net.get('s1')
         self.java_clients = [self.client, self.kafka, self.zookeeper]
     def cmd(self, where, cmd):
@@ -524,13 +526,19 @@ class TestMininet(unittest.TestCase):
         self.write_to_log()
         self.kafka_start()
         self.get_consumed_events(1)
-    def test_stopping_switch(self):
+    def test_cutting_kafka(self):
         self.check()
-        self.switch.stop()
-        print(repr(self.switch))
-        self.switch.start(self.net.controllers)
         self.write_to_log()
-        #self.get_consumed_events(1)
+        self.net.configLinkStatus(self.kafka.name, self.switch.name, "down") 
+        self.assertRaises(ValueError, self.get_consumed_events, (1))
+        self.net.configLinkStatus(self.kafka.name, self.switch.name, "up") 
+        self.get_consumed_events(1)
+    def test_cutting_zookeeper(self):
+        self.check()
+        self.write_to_log()
+        self.net.configLinkStatus(self.zookeeper.name, self.switch.name, "down") 
+        # zookeeper being brought down should not influence an already launched producer
+        self.get_consumed_events(1)
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
