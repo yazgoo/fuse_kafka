@@ -137,6 +137,10 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>write_to_log</b></td><
 def&#160;</td><td class="memItemRight" valign="bottom"><b>test_shutting_down_kafka</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f6495aecfb8e64e9662786b1ac5055f"></a><!-- doxytag: member="build::TestMininet::test_shutting_down_zookeeper" ref="a0f6495aecfb8e64e9662786b1ac5055f" args="" -->
 def&#160;</td><td class="memItemRight" valign="bottom"><b>test_shutting_down_zookeeper</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4cf179e15a6dbb3793601d640e96073c"></a><!-- doxytag: member="build::TestMininet::test_bringing_down_kafka" ref="a4cf179e15a6dbb3793601d640e96073c" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>test_bringing_down_kafka</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b433e237ce21a3c5ca583a7a914b953"></a><!-- doxytag: member="build::TestMininet::test_stopping_switch" ref="a8b433e237ce21a3c5ca583a7a914b953" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>test_stopping_switch</b></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af25a115402073806776bb044166582c5"></a><!-- doxytag: member="build::TestMininet::net" ref="af25a115402073806776bb044166582c5" args="" -->
@@ -149,6 +153,8 @@ Data Fields</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>fuse_kafka</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4493ea1ec4b060509916390a2e3787b"></a><!-- doxytag: member="build::TestMininet::client" ref="ae4493ea1ec4b060509916390a2e3787b" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>client</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a836f993654af8eeffe238b33897be3f7"></a><!-- doxytag: member="build::TestMininet::switch" ref="a836f993654af8eeffe238b33897be3f7" args="" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>switch</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f2a95206e01e7d4c096df1366cabab9"></a><!-- doxytag: member="build::TestMininet::java_clients" ref="a3f2a95206e01e7d4c096df1366cabab9" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>java_clients</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af204dd0350ebd9e7852ab138ebfc4ff8"></a><!-- doxytag: member="build::TestMininet::kafka_config" ref="af204dd0350ebd9e7852ab138ebfc4ff8" args="" -->
@@ -200,7 +206,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00490">490</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00491">491</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -219,7 +225,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts fuse_kafka consumer </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00439">439</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00440">440</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -238,7 +244,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">cleanups generated directory </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00399">399</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00400">400</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -257,7 +263,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts fuse_kafka </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00426">426</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00427">427</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -305,7 +311,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts kafka server and creates logging topic </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00407">407</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00408">408</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -324,7 +330,7 @@ Data Fields</h2></td></tr>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">stops kafka server </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00420">420</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00421">421</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -344,7 +350,7 @@ Data Fields</h2></td></tr>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts the topology, downloads kafka, does a data directory
 cleanup in case of previous run </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00459">459</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00460">460</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -402,7 +408,7 @@ cleanup in case of previous run </pre></div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">stops fuse_kafka, zookeeper, kafka, cleans their working directory and 
 stops the virtual topology </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00449">449</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00450">450</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -421,7 +427,7 @@ stops the virtual topology </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">runs the topology with a mininet shell </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00496">496</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00497">497</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -440,7 +446,7 @@ stops the virtual topology </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">starts zookeeper server </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00402">402</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00403">403</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -459,7 +465,7 @@ stops the virtual topology </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">stops zookeeper server </pre></div> 
-<p>Definition at line <a class="el" href="build_8py_source.html#l00423">423</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
+<p>Definition at line <a class="el" href="build_8py_source.html#l00424">424</a> of file <a class="el" href="build_8py_source.html">build.py</a>.</p>
 
 </div>
 </div>
@@ -484,7 +490,7 @@ stops the virtual topology </pre></div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 18 2014 16:23:57 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 19 2014 07:10:38 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
