@@ -237,6 +237,7 @@ static char* test_utils()
     char* args[] = {"lol", "xd", "pdtr"};
     char* args2[] = {"xd", "--", "--lol"};
     char* container;
+    printf("command line is %s\n", get_command_line(1));
     mu_assert("cmdline for process #1 should contain init",
             strstr(get_command_line(1), "aW5pd") != NULL);
     mu_assert("found a process with UINT_MAX as pid!",
