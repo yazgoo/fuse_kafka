@@ -539,6 +539,21 @@ class TestMininet(unittest.TestCase):
         self.net.configLinkStatus(self.zookeeper.name, self.switch.name, "down") 
         # zookeeper being brought down should not influence an already launched producer
         self.get_consumed_events(1)
+    def test_cutting_kafka_periodically(self):
+        self.check()
+        ranges = {10: range(3), 1: range(4), 0: range(10)}
+        for sleep_time in ranges:
+            print("sleep time: " + str(sleep_time))
+            for i in ranges[sleep_time]:
+                print("loop # " + str(i))
+                self.net.configLinkStatus(self.kafka.name, self.switch.name, "down") 
+                time.sleep(sleep_time)
+                self.assertRaises(ValueError, self.get_consumed_events, (1))
+                self.net.configLinkStatus(self.kafka.name, self.switch.name, "up") 
+                if sleep_time > 1:
+                    time.sleep(7) # wait for kafka to be restarted
+                self.write_to_log()
+                self.get_consumed_events(1)
 if __name__ == "__main__":
     if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
         main()
