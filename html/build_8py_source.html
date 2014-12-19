@@ -622,14 +622,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00539"></a>00539         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
 <a name="l00540"></a>00540         <span class="comment"># zookeeper being brought down should not influence an already launched producer</span>
 <a name="l00541"></a>00541         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00542"></a>00542 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
-<a name="l00543"></a>00543     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> <span class="keywordflow">not</span> (sys.argv[1] <span class="keywordflow">in</span> [<span class="stringliteral">&quot;quickstart&quot;</span>, <span class="stringliteral">&quot;mininet&quot;</span>]):
-<a name="l00544"></a>00544         main()
-<a name="l00545"></a>00545     <span class="keywordflow">else</span>:
-<a name="l00546"></a>00546         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
-<a name="l00547"></a>00547         <span class="keywordflow">else</span>:
-<a name="l00548"></a>00548             sys.argv.pop(0)
-<a name="l00549"></a>00549             unittest.main()
+<a name="l00542"></a>00542     <span class="keyword">def </span>test_cutting_kafka_periodically(self):
+<a name="l00543"></a>00543         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
+<a name="l00544"></a>00544         ranges = {10: range(3), 1: range(4), 0: range(10)}
+<a name="l00545"></a>00545         <span class="keywordflow">for</span> sleep_time <span class="keywordflow">in</span> ranges:
+<a name="l00546"></a>00546             print(<span class="stringliteral">&quot;sleep time: &quot;</span> + str(sleep_time))
+<a name="l00547"></a>00547             <span class="keywordflow">for</span> i <span class="keywordflow">in</span> ranges[sleep_time]:
+<a name="l00548"></a>00548                 print(<span class="stringliteral">&quot;loop # &quot;</span> + str(i))
+<a name="l00549"></a>00549                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
+<a name="l00550"></a>00550                 time.sleep(sleep_time)
+<a name="l00551"></a>00551                 self.assertRaises(ValueError, self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>, (1))
+<a name="l00552"></a>00552                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;up&quot;</span>) 
+<a name="l00553"></a>00553                 <span class="keywordflow">if</span> sleep_time &gt; 1:
+<a name="l00554"></a>00554                     time.sleep(7) <span class="comment"># wait for kafka to be restarted</span>
+<a name="l00555"></a>00555                 self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
+<a name="l00556"></a>00556                 self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
+<a name="l00557"></a>00557 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
+<a name="l00558"></a>00558     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> <span class="keywordflow">not</span> (sys.argv[1] <span class="keywordflow">in</span> [<span class="stringliteral">&quot;quickstart&quot;</span>, <span class="stringliteral">&quot;mininet&quot;</span>]):
+<a name="l00559"></a>00559         main()
+<a name="l00560"></a>00560     <span class="keywordflow">else</span>:
+<a name="l00561"></a>00561         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
+<a name="l00562"></a>00562         <span class="keywordflow">else</span>:
+<a name="l00563"></a>00563             sys.argv.pop(0)
+<a name="l00564"></a>00564             unittest.main()
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -648,7 +663,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 19 2014 11:34:19 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 19 2014 14:52:29 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
