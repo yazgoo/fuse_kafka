@@ -20,3 +20,5 @@ fuse_kafka.test
 out/*
 a.out
 log-cleaner.log
+.tox
+fuse_kafka.tar.bz2
