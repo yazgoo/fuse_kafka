@@ -240,7 +240,7 @@ def c_test():
                 run("genhtml", "src/" + source + ".info", "-o", "./out/c")
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
-    run("find out")
+    run("find", "out")
     run("python-coverage", "html", "-d", "out/python")
 def test_run():
     c_test()
