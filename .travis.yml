@@ -20,7 +20,6 @@ script:
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
 # - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
-- bash -c "[ -z \"${SHIPPABLE}\" ] && echo nothing to do || sudo ./build.py mininet"
 after_failure:
 - find
 - cat /proc/sys/kernel/core_pattern
