@@ -35,7 +35,7 @@ after_success:
 - git checkout gh-pages
 - cd ..
 - sudo apt-get install doxygen
-- ./build.py doc
+- bash -c "[ -z \"${SHIPPABLE}\" ] && ./build.py doc || echo nothing to do"
 - cd doc
 - git add --all .
 - git commit -m "auto updating documentation"
