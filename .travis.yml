@@ -9,6 +9,7 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install python2.6 python2.7 python3.3 python3.4 python
 - sudo pip install tox
+- bash -c "[ -z \"${SHIPPABLE}\" ] && echo nothing to do || sudo apt-get install mininet"
 install:
 - sed -i 's/_mt/_st/' build.py
 - sudo apt-get install python-coverage libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
@@ -19,6 +20,7 @@ script:
 - ./build.py test
 - tox # to test fuse_kafka against multiple python versions
 # - sudo ./build.py mininet # to test fuse_kafka in a more like integrated environment
+- bash -c "[ -z \"${SHIPPABLE}\" ] && echo nothing to do || sudo ./build.py mininet"
 after_failure:
 - find
 - cat /proc/sys/kernel/core_pattern
