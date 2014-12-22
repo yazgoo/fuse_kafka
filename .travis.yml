@@ -38,7 +38,7 @@ after_success:
 - ./build.py doc
 - cd doc
 - git add --all .
-- git commit -m "auto updating documenation"
+- git commit -m "auto updating documentation"
 - git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages
 env:
   global:

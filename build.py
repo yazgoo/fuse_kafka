@@ -241,7 +241,10 @@ def c_test():
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("find", "out")
-    run("python-coverage", "html", "-d", "out/python")
+    try:
+        run("python-coverage", "html", "-d", "out/python")
+    except:
+        print("error while generating html coverage report")
 def test_run():
     c_test()
     python_test()
