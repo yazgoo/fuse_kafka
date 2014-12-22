@@ -238,8 +238,9 @@ static char* test_utils()
     char* args2[] = {"xd", "--", "--lol"};
     char* container;
     printf("command line is %s\n", get_command_line(1));
-    mu_assert("cmdline for process #1 should contain init",
-            strstr(get_command_line(1), "aW5pd") != NULL);
+    mu_assert("cmdline for process #1 should contain init or boot.sh",
+            strstr(get_command_line(1), "aW5pd") != NULL
+            || strstr(get_command_line(1), "Ym9vd") != NULL);
     mu_assert("found a process with UINT_MAX as pid!",
             !strcmp("", get_command_line(UINT_MAX)));
     mu_assert("getting limit failed", get_limit(2, args) == 2);

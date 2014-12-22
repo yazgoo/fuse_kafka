@@ -55,7 +55,6 @@ static char* get_command_line(int pid)
     {
         while((c = fgetc(f)) != EOF)
         {
-            printf("shippable debug: %c\n", c);
             if(c == 0) c = ' ';
             if(i >= (size - 1))
             {
