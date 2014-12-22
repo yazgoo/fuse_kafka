@@ -38,8 +38,8 @@ after_success:
 - bash -c "[ -z \"${SHIPPABLE}\" ] && ./build.py doc || echo nothing to do"
 - cd doc
 - git add --all .
-- git commit -m "auto updating documentation"
-- git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages
+- bash -c "[ -z \"${SHIPPABLE}\" ] && git commit -m 'auto updating documentation' || echo nothing to do"
+- bash -c "[ -z \"${SHIPPABLE}\" ] && git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages || echo nothing to do" 
 env:
   global:
     secure: LZlIH/SfgTMAQjUULjIk4j6pxhxVKPRvzRopdDeFnXrRozIeBdUUOePQEMoFYiiu/qAhoROEiO9SupvyX6YE2wGpEm/PIN30HmAXN1OxabpADPjyjbCHycaYb8ejl9xjoA3w68YbT7ezhV/ut1fvuihDZxotqUodXK7n1m7M+K4=
