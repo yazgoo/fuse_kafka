@@ -26,7 +26,7 @@ after_failure:
 - sudo cat /var/log/messages
 - gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" fuse_kafka.test core*
 after_success:
-- bash -c "[ -z \"${SHIPPABLE}\" ] && coveralls --exclude bin --exclude tests --gcov-options '\-lp'"
+- bash -c "[ -z \"${SHIPPABLE}\" ] && coveralls --exclude bin --exclude tests --gcov-options '\-lp' || echo nothing to do"
 - git config --global user.name "${GIT_NAME}"
 - git config --global user.email "${GIT_EMAIL}"
 - mkdir doc
