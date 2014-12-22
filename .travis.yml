@@ -9,7 +9,7 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install python2.6 python2.7 python3.3 python3.4 python
 - sudo pip install tox
-- bash -c "[ -z \"${SHIPPABLE}\" ] && echo nothing to do || sudo apt-get install mininet"
+- bash -c "[ -z \"${SHIPPABLE}\" ] && echo nothing to do || sudo apt-get install cgroup-bin mininet"
 install:
 - sed -i 's/_mt/_st/' build.py
 - sudo apt-get install python-coverage libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
