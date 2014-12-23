@@ -3,7 +3,7 @@ build_image:
     name: shippableimages/ubuntu1404_python
     privileged: true
 before_install:
-    - bash -c "[ -z \"${SHIPPABLE}\" ] && ( echo 'deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe' | sudo tee -a /etc/apt/sources.list )"
+    - bash -c "[ -z \"${SHIPPABLE}\" ] && ( echo 'deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe' | sudo tee -a /etc/apt/sources.list ) || echo"
     - sudo apt-get -y update -qq
     - ulimit -c unlimited -S
     - sudo apt-get -y install gdb
