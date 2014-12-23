@@ -1,6 +1,6 @@
 language: python
 build_image: shippableimages/ubuntu1404_python
-commit_container: fuse_kafka/latest
+commit_container: yazgoo/fuse_kafka
 before_install:
     - bash -c "[ -z \"${SHIPPABLE}\" ] && ( echo 'deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe' | sudo tee -a /etc/apt/sources.list ) || echo"
     - sudo apt-get -y update -qq
