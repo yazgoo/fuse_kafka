@@ -6,6 +6,8 @@
 [![Open Build Service](http://img.shields.io/badge/install-packages-yellow.svg?style=flat)](http://software.opensuse.org/download.html?project=home%3Ayazgoo&package=fuse_kafka)
 [![Benchmarks](http://img.shields.io/badge/benchmarks-bonnie++-949494.svg?style=flat)](http://htmlpreview.github.io/?https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/benchs/benchmarks.html#5)
 
+[![Docker](http://dockeri.co/image/yazgoo/fuse_kafka)](https://registry.hub.docker.com/u/yazgoo/fuse_kafka/)
+
 ![fuse kafka logo](https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/graphics/fuse_kafka_logo.png "Logo")
 
 Intercepts all writes to specified directories and send them 
