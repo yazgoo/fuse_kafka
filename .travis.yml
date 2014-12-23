@@ -22,7 +22,6 @@ script:
     - ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
-    - sudo ./build.py install
 after_failure:
     - find
     - cat /proc/sys/kernel/core_pattern
