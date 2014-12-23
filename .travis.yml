@@ -1,7 +1,7 @@
 language: python
 build_image: shippableimages/ubuntu1404_python
 before_install:
-- echo "deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe" | sudo tee -a /etc/apt/sources.list
+- bash -c "[ -z \"${SHIPPABLE}\" ] && ( echo 'deb http://fr.archive.ubuntu.com/ubuntu/ trusty universe' | sudo tee -a /etc/apt/sources.list ) || echo nothing to do"
 - sudo apt-get update -qq
 - ulimit -c unlimited -S
 - sudo apt-get install gdb
