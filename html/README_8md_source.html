@@ -359,34 +359,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00276"></a>00276 Logstash input plugin
 <a name="l00277"></a>00277 =====================
 <a name="l00278"></a>00278 
-<a name="l00279"></a>00279 A logstash input plugin to read from kafka is available in src/kafka.rb
+<a name="l00279"></a>00279 A logstash input plugin to read from kafka is available in src/logstash/inputs/kafka.rb
 <a name="l00280"></a>00280 
-<a name="l00281"></a>00281 Unit testing
-<a name="l00282"></a>00282 ============
+<a name="l00281"></a>00281 Provided you have kafka installed in . (which `./build.py kafka_start` should do),
+<a name="l00282"></a>00282 you can try it by downloading logastash and running:
 <a name="l00283"></a>00283 
-<a name="l00284"></a>00284 To launch unit tests, issue a:
+<a name="l00284"></a>00284     /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
 <a name="l00285"></a>00285 
-<a name="l00286"></a>00286     ./build.py test
-<a name="l00287"></a>00287 
-<a name="l00288"></a>00288 To test against multiple python versions (provided tox is installed), issue a:
-<a name="l00289"></a>00289 
-<a name="l00290"></a>00290     tox
-<a name="l00291"></a>00291 
-<a name="l00292"></a>00292 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
-<a name="l00293"></a>00293 
-<a name="l00294"></a>00294 Licensing
-<a name="l00295"></a>00295 =========
+<a name="l00286"></a>00286 Unit testing
+<a name="l00287"></a>00287 ============
+<a name="l00288"></a>00288 
+<a name="l00289"></a>00289 To launch unit tests, issue a:
+<a name="l00290"></a>00290 
+<a name="l00291"></a>00291     ./build.py test
+<a name="l00292"></a>00292 
+<a name="l00293"></a>00293 To test against multiple python versions (provided tox is installed), issue a:
+<a name="l00294"></a>00294 
+<a name="l00295"></a>00295     tox
 <a name="l00296"></a>00296 
-<a name="l00297"></a>00297 licensed under Apache v 2.0, see LICENSE file
+<a name="l00297"></a>00297 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 <a name="l00298"></a>00298 
-<a name="l00299"></a>00299 
-<a name="l00300"></a>00300 Code of conduct
-<a name="l00301"></a>00301 ===============
-<a name="l00302"></a>00302 
-<a name="l00303"></a>00303 Please note that this project is released with a Contributor Code of Conduct.
-<a name="l00304"></a>00304 By participating in this project you agree to abide by its terms.
-<a name="l00305"></a>00305 See CODE OF CONDUCT file.
-<a name="l00306"></a>00306 
+<a name="l00299"></a>00299 Licensing
+<a name="l00300"></a>00300 =========
+<a name="l00301"></a>00301 
+<a name="l00302"></a>00302 licensed under Apache v 2.0, see LICENSE file
+<a name="l00303"></a>00303 
+<a name="l00304"></a>00304 
+<a name="l00305"></a>00305 Code of conduct
+<a name="l00306"></a>00306 ===============
+<a name="l00307"></a>00307 
+<a name="l00308"></a>00308 Please note that this project is released with a Contributor Code of Conduct.
+<a name="l00309"></a>00309 By participating in this project you agree to abide by its terms.
+<a name="l00310"></a>00310 See CODE OF CONDUCT file.
+<a name="l00311"></a>00311 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -405,7 +410,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 13 2015 15:15:24 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 15 2015 10:44:04 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
