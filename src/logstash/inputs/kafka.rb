@@ -2,26 +2,33 @@ require "base64"
 require "logstash/inputs/base"
 require "logstash/namespace"
 require "json"
-java_import "kafka.consumer.ConsumerIterator"
-java_import "kafka.consumer.KafkaStream"
-java_import "kafka.consumer.ConsumerConfig"
-java_import "java.util.Properties"
-java_import "kafka.consumer.Consumer"
-java_import "java.util.HashMap"
 class LogStash::Inputs::Kafka < LogStash::Inputs::Base
     config_name "kafka"
     milestone 1
-    config :zkConnect, :validate => :string, :required => true
-    config :groupId, :validate => :string, :required => true
+    config :load, :validate => :array
+    config :zk_connect, :validate => :string, :required => true
+    config :group_id, :validate => :string, :required => true
     config :topic, :validate => :string, :required => true
     config :num_threads, :validate => :string, :required => true
+    def java_load
+        require "java"
+        r = /\${?([A-z]+)\}?/
+        @load.each { |f| Dir[f.gsub(r) { |x| ENV[x.scan(r)[0][0]] }].each { |f| require f } }
+        java_import "kafka.consumer.ConsumerIterator"
+        java_import "kafka.consumer.KafkaStream"
+        java_import "kafka.consumer.ConsumerConfig"
+        java_import "java.util.Properties"
+        java_import "kafka.consumer.Consumer"
+        java_import "java.util.HashMap"
+    end
     public
     def register
+        java_load
         begin
             @logger.info "registering kafka logger"
             properties = Properties.new
-            properties.put "zookeeper.connect", @zkConnect
-            properties.put "group.id", @groupId
+            properties.put "zookeeper.connect", @zk_connect
+            properties.put "group.id", @group_id
             consumer = Consumer.createJavaConsumerConnector(
                 ConsumerConfig.new properties)
             @logger.info "done creating consumer connector"

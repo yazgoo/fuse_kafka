@@ -276,7 +276,12 @@ The consumer log is available via (/tmp/kafka_consumer.log).
 Logstash input plugin
 =====================
 
-A logstash input plugin to read from kafka is available in src/kafka.rb
+A logstash input plugin to read from kafka is available in src/logstash/inputs/kafka.rb
+
+Provided you have kafka installed in . (which `./build.py kafka_start` should do),
+you can try it by downloading logastash and running:
+
+    /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
 
 Unit testing
 ============
