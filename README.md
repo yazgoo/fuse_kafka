@@ -296,6 +296,23 @@ To test against multiple python versions (provided tox is installed), issue a:
 
 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 
+
+Working with other logging systems
+==================================
+
+Basically, any process that has a file handle opened before fuse_kafka starts
+won't have it's writes captured.
+Such a process must open a new file handle after fuse_kafka startup,
+for example by restarting the process.
+
+For example, If you're using rsyslogd and it is writing to /var/log/syslog,
+after starting fuse_kafka on /var/log, you should issue a:
+
+    service rsyslogd restart
+
+After stopping fuse_kafka, you should also restart rsyslogd so 
+it re-acquires a file descriptor on the actual FS.
+
 Licensing
 =========
 
