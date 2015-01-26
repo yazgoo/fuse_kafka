@@ -1,4 +1,6 @@
 import unittest, subprocess
+import tempfile
+import shutil
 from fuse_kafka import *
 class Stub:
     def __init__(*args, **kwargs):
@@ -54,5 +56,15 @@ class TestFuseKafkaInit(unittest.TestCase):
         service.cleanup()
         service.restart()
         service.do("status")
+    def test_load_sleeping(self):
+        conf = Configuration()
+        dirpath = tempfile.mkdtemp()
+        sleep_file = dirpath + "/fuse_kafka_backup"
+        f = open(sleep_file, "w");
+        f.write("test")
+        f.close()
+        self.assertTrue(os.path.isfile(sleep_file))
+        conf.load(dirpath)
+        shutil.rmtree(dirpath)
 if __name__ == '__main__':
     unittest.main()

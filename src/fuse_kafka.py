@@ -116,10 +116,10 @@ class Configuration:
                         conf[key].append(parsed[parsed_key])
                 else:
                     conf[key].extend(parsed)
-    def is_sleeping(self):
+    def is_sleeping(self, var_run_path = "/var/run"):
         """ Returns True if fuse_kafka is in sleep mode """
-        return os.path.exists('/var/run/fuse_kafka_backup')
-    def load(self):
+        return os.path.exists(var_run_path + '/fuse_kafka_backup')
+    def load(self, var_run_path = "/var/run"):
         """ Loads configuration from configurations files """
         self.conf = {}
         for globbed in self.configurations:
@@ -127,8 +127,8 @@ class Configuration:
                 with open(config) as f:
                     for line in f.readlines():
                         self.parse_line(line, self.conf)
-        if self.is_sleeping():
-            self.conf['directories'] = exclude_directories(
+        if self.is_sleeping(var_run_path):
+            self.conf['directories'] = self.exclude_directories(
                self.conf['directories'], self.conf['sleep'])
         if 'sleep' in self.conf: del self.conf['sleep']
     def args(self):
