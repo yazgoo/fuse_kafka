@@ -19,6 +19,56 @@ kafka_directory = "kafka_" + scala_version + "-" + kafka_version
 kafka_archive = kafka_directory + ".tgz"
 kafka_bin_directory = kafka_directory + "/bin/"
 kafka_config_directory = kafka_directory + "/config/"
+class Benchmark:
+    def run_low_level(self):
+        return os.popen("bonnie++ -q -n 128 -d /tmp/fuse-kafka-test").read()
+    def run(self):
+        s = self.run_low_level().split(",")
+        create_subsections = ["create", "read", "delete"]
+        output_subsections = ["per char", "block", "rewrite"]
+        input_subsections = ["sequential per char",
+                "sequential block", "random seeks"]
+        res = {
+                "version": s[0],
+                "hostname": s[2],
+                "timestamp": int(s[4]),
+                "files": int(s[19]),
+                "sequential create": self.parse_action(
+                    s, 24, 0, create_subsections),
+                "random create": self.parse_action(s, 24, 6,
+                    create_subsections),
+                "sequential output": self.parse_action(s, 7, 0,
+                    output_subsections),
+                "input": self.parse_action(s, 7, 6,
+                    input_subsections),
+                }
+        return res
+    def int(self, i):
+        if i[0] == '+': return 0;
+        return float(i)
+    def p(self, s, _, d, subsections, i, n):
+        return {
+                "per second": self.int(s[_ + i + d]),
+                "cpu percent": self.int(s[_ + i + 1 + d]),
+                "latency": s[_ + n + d/2]
+                }
+    def parse_action(self, s, _, d, subsections):
+        return {
+                subsections[0]: self.p(s, _, d, subsections, 0, 18),
+                subsections[1]: self.p(s, _, d, subsections, 2, 19),
+                subsections[2]: self.p(s, _, d, subsections, 4, 20)
+                }
+class Benchmarks:
+    def generate(self):
+        import json
+        result = {}
+        result["with fuse kafka"] = Benchmark().run()
+        result["without fuse kafka"] = Benchmark().run()
+        f = open("benchs/results.js", "w")
+        f.write("function get_results() { \nreturn "\
+                + json.dumps(result, sort_keys=True,
+                    indent=4, separators=(',', ': ')) + "; \n}\n")
+        f.close()
 class FuseKafkaLog:
     """ Utility to read messages from kafka based on fuse kafka format """
     def __init__(self, zkconnect = "localhost"):
@@ -297,6 +347,8 @@ def zookeeper_start():
     kafka_download()
     run(kafka_bin_directory + 'zookeeper-server-start.sh',
             kafka_config_directory + 'zookeeper.properties')
+def bench():
+    Benchmarks().generate()
 def kafka_start():
     """ Does kafka_dowload() and starts kafka server """
     kafka_download()
