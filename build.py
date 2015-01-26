@@ -62,7 +62,9 @@ class Benchmarks:
     def generate(self):
         import json
         result = {}
+        os.system('./src/fuse_kafka.py start')
         result["with fuse kafka"] = Benchmark().run()
+        os.system('./src/fuse_kafka.py stop')
         result["without fuse kafka"] = Benchmark().run()
         f = open("benchs/results.js", "w")
         f.write("function get_results() { \nreturn "\
@@ -611,10 +613,11 @@ class TestMininet(unittest.TestCase):
                 self.write_to_log()
                 self.get_consumed_events(1)
 if __name__ == "__main__":
-    if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet"]):
+    if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet", "bench"]):
         main()
     else:
         if sys.argv[1] == "quickstart": quickstart()
+        elif sys.argv[1] == "bench": bench()
         else:
             sys.argv.pop(0)
             unittest.main()
