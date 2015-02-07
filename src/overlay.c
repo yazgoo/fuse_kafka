@@ -454,9 +454,16 @@ void kafka_destroy(void* untyped)
     rd_kafka_wait_destroyed(1000);
     free(k);
 }
+void setup_from_dynamic_configuration(int argc, char** argv, void* context)
+{
+    kafka_t* k = (kafka_t*) context;
+    parse_arguments(argc, argv, k->conf);
+    initialize_zookeeper(k->conf->zookeepers[0], k);
+}
 void* kafka_init(struct fuse_conn_info *conn)
 {
     config* conf = ((config*) fuse_get_context()->private_data);
+    dynamic_configuration_watch(&setup_from_dynamic_configuration);
     int directory_fd = conf->directory_fd;
     int time_queue_size;
     fchdir(directory_fd);
@@ -475,6 +482,7 @@ void* kafka_init(struct fuse_conn_info *conn)
         conf->quota_queue = time_queue_new(
                 time_queue_size, atoi(conf->quota[0]));
     }
+    dynamic_configuration_get()->context = (void*) k;
     return (void*) k;
 }
 

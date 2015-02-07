@@ -51,7 +51,7 @@ char errstr[512];
  **/
 int setup_kafka(kafka_t* k)
 {
-    char* brokers = "localhost:9092";
+    char* brokers = NULL;
     char* zookeepers = NULL;
     char* topic = "bloh";
     config* fk_conf = (config*) fuse_get_context()->private_data;
@@ -84,7 +84,7 @@ int setup_kafka(kafka_t* k)
         initialize_zookeeper(zookeepers, k);
         return 0;
     }
-    else
+    else if(brokers != NULL)
     {
         if (rd_kafka_brokers_add(k->rk, brokers) == 0) {
             fprintf(stderr, "%% No valid brokers specified\n");
@@ -96,6 +96,7 @@ int setup_kafka(kafka_t* k)
             printf("topic %s creation failed\n", topic);
         return k->rkt == NULL;
     }
+    return 0;
 }
 /**
  * @brief send a string to kafka

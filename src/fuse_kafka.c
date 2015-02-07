@@ -26,6 +26,7 @@
 #include <grp.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include "dynamic_configuration.c"
 /** @brief declare a configuration item, which is a list of string an
  * and a number of those */
 #define CONFIG_ITEM(name) char** name; size_t name ## _n;

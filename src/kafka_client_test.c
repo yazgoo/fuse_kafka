@@ -1,5 +1,6 @@
 /** @file */ 
 #include <limits.h>
+#define FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH "/tmp/fuse_kafka.args"
 static struct fuse_context* test_fuse_get_context()
 {
     static struct fuse_context ctx = { 0 };
@@ -98,6 +99,10 @@ struct String_vector {
 };
 #define ZOK 1
 #define ZOO_CHILD_EVENT 4
+#define ZOO_LOG_LEVEL_ERROR 1
+void zoo_set_debug_level(int level)
+{
+}
 typedef void (*watcher_fn)(zhandle_t *zh, int type, 
         int state, const char *path,void *watcherCtx);
 zhandle_t *zookeeper_init(const char *host, watcher_fn fn,

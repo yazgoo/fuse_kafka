@@ -295,6 +295,32 @@ static char* test_trace()
     trace("blah");
     return 0;
 }
+void touch(char* path)
+{
+    FILE* f = fopen(path, "w");
+    fwrite(" ", 1, 1, f);
+    fclose(f);
+}
+static char* test_dynamic_configuration()
+{
+    char* line;
+    char** argv;
+    int argc;
+    char* conf_path = "/tmp/fuse_kafka_test_dynamic_configuration";
+    touch(conf_path);
+    dynamic_configuration_get()->path = conf_path;
+    mu_assert("parse_line_from_file should return 1",
+            parse_line_from_file(NULL, NULL, NULL) == 1);
+    mu_assert("parse_args_from_file should return 1",
+            parse_args_from_file(NULL, &argc, &argv, &line) == 1);
+    dynamic_configuration_free();
+    dynamic_configuration_load();
+    mu_assert("dynamic_configuration_changed should return 0",
+            dynamic_configuration_changed() == 0);
+    touch(conf_path);
+    unlink(conf_path);
+    return 0;
+}
 static char* all_tests()
 {
     mu_run_test(test_kafka_write);
@@ -306,6 +332,7 @@ static char* all_tests()
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
     mu_run_test(test_trace);
+    mu_run_test(test_dynamic_configuration);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

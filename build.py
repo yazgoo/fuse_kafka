@@ -613,10 +613,13 @@ class TestMininet(unittest.TestCase):
                 self.write_to_log()
                 self.get_consumed_events(1)
 if __name__ == "__main__":
-    if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet", "bench"]):
+    if len(sys.argv) <= 1 or not (sys.argv[1] in ["quickstart", "mininet", "bench", "multiple"]):
         main()
     else:
-        if sys.argv[1] == "quickstart": quickstart()
+        if sys.argv[1] == "multiple":
+            for arg in sys.argv[2:]:
+                locals()[arg]()
+        elif sys.argv[1] == "quickstart": quickstart()
         elif sys.argv[1] == "bench": bench()
         else:
             sys.argv.pop(0)

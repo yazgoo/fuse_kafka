@@ -85,7 +85,6 @@ static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
             }
         }
         deallocate_String_vector(&brokerlist);
-        printf("Found brokers %s\n", brokers);
     }
 }
 static void watcher(zhandle_t *zh, int type,
@@ -115,6 +114,7 @@ static void watcher(zhandle_t *zh, int type,
 }
 static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
 {
+    zoo_set_debug_level(ZOO_LOG_LEVEL_ERROR);
     ((kafka_t*) param)->no_brokers = 1;
     zhandle_t *zh;
     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);

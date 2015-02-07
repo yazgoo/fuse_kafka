@@ -175,6 +175,11 @@ class FuseKafkaService:
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
+    def reload(self):
+        """ Reloads the dynamic part of the configuration """
+        self.configuration = Configuration()
+        with open("/var/run/fuse_kafka.args", "w") as f:
+            f.write(str(self.configuration))
     def restart(self):
         """ Stops and starts fuse_kafka processes """
         self.stop()
