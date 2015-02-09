@@ -313,6 +313,15 @@ after starting fuse_kafka on /var/log, you should issue a:
 After stopping fuse_kafka, you should also restart rsyslogd so 
 it re-acquires a file descriptor on the actual FS.
 
+Benchmarks
+==========
+
+Provided you have bonnie++ installed, you can run benchmarks with
+
+    ./build.py bench
+
+This will generate `bench/results.js`, which you can see via `benchs/benchmarks.html`
+
 Dynamic configuration
 =====================
 
