@@ -19,6 +19,7 @@ typedef struct _kafka_t
     config* conf;
     /* were brokers given added to kafka (in zk mode): */
     char no_brokers;
+    zhandle_t* zhandle;
 } kafka_t;
 #include "zookeeper.c"
 /**
@@ -51,7 +52,7 @@ char errstr[512];
  **/
 int setup_kafka(kafka_t* k)
 {
-    char* brokers = "localhost:9092";
+    char* brokers = NULL;
     char* zookeepers = NULL;
     char* topic = "bloh";
     config* fk_conf = (config*) fuse_get_context()->private_data;
@@ -81,10 +82,10 @@ int setup_kafka(kafka_t* k)
     rd_kafka_set_log_level(k->rk, 7);
     if (zookeepers != NULL)
     {
-        initialize_zookeeper(zookeepers, k);
+        k->zhandle = initialize_zookeeper(zookeepers, k);
         return 0;
     }
-    else
+    else if(brokers != NULL)
     {
         if (rd_kafka_brokers_add(k->rk, brokers) == 0) {
             fprintf(stderr, "%% No valid brokers specified\n");
@@ -96,6 +97,7 @@ int setup_kafka(kafka_t* k)
             printf("topic %s creation failed\n", topic);
         return k->rkt == NULL;
     }
+    return 0;
 }
 /**
  * @brief send a string to kafka

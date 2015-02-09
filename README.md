@@ -313,6 +313,38 @@ after starting fuse_kafka on /var/log, you should issue a:
 After stopping fuse_kafka, you should also restart rsyslogd so 
 it re-acquires a file descriptor on the actual FS.
 
+Benchmarks
+==========
+
+Provided you have bonnie++ installed, you can run benchmarks with
+
+    ./build.py bench
+
+This will generate `bench/results.js`, which you can see via `benchs/benchmarks.html`
+
+Dynamic configuration
+=====================
+
+You might want to have fuse_kafka start ahead of most processes.
+But when it starts, you might not have all its configuration available yet.
+Or you might want to add brokers or use new zookeepers.
+
+Dynamic configuration allows to modify the configuration on the fly.
+You won't be able to add watched directory on the fly, but you will be able to:
+
+* point to new zookeepers/brokers
+* update tags, fields
+
+Just update your configuration, then, issue a:
+
+    sevice fuse_kafka reload
+
+Or, if you using the developer version:
+
+    ./src/fuse_kafka.py reload
+
+To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.
+
 Licensing
 =========
 

@@ -60,8 +60,8 @@ body {
     margin: 2px;
 }
 </style>
-<script src="Chart.js">
-</script>
+<script src="results.js"></script>
+<script src="Chart.js"></script>
 </head><body><div id="charts">
     <div class="chart box">
         <div id="caption"><a class="caption_square" style="background-color:rgba(220,220,220, 0.5);border-color:rgb(220,220,220);">fuseless</a><a class="caption_square" style="background-color:rgba(151,187,205, 0.5);border-color:rgb(151,187,205);">fuse overlay</a><a class="caption_square" style="background-color:rgba(200,187,205, 0.5);border-color:rgb(200,187,205);">fuse_kafka</a></div>
@@ -117,58 +117,72 @@ function draw_chart(di) {
     overhead = "There's an overhead queuing data to kafka producer. If you need to write quicker to the log dir, you can use the ignore pattern."
     fuse_overhead = "fuse_kafka does nothing. fuse generates overhead because there's a lot of syscall involved. logging directories should not do that mutch seeking/reading."
     good_enough = "these numbers are good enough for a logging FS"
+    d = get_results()
+    console.log(d["without fuse kafka"]["sequential output"]["per char"]["per second"]);
+    console.log(d["with fuse kafka"]["sequential output"]["per char"]["per second"]);
+    console.log(d["without fuse kafka"]["sequential output"]["rewrite"]["per second"]);
+    console.log(d["with fuse kafka"]["sequential output"]["rewrite"]["per second"]);
     out = [
         ["Sequential output (K/s)",
         ["Per char"],
-        [[1022], [69]],
+        [[d["without fuse kafka"]["sequential output"]["per char"]["per second"]],
+        [d["with fuse kafka"]["sequential output"]["per char"]["per second"]]],
         dnames, "The file is written using the putc() stdio macro. The loop that does the writing should be small enough to fit into any reasonable I-cache.",
         overhead
             ],
         ["Sequential output (K/s)",
         ["Per block"],
-        [[99103], [89558]],
+        [[d["without fuse kafka"]["sequential output"]["block"]["per second"]],
+        [d["with fuse kafka"]["sequential output"]["block"]["per second"]]],
         dnames, "The file is created using write(2)",
         overhead
             ],
         ["Sequential output (K/s)",
         ["Rewrite"],
-        [[93291], [46321]],
+        [[d["without fuse kafka"]["sequential output"]["rewrite"]["per second"]],
+        [d["with fuse kafka"]["sequential output"]["rewrite"]["per second"]]],
         dnames, "Each BUFSIZ of the file is read with read(2), dirtied, and rewritten with write(2), requiring an lseek(2). No space allocation done, I/O is well-localized =&gt;  should test effectiveness of the FS cache and speed of data transfer.",
         fuse_overhead
             ],
         ["Sequential input per char (K/s)",
         ["Per char"],
-        [[4846], [4559]],
+        [[d["without fuse kafka"]["input"]["sequential per char"]["per second"]],
+        [d["with fuse kafka"]["input"]["sequential per char"]["per second"]]],
         dnames, "The file is read using the getc() stdio macro. Once again, the inner loop is small. This should exercise only stdio and sequential input.",
         fuse_overhead
             ],
         ["Sequential input per block (K/s)",
         ["default"],
-        [[6344066], [4559]],
+        [[d["without fuse kafka"]["input"]["sequential block"]["per second"]],
+        [d["with fuse kafka"]["input"]["sequential block"]["per second"]]],
         dnames, "The file is read using read(2). This should be a very pure test of sequential input performance.",
         "maybe a filecache overhead: tryied <a href='http://thread.gmane.org/gmane.comp.file-systems.fuse.devel/7389/focus=7391'>Direct IO</a>; Maybe it's due to <a href='http://article.gmane.org/gmane.comp.file-systems.fuse.devel/5431/match=sequential+read'>this</a>. See <a href='http://search.gmane.org/?query=sequential+read&author=&group=gmane.comp.file-systems.fuse.devel&sort=relevance&DEFAULTOP=and&%3E=Next&TOPDOC=10&xP=Zsequenti%09Zread&xFILTERS=Gcomp.file-systems.fuse.devel---A'>this</a>: there is room for improvement via better configuration"
             ],
         ["Sequential create per second",
         [""],
-        [[84142],[18483]],
+        [[d["without fuse kafka"]["sequential create"]["create"]["per second"]],
+        [d["with fuse kafka"]["sequential create"]["create"]["per second"]]],
         dnames, "Create the files in numeric order, then stat()ing them in readdir() order (the order they are stored in the directory - very likely same order as created)",
         good_enough
             ],
         ["Sequential delete per second",
         [""],
-        [[7748],[7906]],
+        [[d["without fuse kafka"]["sequential create"]["delete"]["per second"]],
+        [d["with fuse kafka"]["sequential create"]["delete"]["per second"]]],
         dnames, "delete the file in the same order as sequential create",
         good_enough
             ],
         ["Random create per second",
         [""],
-        [[93009],[19973]],
+        [[d["without fuse kafka"]["random create"]["create"]["per second"]],
+        [d["with fuse kafka"]["random create"]["create"]["per second"]]],
         dnames, "create file in random order",
         good_enough
             ],
         ["Random delete per second",
         [""],
-        [[7929],[9035]],
+        [[d["without fuse kafka"]["random create"]["delete"]["per second"]],
+        [d["with fuse kafka"]["random create"]["delete"]["per second"]]],
         dnames, "delete file in random order",
         good_enough
             ]
