@@ -449,16 +449,19 @@ void kafka_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
     if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
+    if(k->zhandle != NULL) zookeeper_close(k->zhandle);
     rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
     free(k);
+    dynamic_configuration_watch_stop();
 }
 void setup_from_dynamic_configuration(int argc, char** argv, void* context)
 {
     kafka_t* k = (kafka_t*) context;
     parse_arguments(argc, argv, k->conf);
-    initialize_zookeeper(k->conf->zookeepers[0], k);
+    if(k->zhandle != NULL) zookeeper_close(k->zhandle);
+    k->zhandle = initialize_zookeeper(k->conf->zookeepers[0], k);
 }
 void* kafka_init(struct fuse_conn_info *conn)
 {

@@ -334,6 +334,8 @@ Or, if you using the developer version:
 
     ./src/fuse_kafka.py reload
 
+To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.
+
 Licensing
 =========
 

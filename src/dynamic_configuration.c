@@ -13,6 +13,7 @@ typedef struct
     int loaded;
     void* context;
     char* path;
+    pthread_t thread;
 } dynamic_configuration;
 /**
  * @return current dynamic configuration
@@ -141,8 +142,12 @@ void* dynamic_configuration_watch_routine(void(*f)(int argc, char** argv, void* 
  */
 void dynamic_configuration_watch(void(*f)(int argc, char** argv, void* context))
 {
-    pthread_t thread;
-    pthread_create(&thread, NULL, 
+    pthread_create(&(dynamic_configuration_get()->thread), NULL, 
             (void * (*)(void *))
             dynamic_configuration_watch_routine, (void*) f);
+}
+void dynamic_configuration_watch_stop()
+{
+    pthread_cancel(dynamic_configuration_get()->thread);
+    pthread_join(dynamic_configuration_get()->thread, NULL);
 }

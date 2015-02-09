@@ -181,8 +181,10 @@ static int kafka_write(const char *path, const char *buf,
 #include "overlay.c"
 void add_fields_and_tags(config* conf)
 {
+    if(conf->fields_s != NULL) free(conf->fields_s);
     conf->fields_s = array_to_container_string(
             conf->fields, conf->fields_n, '{', '}', ':', ',');
+    if(conf->tags_s != NULL) free(conf->tags_s);
     conf->tags_s = array_to_container_string(
             conf->tags, conf->tags_n, '[', ']', ',', ',');
 }

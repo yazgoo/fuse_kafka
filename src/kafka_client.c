@@ -19,6 +19,7 @@ typedef struct _kafka_t
     config* conf;
     /* were brokers given added to kafka (in zk mode): */
     char no_brokers;
+    zhandle_t* zhandle;
 } kafka_t;
 #include "zookeeper.c"
 /**
@@ -81,7 +82,7 @@ int setup_kafka(kafka_t* k)
     rd_kafka_set_log_level(k->rk, 7);
     if (zookeepers != NULL)
     {
-        initialize_zookeeper(zookeepers, k);
+        k->zhandle = initialize_zookeeper(zookeepers, k);
         return 0;
     }
     else if(brokers != NULL)
