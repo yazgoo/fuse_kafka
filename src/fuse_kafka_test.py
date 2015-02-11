@@ -56,6 +56,7 @@ class TestFuseKafkaInit(unittest.TestCase):
         service.cleanup()
         service.restart()
         service.do("status")
+        service.do("reload")
     def test_load_sleeping(self):
         conf = Configuration()
         dirpath = tempfile.mkdtemp()
@@ -66,5 +67,10 @@ class TestFuseKafkaInit(unittest.TestCase):
         self.assertTrue(os.path.isfile(sleep_file))
         conf.load(dirpath)
         shutil.rmtree(dirpath)
+    def test_unique_dierctories(self):
+        conf = Configuration()
+        self.assertEqual(['a'], conf.unique_directories(['a', 'a']))
+        self.assertEqual([], conf.unique_directories([]))
+        self.assertEqual(['a', 'b'], conf.unique_directories(['a', 'b']))
 if __name__ == '__main__':
     unittest.main()

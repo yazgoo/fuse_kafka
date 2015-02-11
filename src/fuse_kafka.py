@@ -119,6 +119,17 @@ class Configuration:
     def is_sleeping(self, var_run_path = "/var/run"):
         """ Returns True if fuse_kafka is in sleep mode """
         return os.path.exists(var_run_path + '/fuse_kafka_backup')
+    def unique_directories(self, conf_directories):
+        """ return a list with duplicates removed 
+        (in absolute path) from conf_directories """
+        directories = []
+        abstract_directories = []
+        for directory in conf_directories:
+            abstract_directory = os.path.abspath(directory)
+            if not os.path.abspath(directory) in abstract_directories:
+                directories.append(directory)
+                abstract_directories.append(abstract_directory)
+        return directories
     def load(self, var_run_path = "/var/run"):
         """ Loads configuration from configurations files """
         self.conf = {}
@@ -130,6 +141,7 @@ class Configuration:
         if self.is_sleeping(var_run_path):
             self.conf['directories'] = self.exclude_directories(
                self.conf['directories'], self.conf['sleep'])
+        self.conf['directories'] = self.unique_directories(self.conf['directories'])
         if 'sleep' in self.conf: del self.conf['sleep']
     def args(self):
         """ Returns the fuse_kafka binary arguments based on the
