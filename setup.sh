@@ -38,7 +38,9 @@ install_yum() {
             $remotely cp  home:$who.repo /etc/yum.repos.d/
             shift
         done
-        $remotely yum $yum_options install -y fuse_kafka
+        $remotely yum $yum_options install -y fuse_kafka \
+            fuse_kafka-debuginfo jansson-debuginfo \
+            librdkafka-debuginfo zookeeper-debuginfo
     else
         $remotely tar xjf $tar_path
         $remotely yum install -y fuse_kafka/*.rpm
