@@ -159,6 +159,7 @@ class FuseKafkaService:
     def __init__(self):
         self.prefix = ["fuse_kafka", "_", "-oallow_other",
                 "-ononempty", "-omodules=subdir,subdir=.", "-f", "--"]
+        self.proc_mount_path = "/proc/mounts"
         if "FUSE_KAFKA_PREFIX" in os.environ:
             self.prefix = os.environ["FUSE_KAFKA_PREFIX"].split() + self.prefix
     def do(self, action):
@@ -170,6 +171,9 @@ class FuseKafkaService:
         getattr(self, action)()
     def start(self):
         """ Starts fuse_kafka processes """
+        if self.get_status() == 0:
+            print("fuse_kafka is already running")
+            return
         env = os.environ.copy()
         env["PATH"] = ".:" + env["PATH"]
         env["LD_LIBRARY_PATH"] = ":/usr/lib"
@@ -188,10 +192,13 @@ class FuseKafkaService:
         if self.get_status() != 0:
             print("fuse_kafka stoped")
     def reload(self):
-        """ Reloads the dynamic part of the configuration """
-        self.configuration = Configuration()
-        with open("/var/run/fuse_kafka.args", "w") as f:
-            f.write(str(self.configuration))
+        """ if fuse_kafka is running, reloads the dynamic part of 
+        the configuration. If it is not running, starts it """
+        if self.get_status() == 3: self.start()
+        else:
+            self.configuration = Configuration()
+            with open("/var/run/fuse_kafka.args", "w") as f:
+                f.write(str(self.configuration))
     def restart(self):
         """ Stops and starts fuse_kafka processes """
         self.stop()
@@ -200,7 +207,7 @@ class FuseKafkaService:
     def get_status(self):
         """ Displays the status of fuse_kafka processes """
         status = 3
-        with open("/proc/mounts") as f:
+        with open(self.proc_mount_path) as f:
             for line in f.readlines():
                 if line.startswith("fuse_kafka"):
                     print("listening on " + line.split()[1])

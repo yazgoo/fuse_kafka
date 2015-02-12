@@ -46,6 +46,20 @@ class TestFuseKafkaInit(unittest.TestCase):
                 '512', '--topic', 'logs', '--zookeepers', '127.0.0.1:2181']
         self.assertEqual(args.sort(), configuration.args().sort())
         str(configuration)
+    def with_temporary_file(self, name, content, do, additional):
+        dirpath = tempfile.mkdtemp()
+        sleep_file = dirpath + "/" + name
+        f = open(sleep_file, "w");
+        f.write(content)
+        f.close()
+        self.assertTrue(os.path.isfile(sleep_file))
+        do(sleep_file, dirpath, additional)
+        shutil.rmtree(dirpath)
+    def start_stop_reload_service(self, service, proc_mount_path):
+        service.proc_mount_path = proc_mount_path
+        service.start()
+        service.stop()
+        service.reload()
     def test_fuse_kafka_service(self):
         os.environ['FUSE_KAFKA_PREFIX'] = '/'
         service = FuseKafkaService()
@@ -57,16 +71,14 @@ class TestFuseKafkaInit(unittest.TestCase):
         service.restart()
         service.do("status")
         service.do("reload")
+        self.with_temporary_file("mount", "fuse_kafka none",
+                lambda path, dirpath, service:
+                self.start_stop_reload_service(service, path),
+                service)
     def test_load_sleeping(self):
         conf = Configuration()
-        dirpath = tempfile.mkdtemp()
-        sleep_file = dirpath + "/fuse_kafka_backup"
-        f = open(sleep_file, "w");
-        f.write("test")
-        f.close()
-        self.assertTrue(os.path.isfile(sleep_file))
-        conf.load(dirpath)
-        shutil.rmtree(dirpath)
+        self.with_temporary_file("fuse_kafka_backup", "test",
+                lambda sleep_file, dirpath, conf: conf.load(dirpath), conf)
     def test_unique_dierctories(self):
         conf = Configuration()
         self.assertEqual(['a'], conf.unique_directories(['a', 'a']))
