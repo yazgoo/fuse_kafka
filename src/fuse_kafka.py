@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# chkconfig: 2345 11 88
 ### BEGIN INIT INFO
 # Provides: fuse_kafka
 # Required-Start:
