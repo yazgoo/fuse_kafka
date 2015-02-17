@@ -4,7 +4,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <pthread.h>
+#ifndef FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH
 #define FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH "/var/run/fuse_kafka.args"
+#endif
 typedef struct
 {
     int argc;
