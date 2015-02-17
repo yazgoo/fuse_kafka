@@ -320,7 +320,7 @@ static char* test_dynamic_configuration()
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
             dynamic_configuration_changed() == 0);
-    touch(conf_path);
+    //touch(conf_path);
     unlink(conf_path);
     dynamic_configuration_watch_stop();
     return 0;

@@ -180,6 +180,7 @@ class FuseKafkaService:
         env["LD_LIBRARY_PATH"] = ":/usr/lib"
         self.configuration = Configuration()
         directories = copy.deepcopy(self.configuration.conf['directories'])
+        subprocess.call(["/sbin/modprobe", "fuse"])
         for directory in directories:
             print("starting fuse_kafka on " + directory)
             if not os.path.exists(directory):
