@@ -213,6 +213,7 @@ static char* test_setup_kafka()
 static char* test_parse_arguments()
 {
     config conf;
+    memset(&conf, 0, sizeof(config));
     char* argv[] = {"--topic", "logs", "--fields", "datacenter", "eu-west-1a", 
         "--directories", "/usr/local/tomcat1/logs", "--brokers", "server:9092",
         "--tags", "gen", "--persist", "no", "--excluded_files", "blah",

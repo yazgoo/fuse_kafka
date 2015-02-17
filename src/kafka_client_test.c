@@ -1,6 +1,5 @@
 /** @file */ 
 #include <limits.h>
-#define FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH "/tmp/fuse_kafka.args"
 static struct fuse_context* test_fuse_get_context()
 {
     static struct fuse_context ctx = { 0 };
@@ -112,6 +111,10 @@ zhandle_t *zookeeper_init(const char *host, watcher_fn fn,
     zhandle_t* zh = (zhandle_t*) malloc(sizeof(zhandle_t));
     fn(zh, ZOO_CHILD_EVENT, 0, "/brokers/ids", context);
     return zh;
+}
+int zookeeper_close(zhandle_t *zh)
+{
+    return 0;
 }
 int zoo_get_children(zhandle_t *zh, const char *path, int watch,
                             struct String_vector *strings)
