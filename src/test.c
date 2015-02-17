@@ -299,7 +299,7 @@ static char* test_trace()
 void touch(char* path)
 {
     FILE* f = fopen(path, "w");
-    fwrite(" ", 1, 1, f);
+    fwrite("blah", 1, 1, f);
     fclose(f);
 }
 static char* test_dynamic_configuration()
@@ -308,6 +308,8 @@ static char* test_dynamic_configuration()
     char** argv;
     int argc;
     char* conf_path = "/tmp/fuse_kafka_test_dynamic_configuration";
+    mu_assert("loading dynamic configuration should fail",
+            dynamic_configuration_load() == 1);
     touch(conf_path);
     dynamic_configuration_get()->path = conf_path;
     mu_assert("parse_line_from_file should return 1",
@@ -320,6 +322,7 @@ static char* test_dynamic_configuration()
             dynamic_configuration_changed() == 0);
     touch(conf_path);
     unlink(conf_path);
+    dynamic_configuration_watch_stop();
     return 0;
 }
 static char* all_tests()

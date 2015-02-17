@@ -297,6 +297,14 @@ To test against multiple python versions (provided tox is installed), issue a:
 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 
 
+C Unit testing
+==============
+
+To run c unit tests, do a:
+
+    $ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test && ./build.py c_test
+
+
 Working with other logging systems
 ==================================
 
