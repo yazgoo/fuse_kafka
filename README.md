@@ -1,3 +1,4 @@
+[![Build Status](https://codeship.com/projects/66521/status?branch=master)](https://codeship.com/projects/66521)]
 [![Build Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://travis-ci.org/yazgoo/fuse_kafka)
 [![Build Status](https://api.shippable.com/projects/549439afd46935d5fbc0a9cf/badge?branchName=master)](https://app.shippable.com/projects/549439afd46935d5fbc0a9cf/builds/latest)
 [![Coverage Status](https://img.shields.io/coveralls/yazgoo/fuse_kafka.svg)](https://coveralls.io/r/yazgoo/fuse_kafka?branch=master)
