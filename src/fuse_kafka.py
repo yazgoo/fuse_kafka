@@ -87,6 +87,9 @@ class Configuration:
         """
         return [path for path in paths if not self.includes_subdir(prefixes,
             os.path.realpath(path))]
+    def exclude_from_conf(self, paths):
+        self.conf['directories'] = self.exclude_directories(
+                self.conf['directories'], paths)
     def __init__(self, configurations = CONFIGURATIONS_PATHS):
         self.configurations = configurations
         self.sleeping = False
@@ -140,8 +143,7 @@ class Configuration:
                     for line in f.readlines():
                         self.parse_line(line, self.conf)
         if self.is_sleeping(var_run_path):
-            self.conf['directories'] = self.exclude_directories(
-               self.conf['directories'], self.conf['sleep'])
+            self.exclude_from_conf(self.conf['sleep'])
         self.conf['directories'] = self.unique_directories(self.conf['directories'])
         if 'sleep' in self.conf: del self.conf['sleep']
     def args(self):
@@ -171,14 +173,17 @@ class FuseKafkaService:
         """
         getattr(self, action)()
     def start(self):
-        """ Starts fuse_kafka processes """
         if self.get_status() == 0:
             print("fuse_kafka is already running")
             return
+        self.start_excluding_directories([])
+    def start_excluding_directories(self, excluded):
+        """ Starts fuse_kafka processes """
         env = os.environ.copy()
         env["PATH"] = ".:" + env["PATH"]
         env["LD_LIBRARY_PATH"] = ":/usr/lib"
         self.configuration = Configuration()
+        self.configuration.exclude_from_conf(excluded)
         directories = copy.deepcopy(self.configuration.conf['directories'])
         subprocess.call(["/sbin/modprobe", "fuse"])
         for directory in directories:
@@ -201,19 +206,25 @@ class FuseKafkaService:
             self.configuration = Configuration()
             with open("/var/run/fuse_kafka.args", "w") as f:
                 f.write(str(self.configuration))
+            self.start_excluding_directories(self.list_watched_directories())
     def restart(self):
         """ Stops and starts fuse_kafka processes """
         self.stop()
         while self.get_status() == 0: time.sleep(0.1)
         self.start()
-    def get_status(self):
-        """ Displays the status of fuse_kafka processes """
-        status = 3
+    def list_watched_directories(self):
+        result = []
         with open(self.proc_mount_path) as f:
             for line in f.readlines():
                 if line.startswith("fuse_kafka"):
-                    print("listening on " + line.split()[1])
-                    status = 0
+                    result.append(line.split()[1])
+        return result
+    def get_status(self):
+        """ Displays the status of fuse_kafka processes """
+        status = 3
+        for directory in self.list_watched_directories():
+            print("listening on " + directory)
+            status = 0
         return status
     def status(self):
         status = self.get_status()
