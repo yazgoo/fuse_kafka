@@ -43,6 +43,7 @@ fi
 %defattr(-,root,root)
 /usr/bin/fuse_kafka
 /etc/init.d/fuse_kafka
+/etc/init.d/fuse_kafka_umounter
 /etc/fuse_kafka.conf
 
 %changelog

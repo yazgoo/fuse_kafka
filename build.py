@@ -332,7 +332,8 @@ def install():
     [run('mkdir', '-p', d) for d in
             [conf_directory, init_directory, install_directory]]
     run('cp', binary_name, install_directory)
-    run('cp', 'src/fuse_kafka.py', init_directory + "fuse_kafka")
+    [run('cp', 'src/' + init_name + '.py', init_directory + init_name)
+            for init_name in ["fuse_kafka", "fuse_kafka_umounter"]]
     run('cp', 'conf/fuse_kafka.properties',
             conf_directory + "fuse_kafka.conf")
 def clean():
