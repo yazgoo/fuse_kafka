@@ -198,18 +198,18 @@ class FuseKafkaService:
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
-    def reload(self):
+    def reload(self, var_run_path = "/var/run"):
         """ if fuse_kafka is running, reloads the dynamic part of 
         the configuration. If it is not running, starts it """
         if self.get_status() == 3: self.start()
         else:
             self.configuration = Configuration()
-            with open("/var/run/fuse_kafka.args", "w") as f:
+            with open(var_run_path + "/fuse_kafka.args", "w") as f:
                 f.write(str(self.configuration))
             watched_directories = self.list_watched_directories()
             self.start_excluding_directories(watched_directories)
             for to_stop_watching in [a for a in watched_directories 
-                    if a not in self.configuration.conf['dir']]:
+                    if a not in self.configuration.conf['directories']]:
                 self.stop_watching_directory(to_stop_watching)
     def stop_watching_directory(self, to_stop_watching):
         """ Stops fuse_kafka process for a specific directory """

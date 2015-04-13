@@ -2,6 +2,7 @@ import unittest, subprocess
 import tempfile
 import shutil
 from fuse_kafka import *
+from fuse_kafka_umounter import *
 class Stub:
     def __init__(*args, **kwargs):
         print(args, kwargs)
@@ -21,6 +22,9 @@ def nothing_stub(what):
     print(what)
 def return_stub(*args):
     return return_value
+class FakeService(Service):
+    def run(self):
+        print("start")
 class TestFuseKafkaInit(unittest.TestCase):
     def setUp(self):
         subprocess.Popen = PopenStub
@@ -59,7 +63,7 @@ class TestFuseKafkaInit(unittest.TestCase):
         service.proc_mount_path = proc_mount_path
         service.start()
         service.stop()
-        service.reload()
+        service.reload("/tmp")
     def test_fuse_kafka_service(self):
         os.environ['FUSE_KAFKA_PREFIX'] = '/'
         service = FuseKafkaService()
@@ -84,5 +88,22 @@ class TestFuseKafkaInit(unittest.TestCase):
         self.assertEqual(['a'], conf.unique_directories(['a', 'a']))
         self.assertEqual([], conf.unique_directories([]))
         self.assertEqual(['a', 'b'], conf.unique_directories(['a', 'b']))
+    def test_pid(self):
+        pid = Pid("blah")
+        self.assertFalse(pid.is_running())
+        pid.setup(42)
+        self.assertTrue(pid.is_running())
+        self.assertEqual(42, pid.get())
+        pid.teardown(None, None)
+        self.assertFalse(pid.is_running())
+        self.assertEqual(None, pid.get())
+    def test_service(self):
+        service = FakeService()
+        service.start()
+        self.assertEqual(0, service.status())
+        service.stop()
+        service.do("stop")
+    def test_fuse_kafka_umounter(self):
+        FuseKafkaUmounter(False).start()
 if __name__ == '__main__':
     unittest.main()
