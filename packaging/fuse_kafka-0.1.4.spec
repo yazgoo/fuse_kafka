@@ -47,6 +47,9 @@ fi
 /etc/fuse_kafka.conf
 
 %changelog
+* Mon Apr 13 2015 yazgoo <yazgoo@nospam.org> 0.1.3
+- adding fuse_kafka_umounter
+ORG-LIST-END-MARKER
 * Thu Sep 11 2014 yazgoo <yazgoo@nospam.org> 0.1.3
 - Initial version of the package
 ORG-LIST-END-MARKER

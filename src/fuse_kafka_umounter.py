@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# chkconfig: 2345 11 89
+#!/usr/bin/env python
+# chkconfig: 2345 12 87
 ### BEGIN INIT INFO
 # Provides: fuse_kafka_umounter
 # Required-Start:
@@ -12,9 +12,14 @@
 """ @package fuse_kafka_umounter
 Startup script for fuse_kafka_umounter.
 """
-import subprocess, os, time, sys, atexit, signal
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from fuse_kafka import Mountpoints
+import subprocess, os, time, sys, atexit, signal, imp
+directory = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(directory)
+fuse_kafka = None
+try:
+    import fuse_kafka
+except ImportError:
+    fuse_kafka = imp.load_source("fuse_kafka", directory + "/fuse_kafka")
 class Pid:
     """ Manages a pid file """
     def __init__(self, name):
@@ -67,6 +72,10 @@ class Service:
         pid = self.pid.get()
         if pid != None:
             subprocess.call(['kill', str(pid)])
+    def restart(self):
+        """ restarts the service  """
+        self.stop()
+        self.start()
     def status(self):
         """ Returns the process status, and prints a status message """
         pid = self.pid.get()
@@ -88,7 +97,7 @@ class FuseKafkaUmounter(Service):
         Service.__init__(self)
     def run(self):
         while self.forever:
-            Mountpoints().umount_non_accessible()
+            fuse_kafka.Mountpoints().umount_non_accessible()
             time.sleep(60)
 if __name__ == "__main__":
     FuseKafkaUmounter().do(sys.argv[1])
