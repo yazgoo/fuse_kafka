@@ -1,4 +1,3 @@
-[![Build Status](https://codeship.com/projects/66521/status?branch=master)](https://codeship.com/projects/66521)]
 [![Build Status](https://travis-ci.org/yazgoo/fuse_kafka.svg?branch=master)](https://travis-ci.org/yazgoo/fuse_kafka)
 [![Build Status](https://api.shippable.com/projects/549439afd46935d5fbc0a9cf/badge?branchName=master)](https://app.shippable.com/projects/549439afd46935d5fbc0a9cf/builds/latest)
 [![Coverage Status](https://img.shields.io/coveralls/yazgoo/fuse_kafka.svg)](https://coveralls.io/r/yazgoo/fuse_kafka?branch=master)
@@ -222,15 +221,15 @@ Anti hanging
 Fuse-kafka must never make your filesystem accesses hang.
 Although this should be considered as a major bug, this might happen
 since the soft is still young.
-You can install a script call in your crontab so that any FS hanging
+You can run a daemon so that any FS hanging
 is umounted (the check will occur every minute).
 To do so on an installed instance:
 
-    # service fuse_kafka cleanup
+    # service fuse_kafka_umounter start
 
 To do so on a source based instance:
 
-    $ ./src/fuse_kafka.py cleanup
+    $ ./src/fuse_kafka.py start
 
 
 setup.sh options
