@@ -54,11 +54,11 @@ int setup_kafka(kafka_t* k)
 {
     char* brokers = NULL;
     char* zookeepers = NULL;
-    char* topic = "bloh";
+    char* topic = "logs";
     config* fk_conf = (config*) fuse_get_context()->private_data;
     if(fk_conf->zookeepers_n > 0) zookeepers = fk_conf->zookeepers[0];
     if(fk_conf->brokers_n > 0) brokers = fk_conf->brokers[0];
-    topic = fk_conf->topic[0];
+    if(fk_conf->topic_n > 0) topic = fk_conf->topic[0];
     rd_kafka_topic_conf_t *topic_conf;
     rd_kafka_conf_t *conf;
     conf = rd_kafka_conf_new();

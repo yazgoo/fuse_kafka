@@ -450,7 +450,7 @@ void kafka_destroy(void* untyped)
     kafka_t* k = (kafka_t*) untyped;
     if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
     if(k->zhandle != NULL) zookeeper_close(k->zhandle);
-    rd_kafka_topic_destroy(k->rkt);
+    if(k->rkt != NULL) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
     free(k);
