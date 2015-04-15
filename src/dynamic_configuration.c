@@ -145,7 +145,6 @@ int dynamic_configuration_load()
     if(parse_args_from_file(dynamic_configuration_get_path(),
                 &argc, &argv, &line) == 0)
     {
-        printf("UGUU %d %s %s\n", argc, argv[0], dynamic_configuration_get_path());
         if(conf->loaded) dynamic_configuration_free();
         conf->argc = argc;
         conf->line = line;
