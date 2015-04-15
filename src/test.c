@@ -299,6 +299,7 @@ static char* test_trace()
 void touch(char* path)
 {
     FILE* f = fopen(path, "w");
+    flock(fileno(f), LOCK_EX);
     fwrite("blah", 1, 1, f);
     fclose(f);
 }
@@ -319,7 +320,7 @@ static char* test_dynamic_configuration()
     dynamic_configuration_free();
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
-            dynamic_configuration_changed() == 0);
+            dynamic_configuration_changed() == 1);
     //touch(conf_path);
     unlink(conf_path);
     dynamic_configuration_watch_stop();

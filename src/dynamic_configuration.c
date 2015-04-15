@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/timeb.h>
 #include <unistd.h>
 #include <pthread.h>
 #ifdef TEST
@@ -101,17 +102,26 @@ unsigned long long millisecond(struct stat* info)
 {
     return info->st_mtime * 1000 + info->st_mtim.tv_nsec / 1000000;
 }
+unsigned long long millisecond_clock()
+{
+    struct timeb t;
+    ftime(&t);
+    return t.time * 1000 + t.millitm;
+}
 /**
  * @return 1 if the configuration file has changed since last check, 0 otherwise
  */
 int dynamic_configuration_changed()
 {
     static long long last_change = 0;
+    long long new_change;
     struct stat stats;
+    if(last_change == 0) last_change = millisecond_clock();
     if(stat(dynamic_configuration_get_path(), &stats) != 0)
         return 0;
-    if(millisecond(&stats) <= last_change) return 0;
-    last_change = millisecond(&stats);
+    new_change = millisecond(&stats);
+    if(new_change <= last_change) return 0;
+    last_change = new_change;
     return 1;
 }
 /**

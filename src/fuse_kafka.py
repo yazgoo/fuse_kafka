@@ -12,7 +12,7 @@
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing
+import sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing, fcntl
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
