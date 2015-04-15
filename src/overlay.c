@@ -459,9 +459,15 @@ void kafka_destroy(void* untyped)
 void setup_from_dynamic_configuration(int argc, char** argv, void* context)
 {
     kafka_t* k = (kafka_t*) context;
+    memset(k->conf, 0, sizeof(config));
     parse_arguments(argc, argv, k->conf);
-    if(k->zhandle != NULL) zookeeper_close(k->zhandle);
-    k->zhandle = initialize_zookeeper(k->conf->zookeepers[0], k);
+    if(k->zhandle != NULL)
+    {
+        zookeeper_close(k->zhandle);
+        k->zhandle = NULL;
+    }
+    if(k->conf->zookeepers_n > 0)
+        k->zhandle = initialize_zookeeper(k->conf->zookeepers[0], k);
 }
 void* kafka_init(struct fuse_conn_info *conn)
 {

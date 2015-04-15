@@ -200,6 +200,9 @@ int parse_arguments(int argc, char** argv, config* conf)
     char* name;
     for(i = 0; i < argc; i++)
     {
+#ifdef NO_SLEEP_TEST
+        printf("`%s` ", argv[i]);
+#endif
         if(strlen(argv[i]) > 2 && argv[i][0] == '-' && argv[i][1] == '-')
         {
             name = argv[i] + 2;
@@ -225,6 +228,9 @@ int parse_arguments(int argc, char** argv, config* conf)
             (*current_size)++;
         }
     }
+#ifdef NO_SLEEP_TEST
+        printf("\n");
+#endif
     add_fields_and_tags(conf);
     return 1;
 }

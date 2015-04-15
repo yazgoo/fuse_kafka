@@ -205,6 +205,7 @@ class FuseKafkaService:
         else:
             self.configuration = Configuration()
             with open(var_run_path + "/fuse_kafka.args", "w") as f:
+                fcntl.fcntl(f, fcntl.LOCK_EX)
                 f.write(str(self.configuration))
             watched_directories = self.list_watched_directories()
             self.start_excluding_directories(watched_directories)
