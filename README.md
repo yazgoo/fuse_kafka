@@ -218,6 +218,14 @@ perform analyses while running (like memcheck):
     FUSE_KAFKA_PREFIX="valgrind --leak-check=yes" ./src/fuse_kafka.py start
 
 
+Debugging with gdb
+==================
+
+You can also debug using FUSE\_KAFKA\_PREFIX, here is how to do so:
+
+    $ echo -e "set follow-fork-mode child\nrun\nwhere" > /tmp/gdb_opts
+    $ FUSE_KAFKA_PREFIX="gdb -x /tmp/gdb_opts --args" ./src/fuse_kafka.py start
+
 Anti hanging
 ============
 
