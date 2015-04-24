@@ -11,6 +11,7 @@ sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
+libs_of = {"overlay": ["zookeeper_mt", "rdkafka", "fuse"]}
 flags = ['-D_FILE_OFFSET_BITS=64']
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
 kafka_server = "http://mir2.ovh.net/ftp.apache.org/dist/kafka/"
@@ -305,7 +306,7 @@ def compile():
     """ Compiles *.c files in source directory """
     for library_source in libraries_sources:
         run('gcc', '-g', '-c', '-fpic', "./src/" + library_source +'.c', flags)
-        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags)
+        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(libs_of[library_source]))
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():

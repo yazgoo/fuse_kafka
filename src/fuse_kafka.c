@@ -120,9 +120,16 @@ int fuse_kafka_main(int argc, char *argv[])
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
                 void* handle = dlopen("overlay.so", RTLD_LAZY);
-                typedef int (*input_setup_t)(int argc, char** argv, void* conf);
-                input_setup_t f = dlsym(handle, "input_setup");
-                return f(limit, argv, &conf);
+                if(handle == NULL)
+                {
+                    printf("%s\n", dlerror());
+                    return 1;
+                }
+                else
+                {
+                    input_setup_t f = dlsym(handle, "input_setup");
+                    return f(limit, argv, &conf);
+                }
             }
         }
     }
