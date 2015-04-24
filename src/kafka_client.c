@@ -8,19 +8,7 @@
 #else
 #include "kafka_client_test.c"
 #endif // TEST
-/**
- * @brief a wrapping structure for kafka client and fuse_kafka
- * configuration
- **/
-typedef struct _kafka_t
-{
-    rd_kafka_t* rk;
-    rd_kafka_topic_t* rkt;
-    config* conf;
-    /* were brokers given added to kafka (in zk mode): */
-    char no_brokers;
-    zhandle_t* zhandle;
-} kafka_t;
+#include "output.h"
 #include "zookeeper.c"
 /**
  * @brief a librdkafka callback called when a message is delivered

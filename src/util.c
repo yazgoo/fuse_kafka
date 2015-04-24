@@ -1,6 +1,8 @@
 /** @file 
  * @brief utility functions
  **/ 
+#ifndef UTIL_C
+#define UTIL_C
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
@@ -125,3 +127,4 @@ char* array_to_container_string(char** array, size_t n, char open_char,
     action \
     setegid(__gid); \
     seteuid(__uid);
+#endif

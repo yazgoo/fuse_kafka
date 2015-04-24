@@ -3,15 +3,11 @@
  * finite number of keys. It allows to check if, for a given key, a
  * limit per unit of time is reached or not.
  **/
+#ifndef TIME_QUEUE_C
+#define TIME_QUEUE_C
 #include <stdlib.h>
 #include <stdio.h>
-typedef struct
-{
-    unsigned long* values;
-    unsigned long* hashes;
-    unsigned int size, i, quota;
-}
-time_queue;
+#include "time_queue.h"
 /** @brief Internal: generates a djb2 hash 
  *
  * @param str the string to hash
@@ -169,3 +165,4 @@ int main(int argc, char** argv)
     time_queue_delete(queue);
 }
 */
+#endif
