@@ -1,7 +1,40 @@
 /** @file */ 
+#define FUSE_USE_VERSION 26
+#include <fuse.h>
 #ifdef HAVE_SETXATTR
 #include <sys/xattr.h>
 #endif
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string.h>
+#include <dirent.h>
+#include "util.c"
+#include "output.c"
+/**
+ * @brief write the data to kafka and to the overlaid fs if it should
+ * be done
+ * @param path file path to save to kafka
+ * @param buf write buffer
+ * @param size size of the buffer to write
+ * @param fi file information @see fuse
+ * @return @see pwrite
+ */
+static int kafka_write(const char *path, const char *buf,
+        size_t size, off_t offset, struct fuse_file_info *fi)
+{
+    int res;
+    if(should_write_to_kafka(path, size))
+            actual_kafka_write(path, buf, size, offset);
+    DO_AS_CALLER(
+            res = pwrite(fi->fh, buf, size, offset);
+    )
+    if (res == -1)
+        res = -errno;
+
+    return res;
+}
 static int kafka_getattr(const char *path, struct stat *stbuf)
 {
     int res;
@@ -447,53 +480,11 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
 */
 void kafka_destroy(void* untyped)
 {
-    kafka_t* k = (kafka_t*) untyped;
-    if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
-    if(k->zhandle != NULL) zookeeper_close(k->zhandle);
-    if(k->rkt != NULL) rd_kafka_topic_destroy(k->rkt);
-    server_list_free(&(k->broker_list));
-    rd_kafka_destroy(k->rk);
-    rd_kafka_wait_destroyed(1000);
-    free(k);
-    dynamic_configuration_watch_stop();
-}
-void setup_from_dynamic_configuration(int argc, char** argv, void* context)
-{
-    kafka_t* k = (kafka_t*) context;
-    memset(k->conf, 0, sizeof(config));
-    parse_arguments(argc, argv, k->conf);
-    if(k->zhandle != NULL)
-    {
-        zookeeper_close(k->zhandle);
-        k->zhandle = NULL;
-    }
-    if(k->conf->zookeepers_n > 0)
-        k->zhandle = initialize_zookeeper(k->conf->zookeepers[0], k);
+    output_destroy(untyped);
 }
 void* kafka_init(struct fuse_conn_info *conn)
 {
-    config* conf = ((config*) fuse_get_context()->private_data);
-    dynamic_configuration_watch(&setup_from_dynamic_configuration);
-    int directory_fd = conf->directory_fd;
-    int time_queue_size;
-    fchdir(directory_fd);
-    close(directory_fd);
-    kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
-    memset(k, 0, sizeof(kafka_t));
-    if(setup_kafka((kafka_t*) k))
-    {
-        printf("kafka_init: setup_kafka failed\n");
-        return NULL;
-    }
-    k->conf = conf;
-    if(conf->quota_n > 0)
-    {
-        time_queue_size = conf->quota_n > 1 ? atoi(conf->quota[1]):20;
-        conf->quota_queue = time_queue_new(
-                time_queue_size, atoi(conf->quota[0]));
-    }
-    dynamic_configuration_get()->context = (void*) k;
-    return (void*) k;
+    return output_init((config*) fuse_get_context()->private_data);
 }
 
 
@@ -536,3 +527,8 @@ static struct fuse_operations kafka_oper = {
     .lock       = kafka_lock,
     /*.flock      = kafka_flock,*/
 };
+
+int input_setup(int argc, char** argv, void* conf)
+{
+    return fuse_main(argc, argv, &kafka_oper, conf);
+}

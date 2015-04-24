@@ -1,6 +1,8 @@
 /** @file 
  * @brief utility functions
  **/ 
+#ifndef UTIL_C
+#define UTIL_C
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
@@ -150,3 +152,4 @@ void* frealloc(void* ptr, size_t size)
     action \
     setegid(__gid); \
     seteuid(__uid);
+#endif

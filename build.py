@@ -6,6 +6,7 @@ try:
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
+libraries_sources = ['overlay']
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
@@ -304,6 +305,9 @@ def test_run():
     python_test()
 def compile():
     """ Compiles *.c files in source directory """
+    for library_source in libraries_sources:
+        run('gcc', '-g', '-c', '-fpic', "./src/" + library_source +'.c', flags)
+        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags)
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
