@@ -1,6 +1,4 @@
-#include "util.c"
-#include "context.c"
-#include "output.c"
+#include <input_plugin.h>
 #include <stdio.h>
 int input_setup(int argc, char** argv, void* conf)
 {

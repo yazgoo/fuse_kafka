@@ -1,3 +1,4 @@
+#ifndef _FUSE_H_
 struct fuse_context {
 	int uid;
 	int gid;
@@ -9,4 +10,4 @@ struct fuse_context* fuse_get_context()
 {
     return &context;
 }
-
+#endif

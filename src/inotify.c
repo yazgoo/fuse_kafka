@@ -1,6 +1,4 @@
-#include "util.c"
-#include "context.c"
-#include "output.c"
+#include <input_plugin.h>
 #include <sys/inotify.h>
 #include <glib.h>
 #include <stdio.h>
