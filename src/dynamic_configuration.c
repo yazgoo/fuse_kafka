@@ -5,6 +5,7 @@
 #include <sys/timeb.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/file.h>
 #ifdef TEST
 #define FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH "/tmp/fuse_kafka.args"
 #else

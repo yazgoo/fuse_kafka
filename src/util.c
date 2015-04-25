@@ -7,6 +7,7 @@
 #include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <stdlib.h>
+#include <string.h>
 int strcmp(const char* s1, const char* s2)
 {
     while(*s1 && (*s1==*s2))
@@ -117,6 +118,15 @@ char* array_to_container_string(char** array, size_t n, char open_char,
         }
     sprintf(str + k, "%c", close_char);
     return str;
+}
+char* concat(char* a, char* b)
+{
+    char* result = (char*) malloc(strlen(a) + strlen(b) + 2);
+    char* middle = result + strlen(a);
+    strcpy(result, a);
+    middle[0] = '/';
+    strcpy(++middle, b);
+    return result;
 }
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \
