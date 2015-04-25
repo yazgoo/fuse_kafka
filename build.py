@@ -310,7 +310,7 @@ def to_includes(what):
 def compile():
     """ Compiles *.c files in source directory """
     for library_source in libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', to_includes(includes_of[library_source]), "./src/" + library_source +'.c', flags)
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(includes_of[library_source]), "./src/" + library_source +'.c', flags)
         run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(libs_of[library_source]))
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)

@@ -9,8 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "util.c"
-#include "output.c"
+#include <input_plugin.h>
 /**
  * @brief write the data to kafka and to the overlaid fs if it should
  * be done

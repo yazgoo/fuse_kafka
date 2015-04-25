@@ -120,9 +120,13 @@ int fuse_kafka_main(int argc, char *argv[])
 #endif
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
-                char* input = "overlay.so";
+                char* input = "overlay";
                 if(conf.input_n > 0) input = conf.input[0];
-                void* handle = dlopen(input, RTLD_LAZY);
+                char*  lib = malloc(strlen(input) + 4);
+                strcpy(lib, input);
+                strcpy(lib + strlen(input), ".so");
+                void* handle = dlopen(lib, RTLD_LAZY);
+                free(lib);
                 if(handle == NULL)
                 {
                     printf("%s\n", dlerror());
