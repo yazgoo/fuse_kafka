@@ -8,7 +8,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <string.h>
 #include <dirent.h>
 #include "util.c"
 #include "output.c"

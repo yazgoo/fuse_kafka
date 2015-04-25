@@ -6,15 +6,17 @@ try:
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
-libraries_sources = ['overlay']
+libraries_sources = ['overlay', 'inotify', 'stdin']
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-flags = ["-D_FILE_OFFSET_BITS=64"]
+default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
+libs_of = {"overlay": ["fuse"] + default_libs, "inotify": ["glib-2.0"] + default_libs, "stdin": default_libs}
+includes_of = {"overlay": [], "inotify": ["glib-2.0"], "stdin": []}
+flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
-libs_of = {"overlay": ["zookeeper_mt", "rdkafka", "fuse"]}
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
 kafka_server = "http://mir2.ovh.net/ftp.apache.org/dist/kafka/"
 kafka_version = "0.8.1.1"
@@ -264,7 +266,8 @@ def to_links(libs):
 
     Returns the new converted list
     """
-    return [filter_link(a) for a in ['-l'+s for s in libs]]
+    #return [filter_link(a) for a in ['-l'+s for s in libs]]
+    return [a for a in ['-l'+s for s in libs]]
 def binary_exists(name):
     """ Checks if a binary exists (requires 'which' utility)
     Returns true if the binary exists
@@ -304,10 +307,12 @@ def python_test():
 def test_run():
     c_test()
     python_test()
+def to_includes(what):
+    return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
 def compile():
     """ Compiles *.c files in source directory """
     for library_source in libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', "./src/" + library_source +'.c', flags)
+        run('gcc', '-g', '-c', '-fpic', to_includes(includes_of[library_source]), "./src/" + library_source +'.c', flags)
         run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(libs_of[library_source]))
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)

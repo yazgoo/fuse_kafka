@@ -76,6 +76,7 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(fields)
             else CONFIG_CURRENT(tags)
             else CONFIG_CURRENT(quota)
+            else CONFIG_CURRENT(input)
             else
             {
                 printf("unknown option %s\n", argv[i]);
@@ -119,7 +120,9 @@ int fuse_kafka_main(int argc, char *argv[])
 #endif
                 conf.directory_fd = open(conf.directories[conf.directory_n],
                         O_RDONLY);
-                void* handle = dlopen("overlay.so", RTLD_LAZY);
+                char* input = "overlay.so";
+                if(conf.input_n > 0) input = conf.input[0];
+                void* handle = dlopen(input, RTLD_LAZY);
                 if(handle == NULL)
                 {
                     printf("%s\n", dlerror());
