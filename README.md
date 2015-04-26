@@ -140,10 +140,13 @@ Then, start fuse kafka.
 Let's create a segfaulting program:
 
     $ cat first.c
-    int main(void)
-    {
-        *((int*)0) = 1;
-    }
+
+````c
+int main(void)
+{
+    *((int*)0) = 1;
+}
+````
 
     $ gcc first.c
 
