@@ -369,10 +369,11 @@ But when it starts, you might not have all its configuration available yet.
 Or you might want to add brokers or use new zookeepers.
 
 Dynamic configuration allows to modify the configuration on the fly.
-You won't be able to add watched directory on the fly, but you will be able to:
+You will be able to:
 
 * point to new zookeepers/brokers
 * update tags, fields
+* modify watched directories
 
 Just update your configuration, then, issue a:
 
