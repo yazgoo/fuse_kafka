@@ -70,9 +70,12 @@ The default configuration is conf/fuse\_kafka.properties.
 An important piece of configuration is fuse\_kafka\_directories:
 
     $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
-    # directories fuse_kafka will listen to (launch script will try to
-    # create them if they don't exist)
-    fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+
+````python
+# directories fuse_kafka will listen to (launch script will try to
+# create them if they don't exist)
+fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+````
 
 Start fuse\_kafka using the init script:
 
