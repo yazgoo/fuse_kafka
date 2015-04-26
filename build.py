@@ -6,14 +6,25 @@ try:
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
-libraries_sources = ['overlay', 'inotify', 'stdin']
+class InputPlugins:
+    def __init__(self):
+        _dir = "src/plugins/input/"
+        self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
+        self.libs_of = {}
+        self.includes_of = {}
+        for lib in self.libraries_sources:
+            cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
+            required_str = os.popen(cmd).read().rstrip()
+            required = []
+            if required_str != '': required = required_str.split("\n")
+            self.libs_of[lib] = required + default_libs
+            self.includes_of[lib] = required
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
 default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
-libs_of = {"overlay": ["fuse"] + default_libs, "inotify": ["glib-2.0"] + default_libs, "stdin": default_libs}
-includes_of = {"overlay": [], "inotify": ["glib-2.0"], "stdin": []}
+input_plugins = InputPlugins()
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -309,11 +320,13 @@ def test_run():
     python_test()
 def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
+def compile_input_plugins():
+    for library_source in input_plugins.libraries_sources:
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags)
+        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
-    for library_source in libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(includes_of[library_source]), "./src/" + library_source +'.c', flags)
-        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(libs_of[library_source]))
+    compile_input_plugins()
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def compile_test():
