@@ -254,12 +254,16 @@ Here are available options:
 
 For example, this will download packages on a remote server:
 
-    ./setup.sh -r mykey.pem root@myserver -d
+````shell
+$ ./setup.sh -r mykey.pem root@myserver -d
+````
 
 This will generate an archive that will be copied locally.
 You can then install that archive via:
 
-    ./setup.sh -f fuse_kafka.tar.bz2
+````shell
+$ ./setup.sh -f fuse_kafka.tar.bz2
+````
 
 
 Networking tests
@@ -267,7 +271,9 @@ Networking tests
 
 A more realistic network setup test can be launched (as root) via:
 
-    sudo ./build.py mininet
+````shell
+$ sudo ./build.py mininet
+````
 
 This requires [mininet](http://mininet.org).
 
@@ -277,7 +283,9 @@ fuse_kafka is running on h3 (host number three).
 This will launch a mininet shell.
 For example, if you want to try and write on fuse_kafka host, issue a:
 
-    mininet> h3 echo lol > /tmp/fuse-kafka-test/xd
+````shell
+mininet> h3 echo lol > /tmp/fuse-kafka-test/xd
+````
 
 The consumer log is available via (/tmp/kafka_consumer.log). 
 
@@ -292,18 +300,24 @@ A logstash input plugin to read from kafka is available in src/logstash/inputs/k
 Provided you have kafka installed in . (which `./build.py kafka_start` should do),
 you can try it by downloading logastash and running:
 
-    /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
+````shell
+$ /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
+````
 
 Unit testing
 ============
 
 To launch unit tests, issue a:
 
+````shell
     ./build.py test
+````
 
 To test against multiple python versions (provided tox is installed), issue a:
 
-    tox
+````shell
+$ tox
+````
 
 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 
@@ -313,7 +327,9 @@ C Unit testing
 
 To run c unit tests, do a:
 
-    $ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test && ./build.py c_test
+````shell
+$ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test && ./build.py c_test
+````
 
 
 Working with other logging systems
@@ -327,7 +343,9 @@ for example by restarting the process.
 For example, If you're using rsyslogd and it is writing to /var/log/syslog,
 after starting fuse_kafka on /var/log, you should issue a:
 
-    service rsyslogd restart
+````shell
+$ service rsyslogd restart
+````
 
 After stopping fuse_kafka, you should also restart rsyslogd so 
 it re-acquires a file descriptor on the actual FS.
@@ -337,7 +355,9 @@ Benchmarks
 
 Provided you have bonnie++ installed, you can run benchmarks with
 
-    ./build.py bench
+````shell
+$ ./build.py bench
+````
 
 This will generate `bench/results.js`, which you can see via `benchs/benchmarks.html`
 
@@ -356,11 +376,15 @@ You won't be able to add watched directory on the fly, but you will be able to:
 
 Just update your configuration, then, issue a:
 
-    sevice fuse_kafka reload
+````shell
+$ sevice fuse_kafka reload
+````
 
 Or, if you using the developer version:
 
-    ./src/fuse_kafka.py reload
+````shell
+./src/fuse_kafka.py reload
+````
 
 To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.
 
@@ -373,13 +397,13 @@ An example input plugin is available in `src/plugins/input/example.c`.
 A plugin should include:
 
 ````c
-    #include <input_plugin.h>
+#include <input_plugin.h>
 ````
 
 Its entry point is the function:
 
 ````c
-    int input_setup(int argc, char** argv, void* conf)
+int input_setup(int argc, char** argv, void* conf)
 ````
 
 With parameters being:
@@ -393,8 +417,8 @@ conf           | parsed configuration based on arguments given after `--` (see c
 It should output it's data using:
 
 ````c
-    void output_write(const char *path, const char *buf,
-            size_t size, off_t offset)
+void output_write(const char *path, const char *buf,
+        size_t size, off_t offset)
 ````
 
 With parameters being:
@@ -409,7 +433,7 @@ offset         | start of the log line in buf
 If you require some library, you should refer to its pkg-config name via the macro:
 
 ````c
-    require(your-library)
+require(your-library)
 ````
 
 Licensing
