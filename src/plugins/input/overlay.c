@@ -1,4 +1,3 @@
-/** @file */ 
 #define FUSE_USE_VERSION 26
 #include <fuse.h>
 #ifdef HAVE_SETXATTR
@@ -10,6 +9,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <input_plugin.h>
+requires(fuse)
 /**
  * @brief write the data to kafka and to the overlaid fs if it should
  * be done
