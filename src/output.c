@@ -75,6 +75,12 @@ static int should_write_to_kafka(const char* path, size_t size)
     time_queue_set(conf->quota_queue, (char*)path);
     return i;
 }
+void output_write(const char *path, const char *buf,
+        size_t size, off_t offset)
+{
+    if(should_write_to_kafka(path, size))
+        actual_kafka_write(path, buf, size, offset);
+}
 void output_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
@@ -222,4 +228,10 @@ int send_kafka(kafka_t* k, char* buf, size_t len)
     /*while(rd_kafka_poll(k->rk, 1000) != -1)
         continue;*/
     return 0;
+}
+input_setup_internal(int argc, char** argv, void* conf)
+{
+    fuse_get_context()->private_data = conf;
+    fuse_get_context()->private_data = output_init((config*) conf);
+    input_setup(argc, argv, conf);
 }

@@ -134,7 +134,7 @@ int fuse_kafka_main(int argc, char *argv[])
                 }
                 else
                 {
-                    input_setup_t f = dlsym(handle, "input_setup");
+                    input_setup_t f = dlsym(handle, "input_setup_internal");
                     return f(limit, argv, &conf);
                 }
             }

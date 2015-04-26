@@ -364,6 +364,28 @@ Or, if you using the developer version:
 
 To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.
 
+
+Input plugin
+============
+
+You can write your own input plugins in src/plugins/input.
+A plugin should include:
+
+    #include <input_plugin.h>
+
+Its entry point is the function:
+
+    int input_setup(int argc, char** argv, void* conf)
+
+It should output it's data using:
+
+    void output_write(const char *path, const char *buf,
+            size_t size, off_t offset)
+
+If you require some library, you should use refer to its pkg-config name via the macro:
+
+    require(your-library)
+
 Licensing
 =========
 
