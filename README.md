@@ -103,21 +103,23 @@ Then start writing to a file under the overlay directory:
 
 You should have an output from the consumer similar to this:
 
-    event:
-        group: users
-        uid: 1497
-        @tags:
-            -  test
-        @fields:
-             hostname: test
-        @timestamp: 2014-10-03T09:07:04.000+0000
-        pid: 6485
-        gid: 604
-        command: bash -c echo "foo"
-        @message: foo
-        path: /tmp/fuse-kafka-test/bar
-        @version: 0.1.3
-        user: yazgoo
+````yaml
+event:
+    group: users
+    uid: 1497
+    @tags:
+        -  test
+    @fields:
+         hostname: test
+    @timestamp: 2014-10-03T09:07:04.000+0000
+    pid: 6485
+    gid: 604
+    command: bash -c echo "foo"
+    @message: foo
+    path: /tmp/fuse-kafka-test/bar
+    @version: 0.1.3
+    user: yazgoo
+````
 
 When you're done, you can stop fuse\_kafka:
 
