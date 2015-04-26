@@ -365,17 +365,17 @@ To use this feature, you must make sure that /var/run/fuse_kafka.args is accessi
 Input plugin
 ============
 
-You can write your own input plugins in src/plugins/input.
+You can write your own input plugins in `src/plugins/input`.
 An example input plugin is available in `src/plugins/input/example.c`.
 A plugin should include:
 
-````
+````c
     #include <input_plugin.h>
 ````
 
 Its entry point is the function:
 
-````
+````c
     int input_setup(int argc, char** argv, void* conf)
 ````
 
@@ -389,7 +389,7 @@ conf           | parsed configuration based on arguments given after `--` (see c
 
 It should output it's data using:
 
-````
+````c
     void output_write(const char *path, const char *buf,
             size_t size, off_t offset)
 ````
@@ -403,9 +403,9 @@ buf            | buffer containing the log line
 size           | size of the log line
 offset         | start of the log line in buf
 
-If you require some library, you should use refer to its pkg-config name via the macro:
+If you require some library, you should refer to its pkg-config name via the macro:
 
-````
+````c
     require(your-library)
 ````
 
