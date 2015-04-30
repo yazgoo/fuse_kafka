@@ -358,10 +358,12 @@ def install():
         root = os.environ.get('BUILDROOT') + "/"
     build()
     install_directory = root + 'usr/bin/'
+    lib_directory = root + 'usr/lib/'
     init_directory = root + 'etc/init.d/'
     conf_directory = root + 'etc/'
     [run('mkdir', '-p', d) for d in
-            [conf_directory, init_directory, install_directory]]
+            [conf_directory, init_directory, install_directory, lib_directory]]
+    for key in input_plugins.shareds_objects: run('cp', input_plugins.shareds_objects[key], lib_directory)
     run('cp', binary_name, install_directory)
     [run('cp', 'src/' + init_name + '.py', init_directory + init_name)
             for init_name in ["fuse_kafka", "fuse_kafka_umounter"]]
