@@ -7,9 +7,6 @@
 #include <config.h>
 #endif
 #define _GNU_SOURCE
-#ifdef TEST
-#define fuse_get_context() test_fuse_get_context()
-#endif
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -122,9 +119,10 @@ int fuse_kafka_main(int argc, char *argv[])
                         O_RDONLY);
                 char* input = "overlay";
                 if(conf.input_n > 0) input = conf.input[0];
-                char*  lib = malloc(strlen(input) + 4);
-                strcpy(lib, input);
-                strcpy(lib + strlen(input), ".so");
+                char*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
+                strcpy(lib, INPUT_PLUGIN_PREFIX);
+                strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
+                strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), ".so");
                 void* handle = dlopen(lib, RTLD_LAZY);
                 free(lib);
                 if(handle == NULL)

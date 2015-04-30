@@ -2,7 +2,6 @@
 #include <fuse.h>
 #ifdef HAVE_SETXATTR
 #include <sys/xattr.h>
-#endif
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -530,3 +529,4 @@ int input_setup(int argc, char** argv, void* conf)
 {
     return fuse_main(argc, argv, &kafka_oper, conf);
 }
+#endif

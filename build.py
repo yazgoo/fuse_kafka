@@ -6,12 +6,26 @@ try:
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
+def get_define(source, name):
+    """ Returns the current define for fuse_kafka based on src/source """
+    f = open("src/" + source + ".h")
+    result = []
+    while True:
+        result = f.readline().split()
+        if len(result) == 3 and result[0] == "#define" and result[1] == name:
+            break;
+    result = result[-1][1:-1]
+    f.close()
+    return result
 class InputPlugins:
     def __init__(self):
         _dir = "src/plugins/input/"
         self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
         self.libs_of = {}
         self.includes_of = {}
+        self.shareds_objects = {}
+        self.objects = {}
+        prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
         for lib in self.libraries_sources:
             cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
             required_str = os.popen(cmd).read().rstrip()
@@ -19,6 +33,8 @@ class InputPlugins:
             if required_str != '': required = required_str.split("\n")
             self.libs_of[lib] = required + default_libs
             self.includes_of[lib] = required
+            self.shareds_objects[lib] = prefix + lib + ".so"
+            self.objects[lib] = prefix + lib + ".o"
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
@@ -183,15 +199,7 @@ class FuseKafkaLog:
                 print line
 def get_version():
     """ Returns the current version for fuse_kafka based on src/version.h """
-    f = open("src/version.h")
-    result = []
-    while True:
-        result = f.readline().split()
-        if len(result) == 3 and result[0] == "#define" and result[1] == "VERSION":
-            break;
-    result = result[-1][1:-1]
-    f.close()
-    return result
+    return get_define("version", "VERSION")
 def bump_version():
     """ Changes the version number if v variable if specified:
             - The version number is changed in src/version.h
@@ -320,8 +328,8 @@ def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
 def compile_input_plugins():
     for library_source in input_plugins.libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags)
-        run('gcc', '-shared', '-o', library_source + ".so", library_source +'.o', flags, to_links(input_plugins.libs_of[library_source]))
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
+        run('gcc', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_input_plugins()
@@ -330,7 +338,7 @@ def compile():
 def compile_test():
     """ Builds unit test binary """
     for source in sources:
-        run('gcc', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
+        run('gcc', '-I', 'src', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
                 test_flags, to_links(common_libs))
 def link():
     """ Finalize the binary generation by linking all object files """

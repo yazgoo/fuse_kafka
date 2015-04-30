@@ -1,8 +1,10 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
+#ifndef TEST
 #include <librdkafka/rdkafka.h>
 #include <zookeeper/zookeeper.h>
 #include "config.h"
+#endif
 /**
  * @brief a wrapping structure for kafka client and fuse_kafka
  * configuration
