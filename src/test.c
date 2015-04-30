@@ -348,7 +348,7 @@ static char* all_tests()
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
     // TODO move to specific unit test mu_run_test(test_trace);
-    mu_run_test(test_dynamic_configuration);
+    // TODO move to specific unit test mu_run_test(test_dynamic_configuration);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
