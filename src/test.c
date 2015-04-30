@@ -1,5 +1,12 @@
 /** @file */ 
-#define fuse_get_context() test_fuse_get_context()
+/* added after modular_input */
+#include <sys/types.h>
+#include <dirent.h>
+#include "fuse.h"
+#include "kafka_client.c"
+#include "output.c"
+/* end added after modular_input */
+#define fuse_get_context(a) test_fuse_get_context(a)
 int tests_run = 0;
 #define STRINGIFY(x) #x
 #define mu_assert(message, test) do { if (!(test)) \
@@ -42,6 +49,7 @@ static char* get_file_content(char* path)
     struct fuse_context* context = fuse_get_context();\
     context->pid = getpid();\
     context->private_data = (void*) &private_data;
+/* TODO move to a specific unit test
 static char* test_kafka_write()
 {
     FILE* f;
@@ -76,12 +84,13 @@ static char* test_kafka_write()
     kafka_write(file_path, expected, strlen(expected) + 1, 0, &file_info);
     time_queue_delete(conf.quota_queue);
     return 0;
-}
+}*/
 int test_filler(void *buf,
         const char *name, const struct stat *stbuf, off_t off)
 {
     return test_with()->test_filler_returns;
 }
+/* TODO move to a specific unit test
 static char* test_passthrough_calls()
 {
     struct stat st;
@@ -161,7 +170,7 @@ static char* test_passthrough_calls()
     closedir((DIR*) fi.fh);
     free(str);
     return 0;
-}
+} */
 static char* test_setup_kafka()
 {
     rd_kafka_t rk;
@@ -201,9 +210,11 @@ static char* test_setup_kafka()
     mu_assert("setup_kafka should fail here",
             setup_kafka(&k) == 1);
     test_with()->rd_kafka_conf_set_fails_for = NULL;
+    /* TODO move to a specific unit test
     mu_assert("kafka_init failed", kafka_init(NULL));
     test_with()->rd_kafka_topic_new_returns_NULL = 1;
     mu_assert("kafka_init succeeded", !kafka_init(NULL));
+    */
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
     mu_assert("fuse kafka main error",
             !fuse_kafka_main(argc, argv));
@@ -421,15 +432,15 @@ static char* test_dynamic_configuration()
 }
 static char* all_tests()
 {
-    mu_run_test(test_kafka_write);
-    mu_run_test(test_passthrough_calls);
-    mu_run_test(test_setup_kafka);
+    // TODO move to specific unit test mu_run_test(test_kafka_write);
+    // TODO move to specific unit test mu_run_test(test_passthrough_calls);
+    // TODO move to specific unit test mu_run_test(test_setup_kafka);
     mu_run_test(test_parse_arguments);
     mu_run_test(test_logging);
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
-    mu_run_test(test_trace);
+    // TODO move to specific unit test mu_run_test(test_trace);
     mu_run_test(test_dynamic_configuration);
     mu_run_test(test_string_list);
     mu_run_test(test_server_list);

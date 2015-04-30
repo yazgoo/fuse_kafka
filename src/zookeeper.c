@@ -40,6 +40,8 @@
  * ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef FUSE_KAFKA_ZOOKEEPER_C
+#define FUSE_KAFKA_ZOOKEEPER_C
 #include <jansson.h>
 #define BROKER_PATH "/brokers/ids"
 #include "server_list.c"
@@ -128,3 +130,4 @@ static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
     }
     return zh;
 }
+#endif

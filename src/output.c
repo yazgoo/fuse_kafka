@@ -2,7 +2,9 @@
 #include "output.h"
 #include "time_queue.c"
 #include "zookeeper.c"
+#ifndef TEST
 #include "dynamic_configuration.c"
+#endif
 #include <grp.h>
 #include <pwd.h>
 /**
@@ -233,5 +235,7 @@ input_setup_internal(int argc, char** argv, void* conf)
 {
     fuse_get_context()->private_data = conf;
     fuse_get_context()->private_data = output_init((config*) conf);
+#ifndef TEST
     input_setup(argc, argv, conf);
+#endif
 }
