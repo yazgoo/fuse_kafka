@@ -16,7 +16,7 @@ before_install:
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo modprobe openvswitch"
 install:
     - sed -i 's/_mt/_st/' build.py
-    - sudo apt-get -y install python-coverage libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
+    - sudo apt-get -y install python-coverage libglib2.0 libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
     - sudo pip install fabricate cpp-coveralls
 script:
     - ./build.py clean
