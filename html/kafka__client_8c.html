@@ -77,11 +77,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <div class="header">
-  <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">src/kafka_client.c File Reference</div>  </div>
 </div><!--header-->
@@ -92,120 +87,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;librdkafka/rdkafka.h&gt;</code><br/>
 <code>#include &lt;zookeeper/zookeeper.h&gt;</code><br/>
 <code>#include &lt;zookeeper/zookeeper.jute.h&gt;</code><br/>
+<code>#include &quot;output.h&quot;</code><br/>
 <code>#include &quot;zookeeper.c&quot;</code><br/>
 </div>
 <p><a href="kafka__client_8c_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr><td colspan="2"><h2><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__kafka__t.html">_kafka_t</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">a wrapping structure for kafka client and fuse_kafka configuration  <a href="struct__kafka__t.html#details">More...</a><br/></td></tr>
-<tr><td colspan="2"><h2><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8198853a72de73a210b3507587b2768a"></a><!-- doxytag: member="kafka_client.c::kafka_t" ref="a8198853a72de73a210b3507587b2768a" args="" -->
-typedef struct <a class="el" href="struct__kafka__t.html">_kafka_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kafka__client_8c.html#a8198853a72de73a210b3507587b2768a">kafka_t</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">a wrapping structure for kafka client and fuse_kafka configuration <br/></td></tr>
-<tr><td colspan="2"><h2><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1a30330736ec965497f25e8440b2c3b"></a><!-- doxytag: member="kafka_client.c::msg_delivered" ref="ad1a30330736ec965497f25e8440b2c3b" args="(rd_kafka_t *rk, void *payload, size_t len, int error_code, void *opaque, void *msg_opaque)" -->
-static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kafka__client_8c.html#ad1a30330736ec965497f25e8440b2c3b">msg_delivered</a> (<a class="el" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, void *payload, size_t len, int error_code, void *opaque, void *msg_opaque)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">a librdkafka callback called when a message is delivered <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bead3257610b911174b3790d7d06a0d"></a><!-- doxytag: member="kafka_client.c::logger" ref="a5bead3257610b911174b3790d7d06a0d" args="(const rd_kafka_t *rk, int level, const char *fac, const char *buf)" -->
-static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kafka__client_8c.html#a5bead3257610b911174b3790d7d06a0d">logger</a> (const <a class="el" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, int level, const char *fac, const char *buf)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">a librdkafka callback called to log stuff from librdkafka <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kafka__client_8c.html#a5660dc39d8b2c2458c67f197e5276203">setup_kafka</a> (<a class="el" href="kafka__client_8c.html#a8198853a72de73a210b3507587b2768a">kafka_t</a> *k)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">setup_kafka initialises librdkafka based on the config wrapped in kafka_t  <a href="#a5660dc39d8b2c2458c67f197e5276203"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kafka__client_8c.html#a3438f364ace1f612d88cbf9cbc68c9a6">send_kafka</a> (<a class="el" href="kafka__client_8c.html#a8198853a72de73a210b3507587b2768a">kafka_t</a> *k, char *buf, size_t len)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">send a string to kafka  <a href="#a3438f364ace1f612d88cbf9cbc68c9a6"></a><br/></td></tr>
-<tr><td colspan="2"><h2><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ac29594c7524f710cd7dbd67a343fd8"></a><!-- doxytag: member="kafka_client.c::errstr" ref="a9ac29594c7524f710cd7dbd67a343fd8" args="[512]" -->
-char&#160;</td><td class="memItemRight" valign="bottom"><b>errstr</b> [512]</td></tr>
-</table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>kafka client level structures and function </p>
 
 <p>Definition in file <a class="el" href="kafka__client_8c_source.html">kafka_client.c</a>.</p>
-</div><hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a3438f364ace1f612d88cbf9cbc68c9a6"></a><!-- doxytag: member="kafka_client.c::send_kafka" ref="a3438f364ace1f612d88cbf9cbc68c9a6" args="(kafka_t *k, char *buf, size_t len)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int <a class="el" href="kafka__client_8c.html#a3438f364ace1f612d88cbf9cbc68c9a6">send_kafka</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="kafka__client_8c.html#a8198853a72de73a210b3507587b2768a">kafka_t</a> *&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *&#160;</td>
-          <td class="paramname"><em>buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>send a string to kafka </p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">k</td><td>configuration with kafka </td></tr>
-    <tr><td class="paramname">buf</td><td>string to serialize </td></tr>
-    <tr><td class="paramname">len</td><td>size of the string to save </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="kafka__client_8c_source.html#l00106">106</a> of file <a class="el" href="kafka__client_8c_source.html">kafka_client.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5660dc39d8b2c2458c67f197e5276203"></a><!-- doxytag: member="kafka_client.c::setup_kafka" ref="a5660dc39d8b2c2458c67f197e5276203" args="(kafka_t *k)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int <a class="el" href="kafka__client_8c.html#a5660dc39d8b2c2458c67f197e5276203">setup_kafka</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="kafka__client_8c.html#a8198853a72de73a210b3507587b2768a">kafka_t</a> *&#160;</td>
-          <td class="paramname"><em>k</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>setup_kafka initialises librdkafka based on the config wrapped in kafka_t </p>
-<dl class="params"><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">k</td><td>kafka configuration </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="kafka__client_8c_source.html#l00052">52</a> of file <a class="el" href="kafka__client_8c_source.html">kafka_client.c</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -217,7 +113,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>errstr</b> [512]</td>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

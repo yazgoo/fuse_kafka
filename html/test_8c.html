@@ -85,36 +85,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">src/test.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;sys/ioctl.h&gt;</code><br/>
+<div class="textblock"><code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;dirent.h&gt;</code><br/>
+<code>#include &quot;fuse.h&quot;</code><br/>
+<code>#include &quot;<a class="el" href="kafka__client_8c_source.html">kafka_client.c</a>&quot;</code><br/>
+<code>#include &quot;output.c&quot;</code><br/>
+<code>#include &lt;sys/ioctl.h&gt;</code><br/>
 <code>#include &lt;unistd.h&gt;</code><br/>
 </div>
 <p><a href="test_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeec80311534ba44e106083c80ba908c3"></a><!-- doxytag: member="test.c::fuse_get_context" ref="aeec80311534ba44e106083c80ba908c3" args="()" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>fuse_get_context</b>()&#160;&#160;&#160;test_fuse_get_context()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29e54f30d8fa9fc73e632b7231a556b0"></a><!-- doxytag: member="test.c::fuse_get_context" ref="a29e54f30d8fa9fc73e632b7231a556b0" args="(a)" -->
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>fuse_get_context</b>(a)&#160;&#160;&#160;test_fuse_get_context(a)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6df1d22fb5f09eccc23b9f399670cfd7"></a><!-- doxytag: member="test.c::STRINGIFY" ref="a6df1d22fb5f09eccc23b9f399670cfd7" args="(x)" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>STRINGIFY</b>(x)&#160;&#160;&#160;#x</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>mu_assert</b>(message, test)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>mu_run_test</b>(test)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>SET_CONFIG</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe050be1cca5c04a1bbec5d4bf1c02e6"></a><!-- doxytag: member="test.c::TEST_FUNC" ref="abe050be1cca5c04a1bbec5d4bf1c02e6" args="(x, y,...)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_FUNC</b>(x, y,...)&#160;&#160;&#160;mu_assert(#x &quot; failed&quot;, x(__VA_ARGS__) == y);</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16ca9524a8199037367b1762b510e39c"></a><!-- doxytag: member="test.c::TEST_FUNC_SUCCESS" ref="a16ca9524a8199037367b1762b510e39c" args="(x, y,...)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_FUNC_SUCCESS</b>(x, y,...)&#160;&#160;&#160;mu_assert(#x &quot;(&quot; #y &quot;) failed&quot;, x(y, ##__VA_ARGS__) == 0);</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad30172d6e49290d6b34d2f63f86b2b4f"></a><!-- doxytag: member="test.c::TEST_FUNC_FAILURE" ref="ad30172d6e49290d6b34d2f63f86b2b4f" args="(x, y,...)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>TEST_FUNC_FAILURE</b>(x, y,...)&#160;&#160;&#160;mu_assert(#x &quot;(&quot; #y &quot;) succeeded&quot;, x(y, ##__VA_ARGS__) != 0);</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4ce2f2b04dd85332081e4baad92fff"></a><!-- doxytag: member="test.c::get_file_content" ref="abd4ce2f2b04dd85332081e4baad92fff" args="(char *path)" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>get_file_content</b> (char *path)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55a56b58cfb6dfd6fbea7ee345a34ef7"></a><!-- doxytag: member="test.c::test_kafka_write" ref="a55a56b58cfb6dfd6fbea7ee345a34ef7" args="()" -->
-static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_kafka_write</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33daede4a854ecff80961027d1772986"></a><!-- doxytag: member="test.c::test_filler" ref="a33daede4a854ecff80961027d1772986" args="(void *buf, const char *name, const struct stat *stbuf, off_t off)" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>test_filler</b> (void *buf, const char *name, const struct stat *stbuf, off_t off)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d85c9e0947a04b6c419ff4c2c49b981"></a><!-- doxytag: member="test.c::test_passthrough_calls" ref="a8d85c9e0947a04b6c419ff4c2c49b981" args="()" -->
-static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_passthrough_calls</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ed4104e1ca01484a6a1be12608013bf"></a><!-- doxytag: member="test.c::test_setup_kafka" ref="a8ed4104e1ca01484a6a1be12608013bf" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_setup_kafka</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60d55b982a7af6b0a1ce30cc7d5b3846"></a><!-- doxytag: member="test.c::test_parse_arguments" ref="a60d55b982a7af6b0a1ce30cc7d5b3846" args="()" -->
@@ -129,6 +124,10 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_time_qu
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_zookeeper</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f6b038f84fb322e0a604d8e285dfda3"></a><!-- doxytag: member="test.c::test_trace" ref="a3f6b038f84fb322e0a604d8e285dfda3" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_trace</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06e435f5f411a0d49a51b91cb60c7de9"></a><!-- doxytag: member="test.c::touch" ref="a06e435f5f411a0d49a51b91cb60c7de9" args="(char *path)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (char *path)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06da128ec1670c30352f65fa5f2296ab"></a><!-- doxytag: member="test.c::test_dynamic_configuration" ref="a06da128ec1670c30352f65fa5f2296ab" args="()" -->
+static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_dynamic_configuration</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5778abb510b0149069f4ed1de091f736"></a><!-- doxytag: member="test.c::all_tests" ref="a5778abb510b0149069f4ed1de091f736" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ac9c22b6bab5179a1393f5a1ed9669a"></a><!-- doxytag: member="test.c::line" ref="a4ac9c22b6bab5179a1393f5a1ed9669a" args="()" -->
@@ -172,7 +171,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>tests_run</b> = 0</td>
 return message; \
 } <span class="keywordflow">while</span> (0)
 </pre></div>
-<p>Definition at line <a class="el" href="test_8c_source.html#l00005">5</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
+<p>Definition at line <a class="el" href="test_8c_source.html#l00012">12</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
 
 </div>
 </div>
@@ -193,7 +192,7 @@ return message; \
 <b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordflow">do</span> { <span class="keywordtype">char</span> *message = test(); tests_run++; \
     if (message) return message; } while (0)
 </pre></div>
-<p>Definition at line <a class="el" href="test_8c_source.html#l00008">8</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
+<p>Definition at line <a class="el" href="test_8c_source.html#l00015">15</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
 
 </div>
 </div>
@@ -212,7 +211,7 @@ return message; \
     kafka_t private_data;\
     config conf;\
     conf.directories = directories;\
-    conf.<a class="code" href="struct__config.html#a0b3e811f6c5e7037b3763da5d1b9b8d2" title="number of the directory to mount amongst the directories list">directory_n</a> = 0;\
+    conf.directory_n = 0;\
     conf.excluded_files_n = 1;\
     conf.excluded_files = excluded_files;\
     conf.fields_s = <span class="stringliteral">&quot;{}&quot;</span>;\
@@ -220,11 +219,11 @@ return message; \
     conf.quota_queue = NULL;\
     conf.quota_n = 0;\
     private_data.conf = &amp;conf;\
-    struct fuse_context* context = fuse_get_context();\
+    struct <a class="code" href="structfuse__context.html">fuse_context</a>* context = fuse_get_context();\
     context-&gt;pid = getpid();\
     context-&gt;private_data = (<span class="keywordtype">void</span>*) &amp;private_data;
 </pre></div>
-<p>Definition at line <a class="el" href="test_8c_source.html#l00028">28</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
+<p>Definition at line <a class="el" href="test_8c_source.html#l00035">35</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
 
 </div>
 </div>
@@ -234,7 +233,7 @@ return message; \
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -246,7 +245,7 @@ return message; \
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

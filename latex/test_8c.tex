@@ -1,12 +1,17 @@
 \hypertarget{test_8c}{\section{src/test.c \-File \-Reference}
 \label{test_8c}\index{src/test.\-c@{src/test.\-c}}
 }
+{\ttfamily \#include $<$sys/types.\-h$>$}\*
+{\ttfamily \#include $<$dirent.\-h$>$}\*
+{\ttfamily \#include \char`\"{}fuse.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}kafka\-\_\-client.\-c\char`\"{}}\*
+{\ttfamily \#include \char`\"{}output.\-c\char`\"{}}\*
 {\ttfamily \#include $<$sys/ioctl.\-h$>$}\*
 {\ttfamily \#include $<$unistd.\-h$>$}\*
 \subsection*{\-Defines}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{test_8c_aeec80311534ba44e106083c80ba908c3}{\#define {\bfseries fuse\-\_\-get\-\_\-context}()~test\-\_\-fuse\-\_\-get\-\_\-context()}\label{test_8c_aeec80311534ba44e106083c80ba908c3}
+\hypertarget{test_8c_a29e54f30d8fa9fc73e632b7231a556b0}{\#define {\bfseries fuse\-\_\-get\-\_\-context}(a)~test\-\_\-fuse\-\_\-get\-\_\-context(a)}\label{test_8c_a29e54f30d8fa9fc73e632b7231a556b0}
 
 \item 
 \hypertarget{test_8c_a6df1d22fb5f09eccc23b9f399670cfd7}{\#define {\bfseries \-S\-T\-R\-I\-N\-G\-I\-F\-Y}(x)~\#x}\label{test_8c_a6df1d22fb5f09eccc23b9f399670cfd7}
@@ -17,15 +22,6 @@
 \#define {\bfseries mu\-\_\-run\-\_\-test}(test)
 \item 
 \#define {\bfseries \-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}
-\item 
-\hypertarget{test_8c_abe050be1cca5c04a1bbec5d4bf1c02e6}{\#define {\bfseries \-T\-E\-S\-T\-\_\-\-F\-U\-N\-C}(x, y,...)~mu\-\_\-assert(\#x \char`\"{} failed\char`\"{}, x(\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) == y);}\label{test_8c_abe050be1cca5c04a1bbec5d4bf1c02e6}
-
-\item 
-\hypertarget{test_8c_a16ca9524a8199037367b1762b510e39c}{\#define {\bfseries \-T\-E\-S\-T\-\_\-\-F\-U\-N\-C\-\_\-\-S\-U\-C\-C\-E\-S\-S}(x, y,...)~mu\-\_\-assert(\#x \char`\"{}(\char`\"{} \#y \char`\"{}) failed\char`\"{}, x(y, \#\#\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) == 0);}\label{test_8c_a16ca9524a8199037367b1762b510e39c}
-
-\item 
-\hypertarget{test_8c_ad30172d6e49290d6b34d2f63f86b2b4f}{\#define {\bfseries \-T\-E\-S\-T\-\_\-\-F\-U\-N\-C\-\_\-\-F\-A\-I\-L\-U\-R\-E}(x, y,...)~mu\-\_\-assert(\#x \char`\"{}(\char`\"{} \#y \char`\"{}) succeeded\char`\"{}, x(y, \#\#\-\_\-\-\_\-\-V\-A\-\_\-\-A\-R\-G\-S\-\_\-\-\_\-) != 0);}\label{test_8c_ad30172d6e49290d6b34d2f63f86b2b4f}
-
 \end{DoxyCompactItemize}
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
@@ -33,13 +29,7 @@
 \hypertarget{test_8c_abd4ce2f2b04dd85332081e4baad92fff}{static char $\ast$ {\bfseries get\-\_\-file\-\_\-content} (char $\ast$path)}\label{test_8c_abd4ce2f2b04dd85332081e4baad92fff}
 
 \item 
-\hypertarget{test_8c_a55a56b58cfb6dfd6fbea7ee345a34ef7}{static char $\ast$ {\bfseries test\-\_\-kafka\-\_\-write} ()}\label{test_8c_a55a56b58cfb6dfd6fbea7ee345a34ef7}
-
-\item 
 \hypertarget{test_8c_a33daede4a854ecff80961027d1772986}{int {\bfseries test\-\_\-filler} (void $\ast$buf, const char $\ast$name, const struct stat $\ast$stbuf, off\-\_\-t off)}\label{test_8c_a33daede4a854ecff80961027d1772986}
-
-\item 
-\hypertarget{test_8c_a8d85c9e0947a04b6c419ff4c2c49b981}{static char $\ast$ {\bfseries test\-\_\-passthrough\-\_\-calls} ()}\label{test_8c_a8d85c9e0947a04b6c419ff4c2c49b981}
 
 \item 
 \hypertarget{test_8c_a8ed4104e1ca01484a6a1be12608013bf}{static char $\ast$ {\bfseries test\-\_\-setup\-\_\-kafka} ()}\label{test_8c_a8ed4104e1ca01484a6a1be12608013bf}
@@ -61,6 +51,12 @@
 
 \item 
 \hypertarget{test_8c_a3f6b038f84fb322e0a604d8e285dfda3}{static char $\ast$ {\bfseries test\-\_\-trace} ()}\label{test_8c_a3f6b038f84fb322e0a604d8e285dfda3}
+
+\item 
+\hypertarget{test_8c_a06e435f5f411a0d49a51b91cb60c7de9}{void {\bfseries touch} (char $\ast$path)}\label{test_8c_a06e435f5f411a0d49a51b91cb60c7de9}
+
+\item 
+\hypertarget{test_8c_a06da128ec1670c30352f65fa5f2296ab}{static char $\ast$ {\bfseries test\-\_\-dynamic\-\_\-configuration} ()}\label{test_8c_a06da128ec1670c30352f65fa5f2296ab}
 
 \item 
 \hypertarget{test_8c_a5778abb510b0149069f4ed1de091f736}{static char $\ast$ {\bfseries all\-\_\-tests} ()}\label{test_8c_a5778abb510b0149069f4ed1de091f736}
@@ -104,7 +100,7 @@ return message; \
 \end{DoxyCode}
 
 
-\-Definition at line 5 of file test.\-c.
+\-Definition at line 12 of file test.\-c.
 
 \hypertarget{test_8c_a9c8e76cc15deeca6f9afa206f6caca76}{\index{test.\-c@{test.\-c}!mu\-\_\-run\-\_\-test@{mu\-\_\-run\-\_\-test}}
 \index{mu\-\_\-run\-\_\-test@{mu\-\_\-run\-\_\-test}!test.c@{test.\-c}}
@@ -120,7 +116,7 @@ do { char *message = test(); tests_run++; \
 \end{DoxyCode}
 
 
-\-Definition at line 8 of file test.\-c.
+\-Definition at line 15 of file test.\-c.
 
 \hypertarget{test_8c_a03c9510ad1cf49128f06fbc48bb5a51d}{\index{test.\-c@{test.\-c}!\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G@{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}}
 \index{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G@{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}!test.c@{test.\-c}}
@@ -146,5 +142,5 @@ static char* directories[] = {"/lol/"};\
 \end{DoxyCode}
 
 
-\-Definition at line 28 of file test.\-c.
+\-Definition at line 35 of file test.\-c.
 

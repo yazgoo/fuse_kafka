@@ -3,27 +3,23 @@
 }
 {\ttfamily \#include $<$stdlib.\-h$>$}\*
 {\ttfamily \#include $<$stdio.\-h$>$}\*
-\subsection*{\-Data \-Structures}
-\begin{DoxyCompactItemize}
-\item 
-struct \hyperlink{structtime__queue}{time\-\_\-queue}
-\end{DoxyCompactItemize}
+{\ttfamily \#include \char`\"{}time\-\_\-queue.\-h\char`\"{}}\*
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
 \item 
 unsigned long \hyperlink{time__queue_8c_a1bc48c2d45970dac67074f3673e94e7b}{time\-\_\-queue\-\_\-hash} (unsigned char $\ast$str)
 \begin{DoxyCompactList}\small\item\em \-Internal\-: generates a djb2 hash. \end{DoxyCompactList}\item 
-\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$ \hyperlink{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}{time\-\_\-queue\-\_\-new} (unsigned int size, unsigned int quota)
+time\-\_\-queue $\ast$ \hyperlink{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}{time\-\_\-queue\-\_\-new} (unsigned int size, unsigned int quota)
 \begin{DoxyCompactList}\small\item\em \-Public\-: instantiates a new time queue, free it with time\-\_\-queue\-\_\-delete. \end{DoxyCompactList}\item 
 unsigned long \hyperlink{time__queue_8c_a3bec434e48da17f9bbe881622c7da594}{time\-\_\-queue\-\_\-time} ()
 \begin{DoxyCompactList}\small\item\em \-Internal\-: get the time. \end{DoxyCompactList}\item 
-void \hyperlink{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}{time\-\_\-queue\-\_\-set} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key)
+void \hyperlink{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}{time\-\_\-queue\-\_\-set} (time\-\_\-queue $\ast$queue, char $\ast$key)
 \begin{DoxyCompactList}\small\item\em \-Public\-: set a time queue key to current time. \end{DoxyCompactList}\item 
-unsigned long $\ast$ \hyperlink{time__queue_8c_a221a8f617d2287a6168cab25956677cb}{time\-\_\-queue\-\_\-get} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key)
+unsigned long $\ast$ \hyperlink{time__queue_8c_a221a8f617d2287a6168cab25956677cb}{time\-\_\-queue\-\_\-get} (time\-\_\-queue $\ast$queue, char $\ast$key)
 \begin{DoxyCompactList}\small\item\em \-Public\-: get last stored time pointer for given key. \end{DoxyCompactList}\item 
-int \hyperlink{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}{time\-\_\-queue\-\_\-overflows} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue, char $\ast$key, unsigned int size)
+int \hyperlink{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}{time\-\_\-queue\-\_\-overflows} (time\-\_\-queue $\ast$queue, char $\ast$key, unsigned int size)
 \begin{DoxyCompactList}\small\item\em \-Internal\-: checks if the given key overflows the quota. \end{DoxyCompactList}\item 
-void \hyperlink{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{time\-\_\-queue\-\_\-delete} (\hyperlink{structtime__queue}{time\-\_\-queue} $\ast$queue)
+void \hyperlink{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{time\-\_\-queue\-\_\-delete} (time\-\_\-queue $\ast$queue)
 \begin{DoxyCompactList}\small\item\em \-Public\-: deletes the time queue structure and allocated content. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -39,7 +35,7 @@ void \hyperlink{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{time\-\_\-queu
 \index{time\-\_\-queue\-\_\-delete@{time\-\_\-queue\-\_\-delete}!time_queue.c@{time\-\_\-queue.\-c}}
 \subsubsection[{time\-\_\-queue\-\_\-delete}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf time\-\_\-queue\-\_\-delete} (
 \begin{DoxyParamCaption}
-\item[{{\bf time\-\_\-queue} $\ast$}]{queue}
+\item[{time\-\_\-queue $\ast$}]{queue}
 \end{DoxyParamCaption}
 )}}\label{time__queue_8c_aee8286362f0df21f401d96d725cd340b}
 
@@ -53,13 +49,13 @@ void \hyperlink{time__queue_8c_aee8286362f0df21f401d96d725cd340b}{time\-\_\-queu
 \end{DoxyParams}
 
 
-\-Definition at line 153 of file time\-\_\-queue.\-c.
+\-Definition at line 149 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_a221a8f617d2287a6168cab25956677cb}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-get@{time\-\_\-queue\-\_\-get}}
 \index{time\-\_\-queue\-\_\-get@{time\-\_\-queue\-\_\-get}!time_queue.c@{time\-\_\-queue.\-c}}
 \subsubsection[{time\-\_\-queue\-\_\-get}]{\setlength{\rightskip}{0pt plus 5cm}unsigned long$\ast$ {\bf time\-\_\-queue\-\_\-get} (
 \begin{DoxyParamCaption}
-\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{time\-\_\-queue $\ast$}]{queue, }
 \item[{char $\ast$}]{key}
 \end{DoxyParamCaption}
 )}}\label{time__queue_8c_a221a8f617d2287a6168cab25956677cb}
@@ -83,7 +79,7 @@ a pointer to the time value registered, \-N\-U\-L\-L if there is none
 \end{DoxyReturn}
 
 
-\-Definition at line 114 of file time\-\_\-queue.\-c.
+\-Definition at line 110 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_a1bc48c2d45970dac67074f3673e94e7b}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-hash@{time\-\_\-queue\-\_\-hash}}
 \index{time\-\_\-queue\-\_\-hash@{time\-\_\-queue\-\_\-hash}!time_queue.c@{time\-\_\-queue.\-c}}
@@ -110,11 +106,11 @@ a hash for the string
 \end{DoxyReturn}
 
 
-\-Definition at line 25 of file time\-\_\-queue.\-c.
+\-Definition at line 21 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_aa0991ce4a2baa1a3355834025e2559ab}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-new@{time\-\_\-queue\-\_\-new}}
 \index{time\-\_\-queue\-\_\-new@{time\-\_\-queue\-\_\-new}!time_queue.c@{time\-\_\-queue.\-c}}
-\subsubsection[{time\-\_\-queue\-\_\-new}]{\setlength{\rightskip}{0pt plus 5cm}{\bf time\-\_\-queue}$\ast$ {\bf time\-\_\-queue\-\_\-new} (
+\subsubsection[{time\-\_\-queue\-\_\-new}]{\setlength{\rightskip}{0pt plus 5cm}time\-\_\-queue$\ast$ {\bf time\-\_\-queue\-\_\-new} (
 \begin{DoxyParamCaption}
 \item[{unsigned int}]{size, }
 \item[{unsigned int}]{quota}
@@ -140,13 +136,13 @@ a newly allocated pointer to a time queue of the specified size with the specifi
 \end{DoxyReturn}
 
 
-\-Definition at line 46 of file time\-\_\-queue.\-c.
+\-Definition at line 42 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_aee2a32b0025bf23894265fe5b21ad59f}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-overflows@{time\-\_\-queue\-\_\-overflows}}
 \index{time\-\_\-queue\-\_\-overflows@{time\-\_\-queue\-\_\-overflows}!time_queue.c@{time\-\_\-queue.\-c}}
 \subsubsection[{time\-\_\-queue\-\_\-overflows}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf time\-\_\-queue\-\_\-overflows} (
 \begin{DoxyParamCaption}
-\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{time\-\_\-queue $\ast$}]{queue, }
 \item[{char $\ast$}]{key, }
 \item[{unsigned int}]{size}
 \end{DoxyParamCaption}
@@ -173,13 +169,13 @@ time\-\_\-queue$\ast$ queue = time\-\_\-queue\-\_\-new(10, 42); time\-\_\-queue\
 \end{DoxyReturn}
 
 
-\-Definition at line 141 of file time\-\_\-queue.\-c.
+\-Definition at line 137 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-set@{time\-\_\-queue\-\_\-set}}
 \index{time\-\_\-queue\-\_\-set@{time\-\_\-queue\-\_\-set}!time_queue.c@{time\-\_\-queue.\-c}}
 \subsubsection[{time\-\_\-queue\-\_\-set}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf time\-\_\-queue\-\_\-set} (
 \begin{DoxyParamCaption}
-\item[{{\bf time\-\_\-queue} $\ast$}]{queue, }
+\item[{time\-\_\-queue $\ast$}]{queue, }
 \item[{char $\ast$}]{key}
 \end{DoxyParamCaption}
 )}}\label{time__queue_8c_afaa0f98d3731f4998abbf385990b9b3b}
@@ -198,7 +194,7 @@ time\-\_\-queue$\ast$ queue = time\-\_\-queue\-\_\-new(10, 42); time\-\_\-queue\
 
 time\-\_\-queue\-\_\-set(queue, \char`\"{}/var/log/blah.\-log\char`\"{}) 
 
-\-Definition at line 79 of file time\-\_\-queue.\-c.
+\-Definition at line 75 of file time\-\_\-queue.\-c.
 
 \hypertarget{time__queue_8c_a3bec434e48da17f9bbe881622c7da594}{\index{time\-\_\-queue.\-c@{time\-\_\-queue.\-c}!time\-\_\-queue\-\_\-time@{time\-\_\-queue\-\_\-time}}
 \index{time\-\_\-queue\-\_\-time@{time\-\_\-queue\-\_\-time}!time_queue.c@{time\-\_\-queue.\-c}}
@@ -216,5 +212,5 @@ current time in microseconds
 \end{DoxyReturn}
 
 
-\-Definition at line 64 of file time\-\_\-queue.\-c.
+\-Definition at line 60 of file time\-\_\-queue.\-c.
 

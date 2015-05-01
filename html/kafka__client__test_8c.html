@@ -115,6 +115,8 @@ Defines</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ZOK</b>&#160;&#160;&#160;1</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd6869abeb3231bd660163a05177acbe"></a><!-- doxytag: member="kafka_client_test.c::ZOO_CHILD_EVENT" ref="acd6869abeb3231bd660163a05177acbe" args="" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>ZOO_CHILD_EVENT</b>&#160;&#160;&#160;4</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34a4be4ab8f1c0c9cf27eb84fb7f00bc"></a><!-- doxytag: member="kafka_client_test.c::ZOO_LOG_LEVEL_ERROR" ref="a34a4be4ab8f1c0c9cf27eb84fb7f00bc" args="" -->
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>ZOO_LOG_LEVEL_ERROR</b>&#160;&#160;&#160;1</td></tr>
 <tr><td colspan="2"><h2><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb63e62d7e54cb60224246c10c236491"></a><!-- doxytag: member="kafka_client_test.c::rd_kafka_conf_res_t" ref="abb63e62d7e54cb60224246c10c236491" args="" -->
@@ -128,7 +130,7 @@ typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>watcher_fn<
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6554d448d8c629888b40ef090dc8fe3d"></a><!-- doxytag: member="kafka_client_test.c::test_fuse_get_context" ref="a6554d448d8c629888b40ef090dc8fe3d" args="()" -->
-static struct fuse_context *&#160;</td><td class="memItemRight" valign="bottom"><b>test_fuse_get_context</b> ()</td></tr>
+static struct <a class="el" href="structfuse__context.html">fuse_context</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>test_fuse_get_context</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a788d57320b6a2045db472a839f562ddb"></a><!-- doxytag: member="kafka_client_test.c::rd_kafka_conf_new" ref="a788d57320b6a2045db472a839f562ddb" args="()" -->
 <a class="el" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>rd_kafka_conf_new</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73ff8cf5f626ea03e9b865f91438c54e"></a><!-- doxytag: member="kafka_client_test.c::rd_kafka_topic_conf_new" ref="a73ff8cf5f626ea03e9b865f91438c54e" args="()" -->
@@ -159,8 +161,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>rd_kafka_brokers_add</
 int&#160;</td><td class="memItemRight" valign="bottom"><b>rd_kafka_produce</b> (<a class="el" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rkt, int32_t partitition, int msgflags, void *payload, size_t len, const void *key, size_t keylen, void *msg_opaque)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2af40c46fbeff01010580882f17f520"></a><!-- doxytag: member="kafka_client_test.c::rd_kafka_poll" ref="af2af40c46fbeff01010580882f17f520" args="(rd_kafka_t *rk, int timeout_ms)" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>rd_kafka_poll</b> (<a class="el" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, int timeout_ms)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b112923b8eafc396654539cd7500f06"></a><!-- doxytag: member="kafka_client_test.c::zoo_set_debug_level" ref="a7b112923b8eafc396654539cd7500f06" args="(int level)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>zoo_set_debug_level</b> (int level)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9fae982bb2ceaed42848b9e28389212"></a><!-- doxytag: member="kafka_client_test.c::zookeeper_init" ref="ab9fae982bb2ceaed42848b9e28389212" args="(const char *host, watcher_fn fn, int recv_timeout, void *clientid, void *context, int flags)" -->
 <a class="el" href="struct__zhandle__t.html">zhandle_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>zookeeper_init</b> (const char *host, watcher_fn fn, int recv_timeout, void *clientid, void *context, int flags)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a633908b12b5d9652cd250aa0387b95f3"></a><!-- doxytag: member="kafka_client_test.c::zookeeper_close" ref="a633908b12b5d9652cd250aa0387b95f3" args="(zhandle_t *zh)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>zookeeper_close</b> (<a class="el" href="struct__zhandle__t.html">zhandle_t</a> *zh)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a323fa9227a93c9ad239ce71898b3877e"></a><!-- doxytag: member="kafka_client_test.c::zoo_get_children" ref="a323fa9227a93c9ad239ce71898b3877e" args="(zhandle_t *zh, const char *path, int watch, struct String_vector *strings)" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>zoo_get_children</b> (<a class="el" href="struct__zhandle__t.html">zhandle_t</a> *zh, const char *path, int watch, struct <a class="el" href="structString__vector.html">String_vector</a> *strings)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab56709b0ab14d0e60d91f13f39fdf9e8"></a><!-- doxytag: member="kafka_client_test.c::zoo_get" ref="ab56709b0ab14d0e60d91f13f39fdf9e8" args="(zhandle_t *zh, const char *path, int watch, char *buffer, int *buffer_len, void *stat)" -->
@@ -177,7 +183,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>deallocate_String_vect
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -189,7 +195,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>deallocate_String_vect
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

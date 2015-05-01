@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -111,9 +111,15 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0bd77704cc258a800441426e62452195"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::__init__" ref="a0bd77704cc258a800441426e62452195" args="" -->
 def&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a08ccfab12ff2c998f5bc466de9c9afa4">do</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a2d8e0d317d293fa8f932e3e8882549f5">start</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d8e0d317d293fa8f932e3e8882549f5"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::start" ref="a2d8e0d317d293fa8f932e3e8882549f5" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>start</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a8a8b5dd68c2c1dbd9315ac2ea4bd5219">start_excluding_directories</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#ad17bb7d3209b7242defee5aa54ca828e">stop</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a1f122fd8f929a5d8e56d8d1bad9cc465">reload</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a6ea1d1193be9c118752f6b7a4c53df92">stop_watching_directory</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a7cc4774d8ed31ffe42ca2f955501ee45">restart</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7dd2095cfc8b080fba7047654e92eb9"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::list_watched_directories" ref="aa7dd2095cfc8b080fba7047654e92eb9" args="" -->
+def&#160;</td><td class="memItemRight" valign="bottom"><b>list_watched_directories</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a6e9278183d970e683d7060610bb9bc6f">get_status</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0289d64b6f56aef8b710466042ada3d1"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::status" ref="a0289d64b6f56aef8b710466042ada3d1" args="" -->
 def&#160;</td><td class="memItemRight" valign="bottom"><b>status</b></td></tr>
@@ -122,12 +128,14 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>status</b></td></tr>
 Data Fields</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae104081d0b1ec3c4c44cfd4ccf75b01e"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::prefix" ref="ae104081d0b1ec3c4c44cfd4ccf75b01e" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>prefix</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1238f08c265e4c19a8a721f57bd7dafe"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::proc_mount_path" ref="a1238f08c265e4c19a8a721f57bd7dafe" args="" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>proc_mount_path</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd89f62981d0dcbb3efee6f56c949642"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::configuration" ref="afd89f62981d0dcbb3efee6f56c949642" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>configuration</b></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><div class="fragment"><pre class="fragment">Utility class to run multiple fuse_kafka processes as one service </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00145">145</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00160">160</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a9cf98c6a35fb986e6877dfdca61630c0"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::cleanup" ref="a9cf98c6a35fb986e6877dfdca61630c0" args="" -->
 <div class="memitem">
@@ -146,7 +154,7 @@ Data Fields</h2></td></tr>
 <div class="fragment"><pre class="fragment">if a fuse kafka mountpoint is not accessible, umount it.
 Also installs this action in the crontab so it is launched
 every minute. </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00198">198</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00245">245</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -179,7 +187,7 @@ every minute. </pre></div>
 action - the action name
 
 </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00152">152</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00168">168</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -198,7 +206,37 @@ action - the action name
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Displays the status of fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00183">183</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00232">232</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f122fd8f929a5d8e56d8d1bad9cc465"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::reload" ref="a1f122fd8f929a5d8e56d8d1bad9cc465" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def <a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a1f122fd8f929a5d8e56d8d1bad9cc465">fuse_kafka.FuseKafkaService.reload</a> </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>var_run_path</em> = <code>&quot;/var/run&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<div class="fragment"><pre class="fragment">if fuse_kafka is running, reloads the dynamic part of 
+the configuration. If it is not running, starts it </pre></div> 
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00201">201</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -217,26 +255,36 @@ action - the action name
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Stops and starts fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00178">178</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00220">220</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2d8e0d317d293fa8f932e3e8882549f5"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::start" ref="a2d8e0d317d293fa8f932e3e8882549f5" args="" -->
+<a class="anchor" id="a8a8b5dd68c2c1dbd9315ac2ea4bd5219"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::start_excluding_directories" ref="a8a8b5dd68c2c1dbd9315ac2ea4bd5219" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def <a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a2d8e0d317d293fa8f932e3e8882549f5">fuse_kafka.FuseKafkaService.start</a> </td>
+          <td class="memname">def <a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a8a8b5dd68c2c1dbd9315ac2ea4bd5219">fuse_kafka.FuseKafkaService.start_excluding_directories</a> </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>excluded</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Starts fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00159">159</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00180">180</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -255,7 +303,36 @@ action - the action name
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Stops fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00173">173</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00196">196</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6ea1d1193be9c118752f6b7a4c53df92"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::stop_watching_directory" ref="a6ea1d1193be9c118752f6b7a4c53df92" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def <a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a6ea1d1193be9c118752f6b7a4c53df92">fuse_kafka.FuseKafkaService.stop_watching_directory</a> </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>to_stop_watching</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<div class="fragment"><pre class="fragment">Stops fuse_kafka process for a specific directory </pre></div> 
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00215">215</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -268,7 +345,7 @@ action - the action name
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -280,7 +357,7 @@ action - the action name
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

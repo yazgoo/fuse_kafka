@@ -91,11 +91,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;openssl/evp.h&gt;</code><br/>
 <code>#include &lt;openssl/pem.h&gt;</code><br/>
 <code>#include &lt;stdlib.h&gt;</code><br/>
+<code>#include &lt;string.h&gt;</code><br/>
 </div>
 <p><a href="util_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae71354ac9b6f7f2c808940036e7f30b7"></a><!-- doxytag: member="util.c::UTIL_C" ref="ae71354ac9b6f7f2c808940036e7f30b7" args="" -->
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>UTIL_C</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>DO_AS_CALLER</b>(action)</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -112,6 +115,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>strcmp</b> (const char
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad16fa3fb65df7353e0eecd8964ed23fd"></a><!-- doxytag: member="util.c::array_to_container_string" ref="ad16fa3fb65df7353e0eecd8964ed23fd" args="(char **array, size_t n, char open_char, char close_char, char sep1, char sep2)" -->
 char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd">array_to_container_string</a> (char **array, size_t n, char open_char, char close_char, char sep1, char sep2)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get a concatenated string from an array of string <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a595bb2010e077b76450c9c04e2b25e16"></a><!-- doxytag: member="util.c::concat" ref="a595bb2010e077b76450c9c04e2b25e16" args="(char *a, char *b)" -->
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a, char *b)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>utility functions </p>
@@ -132,7 +137,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
       </table>
 </div>
 <div class="memdoc">
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">struct </span>fuse_context* __context = fuse_get_context(); \
+<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \
     uid_t __uid = geteuid(); \
     seteuid(__context-&gt;uid); \
@@ -141,7 +146,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
     setegid(__gid); \
     seteuid(__uid);
 </pre></div>
-<p>Definition at line <a class="el" href="util_8c_source.html#l00119">119</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00131">131</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -181,7 +186,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a newly allocated string with the base64 data which should be free'd by the user </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00021">21</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00024">24</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -209,7 +214,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a base64 encoded string with the process command line, or an empty string if it could not be extrcated </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00044">44</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00047">47</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -241,7 +246,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00094">94</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00097">97</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -269,7 +274,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00080">80</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00083">83</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -279,7 +284,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -291,7 +296,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ut
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

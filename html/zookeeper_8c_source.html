@@ -123,98 +123,101 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00040"></a>00040 <span class="comment"> * ADVISED OF THE</span>
 <a name="l00041"></a>00041 <span class="comment"> * POSSIBILITY OF SUCH DAMAGE.</span>
 <a name="l00042"></a>00042 <span class="comment"> */</span>
-<a name="l00043"></a>00043 <span class="preprocessor">#include &lt;jansson.h&gt;</span>
-<a name="l00044"></a>00044 <span class="preprocessor">#define BROKER_PATH &quot;/brokers/ids&quot;</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="keyword">static</span> <span class="keywordtype">void</span> set_brokerlist_from_zookeeper(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zzh, <span class="keywordtype">char</span> *brokers)
-<a name="l00046"></a>00046 {
-<a name="l00047"></a>00047     <span class="keywordflow">if</span> (zzh)
-<a name="l00048"></a>00048     {
-<a name="l00049"></a>00049         <span class="keyword">struct </span><a class="code" href="structString__vector.html">String_vector</a> brokerlist;
-<a name="l00050"></a>00050         <span class="keywordflow">if</span> (zoo_get_children(zzh, BROKER_PATH, 1, &amp;brokerlist) != ZOK)
-<a name="l00051"></a>00051         {
-<a name="l00052"></a>00052             fprintf(stderr, <span class="stringliteral">&quot;No brokers found on path %s\n&quot;</span>, BROKER_PATH);
-<a name="l00053"></a>00053             <span class="keywordflow">return</span>;
-<a name="l00054"></a>00054         }
-<a name="l00055"></a>00055         <span class="keywordtype">int</span> i;
-<a name="l00056"></a>00056         <span class="keywordtype">char</span> *brokerptr = brokers;
-<a name="l00057"></a>00057         <span class="keywordflow">for</span> (i = 0; i &lt; brokerlist.count; i++)
-<a name="l00058"></a>00058         {
-<a name="l00059"></a>00059             <span class="keywordtype">char</span> path[255], cfg[1024];
-<a name="l00060"></a>00060             sprintf(path, <span class="stringliteral">&quot;/brokers/ids/%s&quot;</span>, brokerlist.data[i]);
-<a name="l00061"></a>00061             <span class="keywordtype">int</span> len = <span class="keyword">sizeof</span>(cfg);
-<a name="l00062"></a>00062             zoo_get(zzh, path, 0, cfg, &amp;len, NULL);
-<a name="l00063"></a>00063             <span class="keywordflow">if</span> (len &gt; 0)
-<a name="l00064"></a>00064             {
-<a name="l00065"></a>00065                 cfg[len] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00066"></a>00066                 json_error_t jerror;
-<a name="l00067"></a>00067                 json_t *jobj = json_loads(cfg, 0, &amp;jerror);
-<a name="l00068"></a>00068                 <span class="keywordflow">if</span> (jobj)
-<a name="l00069"></a>00069                 {
-<a name="l00070"></a>00070                     json_t *jhost = json_object_get(jobj, <span class="stringliteral">&quot;host&quot;</span>);
-<a name="l00071"></a>00071                     json_t *jport = json_object_get(jobj, <span class="stringliteral">&quot;port&quot;</span>);
-<a name="l00072"></a>00072                     <span class="keywordflow">if</span> (jhost &amp;&amp; jport)
-<a name="l00073"></a>00073                     {
-<a name="l00074"></a>00074                         <span class="keyword">const</span> <span class="keywordtype">char</span> *host = json_string_value(jhost);
-<a name="l00075"></a>00075                         <span class="keyword">const</span> <span class="keywordtype">int</span> port = json_integer_value(jport);
-<a name="l00076"></a>00076                         sprintf(brokerptr, <span class="stringliteral">&quot;%s:%d&quot;</span>, host, port);
-<a name="l00077"></a>00077                         brokerptr += strlen(brokerptr);
-<a name="l00078"></a>00078                         <span class="keywordflow">if</span> (i &lt; brokerlist.count - 1)
-<a name="l00079"></a>00079                         {
-<a name="l00080"></a>00080                             *brokerptr++ = <span class="charliteral">&#39;,&#39;</span>;
-<a name="l00081"></a>00081                         }
-<a name="l00082"></a>00082                     }
-<a name="l00083"></a>00083                     json_decref(jobj);
-<a name="l00084"></a>00084                 }
-<a name="l00085"></a>00085             }
-<a name="l00086"></a>00086         }
-<a name="l00087"></a>00087         deallocate_String_vector(&amp;brokerlist);
-<a name="l00088"></a>00088         printf(<span class="stringliteral">&quot;Found brokers %s\n&quot;</span>, brokers);
-<a name="l00089"></a>00089     }
-<a name="l00090"></a>00090 }
-<a name="l00091"></a>00091 <span class="keyword">static</span> <span class="keywordtype">void</span> watcher(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keywordtype">int</span> type,
-<a name="l00092"></a>00092         <span class="keywordtype">int</span> state, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">void</span> *param)
-<a name="l00093"></a>00093 {
-<a name="l00094"></a>00094     <span class="keywordtype">char</span> brokers[1024];
-<a name="l00095"></a>00095     <a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>* k = (<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) param;
-<a name="l00096"></a>00096     <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *topic_conf;
-<a name="l00097"></a>00097     <span class="keywordflow">if</span>(k-&gt;conf == NULL) <span class="keywordflow">return</span>;
-<a name="l00098"></a>00098     <span class="keywordtype">char</span>* topic = k-&gt;conf-&gt;topic[0];
-<a name="l00099"></a>00099     <span class="keywordflow">if</span> (k-&gt;no_brokers || type == ZOO_CHILD_EVENT &amp;&amp; strncmp(
-<a name="l00100"></a>00100                 path, BROKER_PATH, <span class="keyword">sizeof</span>(BROKER_PATH) - 1) == 0)
-<a name="l00101"></a>00101     {
-<a name="l00102"></a>00102         brokers[0] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00103"></a>00103         set_brokerlist_from_zookeeper(zh, brokers);
-<a name="l00104"></a>00104         <span class="keywordflow">if</span> (brokers[0] != <span class="charliteral">&#39;\0&#39;</span> &amp;&amp; k-&gt;rk != NULL)
-<a name="l00105"></a>00105         {
-<a name="l00106"></a>00106             rd_kafka_brokers_add(k-&gt;rk, brokers);
-<a name="l00107"></a>00107             k-&gt;no_brokers = 0;
-<a name="l00108"></a>00108             rd_kafka_poll(k-&gt;rk, 10);
-<a name="l00109"></a>00109             topic_conf = rd_kafka_topic_conf_new();
-<a name="l00110"></a>00110             k-&gt;rkt = rd_kafka_topic_new(k-&gt;rk, topic, topic_conf);
-<a name="l00111"></a>00111             <span class="keywordflow">if</span>(k-&gt;rkt == NULL)
-<a name="l00112"></a>00112                 printf(<span class="stringliteral">&quot;topic %s creation failed\n&quot;</span>, topic);
-<a name="l00113"></a>00113         }
-<a name="l00114"></a>00114     }
-<a name="l00115"></a>00115 }
-<a name="l00116"></a>00116 <span class="keyword">static</span> <a class="code" href="struct__zhandle__t.html">zhandle_t</a>* initialize_zookeeper(<span class="keyword">const</span> <span class="keywordtype">char</span> * zookeeper, <span class="keywordtype">void</span>* param)
-<a name="l00117"></a>00117 {
-<a name="l00118"></a>00118     ((<a class="code" href="struct__kafka__t.html" title="a wrapping structure for kafka client and fuse_kafka configuration">kafka_t</a>*) param)-&gt;no_brokers = 1;
-<a name="l00119"></a>00119     <a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh;
-<a name="l00120"></a>00120     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
-<a name="l00121"></a>00121     <span class="keywordflow">if</span> (zh == NULL)
-<a name="l00122"></a>00122     {
-<a name="l00123"></a>00123         fprintf(stderr, <span class="stringliteral">&quot;Zookeeper connection not established.&quot;</span>);
-<a name="l00124"></a>00124         <span class="comment">//exit(1);</span>
-<a name="l00125"></a>00125     }
-<a name="l00126"></a>00126     <span class="keywordflow">return</span> zh;
-<a name="l00127"></a>00127 }
+<a name="l00043"></a>00043 <span class="preprocessor">#ifndef FUSE_KAFKA_ZOOKEEPER_C</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span><span class="preprocessor">#define FUSE_KAFKA_ZOOKEEPER_C</span>
+<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#include &lt;jansson.h&gt;</span>
+<a name="l00046"></a>00046 <span class="preprocessor">#define BROKER_PATH &quot;/brokers/ids&quot;</span>
+<a name="l00047"></a>00047 <span class="preprocessor"></span><span class="keyword">static</span> <span class="keywordtype">void</span> set_brokerlist_from_zookeeper(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zzh, <span class="keywordtype">char</span> *brokers)
+<a name="l00048"></a>00048 {
+<a name="l00049"></a>00049     <span class="keywordflow">if</span> (zzh)
+<a name="l00050"></a>00050     {
+<a name="l00051"></a>00051         <span class="keyword">struct </span><a class="code" href="structString__vector.html">String_vector</a> brokerlist;
+<a name="l00052"></a>00052         <span class="keywordflow">if</span> (zoo_get_children(zzh, BROKER_PATH, 1, &amp;brokerlist) != ZOK)
+<a name="l00053"></a>00053         {
+<a name="l00054"></a>00054             fprintf(stderr, <span class="stringliteral">&quot;No brokers found on path %s\n&quot;</span>, BROKER_PATH);
+<a name="l00055"></a>00055             <span class="keywordflow">return</span>;
+<a name="l00056"></a>00056         }
+<a name="l00057"></a>00057         <span class="keywordtype">int</span> i;
+<a name="l00058"></a>00058         <span class="keywordtype">char</span> *brokerptr = brokers;
+<a name="l00059"></a>00059         <span class="keywordflow">for</span> (i = 0; i &lt; brokerlist.count; i++)
+<a name="l00060"></a>00060         {
+<a name="l00061"></a>00061             <span class="keywordtype">char</span> path[255], cfg[1024];
+<a name="l00062"></a>00062             sprintf(path, <span class="stringliteral">&quot;/brokers/ids/%s&quot;</span>, brokerlist.data[i]);
+<a name="l00063"></a>00063             <span class="keywordtype">int</span> len = <span class="keyword">sizeof</span>(cfg);
+<a name="l00064"></a>00064             zoo_get(zzh, path, 0, cfg, &amp;len, NULL);
+<a name="l00065"></a>00065             <span class="keywordflow">if</span> (len &gt; 0)
+<a name="l00066"></a>00066             {
+<a name="l00067"></a>00067                 cfg[len] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00068"></a>00068                 json_error_t jerror;
+<a name="l00069"></a>00069                 json_t *jobj = json_loads(cfg, 0, &amp;jerror);
+<a name="l00070"></a>00070                 <span class="keywordflow">if</span> (jobj)
+<a name="l00071"></a>00071                 {
+<a name="l00072"></a>00072                     json_t *jhost = json_object_get(jobj, <span class="stringliteral">&quot;host&quot;</span>);
+<a name="l00073"></a>00073                     json_t *jport = json_object_get(jobj, <span class="stringliteral">&quot;port&quot;</span>);
+<a name="l00074"></a>00074                     <span class="keywordflow">if</span> (jhost &amp;&amp; jport)
+<a name="l00075"></a>00075                     {
+<a name="l00076"></a>00076                         <span class="keyword">const</span> <span class="keywordtype">char</span> *host = json_string_value(jhost);
+<a name="l00077"></a>00077                         <span class="keyword">const</span> <span class="keywordtype">int</span> port = json_integer_value(jport);
+<a name="l00078"></a>00078                         sprintf(brokerptr, <span class="stringliteral">&quot;%s:%d&quot;</span>, host, port);
+<a name="l00079"></a>00079                         brokerptr += strlen(brokerptr);
+<a name="l00080"></a>00080                         <span class="keywordflow">if</span> (i &lt; brokerlist.count - 1)
+<a name="l00081"></a>00081                         {
+<a name="l00082"></a>00082                             *brokerptr++ = <span class="charliteral">&#39;,&#39;</span>;
+<a name="l00083"></a>00083                         }
+<a name="l00084"></a>00084                     }
+<a name="l00085"></a>00085                     json_decref(jobj);
+<a name="l00086"></a>00086                 }
+<a name="l00087"></a>00087             }
+<a name="l00088"></a>00088         }
+<a name="l00089"></a>00089         deallocate_String_vector(&amp;brokerlist);
+<a name="l00090"></a>00090     }
+<a name="l00091"></a>00091 }
+<a name="l00092"></a>00092 <span class="keyword">static</span> <span class="keywordtype">void</span> watcher(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keywordtype">int</span> type,
+<a name="l00093"></a>00093         <span class="keywordtype">int</span> state, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">void</span> *param)
+<a name="l00094"></a>00094 {
+<a name="l00095"></a>00095     <span class="keywordtype">char</span> brokers[1024];
+<a name="l00096"></a>00096     kafka_t* k = (kafka_t*) param;
+<a name="l00097"></a>00097     <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *topic_conf;
+<a name="l00098"></a>00098     <span class="keywordflow">if</span>(k-&gt;conf == NULL) <span class="keywordflow">return</span>;
+<a name="l00099"></a>00099     <span class="keywordtype">char</span>* topic = k-&gt;conf-&gt;topic[0];
+<a name="l00100"></a>00100     <span class="keywordflow">if</span> (k-&gt;no_brokers || type == ZOO_CHILD_EVENT &amp;&amp; strncmp(
+<a name="l00101"></a>00101                 path, BROKER_PATH, <span class="keyword">sizeof</span>(BROKER_PATH) - 1) == 0)
+<a name="l00102"></a>00102     {
+<a name="l00103"></a>00103         brokers[0] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00104"></a>00104         set_brokerlist_from_zookeeper(zh, brokers);
+<a name="l00105"></a>00105         <span class="keywordflow">if</span> (brokers[0] != <span class="charliteral">&#39;\0&#39;</span> &amp;&amp; k-&gt;rk != NULL)
+<a name="l00106"></a>00106         {
+<a name="l00107"></a>00107             rd_kafka_brokers_add(k-&gt;rk, brokers);
+<a name="l00108"></a>00108             k-&gt;no_brokers = 0;
+<a name="l00109"></a>00109             rd_kafka_poll(k-&gt;rk, 10);
+<a name="l00110"></a>00110             topic_conf = rd_kafka_topic_conf_new();
+<a name="l00111"></a>00111             k-&gt;rkt = rd_kafka_topic_new(k-&gt;rk, topic, topic_conf);
+<a name="l00112"></a>00112             <span class="keywordflow">if</span>(k-&gt;rkt == NULL)
+<a name="l00113"></a>00113                 printf(<span class="stringliteral">&quot;topic %s creation failed\n&quot;</span>, topic);
+<a name="l00114"></a>00114         }
+<a name="l00115"></a>00115     }
+<a name="l00116"></a>00116 }
+<a name="l00117"></a>00117 <span class="keyword">static</span> <a class="code" href="struct__zhandle__t.html">zhandle_t</a>* initialize_zookeeper(<span class="keyword">const</span> <span class="keywordtype">char</span> * zookeeper, <span class="keywordtype">void</span>* param)
+<a name="l00118"></a>00118 {
+<a name="l00119"></a>00119     zoo_set_debug_level(ZOO_LOG_LEVEL_ERROR);
+<a name="l00120"></a>00120     ((kafka_t*) param)-&gt;no_brokers = 1;
+<a name="l00121"></a>00121     <a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh;
+<a name="l00122"></a>00122     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
+<a name="l00123"></a>00123     <span class="keywordflow">if</span> (zh == NULL)
+<a name="l00124"></a>00124     {
+<a name="l00125"></a>00125         fprintf(stderr, <span class="stringliteral">&quot;Zookeeper connection not established.&quot;</span>);
+<a name="l00126"></a>00126         <span class="comment">//exit(1);</span>
+<a name="l00127"></a>00127     }
+<a name="l00128"></a>00128     <span class="keywordflow">return</span> zh;
+<a name="l00129"></a>00129 }
+<a name="l00130"></a>00130 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -226,7 +229,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

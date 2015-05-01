@@ -42,6 +42,9 @@ struct \hyperlink{structString__vector}{\-String\-\_\-vector}
 \item 
 \hypertarget{kafka__client__test_8c_acd6869abeb3231bd660163a05177acbe}{\#define {\bfseries \-Z\-O\-O\-\_\-\-C\-H\-I\-L\-D\-\_\-\-E\-V\-E\-N\-T}~4}\label{kafka__client__test_8c_acd6869abeb3231bd660163a05177acbe}
 
+\item 
+\hypertarget{kafka__client__test_8c_a34a4be4ab8f1c0c9cf27eb84fb7f00bc}{\#define {\bfseries \-Z\-O\-O\-\_\-\-L\-O\-G\-\_\-\-L\-E\-V\-E\-L\-\_\-\-E\-R\-R\-O\-R}~1}\label{kafka__client__test_8c_a34a4be4ab8f1c0c9cf27eb84fb7f00bc}
+
 \end{DoxyCompactItemize}
 \subsection*{\-Typedefs}
 \begin{DoxyCompactItemize}
@@ -61,7 +64,7 @@ struct \hyperlink{structString__vector}{\-String\-\_\-vector}
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{kafka__client__test_8c_a6554d448d8c629888b40ef090dc8fe3d}{static struct fuse\-\_\-context $\ast$ {\bfseries test\-\_\-fuse\-\_\-get\-\_\-context} ()}\label{kafka__client__test_8c_a6554d448d8c629888b40ef090dc8fe3d}
+\hypertarget{kafka__client__test_8c_a6554d448d8c629888b40ef090dc8fe3d}{static struct \hyperlink{structfuse__context}{fuse\-\_\-context} $\ast$ {\bfseries test\-\_\-fuse\-\_\-get\-\_\-context} ()}\label{kafka__client__test_8c_a6554d448d8c629888b40ef090dc8fe3d}
 
 \item 
 \hypertarget{kafka__client__test_8c_a788d57320b6a2045db472a839f562ddb}{\hyperlink{structrd__kafka__conf__t}{rd\-\_\-kafka\-\_\-conf\-\_\-t} $\ast$ {\bfseries rd\-\_\-kafka\-\_\-conf\-\_\-new} ()}\label{kafka__client__test_8c_a788d57320b6a2045db472a839f562ddb}
@@ -109,7 +112,13 @@ struct \hyperlink{structString__vector}{\-String\-\_\-vector}
 \hypertarget{kafka__client__test_8c_af2af40c46fbeff01010580882f17f520}{int {\bfseries rd\-\_\-kafka\-\_\-poll} (\hyperlink{structrd__kafka__t}{rd\-\_\-kafka\-\_\-t} $\ast$rk, int timeout\-\_\-ms)}\label{kafka__client__test_8c_af2af40c46fbeff01010580882f17f520}
 
 \item 
+\hypertarget{kafka__client__test_8c_a7b112923b8eafc396654539cd7500f06}{void {\bfseries zoo\-\_\-set\-\_\-debug\-\_\-level} (int level)}\label{kafka__client__test_8c_a7b112923b8eafc396654539cd7500f06}
+
+\item 
 \hypertarget{kafka__client__test_8c_ab9fae982bb2ceaed42848b9e28389212}{\hyperlink{struct__zhandle__t}{zhandle\-\_\-t} $\ast$ {\bfseries zookeeper\-\_\-init} (const char $\ast$host, watcher\-\_\-fn fn, int recv\-\_\-timeout, void $\ast$clientid, void $\ast$context, int flags)}\label{kafka__client__test_8c_ab9fae982bb2ceaed42848b9e28389212}
+
+\item 
+\hypertarget{kafka__client__test_8c_a633908b12b5d9652cd250aa0387b95f3}{int {\bfseries zookeeper\-\_\-close} (\hyperlink{struct__zhandle__t}{zhandle\-\_\-t} $\ast$zh)}\label{kafka__client__test_8c_a633908b12b5d9652cd250aa0387b95f3}
 
 \item 
 \hypertarget{kafka__client__test_8c_a323fa9227a93c9ad239ce71898b3877e}{int {\bfseries zoo\-\_\-get\-\_\-children} (\hyperlink{struct__zhandle__t}{zhandle\-\_\-t} $\ast$zh, const char $\ast$path, int watch, struct \hyperlink{structString__vector}{\-String\-\_\-vector} $\ast$strings)}\label{kafka__client__test_8c_a323fa9227a93c9ad239ce71898b3877e}

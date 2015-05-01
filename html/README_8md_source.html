@@ -85,9 +85,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 [![Build Status](https:<span class="comment">//api.shippable.com/projects/549439afd46935d5fbc0a9cf/badge?branchName=master)](https://app.shippable.com/projects/549439afd46935d5fbc0a9cf/builds/latest)</span>
 <a name="l00003"></a>00003 [![Coverage Status](https:<span class="comment">//img.shields.io/coveralls/yazgoo/fuse_kafka.svg)](https://coveralls.io/r/yazgoo/fuse_kafka?branch=master)</span>
 <a name="l00004"></a>00004 [![Gitter](http:<span class="comment">//img.shields.io/badge/gitter-join chat-1dce73.svg?style=flat)](https://gitter.im/yazgoo/fuse_kafka?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge)</span>
-<a name="l00005"></a>00005 [![Documentation](http:<span class="comment">//img.shields.io/badge/documentation-%E2%9C%93-blue.svg?style=flat)](http://yazgoo.github.io/fuse_kafka/html/)</span>
+<a name="l00005"></a>00005 [![Documentation](http:<span class="comment">//img.shields.io/badge/doc-%E2%9C%93-blue.svg?style=flat)](http://yazgoo.github.io/fuse_kafka/html/)</span>
 <a name="l00006"></a>00006 [![Open Build Service](http:<span class="comment">//img.shields.io/badge/install-packages-yellow.svg?style=flat)](http://software.opensuse.org/download.html?project=home%3Ayazgoo&amp;package=fuse_kafka)</span>
-<a name="l00007"></a>00007 [![Benchmarks](http:<span class="comment">//img.shields.io/badge/benchmarks-bonnie++-949494.svg?style=flat)](http://htmlpreview.github.io/?https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/benchs/benchmarks.html#5)</span>
+<a name="l00007"></a>00007 [![Benchmarks](http:<span class="comment">//img.shields.io/badge/benchs-bonnie++-949494.svg?style=flat)](http://htmlpreview.github.io/?https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/benchs/benchmarks.html#5)</span>
 <a name="l00008"></a>00008 
 <a name="l00009"></a>00009 [![Docker](http:<span class="comment">//dockeri.co/image/yazgoo/fuse_kafka)](https://registry.hub.docker.com/u/yazgoo/fuse_kafka/)</span>
 <a name="l00010"></a>00010 
@@ -105,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00022"></a>00022 
 <a name="l00023"></a>00023 <span class="preprocessor">    # curl -O \</span>
 <a name="l00024"></a>00024 <span class="preprocessor">        https://raw.githubusercontent.com/yazgoo/fuse_kafka/master/setup.sh \</span>
-<a name="l00025"></a>00025 <span class="preprocessor">        &amp;&amp; md5sum -c &lt;(echo &quot;bf50da604bcb83b8461a92cdad892970  setup.sh&quot;) \</span>
+<a name="l00025"></a>00025 <span class="preprocessor">        &amp;&amp; md5sum -c &lt;(echo &quot;5a33de1d49a5ab0aebff0e6196f048ef  setup.sh&quot;) \</span>
 <a name="l00026"></a>00026 <span class="preprocessor">        &amp;&amp; chmod +x setup.sh &amp;&amp; ./setup.sh</span>
 <a name="l00027"></a>00027 <span class="preprocessor"></span>
 <a name="l00028"></a>00028 (<span class="keywordflow">for</span> more options - e.g. to install on a machine with no access to the repos - see <span class="stringliteral">&#39;setup.sh options&#39;</span> section)
@@ -153,269 +153,400 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00070"></a>00070 An important piece of configuration is fuse\_kafka\_directories:
 <a name="l00071"></a>00071 
 <a name="l00072"></a>00072     $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
-<a name="l00073"></a>00073     # directories fuse_kafka will listen to (launch script will try to
-<a name="l00074"></a>00074     # create them if they don<span class="stringliteral">&#39;t exist)</span>
-<a name="l00075"></a>00075 <span class="stringliteral">    fuse_kafka_directories=[&quot;/tmp/fuse-kafka-test&quot;]</span>
-<a name="l00076"></a>00076 <span class="stringliteral"></span>
-<a name="l00077"></a>00077 <span class="stringliteral">Start fuse\_kafka using the init script:</span>
-<a name="l00078"></a>00078 <span class="stringliteral"></span>
-<a name="l00079"></a>00079 <span class="stringliteral">    $ src/fuse_kafka.py start</span>
-<a name="l00080"></a>00080 <span class="stringliteral"></span>
-<a name="l00081"></a>00081 <span class="stringliteral">If you&#39;</span>re not running as root, you might have to make 
-<a name="l00082"></a>00082 /etc/fuse.conf readable by your user (here to all users):
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084     $ chmod a+r /etc/fuse.conf
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 And allow non-root user to specify the allow\_other option, by adding
-<a name="l00087"></a>00087 a line with user\_allow\_other in /etc/fuse.conf.
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 ````python
+<a name="l00075"></a>00075 # directories fuse_kafka will listen to (launch script will try to
+<a name="l00076"></a>00076 # create them if they don<span class="stringliteral">&#39;t exist)</span>
+<a name="l00077"></a>00077 <span class="stringliteral">fuse_kafka_directories=[&quot;/tmp/fuse-kafka-test&quot;]</span>
+<a name="l00078"></a>00078 <span class="stringliteral">````</span>
+<a name="l00079"></a>00079 <span class="stringliteral"></span>
+<a name="l00080"></a>00080 <span class="stringliteral">Start fuse\_kafka using the init script:</span>
+<a name="l00081"></a>00081 <span class="stringliteral"></span>
+<a name="l00082"></a>00082 <span class="stringliteral">    $ src/fuse_kafka.py start</span>
+<a name="l00083"></a>00083 <span class="stringliteral"></span>
+<a name="l00084"></a>00084 <span class="stringliteral">If you&#39;</span>re not running as root, you might have to make 
+<a name="l00085"></a>00085 /etc/fuse.conf readable by your user (here to all users):
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087     $ chmod a+r /etc/fuse.conf
 <a name="l00088"></a>00088 
-<a name="l00089"></a>00089 If fuse\_kafka is running, you should get the following output when
-<a name="l00090"></a>00090 running:
+<a name="l00089"></a>00089 And allow non-root user to specify the allow\_other option, by adding
+<a name="l00090"></a>00090 a line with user\_allow\_other in /etc/fuse.conf.
 <a name="l00091"></a>00091 
-<a name="l00092"></a>00092     $ src/fuse_kafka.py status
-<a name="l00093"></a>00093     listening on /tmp/fuse-kafka-test
-<a name="l00094"></a>00094     fuse kafka is running
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096 In yet another terminal, start a test consumer:
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098     $ ./build.py kafka_consumer_start
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100 Then start writing to a file under the overlay directory:
-<a name="l00101"></a>00101 
-<a name="l00102"></a>00102     $ bash -c <span class="stringliteral">&#39;echo &quot;foo&quot;&#39;</span> &gt; /tmp/fuse-kafka-test/bar
-<a name="l00103"></a>00103 
-<a name="l00104"></a>00104 You should have an output from the consumer similar to this:
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106     event:
-<a name="l00107"></a>00107         group: users
-<a name="l00108"></a>00108         uid: 1497
-<a name="l00109"></a>00109         @tags:
-<a name="l00110"></a>00110             -  test
-<a name="l00111"></a>00111         @fields:
-<a name="l00112"></a>00112              hostname: test
-<a name="l00113"></a>00113         @timestamp: 2014-10-03T09:07:04.000+0000
-<a name="l00114"></a>00114         pid: 6485
-<a name="l00115"></a>00115         gid: 604
-<a name="l00116"></a>00116         command: bash -c echo <span class="stringliteral">&quot;foo&quot;</span>
-<a name="l00117"></a>00117         @message: foo
-<a name="l00118"></a>00118         path: /tmp/fuse-kafka-test/bar
-<a name="l00119"></a>00119         @version: 0.1.3
-<a name="l00120"></a>00120         user: yazgoo
-<a name="l00121"></a>00121 
-<a name="l00122"></a>00122 When you<span class="stringliteral">&#39;re done, you can stop fuse\_kafka:</span>
-<a name="l00123"></a>00123 <span class="stringliteral"></span>
-<a name="l00124"></a>00124 <span class="stringliteral">    $ src/fuse_kafka.py stop</span>
-<a name="l00125"></a>00125 <span class="stringliteral"></span>
-<a name="l00126"></a>00126 <span class="stringliteral"></span>
-<a name="l00127"></a>00127 <span class="stringliteral">Quota option test</span>
-<a name="l00128"></a>00128 <span class="stringliteral">=================</span>
-<a name="l00129"></a>00129 <span class="stringliteral"></span>
-<a name="l00130"></a>00130 <span class="stringliteral">First, commment fuse\_kafka\_quota in conf/fuse\_kafka.properties.</span>
-<a name="l00131"></a>00131 <span class="stringliteral">Then, start fuse kafka.</span>
-<a name="l00132"></a>00132 <span class="stringliteral"></span>
-<a name="l00133"></a>00133 <span class="stringliteral">    $ src/fuse_kafka.py start</span>
+<a name="l00092"></a>00092 If fuse\_kafka is running, you should get the following output when
+<a name="l00093"></a>00093 running:
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095     $ src/fuse_kafka.py status
+<a name="l00096"></a>00096     listening on /tmp/fuse-kafka-test
+<a name="l00097"></a>00097     fuse kafka is running
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099 In yet another terminal, start a test consumer:
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101     $ ./build.py kafka_consumer_start
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 Then start writing to a file under the overlay directory:
+<a name="l00104"></a>00104 
+<a name="l00105"></a>00105     $ bash -c <span class="stringliteral">&#39;echo &quot;foo&quot;&#39;</span> &gt; /tmp/fuse-kafka-test/bar
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107 You should have an output from the consumer similar to this:
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109 ````yaml
+<a name="l00110"></a>00110 event:
+<a name="l00111"></a>00111     group: users
+<a name="l00112"></a>00112     uid: 1497
+<a name="l00113"></a>00113     @tags:
+<a name="l00114"></a>00114         -  test
+<a name="l00115"></a>00115     @fields:
+<a name="l00116"></a>00116          hostname: test
+<a name="l00117"></a>00117     @timestamp: 2014-10-03T09:07:04.000+0000
+<a name="l00118"></a>00118     pid: 6485
+<a name="l00119"></a>00119     gid: 604
+<a name="l00120"></a>00120     command: bash -c echo <span class="stringliteral">&quot;foo&quot;</span>
+<a name="l00121"></a>00121     @message: foo
+<a name="l00122"></a>00122     path: /tmp/fuse-kafka-test/bar
+<a name="l00123"></a>00123     @version: 0.1.3
+<a name="l00124"></a>00124     user: yazgoo
+<a name="l00125"></a>00125 ````
+<a name="l00126"></a>00126 
+<a name="l00127"></a>00127 When you<span class="stringliteral">&#39;re done, you can stop fuse\_kafka:</span>
+<a name="l00128"></a>00128 <span class="stringliteral"></span>
+<a name="l00129"></a>00129 <span class="stringliteral">    $ src/fuse_kafka.py stop</span>
+<a name="l00130"></a>00130 <span class="stringliteral"></span>
+<a name="l00131"></a>00131 <span class="stringliteral"></span>
+<a name="l00132"></a>00132 <span class="stringliteral">Quota option test</span>
+<a name="l00133"></a>00133 <span class="stringliteral">=================</span>
 <a name="l00134"></a>00134 <span class="stringliteral"></span>
-<a name="l00135"></a>00135 <span class="stringliteral">Let&#39;</span>s create a segfaulting program:
-<a name="l00136"></a>00136 
-<a name="l00137"></a>00137     $ cat first.c
-<a name="l00138"></a>00138     int main(void)
-<a name="l00139"></a>00139     {
-<a name="l00140"></a>00140         *((<span class="keywordtype">int</span>*)0) = 1;
-<a name="l00141"></a>00141     }
-<a name="l00142"></a>00142 
-<a name="l00143"></a>00143     $ gcc first.c
-<a name="l00144"></a>00144 
-<a name="l00145"></a>00145 Then start a test consumer, displaying only the path and message\_size-added fields
-<a name="l00146"></a>00146 
-<a name="l00147"></a>00147 Launch the segfaulting program in fuse-kafka-test directory:
-<a name="l00148"></a>00148 
-<a name="l00149"></a>00149     $ /path/to/a.out
+<a name="l00135"></a>00135 <span class="stringliteral">First, commment fuse\_kafka\_quota in conf/fuse\_kafka.properties.</span>
+<a name="l00136"></a>00136 <span class="stringliteral">Then, start fuse kafka.</span>
+<a name="l00137"></a>00137 <span class="stringliteral"></span>
+<a name="l00138"></a>00138 <span class="stringliteral">    $ src/fuse_kafka.py start</span>
+<a name="l00139"></a>00139 <span class="stringliteral"></span>
+<a name="l00140"></a>00140 <span class="stringliteral">Let&#39;</span>s create a segfaulting program:
+<a name="l00141"></a>00141 
+<a name="l00142"></a>00142     $ cat first.c
+<a name="l00143"></a>00143 
+<a name="l00144"></a>00144 ````c
+<a name="l00145"></a>00145 int main(void)
+<a name="l00146"></a>00146 {
+<a name="l00147"></a>00147     *((<span class="keywordtype">int</span>*)0) = 1;
+<a name="l00148"></a>00148 }
+<a name="l00149"></a>00149 ````
 <a name="l00150"></a>00150 
-<a name="l00151"></a>00151 A <span class="keyword">new</span> core file should appear in fused directory.
+<a name="l00151"></a>00151     $ gcc first.c
 <a name="l00152"></a>00152 
-<a name="l00153"></a>00153 Here is the consumer output:
+<a name="l00153"></a>00153 Then start a test consumer, displaying only the path and message\_size-added fields
 <a name="l00154"></a>00154 
-<a name="l00155"></a>00155     $ SELECT=<span class="stringliteral">&quot;message_size-added path&quot;</span> ./build.py kafka_consumer_start
-<a name="l00156"></a>00156     <span class="keyword">event</span>:
-<a name="l00157"></a>00157         message_size-added: 4096
-<a name="l00158"></a>00158         path: /tmp/fuse-kafka-test/core
-<a name="l00159"></a>00159     ...
-<a name="l00160"></a>00160     <span class="keyword">event</span>:
-<a name="l00161"></a>00161         message_size-added: 4096
-<a name="l00162"></a>00162         path: /tmp/fuse-kafka-test/core
-<a name="l00163"></a>00163 
-<a name="l00164"></a>00164 Here we see many messages.
-<a name="l00165"></a>00165 
-<a name="l00166"></a>00166 Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
-<a name="l00167"></a>00167 launch the segfaulting program,
-<a name="l00168"></a>00168         
-<a name="l00169"></a>00169     $ SELECT=<span class="stringliteral">&quot;message_size-added path&quot;</span> ./build.py kafka_consumer_start
-<a name="l00170"></a>00170     <span class="keyword">event</span>:
-<a name="l00171"></a>00171         message_size-added: 64
-<a name="l00172"></a>00172         path: /tmp/fuse-kafka-test/core
+<a name="l00155"></a>00155 Launch the segfaulting program in fuse-kafka-test directory:
+<a name="l00156"></a>00156 
+<a name="l00157"></a>00157     $ /path/to/a.out
+<a name="l00158"></a>00158 
+<a name="l00159"></a>00159 A <span class="keyword">new</span> core file should appear in fused directory.
+<a name="l00160"></a>00160 
+<a name="l00161"></a>00161 Here is the consumer output:
+<a name="l00162"></a>00162 
+<a name="l00163"></a>00163     $ SELECT=<span class="stringliteral">&quot;message_size-added path&quot;</span> ./build.py kafka_consumer_start
+<a name="l00164"></a>00164     <span class="keyword">event</span>:
+<a name="l00165"></a>00165         message_size-added: 4096
+<a name="l00166"></a>00166         path: /tmp/fuse-kafka-test/core
+<a name="l00167"></a>00167     ...
+<a name="l00168"></a>00168     <span class="keyword">event</span>:
+<a name="l00169"></a>00169         message_size-added: 4096
+<a name="l00170"></a>00170         path: /tmp/fuse-kafka-test/core
+<a name="l00171"></a>00171 
+<a name="l00172"></a>00172 Here we see many messages.
 <a name="l00173"></a>00173 
-<a name="l00174"></a>00174 This time, we only receive the first write.
-<a name="l00175"></a>00175 
-<a name="l00176"></a>00176 Event format
-<a name="l00177"></a>00177 ============
-<a name="l00178"></a>00178 
-<a name="l00179"></a>00179 We use a logstash event, except the message and command are <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a> encoded:
-<a name="l00180"></a>00180 
-<a name="l00181"></a>00181     {<span class="stringliteral">&quot;path&quot;</span>: <span class="stringliteral">&quot;/var/log/redis_6380.log&quot;</span>, <span class="stringliteral">&quot;pid&quot;</span>: 1262, <span class="stringliteral">&quot;uid&quot;</span>: 0, <span class="stringliteral">&quot;gid&quot;</span>: 0,
-<a name="l00182"></a>00182     <span class="stringliteral">&quot;@message&quot;</span>: <span class="stringliteral">&quot;aGVsbG8gd29ybGQ=&quot;</span>,
-<a name="l00183"></a>00183     <span class="stringliteral">&quot;@timestamp&quot;</span>: <span class="stringliteral">&quot;2014-09-11T14:19:09.000+0000&quot;</span>,<span class="stringliteral">&quot;user&quot;</span>: <span class="stringliteral">&quot;root&quot;</span>, <span class="stringliteral">&quot;group&quot;</span>:
-<a name="l00184"></a>00184     <span class="stringliteral">&quot;root&quot;</span>,
-<a name="l00185"></a>00185     <span class="stringliteral">&quot;command&quot;</span>: <span class="stringliteral">&quot;L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC&quot;</span>,
-<a name="l00186"></a>00186     <span class="stringliteral">&quot;@version&quot;</span>: <span class="stringliteral">&quot;0.1.2&quot;</span>,
-<a name="l00187"></a>00187     <span class="stringliteral">&quot;@fields&quot;</span>: {
-<a name="l00188"></a>00188         <span class="stringliteral">&quot;first_field&quot;</span>: <span class="stringliteral">&quot;first_value&quot;</span>,
-<a name="l00189"></a>00189         <span class="stringliteral">&quot;second_field&quot;</span>: <span class="stringliteral">&quot;second_value&quot;</span> },
-<a name="l00190"></a>00190     <span class="stringliteral">&quot;@tags&quot;</span>: [<span class="stringliteral">&quot;mytag&quot;</span>]}
-<a name="l00191"></a>00191 
-<a name="l00192"></a>00192 
-<a name="l00193"></a>00193 Installing from sources
-<a name="l00194"></a>00194 =======================
-<a name="l00195"></a>00195 
-<a name="l00196"></a>00196 <span class="preprocessor">    # installing prerequisites</span>
-<a name="l00197"></a>00197 <span class="preprocessor"></span>    $ sudo apt-<span class="keyword">get</span> install librdkafka-dev libfuse-dev
-<a name="l00198"></a>00198 <span class="preprocessor">    # building</span>
-<a name="l00199"></a>00199 <span class="preprocessor"></span>    $ ./build.py 
-<a name="l00200"></a>00200 <span class="preprocessor">    # testing</span>
-<a name="l00201"></a>00201 <span class="preprocessor"></span>    $ ./build.py test
-<a name="l00202"></a>00202 <span class="preprocessor">    # cleaning</span>
-<a name="l00203"></a>00203 <span class="preprocessor"></span>    $ ./build.py clean
-<a name="l00204"></a>00204 <span class="preprocessor">    # installing:</span>
-<a name="l00205"></a>00205 <span class="preprocessor"></span>    $ ./build.py install
-<a name="l00206"></a>00206 
-<a name="l00207"></a>00207 
-<a name="l00208"></a>00208 Using valgrind or another dynamic analysis tool
-<a name="l00209"></a>00209 ===============================================
-<a name="l00210"></a>00210 
-<a name="l00211"></a>00211 The start script allows to specify a command to append when actually
-<a name="l00212"></a>00212 launching the binary, FUSE\_KAFKA\_PREFIX, which can be used to
-<a name="l00213"></a>00213 perform analyses <span class="keywordflow">while</span> running (like memcheck):
-<a name="l00214"></a>00214     
-<a name="l00215"></a>00215     FUSE_KAFKA_PREFIX=<span class="stringliteral">&quot;valgrind --leak-check=yes&quot;</span> ./src/fuse_kafka.py start
+<a name="l00174"></a>00174 Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
+<a name="l00175"></a>00175 launch the segfaulting program,
+<a name="l00176"></a>00176         
+<a name="l00177"></a>00177     $ SELECT=<span class="stringliteral">&quot;message_size-added path&quot;</span> ./build.py kafka_consumer_start
+<a name="l00178"></a>00178     <span class="keyword">event</span>:
+<a name="l00179"></a>00179         message_size-added: 64
+<a name="l00180"></a>00180         path: /tmp/fuse-kafka-test/core
+<a name="l00181"></a>00181 
+<a name="l00182"></a>00182 This time, we only receive the first write.
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184 Event format
+<a name="l00185"></a>00185 ============
+<a name="l00186"></a>00186 
+<a name="l00187"></a>00187 We use a logstash event, except the message and command are <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a> encoded:
+<a name="l00188"></a>00188 
+<a name="l00189"></a>00189 ````json
+<a name="l00190"></a>00190 {<span class="stringliteral">&quot;path&quot;</span>: <span class="stringliteral">&quot;/var/log/redis_6380.log&quot;</span>, <span class="stringliteral">&quot;pid&quot;</span>: 1262, <span class="stringliteral">&quot;uid&quot;</span>: 0, <span class="stringliteral">&quot;gid&quot;</span>: 0,
+<a name="l00191"></a>00191 <span class="stringliteral">&quot;@message&quot;</span>: <span class="stringliteral">&quot;aGVsbG8gd29ybGQ=&quot;</span>,
+<a name="l00192"></a>00192 <span class="stringliteral">&quot;@timestamp&quot;</span>: <span class="stringliteral">&quot;2014-09-11T14:19:09.000+0000&quot;</span>,<span class="stringliteral">&quot;user&quot;</span>: <span class="stringliteral">&quot;root&quot;</span>, <span class="stringliteral">&quot;group&quot;</span>:
+<a name="l00193"></a>00193 <span class="stringliteral">&quot;root&quot;</span>,
+<a name="l00194"></a>00194 <span class="stringliteral">&quot;command&quot;</span>: <span class="stringliteral">&quot;L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC&quot;</span>,
+<a name="l00195"></a>00195 <span class="stringliteral">&quot;@version&quot;</span>: <span class="stringliteral">&quot;0.1.2&quot;</span>,
+<a name="l00196"></a>00196 <span class="stringliteral">&quot;@fields&quot;</span>: {
+<a name="l00197"></a>00197     <span class="stringliteral">&quot;first_field&quot;</span>: <span class="stringliteral">&quot;first_value&quot;</span>,
+<a name="l00198"></a>00198     <span class="stringliteral">&quot;second_field&quot;</span>: <span class="stringliteral">&quot;second_value&quot;</span> },
+<a name="l00199"></a>00199 <span class="stringliteral">&quot;@tags&quot;</span>: [<span class="stringliteral">&quot;mytag&quot;</span>]}
+<a name="l00200"></a>00200 ````
+<a name="l00201"></a>00201 
+<a name="l00202"></a>00202 
+<a name="l00203"></a>00203 Installing from sources
+<a name="l00204"></a>00204 =======================
+<a name="l00205"></a>00205 
+<a name="l00206"></a>00206 <span class="preprocessor">    # installing prerequisites</span>
+<a name="l00207"></a>00207 <span class="preprocessor"></span>    $ sudo apt-<span class="keyword">get</span> install librdkafka-dev libfuse-dev
+<a name="l00208"></a>00208 <span class="preprocessor">    # building</span>
+<a name="l00209"></a>00209 <span class="preprocessor"></span>    $ ./build.py 
+<a name="l00210"></a>00210 <span class="preprocessor">    # testing</span>
+<a name="l00211"></a>00211 <span class="preprocessor"></span>    $ ./build.py test
+<a name="l00212"></a>00212 <span class="preprocessor">    # cleaning</span>
+<a name="l00213"></a>00213 <span class="preprocessor"></span>    $ ./build.py clean
+<a name="l00214"></a>00214 <span class="preprocessor">    # installing:</span>
+<a name="l00215"></a>00215 <span class="preprocessor"></span>    $ ./build.py install
 <a name="l00216"></a>00216 
 <a name="l00217"></a>00217 
-<a name="l00218"></a>00218 Anti hanging
-<a name="l00219"></a>00219 ============
+<a name="l00218"></a>00218 Using valgrind or another dynamic analysis tool
+<a name="l00219"></a>00219 ===============================================
 <a name="l00220"></a>00220 
-<a name="l00221"></a>00221 Fuse-kafka must never make your filesystem accesses hang.
-<a name="l00222"></a>00222 Although this should be considered as a major bug, this might happen
-<a name="l00223"></a>00223 since the soft is still young.
-<a name="l00224"></a>00224 You can install a script call in your crontab so that any FS hanging
-<a name="l00225"></a>00225 is umounted (the check will occur every minute).
-<a name="l00226"></a>00226 To do so on an installed instance:
+<a name="l00221"></a>00221 The start script allows to specify a command to append when actually
+<a name="l00222"></a>00222 launching the binary, FUSE\_KAFKA\_PREFIX, which can be used to
+<a name="l00223"></a>00223 perform analyses <span class="keywordflow">while</span> running (like memcheck):
+<a name="l00224"></a>00224     
+<a name="l00225"></a>00225     FUSE_KAFKA_PREFIX=<span class="stringliteral">&quot;valgrind --leak-check=yes&quot;</span> ./src/fuse_kafka.py start
+<a name="l00226"></a>00226 
 <a name="l00227"></a>00227 
-<a name="l00228"></a>00228     # service fuse_kafka cleanup
-<a name="l00229"></a>00229 
-<a name="l00230"></a>00230 To do so on a source based instance:
-<a name="l00231"></a>00231 
-<a name="l00232"></a>00232     $ ./src/fuse_kafka.py cleanup
-<a name="l00233"></a>00233 
-<a name="l00234"></a>00234 
-<a name="l00235"></a>00235 setup.sh options
-<a name="l00236"></a>00236 ================
-<a name="l00237"></a>00237 
-<a name="l00238"></a>00238 Here are available options:
-<a name="l00239"></a>00239 
-<a name="l00240"></a>00240  - `-r`: to do a remote install via ssh: `-r private_ssh_key user@host`
-<a name="l00241"></a>00241  - `-d`: download and do not install the packages, generating an archive
-<a name="l00242"></a>00242  - `-f`: install an archive already built via -d: `-f fuse_kafka.tar.bz2`
-<a name="l00243"></a>00243 
-<a name="l00244"></a>00244 For example, this will download packages on a remote server:
+<a name="l00228"></a>00228 Debugging with gdb
+<a name="l00229"></a>00229 ==================
+<a name="l00230"></a>00230 
+<a name="l00231"></a>00231 You can also debug using FUSE\_KAFKA\_PREFIX, here is how to do so:
+<a name="l00232"></a>00232 
+<a name="l00233"></a>00233     $ echo -e <span class="stringliteral">&quot;set follow-fork-mode child\nrun\nwhere&quot;</span> &gt; /tmp/gdb_opts
+<a name="l00234"></a>00234     $ FUSE_KAFKA_PREFIX=<span class="stringliteral">&quot;gdb -x /tmp/gdb_opts --args&quot;</span> ./src/fuse_kafka.py start
+<a name="l00235"></a>00235 
+<a name="l00236"></a>00236 Anti hanging
+<a name="l00237"></a>00237 ============
+<a name="l00238"></a>00238 
+<a name="l00239"></a>00239 Fuse-kafka must never make your filesystem accesses hang.
+<a name="l00240"></a>00240 Although this should be considered as a major bug, this might happen
+<a name="l00241"></a>00241 since the soft is still young.
+<a name="l00242"></a>00242 You can run a daemon so that any FS hanging
+<a name="l00243"></a>00243 is umounted (the check will occur every minute).
+<a name="l00244"></a>00244 To do so on an installed instance:
 <a name="l00245"></a>00245 
-<a name="l00246"></a>00246     ./setup.sh -r mykey.pem root@myserver -d
+<a name="l00246"></a>00246     # service fuse_kafka_umounter start
 <a name="l00247"></a>00247 
-<a name="l00248"></a>00248 This will generate an archive that will be copied locally.
-<a name="l00249"></a>00249 You can then install that archive via:
-<a name="l00250"></a>00250 
-<a name="l00251"></a>00251     ./setup.sh -f fuse_kafka.tar.bz2
+<a name="l00248"></a>00248 To do so on a source based instance:
+<a name="l00249"></a>00249 
+<a name="l00250"></a>00250     $ ./src/fuse_kafka.py start
+<a name="l00251"></a>00251 
 <a name="l00252"></a>00252 
-<a name="l00253"></a>00253 
-<a name="l00254"></a>00254 Networking tests
-<a name="l00255"></a>00255 ================
-<a name="l00256"></a>00256 
-<a name="l00257"></a>00257 A more realistic network setup test can be launched (as root) via:
-<a name="l00258"></a>00258 
-<a name="l00259"></a>00259     sudo ./build.py mininet
-<a name="l00260"></a>00260 
-<a name="l00261"></a>00261 This requires [mininet](http:<span class="comment">//mininet.org).</span>
-<a name="l00262"></a>00262 
-<a name="l00263"></a>00263 This will launch kafka, zookeeper, fuse_kafka, and a consumer 
-<a name="l00264"></a>00264 on their own mininet virtual hosts with their own network stacks.
-<a name="l00265"></a>00265 fuse_kafka is running on h3 (host number three).
-<a name="l00266"></a>00266 This will launch a mininet shell.
-<a name="l00267"></a>00267 For example, if you want to try and write on fuse_kafka host, issue a:
-<a name="l00268"></a>00268 
-<a name="l00269"></a>00269     mininet&gt; h3 echo lol &gt; /tmp/fuse-kafka-test/xd
+<a name="l00253"></a>00253 setup.sh options
+<a name="l00254"></a>00254 ================
+<a name="l00255"></a>00255 
+<a name="l00256"></a>00256 Here are available options:
+<a name="l00257"></a>00257 
+<a name="l00258"></a>00258  - `-r`: to do a remote install via ssh: `-r private_ssh_key user@host`
+<a name="l00259"></a>00259  - `-d`: download and do not install the packages, generating an archive
+<a name="l00260"></a>00260  - `-f`: install an archive already built via -d: `-f fuse_kafka.tar.bz2`
+<a name="l00261"></a>00261 
+<a name="l00262"></a>00262 For example, this will download packages on a remote server:
+<a name="l00263"></a>00263 
+<a name="l00264"></a>00264 ````shell
+<a name="l00265"></a>00265 $ ./setup.sh -r mykey.pem root@myserver -d
+<a name="l00266"></a>00266 ````
+<a name="l00267"></a>00267 
+<a name="l00268"></a>00268 This will generate an archive that will be copied locally.
+<a name="l00269"></a>00269 You can then install that archive via:
 <a name="l00270"></a>00270 
-<a name="l00271"></a>00271 The consumer log is available via (/tmp/kafka_consumer.log). 
-<a name="l00272"></a>00272 
-<a name="l00273"></a>00273 `quit` or `^D` will stop mininet and cleanup the virtual network.
+<a name="l00271"></a>00271 ````shell
+<a name="l00272"></a>00272 $ ./setup.sh -f fuse_kafka.tar.bz2
+<a name="l00273"></a>00273 ````
 <a name="l00274"></a>00274 
 <a name="l00275"></a>00275 
-<a name="l00276"></a>00276 Logstash input plugin
-<a name="l00277"></a>00277 =====================
+<a name="l00276"></a>00276 Networking tests
+<a name="l00277"></a>00277 ================
 <a name="l00278"></a>00278 
-<a name="l00279"></a>00279 A logstash input plugin to read from kafka is available in src/logstash/inputs/kafka.rb
+<a name="l00279"></a>00279 A more realistic network setup test can be launched (as root) via:
 <a name="l00280"></a>00280 
-<a name="l00281"></a>00281 Provided you have kafka installed in . (which `./build.py kafka_start` should do),
-<a name="l00282"></a>00282 you can try it by downloading logastash and running:
-<a name="l00283"></a>00283 
-<a name="l00284"></a>00284     /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
-<a name="l00285"></a>00285 
-<a name="l00286"></a>00286 Unit testing
-<a name="l00287"></a>00287 ============
-<a name="l00288"></a>00288 
-<a name="l00289"></a>00289 To launch unit tests, issue a:
-<a name="l00290"></a>00290 
-<a name="l00291"></a>00291     ./build.py test
+<a name="l00281"></a>00281 ````shell
+<a name="l00282"></a>00282 $ sudo ./build.py mininet
+<a name="l00283"></a>00283 ````
+<a name="l00284"></a>00284 
+<a name="l00285"></a>00285 This requires [mininet](http:<span class="comment">//mininet.org).</span>
+<a name="l00286"></a>00286 
+<a name="l00287"></a>00287 This will launch kafka, zookeeper, fuse_kafka, and a consumer 
+<a name="l00288"></a>00288 on their own mininet virtual hosts with their own network stacks.
+<a name="l00289"></a>00289 fuse_kafka is running on h3 (host number three).
+<a name="l00290"></a>00290 This will launch a mininet shell.
+<a name="l00291"></a>00291 For example, if you want to try and write on fuse_kafka host, issue a:
 <a name="l00292"></a>00292 
-<a name="l00293"></a>00293 To test against multiple python versions (provided tox is installed), issue a:
-<a name="l00294"></a>00294 
-<a name="l00295"></a>00295     tox
+<a name="l00293"></a>00293 ````shell
+<a name="l00294"></a>00294 mininet&gt; h3 echo lol &gt; /tmp/fuse-kafka-test/xd
+<a name="l00295"></a>00295 ````
 <a name="l00296"></a>00296 
-<a name="l00297"></a>00297 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
+<a name="l00297"></a>00297 The consumer log is available via (/tmp/kafka_consumer.log). 
 <a name="l00298"></a>00298 
-<a name="l00299"></a>00299 
-<a name="l00300"></a>00300 Working with other logging systems
-<a name="l00301"></a>00301 ==================================
-<a name="l00302"></a>00302 
-<a name="l00303"></a>00303 Basically, any process that has a file handle opened before fuse_kafka starts
-<a name="l00304"></a>00304 won<span class="stringliteral">&#39;t have it&#39;</span>s writes captured.
-<a name="l00305"></a>00305 Such a process must open a new file handle after fuse_kafka startup,
-<a name="l00306"></a>00306 for example by restarting the process.
-<a name="l00307"></a>00307 
-<a name="l00308"></a>00308 For example, If you<span class="stringliteral">&#39;re using rsyslogd and it is writing to /var/log/syslog,</span>
-<a name="l00309"></a>00309 <span class="stringliteral">after starting fuse_kafka on /var/log, you should issue a:</span>
-<a name="l00310"></a>00310 <span class="stringliteral"></span>
-<a name="l00311"></a>00311 <span class="stringliteral">    service rsyslogd restart</span>
-<a name="l00312"></a>00312 <span class="stringliteral"></span>
-<a name="l00313"></a>00313 <span class="stringliteral">After stopping fuse_kafka, you should also restart rsyslogd so </span>
-<a name="l00314"></a>00314 <span class="stringliteral">it re-acquires a file descriptor on the actual FS.</span>
-<a name="l00315"></a>00315 <span class="stringliteral"></span>
-<a name="l00316"></a>00316 <span class="stringliteral">Licensing</span>
-<a name="l00317"></a>00317 <span class="stringliteral">=========</span>
-<a name="l00318"></a>00318 <span class="stringliteral"></span>
-<a name="l00319"></a>00319 <span class="stringliteral">licensed under Apache v 2.0, see LICENSE file</span>
-<a name="l00320"></a>00320 <span class="stringliteral"></span>
-<a name="l00321"></a>00321 <span class="stringliteral"></span>
-<a name="l00322"></a>00322 <span class="stringliteral">Code of conduct</span>
-<a name="l00323"></a>00323 <span class="stringliteral">===============</span>
-<a name="l00324"></a>00324 <span class="stringliteral"></span>
-<a name="l00325"></a>00325 <span class="stringliteral">Please note that this project is released with a Contributor Code of Conduct.</span>
-<a name="l00326"></a>00326 <span class="stringliteral">By participating in this project you agree to abide by its terms.</span>
-<a name="l00327"></a>00327 <span class="stringliteral">See CODE OF CONDUCT file.</span>
-<a name="l00328"></a>00328 <span class="stringliteral"></span>
+<a name="l00299"></a>00299 `quit` or `^D` will stop mininet and cleanup the virtual network.
+<a name="l00300"></a>00300 
+<a name="l00301"></a>00301 
+<a name="l00302"></a>00302 Logstash input plugin
+<a name="l00303"></a>00303 =====================
+<a name="l00304"></a>00304 
+<a name="l00305"></a>00305 A logstash input plugin to read from kafka is available in src/logstash/inputs/kafka.rb
+<a name="l00306"></a>00306 
+<a name="l00307"></a>00307 Provided you have kafka installed in . (which `./build.py kafka_start` should do),
+<a name="l00308"></a>00308 you can try it by downloading logastash and running:
+<a name="l00309"></a>00309 
+<a name="l00310"></a>00310 ````shell
+<a name="l00311"></a>00311 $ /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
+<a name="l00312"></a>00312 ````
+<a name="l00313"></a>00313 
+<a name="l00314"></a>00314 Unit testing
+<a name="l00315"></a>00315 ============
+<a name="l00316"></a>00316 
+<a name="l00317"></a>00317 To launch unit tests, issue a:
+<a name="l00318"></a>00318 
+<a name="l00319"></a>00319 ````shell
+<a name="l00320"></a>00320     ./build.py test
+<a name="l00321"></a>00321 ````
+<a name="l00322"></a>00322 
+<a name="l00323"></a>00323 To test against multiple python versions (provided tox is installed), issue a:
+<a name="l00324"></a>00324 
+<a name="l00325"></a>00325 ````shell
+<a name="l00326"></a>00326 $ tox
+<a name="l00327"></a>00327 ````
+<a name="l00328"></a>00328 
+<a name="l00329"></a>00329 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
+<a name="l00330"></a>00330 
+<a name="l00331"></a>00331 
+<a name="l00332"></a>00332 C Unit testing
+<a name="l00333"></a>00333 ==============
+<a name="l00334"></a>00334 
+<a name="l00335"></a>00335 To run c unit tests, do a:
+<a name="l00336"></a>00336 
+<a name="l00337"></a>00337 ````shell
+<a name="l00338"></a>00338 $ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test &amp;&amp; ./build.py c_test
+<a name="l00339"></a>00339 ````
+<a name="l00340"></a>00340 
+<a name="l00341"></a>00341 
+<a name="l00342"></a>00342 Working with other logging systems
+<a name="l00343"></a>00343 ==================================
+<a name="l00344"></a>00344 
+<a name="l00345"></a>00345 Basically, any process that has a file handle opened before fuse_kafka starts
+<a name="l00346"></a>00346 won<span class="stringliteral">&#39;t have it&#39;</span>s writes captured.
+<a name="l00347"></a>00347 Such a process must open a <span class="keyword">new</span> file handle after fuse_kafka startup,
+<a name="l00348"></a>00348 <span class="keywordflow">for</span> example by restarting the process.
+<a name="l00349"></a>00349 
+<a name="l00350"></a>00350 For example, If you<span class="stringliteral">&#39;re using rsyslogd and it is writing to /var/log/syslog,</span>
+<a name="l00351"></a>00351 <span class="stringliteral">after starting fuse_kafka on /var/log, you should issue a:</span>
+<a name="l00352"></a>00352 <span class="stringliteral"></span>
+<a name="l00353"></a>00353 <span class="stringliteral">````shell</span>
+<a name="l00354"></a>00354 <span class="stringliteral">$ service rsyslogd restart</span>
+<a name="l00355"></a>00355 <span class="stringliteral">````</span>
+<a name="l00356"></a>00356 <span class="stringliteral"></span>
+<a name="l00357"></a>00357 <span class="stringliteral">After stopping fuse_kafka, you should also restart rsyslogd so </span>
+<a name="l00358"></a>00358 <span class="stringliteral">it re-acquires a file descriptor on the actual FS.</span>
+<a name="l00359"></a>00359 <span class="stringliteral"></span>
+<a name="l00360"></a>00360 <span class="stringliteral">Benchmarks</span>
+<a name="l00361"></a>00361 <span class="stringliteral">==========</span>
+<a name="l00362"></a>00362 <span class="stringliteral"></span>
+<a name="l00363"></a>00363 <span class="stringliteral">Provided you have bonnie++ installed, you can run benchmarks with</span>
+<a name="l00364"></a>00364 <span class="stringliteral"></span>
+<a name="l00365"></a>00365 <span class="stringliteral">````shell</span>
+<a name="l00366"></a>00366 <span class="stringliteral">$ ./build.py bench</span>
+<a name="l00367"></a>00367 <span class="stringliteral">````</span>
+<a name="l00368"></a>00368 <span class="stringliteral"></span>
+<a name="l00369"></a>00369 <span class="stringliteral">This will generate `bench/results.js`, which you can see via `benchs/benchmarks.html`</span>
+<a name="l00370"></a>00370 <span class="stringliteral"></span>
+<a name="l00371"></a>00371 <span class="stringliteral">Dynamic configuration</span>
+<a name="l00372"></a>00372 <span class="stringliteral">=====================</span>
+<a name="l00373"></a>00373 <span class="stringliteral"></span>
+<a name="l00374"></a>00374 <span class="stringliteral">You might want to have fuse_kafka start ahead of most processes.</span>
+<a name="l00375"></a>00375 <span class="stringliteral">But when it starts, you might not have all its configuration available yet.</span>
+<a name="l00376"></a>00376 <span class="stringliteral">Or you might want to add brokers or use new zookeepers.</span>
+<a name="l00377"></a>00377 <span class="stringliteral"></span>
+<a name="l00378"></a>00378 <span class="stringliteral">Dynamic configuration allows to modify the configuration on the fly.</span>
+<a name="l00379"></a>00379 <span class="stringliteral">You will be able to:</span>
+<a name="l00380"></a>00380 <span class="stringliteral"></span>
+<a name="l00381"></a>00381 <span class="stringliteral">* point to new zookeepers/brokers</span>
+<a name="l00382"></a>00382 <span class="stringliteral">* update tags, fields</span>
+<a name="l00383"></a>00383 <span class="stringliteral">* modify watched directories</span>
+<a name="l00384"></a>00384 <span class="stringliteral"></span>
+<a name="l00385"></a>00385 <span class="stringliteral">Just update your configuration, then, issue a:</span>
+<a name="l00386"></a>00386 <span class="stringliteral"></span>
+<a name="l00387"></a>00387 <span class="stringliteral">````shell</span>
+<a name="l00388"></a>00388 <span class="stringliteral">$ sevice fuse_kafka reload</span>
+<a name="l00389"></a>00389 <span class="stringliteral">````</span>
+<a name="l00390"></a>00390 <span class="stringliteral"></span>
+<a name="l00391"></a>00391 <span class="stringliteral">Or, if you using the developer version:</span>
+<a name="l00392"></a>00392 <span class="stringliteral"></span>
+<a name="l00393"></a>00393 <span class="stringliteral">````shell</span>
+<a name="l00394"></a>00394 <span class="stringliteral">./src/fuse_kafka.py reload</span>
+<a name="l00395"></a>00395 <span class="stringliteral">````</span>
+<a name="l00396"></a>00396 <span class="stringliteral"></span>
+<a name="l00397"></a>00397 <span class="stringliteral">To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.</span>
+<a name="l00398"></a>00398 <span class="stringliteral"></span>
+<a name="l00399"></a>00399 <span class="stringliteral"></span>
+<a name="l00400"></a>00400 <span class="stringliteral">Input plugin</span>
+<a name="l00401"></a>00401 <span class="stringliteral">============</span>
+<a name="l00402"></a>00402 <span class="stringliteral"></span>
+<a name="l00403"></a>00403 <span class="stringliteral">You can write your own input plugins in `src/plugins/input`.</span>
+<a name="l00404"></a>00404 <span class="stringliteral">An example input plugin is available in `src/plugins/input/example.c`.</span>
+<a name="l00405"></a>00405 <span class="stringliteral">A plugin should include:</span>
+<a name="l00406"></a>00406 <span class="stringliteral"></span>
+<a name="l00407"></a>00407 <span class="stringliteral">````c</span>
+<a name="l00408"></a>00408 <span class="stringliteral">#include &lt;input_plugin.h&gt;</span>
+<a name="l00409"></a>00409 <span class="stringliteral">````</span>
+<a name="l00410"></a>00410 <span class="stringliteral"></span>
+<a name="l00411"></a>00411 <span class="stringliteral">Its entry point is the function:</span>
+<a name="l00412"></a>00412 <span class="stringliteral"></span>
+<a name="l00413"></a>00413 <span class="stringliteral">````c</span>
+<a name="l00414"></a>00414 <span class="stringliteral">int input_setup(int argc, char** argv, void* conf)</span>
+<a name="l00415"></a>00415 <span class="stringliteral">````</span>
+<a name="l00416"></a>00416 <span class="stringliteral"></span>
+<a name="l00417"></a>00417 <span class="stringliteral">With parameters being:</span>
+<a name="l00418"></a>00418 <span class="stringliteral"></span>
+<a name="l00419"></a>00419 <span class="stringliteral">parameter name | description</span>
+<a name="l00420"></a>00420 <span class="stringliteral">---------------|------------</span>
+<a name="l00421"></a>00421 <span class="stringliteral">argc           | number of command line arguments (without arguments given after `--` )</span>
+<a name="l00422"></a>00422 <span class="stringliteral">argv           | array of arguments</span>
+<a name="l00423"></a>00423 <span class="stringliteral">conf           | parsed configuration based on arguments given after `--` (see config.h)</span>
+<a name="l00424"></a>00424 <span class="stringliteral"></span>
+<a name="l00425"></a>00425 <span class="stringliteral">It should output it&#39;</span>s data <span class="keyword">using</span>:
+<a name="l00426"></a>00426 
+<a name="l00427"></a>00427 ````c
+<a name="l00428"></a>00428 <span class="keywordtype">void</span> output_write(<span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keyword">const</span> <span class="keywordtype">char</span> *buf,
+<a name="l00429"></a>00429         <span class="keywordtype">size_t</span> size, off_t offset)
+<a name="l00430"></a>00430 ````
+<a name="l00431"></a>00431 
+<a name="l00432"></a>00432 With parameters being:
+<a name="l00433"></a>00433 
+<a name="l00434"></a>00434 parameter name | description
+<a name="l00435"></a>00435 ---------------|------------
+<a name="l00436"></a>00436 path           | path of the file where the log line comes from
+<a name="l00437"></a>00437 buf            | buffer containing the log line
+<a name="l00438"></a>00438 size           | size of the log line
+<a name="l00439"></a>00439 offset         | start of the log line in buf
+<a name="l00440"></a>00440 
+<a name="l00441"></a>00441 If you require some library, you should refer to its pkg-config name via the macro:
+<a name="l00442"></a>00442 
+<a name="l00443"></a>00443 ````c
+<a name="l00444"></a>00444 require(your-library)
+<a name="l00445"></a>00445 ````
+<a name="l00446"></a>00446 
+<a name="l00447"></a>00447 Licensing
+<a name="l00448"></a>00448 =========
+<a name="l00449"></a>00449 
+<a name="l00450"></a>00450 licensed under Apache v 2.0, see LICENSE file
+<a name="l00451"></a>00451 
+<a name="l00452"></a>00452 
+<a name="l00453"></a>00453 Code of conduct
+<a name="l00454"></a>00454 ===============
+<a name="l00455"></a>00455 
+<a name="l00456"></a>00456 Please note that <span class="keyword">this</span> project is released with a Contributor Code of Conduct.
+<a name="l00457"></a>00457 By participating in <span class="keyword">this</span> project you agree to abide by its terms.
+<a name="l00458"></a>00458 See CODE OF CONDUCT file.
+<a name="l00459"></a>00459 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -427,7 +558,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

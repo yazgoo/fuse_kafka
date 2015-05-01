@@ -6,71 +6,44 @@
 main fuse\-\_\-kafka source  
 
 
+{\ttfamily \#include $<$dlfcn.\-h$>$}\*
 {\ttfamily \#include \char`\"{}version.\-h\char`\"{}}\*
-{\ttfamily \#include $<$fuse.\-h$>$}\*
 {\ttfamily \#include $<$stdio.\-h$>$}\*
 {\ttfamily \#include $<$string.\-h$>$}\*
 {\ttfamily \#include $<$unistd.\-h$>$}\*
 {\ttfamily \#include $<$fcntl.\-h$>$}\*
-{\ttfamily \#include $<$dirent.\-h$>$}\*
 {\ttfamily \#include $<$errno.\-h$>$}\*
 {\ttfamily \#include $<$sys/time.\-h$>$}\*
-{\ttfamily \#include $<$pwd.\-h$>$}\*
 {\ttfamily \#include $<$fnmatch.\-h$>$}\*
 {\ttfamily \#include $<$stdarg.\-h$>$}\*
 {\ttfamily \#include $<$stdlib.\-h$>$}\*
 {\ttfamily \#include \char`\"{}time\-\_\-queue.\-c\char`\"{}}\*
-{\ttfamily \#include $<$grp.\-h$>$}\*
 {\ttfamily \#include $<$sys/stat.\-h$>$}\*
 {\ttfamily \#include $<$sys/wait.\-h$>$}\*
+{\ttfamily \#include \char`\"{}dynamic\-\_\-configuration.\-c\char`\"{}}\*
+{\ttfamily \#include \char`\"{}input.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}config.\-h\char`\"{}}\*
 {\ttfamily \#include \char`\"{}util.\-c\char`\"{}}\*
-{\ttfamily \#include \char`\"{}kafka\-\_\-client.\-c\char`\"{}}\*
-{\ttfamily \#include \char`\"{}trace.\-c\char`\"{}}\*
-{\ttfamily \#include \char`\"{}overlay.\-c\char`\"{}}\*
-\subsection*{\-Data \-Structures}
-\begin{DoxyCompactItemize}
-\item 
-struct \hyperlink{struct__config}{\-\_\-config}
-\begin{DoxyCompactList}\small\item\em fuse\-\_\-kafka configuration \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{\-Defines}
 \begin{DoxyCompactItemize}
-\item 
-\hypertarget{fuse__kafka_8c_a0919197af2e154da2c05727b6d87cbda}{\#define {\bfseries \-F\-U\-S\-E\-\_\-\-U\-S\-E\-\_\-\-V\-E\-R\-S\-I\-O\-N}~26}\label{fuse__kafka_8c_a0919197af2e154da2c05727b6d87cbda}
-
 \item 
 \hypertarget{fuse__kafka_8c_a369266c24eacffb87046522897a570d5}{\#define {\bfseries \-\_\-\-G\-N\-U\-\_\-\-S\-O\-U\-R\-C\-E}}\label{fuse__kafka_8c_a369266c24eacffb87046522897a570d5}
 
 \item 
-\hypertarget{fuse__kafka_8c_a3ca02106308f27a9a4115b3d2c83d552}{\#define \hyperlink{fuse__kafka_8c_a3ca02106308f27a9a4115b3d2c83d552}{\-C\-O\-N\-F\-I\-G\-\_\-\-I\-T\-E\-M}(name)~char$\ast$$\ast$ name; size\-\_\-t name \#\# \-\_\-n;}\label{fuse__kafka_8c_a3ca02106308f27a9a4115b3d2c83d552}
-
+\#define \hyperlink{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\-S\-T\-R}(s)~\#s
 \begin{DoxyCompactList}\small\item\em declare a configuration item, which is a list of string an and a number of those \end{DoxyCompactList}\item 
-\hypertarget{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\#define \hyperlink{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\-S\-T\-R}(s)~\#s}\label{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}
-
-\begin{DoxyCompactList}\small\item\em convert a symbol to a string \end{DoxyCompactList}\item 
 \#define \hyperlink{fuse__kafka_8c_a65146f5f302bf995aea3e0354f706b1b}{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}(expected)
 \begin{DoxyCompactList}\small\item\em check if name matches a configuration name, if so points current\-\_\-size pointer to the size of the matched configuration and sets the address of the string array for that configuration to next item in argv list \end{DoxyCompactList}\end{DoxyCompactItemize}
-\subsection*{\-Typedefs}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{typedef struct \hyperlink{struct__config}{\-\_\-config} \hyperlink{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{config}}\label{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}
-
-\begin{DoxyCompactList}\small\item\em fuse\-\_\-kafka configuration \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
 \item 
-static int \hyperlink{fuse__kafka_8c_ae94a1fbb20170cb6392a6921b3ddc230}{actual\-\_\-kafka\-\_\-write} (const char $\ast$path, const char $\ast$buf, size\-\_\-t size, off\-\_\-t offset)
-\begin{DoxyCompactList}\small\item\em actually does the write to kafka of a string with the given file path \end{DoxyCompactList}\item 
-static int \hyperlink{fuse__kafka_8c_a1074ef70b5ba196bf5e05a1eb95b28a3}{should\-\_\-write\-\_\-to\-\_\-kafka} (const char $\ast$path, size\-\_\-t size)
-\begin{DoxyCompactList}\small\item\em checks if writes from the given path should be written to kafka \end{DoxyCompactList}\item 
-static int \hyperlink{fuse__kafka_8c_a48ba4bf8f069d68a01fb5ec60ed8ce6c}{kafka\-\_\-write} (const char $\ast$path, const char $\ast$buf, size\-\_\-t size, off\-\_\-t offset, struct fuse\-\_\-file\-\_\-info $\ast$fi)
-\begin{DoxyCompactList}\small\item\em write the data to kafka and to the overlaid fs if it should be done \end{DoxyCompactList}\item 
-\hypertarget{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}{void {\bfseries add\-\_\-fields\-\_\-and\-\_\-tags} (\hyperlink{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{config} $\ast$conf)}\label{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}
+\hypertarget{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}{void {\bfseries add\-\_\-fields\-\_\-and\-\_\-tags} (config $\ast$conf)}\label{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}
 
 \item 
-\hypertarget{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}{void {\bfseries free\-\_\-fields\-\_\-and\-\_\-tags} (\hyperlink{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{config} $\ast$conf)}\label{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}
+\hypertarget{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}{void {\bfseries free\-\_\-fields\-\_\-and\-\_\-tags} (config $\ast$conf)}\label{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}
 
 \item 
-\hypertarget{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}{int {\bfseries parse\-\_\-arguments} (int argc, char $\ast$$\ast$argv, \hyperlink{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{config} $\ast$conf)}\label{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}
+\hypertarget{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}{int {\bfseries parse\-\_\-arguments} (int argc, char $\ast$$\ast$argv, config $\ast$conf)}\label{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}
 
 \item 
 \hypertarget{fuse__kafka_8c_a00a727547d5cc5aea52bd3642a693821}{void {\bfseries configuration\-\_\-clean} ()}\label{fuse__kafka_8c_a00a727547d5cc5aea52bd3642a693821}
@@ -85,7 +58,7 @@ static int \hyperlink{fuse__kafka_8c_a48ba4bf8f069d68a01fb5ec60ed8ce6c}{kafka\-\
 \subsection*{\-Variables}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}{\hyperlink{fuse__kafka_8c_aa75d2304f2d943e86dadbe603a750c9d}{config} {\bfseries conf}}\label{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}
+\hypertarget{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}{config {\bfseries conf}}\label{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}
 
 \item 
 \hypertarget{fuse__kafka_8c_a7353cae57e2530c316ddacb27ef14932}{char $\ast$ {\bfseries cmd} = \-N\-U\-L\-L}\label{fuse__kafka_8c_a7353cae57e2530c316ddacb27ef14932}
@@ -121,102 +94,20 @@ check if name matches a configuration name, if so points current\-\_\-size point
 
 
 
-\-Definition at line 80 of file fuse\-\_\-kafka.\-c.
+\-Definition at line 33 of file fuse\-\_\-kafka.\-c.
 
-
-
-\subsection{\-Function \-Documentation}
-\hypertarget{fuse__kafka_8c_ae94a1fbb20170cb6392a6921b3ddc230}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!actual\-\_\-kafka\-\_\-write@{actual\-\_\-kafka\-\_\-write}}
-\index{actual\-\_\-kafka\-\_\-write@{actual\-\_\-kafka\-\_\-write}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
-\subsubsection[{actual\-\_\-kafka\-\_\-write}]{\setlength{\rightskip}{0pt plus 5cm}static int {\bf actual\-\_\-kafka\-\_\-write} (
+\hypertarget{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!\-S\-T\-R@{\-S\-T\-R}}
+\index{\-S\-T\-R@{\-S\-T\-R}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
+\subsubsection[{\-S\-T\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-S\-T\-R}(
 \begin{DoxyParamCaption}
-\item[{const char $\ast$}]{path, }
-\item[{const char $\ast$}]{buf, }
-\item[{size\-\_\-t}]{size, }
-\item[{off\-\_\-t}]{offset}
+\item[{}]{s}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}\label{fuse__kafka_8c_ae94a1fbb20170cb6392a6921b3ddc230}
+)~\#s}}\label{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}
 
 
-actually does the write to kafka of a string with the given file path 
+declare a configuration item, which is a list of string an and a number of those 
 
+convert a symbol to a string 
 
-\begin{DoxyParams}{\-Parameters}
-{\em path} & file path to save to kafka \\
-\hline
-{\em buf} & write buffer \\
-\hline
-{\em size} & size of the buffer to write \\
-\hline
-{\em offset} & starting point in the buffer \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{\-Returns}
-0 if the write succeeded, 1 otherwise 
-\end{DoxyReturn}
-
-
-\-Definition at line 96 of file fuse\-\_\-kafka.\-c.
-
-\hypertarget{fuse__kafka_8c_a48ba4bf8f069d68a01fb5ec60ed8ce6c}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!kafka\-\_\-write@{kafka\-\_\-write}}
-\index{kafka\-\_\-write@{kafka\-\_\-write}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
-\subsubsection[{kafka\-\_\-write}]{\setlength{\rightskip}{0pt plus 5cm}static int {\bf kafka\-\_\-write} (
-\begin{DoxyParamCaption}
-\item[{const char $\ast$}]{path, }
-\item[{const char $\ast$}]{buf, }
-\item[{size\-\_\-t}]{size, }
-\item[{off\-\_\-t}]{offset, }
-\item[{struct fuse\-\_\-file\-\_\-info $\ast$}]{fi}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}\label{fuse__kafka_8c_a48ba4bf8f069d68a01fb5ec60ed8ce6c}
-
-
-write the data to kafka and to the overlaid fs if it should be done 
-
-
-\begin{DoxyParams}{\-Parameters}
-{\em path} & file path to save to kafka \\
-\hline
-{\em buf} & write buffer \\
-\hline
-{\em size} & size of the buffer to write \\
-\hline
-{\em fi} & file information \\
-\hline
-\end{DoxyParams}
-\begin{DoxySeeAlso}{\-See also}
-fuse 
-\end{DoxySeeAlso}
-\begin{DoxyReturn}{\-Returns}
-
-\end{DoxyReturn}
-\begin{DoxySeeAlso}{\-See also}
-pwrite 
-\end{DoxySeeAlso}
-
-
-\-Definition at line 166 of file fuse\-\_\-kafka.\-c.
-
-\hypertarget{fuse__kafka_8c_a1074ef70b5ba196bf5e05a1eb95b28a3}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!should\-\_\-write\-\_\-to\-\_\-kafka@{should\-\_\-write\-\_\-to\-\_\-kafka}}
-\index{should\-\_\-write\-\_\-to\-\_\-kafka@{should\-\_\-write\-\_\-to\-\_\-kafka}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
-\subsubsection[{should\-\_\-write\-\_\-to\-\_\-kafka}]{\setlength{\rightskip}{0pt plus 5cm}static int {\bf should\-\_\-write\-\_\-to\-\_\-kafka} (
-\begin{DoxyParamCaption}
-\item[{const char $\ast$}]{path, }
-\item[{size\-\_\-t}]{size}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}\label{fuse__kafka_8c_a1074ef70b5ba196bf5e05a1eb95b28a3}
-
-
-checks if writes from the given path should be written to kafka 
-
-
-\begin{DoxyParams}{\-Parameters}
-{\em path} & the write path \\
-\hline
-{\em size} & the write size \\
-\hline
-\end{DoxyParams}
-
-
-\-Definition at line 137 of file fuse\-\_\-kafka.\-c.
+\-Definition at line 28 of file fuse\-\_\-kafka.\-c.
 

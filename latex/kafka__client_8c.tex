@@ -9,90 +9,12 @@ kafka client level structures and function
 {\ttfamily \#include $<$librdkafka/rdkafka.\-h$>$}\*
 {\ttfamily \#include $<$zookeeper/zookeeper.\-h$>$}\*
 {\ttfamily \#include $<$zookeeper/zookeeper.\-jute.\-h$>$}\*
+{\ttfamily \#include \char`\"{}output.\-h\char`\"{}}\*
 {\ttfamily \#include \char`\"{}zookeeper.\-c\char`\"{}}\*
-\subsection*{\-Data \-Structures}
-\begin{DoxyCompactItemize}
-\item 
-struct \hyperlink{struct__kafka__t}{\-\_\-kafka\-\_\-t}
-\begin{DoxyCompactList}\small\item\em a wrapping structure for kafka client and fuse\-\_\-kafka configuration \end{DoxyCompactList}\end{DoxyCompactItemize}
-\subsection*{\-Typedefs}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{kafka__client_8c_a8198853a72de73a210b3507587b2768a}{typedef struct \hyperlink{struct__kafka__t}{\-\_\-kafka\-\_\-t} \hyperlink{kafka__client_8c_a8198853a72de73a210b3507587b2768a}{kafka\-\_\-t}}\label{kafka__client_8c_a8198853a72de73a210b3507587b2768a}
-
-\begin{DoxyCompactList}\small\item\em a wrapping structure for kafka client and fuse\-\_\-kafka configuration \end{DoxyCompactList}\end{DoxyCompactItemize}
-\subsection*{\-Functions}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{kafka__client_8c_ad1a30330736ec965497f25e8440b2c3b}{static void \hyperlink{kafka__client_8c_ad1a30330736ec965497f25e8440b2c3b}{msg\-\_\-delivered} (\hyperlink{structrd__kafka__t}{rd\-\_\-kafka\-\_\-t} $\ast$rk, void $\ast$payload, size\-\_\-t len, int error\-\_\-code, void $\ast$opaque, void $\ast$msg\-\_\-opaque)}\label{kafka__client_8c_ad1a30330736ec965497f25e8440b2c3b}
-
-\begin{DoxyCompactList}\small\item\em a librdkafka callback called when a message is delivered \end{DoxyCompactList}\item 
-\hypertarget{kafka__client_8c_a5bead3257610b911174b3790d7d06a0d}{static void \hyperlink{kafka__client_8c_a5bead3257610b911174b3790d7d06a0d}{logger} (const \hyperlink{structrd__kafka__t}{rd\-\_\-kafka\-\_\-t} $\ast$rk, int level, const char $\ast$fac, const char $\ast$buf)}\label{kafka__client_8c_a5bead3257610b911174b3790d7d06a0d}
-
-\begin{DoxyCompactList}\small\item\em a librdkafka callback called to log stuff from librdkafka \end{DoxyCompactList}\item 
-int \hyperlink{kafka__client_8c_a5660dc39d8b2c2458c67f197e5276203}{setup\-\_\-kafka} (\hyperlink{kafka__client_8c_a8198853a72de73a210b3507587b2768a}{kafka\-\_\-t} $\ast$k)
-\begin{DoxyCompactList}\small\item\em setup\-\_\-kafka initialises librdkafka based on the config wrapped in kafka\-\_\-t \end{DoxyCompactList}\item 
-int \hyperlink{kafka__client_8c_a3438f364ace1f612d88cbf9cbc68c9a6}{send\-\_\-kafka} (\hyperlink{kafka__client_8c_a8198853a72de73a210b3507587b2768a}{kafka\-\_\-t} $\ast$k, char $\ast$buf, size\-\_\-t len)
-\begin{DoxyCompactList}\small\item\em send a string to kafka \end{DoxyCompactList}\end{DoxyCompactItemize}
-\subsection*{\-Variables}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{kafka__client_8c_a9ac29594c7524f710cd7dbd67a343fd8}{char {\bfseries errstr} \mbox{[}512\mbox{]}}\label{kafka__client_8c_a9ac29594c7524f710cd7dbd67a343fd8}
-
-\end{DoxyCompactItemize}
 
 
 \subsection{\-Detailed \-Description}
 kafka client level structures and function 
 
 \-Definition in file \hyperlink{kafka__client_8c_source}{kafka\-\_\-client.\-c}.
-
-
-
-\subsection{\-Function \-Documentation}
-\hypertarget{kafka__client_8c_a3438f364ace1f612d88cbf9cbc68c9a6}{\index{kafka\-\_\-client.\-c@{kafka\-\_\-client.\-c}!send\-\_\-kafka@{send\-\_\-kafka}}
-\index{send\-\_\-kafka@{send\-\_\-kafka}!kafka_client.c@{kafka\-\_\-client.\-c}}
-\subsubsection[{send\-\_\-kafka}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf send\-\_\-kafka} (
-\begin{DoxyParamCaption}
-\item[{{\bf kafka\-\_\-t} $\ast$}]{k, }
-\item[{char $\ast$}]{buf, }
-\item[{size\-\_\-t}]{len}
-\end{DoxyParamCaption}
-)}}\label{kafka__client_8c_a3438f364ace1f612d88cbf9cbc68c9a6}
-
-
-send a string to kafka 
-
-
-\begin{DoxyParams}{\-Parameters}
-{\em k} & configuration with kafka \\
-\hline
-{\em buf} & string to serialize \\
-\hline
-{\em len} & size of the string to save \\
-\hline
-\end{DoxyParams}
-
-
-\-Definition at line 106 of file kafka\-\_\-client.\-c.
-
-\hypertarget{kafka__client_8c_a5660dc39d8b2c2458c67f197e5276203}{\index{kafka\-\_\-client.\-c@{kafka\-\_\-client.\-c}!setup\-\_\-kafka@{setup\-\_\-kafka}}
-\index{setup\-\_\-kafka@{setup\-\_\-kafka}!kafka_client.c@{kafka\-\_\-client.\-c}}
-\subsubsection[{setup\-\_\-kafka}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf setup\-\_\-kafka} (
-\begin{DoxyParamCaption}
-\item[{{\bf kafka\-\_\-t} $\ast$}]{k}
-\end{DoxyParamCaption}
-)}}\label{kafka__client_8c_a5660dc39d8b2c2458c67f197e5276203}
-
-
-setup\-\_\-kafka initialises librdkafka based on the config wrapped in kafka\-\_\-t 
-
-
-\begin{DoxyParams}{\-Parameters}
-{\em k} & kafka configuration \\
-\hline
-\end{DoxyParams}
-
-
-\-Definition at line 52 of file kafka\-\_\-client.\-c.
 

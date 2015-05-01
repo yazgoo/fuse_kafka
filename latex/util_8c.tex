@@ -10,8 +10,12 @@ utility functions
 {\ttfamily \#include $<$openssl/evp.\-h$>$}\*
 {\ttfamily \#include $<$openssl/pem.\-h$>$}\*
 {\ttfamily \#include $<$stdlib.\-h$>$}\*
+{\ttfamily \#include $<$string.\-h$>$}\*
 \subsection*{\-Defines}
 \begin{DoxyCompactItemize}
+\item 
+\hypertarget{util_8c_ae71354ac9b6f7f2c808940036e7f30b7}{\#define {\bfseries \-U\-T\-I\-L\-\_\-\-C}}\label{util_8c_ae71354ac9b6f7f2c808940036e7f30b7}
+
 \item 
 \#define {\bfseries \-D\-O\-\_\-\-A\-S\-\_\-\-C\-A\-L\-L\-E\-R}(action)
 \end{DoxyCompactItemize}
@@ -31,7 +35,10 @@ int \hyperlink{util_8c_adb849059403e0b01c44605d63d205daa}{get\-\_\-limit} (int a
 \begin{DoxyCompactList}\small\item\em look for the limit \char`\"{}-\/-\/\char`\"{} in argv  argument number  arguments \end{DoxyCompactList}\item 
 \hypertarget{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}{char $\ast$ \hyperlink{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}{array\-\_\-to\-\_\-container\-\_\-string} (char $\ast$$\ast$array, size\-\_\-t n, char open\-\_\-char, char close\-\_\-char, char sep1, char sep2)}\label{util_8c_ad16fa3fb65df7353e0eecd8964ed23fd}
 
-\begin{DoxyCompactList}\small\item\em get a concatenated string from an array of string \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em get a concatenated string from an array of string \end{DoxyCompactList}\item 
+\hypertarget{util_8c_a595bb2010e077b76450c9c04e2b25e16}{char $\ast$ {\bfseries concat} (char $\ast$a, char $\ast$b)}\label{util_8c_a595bb2010e077b76450c9c04e2b25e16}
+
+\end{DoxyCompactItemize}
 
 
 \subsection{\-Detailed \-Description}
@@ -62,7 +69,7 @@ struct fuse_context* __context = fuse_get_context(); \
 \end{DoxyCode}
 
 
-\-Definition at line 119 of file util.\-c.
+\-Definition at line 131 of file util.\-c.
 
 
 
@@ -91,7 +98,7 @@ a newly allocated string with the base64 data which should be free'd by the user
 \end{DoxyReturn}
 
 
-\-Definition at line 21 of file util.\-c.
+\-Definition at line 24 of file util.\-c.
 
 \hypertarget{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}{\index{util.\-c@{util.\-c}!get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}}
 \index{get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}!util.c@{util.\-c}}
@@ -114,7 +121,7 @@ a base64 encoded string with the process command line, or an empty string if it 
 \end{DoxyReturn}
 
 
-\-Definition at line 44 of file util.\-c.
+\-Definition at line 47 of file util.\-c.
 
 \hypertarget{util_8c_adb849059403e0b01c44605d63d205daa}{\index{util.\-c@{util.\-c}!get\-\_\-limit@{get\-\_\-limit}}
 \index{get\-\_\-limit@{get\-\_\-limit}!util.c@{util.\-c}}
@@ -133,7 +140,7 @@ the index of the limit, argc if it is not found
 \end{DoxyReturn}
 
 
-\-Definition at line 94 of file util.\-c.
+\-Definition at line 97 of file util.\-c.
 
 \hypertarget{util_8c_a9cc3c9ae892455a66de3012f5b6fb8e0}{\index{util.\-c@{util.\-c}!set\-\_\-timestamp@{set\-\_\-timestamp}}
 \index{set\-\_\-timestamp@{set\-\_\-timestamp}!util.c@{util.\-c}}
@@ -156,5 +163,5 @@ void
 \end{DoxyReturn}
 
 
-\-Definition at line 80 of file util.\-c.
+\-Definition at line 83 of file util.\-c.
 

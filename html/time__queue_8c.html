@@ -78,7 +78,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Defines</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">src/time_queue.c File Reference</div>  </div>
@@ -86,27 +86,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;stdio.h&gt;</code><br/>
+<code>#include &quot;time_queue.h&quot;</code><br/>
 </div>
 <p><a href="time__queue_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr><td colspan="2"><h2><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtime__queue.html">time_queue</a></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#a1bc48c2d45970dac67074f3673e94e7b">time_queue_hash</a> (unsigned char *str)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal: generates a djb2 hash.  <a href="#a1bc48c2d45970dac67074f3673e94e7b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtime__queue.html">time_queue</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab">time_queue_new</a> (unsigned int size, unsigned int quota)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">time_queue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab">time_queue_new</a> (unsigned int size, unsigned int quota)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Public: instantiates a new time queue, free it with time_queue_delete.  <a href="#aa0991ce4a2baa1a3355834025e2559ab"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#a3bec434e48da17f9bbe881622c7da594">time_queue_time</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal: get the time.  <a href="#a3bec434e48da17f9bbe881622c7da594"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#afaa0f98d3731f4998abbf385990b9b3b">time_queue_set</a> (<a class="el" href="structtime__queue.html">time_queue</a> *queue, char *key)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#afaa0f98d3731f4998abbf385990b9b3b">time_queue_set</a> (time_queue *queue, char *key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Public: set a time queue key to current time.  <a href="#afaa0f98d3731f4998abbf385990b9b3b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned long *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#a221a8f617d2287a6168cab25956677cb">time_queue_get</a> (<a class="el" href="structtime__queue.html">time_queue</a> *queue, char *key)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">unsigned long *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#a221a8f617d2287a6168cab25956677cb">time_queue_get</a> (time_queue *queue, char *key)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Public: get last stored time pointer for given key.  <a href="#a221a8f617d2287a6168cab25956677cb"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aee2a32b0025bf23894265fe5b21ad59f">time_queue_overflows</a> (<a class="el" href="structtime__queue.html">time_queue</a> *queue, char *key, unsigned int size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aee2a32b0025bf23894265fe5b21ad59f">time_queue_overflows</a> (time_queue *queue, char *key, unsigned int size)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal: checks if the given key overflows the quota.  <a href="#aee2a32b0025bf23894265fe5b21ad59f"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aee8286362f0df21f401d96d725cd340b">time_queue_delete</a> (<a class="el" href="structtime__queue.html">time_queue</a> *queue)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="time__queue_8c.html#aee8286362f0df21f401d96d725cd340b">time_queue_delete</a> (time_queue *queue)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Public: deletes the time queue structure and allocated content.  <a href="#aee8286362f0df21f401d96d725cd340b"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
@@ -121,7 +119,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void <a class="el" href="time__queue_8c.html#aee8286362f0df21f401d96d725cd340b">time_queue_delete</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtime__queue.html">time_queue</a> *&#160;</td>
+          <td class="paramtype">time_queue *&#160;</td>
           <td class="paramname"><em>queue</em></td><td>)</td>
           <td></td>
         </tr>
@@ -137,7 +135,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00153">153</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00149">149</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -148,7 +146,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">unsigned long* <a class="el" href="time__queue_8c.html#a221a8f617d2287a6168cab25956677cb">time_queue_get</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtime__queue.html">time_queue</a> *&#160;</td>
+          <td class="paramtype">time_queue *&#160;</td>
           <td class="paramname"><em>queue</em>, </td>
         </tr>
         <tr>
@@ -178,7 +176,7 @@ Functions</h2></td></tr>
 <p>time_queue_get(queue, "/unset/key") =&gt; NULL time_queue_get(queue, "/existing/key") =&gt; pointer to: 1412074060579654</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a pointer to the time value registered, NULL if there is none </dd></dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00114">114</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00110">110</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -208,7 +206,7 @@ Functions</h2></td></tr>
 <p>time_queue_hash('hello world') =&gt; 13876786532495509697</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a hash for the string </dd></dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00025">25</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00021">21</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -217,7 +215,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structtime__queue.html">time_queue</a>* <a class="el" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab">time_queue_new</a> </td>
+          <td class="memname">time_queue* <a class="el" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab">time_queue_new</a> </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>size</em>, </td>
@@ -249,7 +247,7 @@ Functions</h2></td></tr>
 <p>time_queue_new(10, 42) =&gt; time_queue*</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a newly allocated pointer to a time queue of the specified size with the specified quota initialized to zero for values, and hashes </dd></dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00046">46</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00042">42</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -260,7 +258,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int <a class="el" href="time__queue_8c.html#aee2a32b0025bf23894265fe5b21ad59f">time_queue_overflows</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtime__queue.html">time_queue</a> *&#160;</td>
+          <td class="paramtype">time_queue *&#160;</td>
           <td class="paramname"><em>queue</em>, </td>
         </tr>
         <tr>
@@ -297,7 +295,7 @@ Functions</h2></td></tr>
 <p>time_queue* queue = time_queue_new(10, 42); time_queue_set(queue, "/var/log/lol"); sleep(1); time_queue_overflows(queue, "/var/log/lol", 880); =&gt; 1</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>0 if the key does not overflow the quota or no value exists for this key, 1 overwise </dd></dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00141">141</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00137">137</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -308,7 +306,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void <a class="el" href="time__queue_8c.html#afaa0f98d3731f4998abbf385990b9b3b">time_queue_set</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtime__queue.html">time_queue</a> *&#160;</td>
+          <td class="paramtype">time_queue *&#160;</td>
           <td class="paramname"><em>queue</em>, </td>
         </tr>
         <tr>
@@ -337,7 +335,7 @@ Functions</h2></td></tr>
 <p>Examples</p>
 <p>time_queue_set(queue, "/var/log/blah.log") </p>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00079">79</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00075">75</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -358,7 +356,7 @@ Functions</h2></td></tr>
 <p>Internal: get the time. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>current time in microseconds </dd></dl>
 
-<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00064">64</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
+<p>Definition at line <a class="el" href="time__queue_8c_source.html#l00060">60</a> of file <a class="el" href="time__queue_8c_source.html">time_queue.c</a>.</p>
 
 </div>
 </div>
@@ -368,7 +366,7 @@ Functions</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -380,7 +378,7 @@ Functions</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 26 2015 13:14:55 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 1 2015 16:49:37 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

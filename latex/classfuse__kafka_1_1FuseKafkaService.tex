@@ -9,11 +9,21 @@
 \item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a08ccfab12ff2c998f5bc466de9c9afa4}{do}
 \item 
-def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}{start}
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}{def {\bfseries start}}\label{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}
+
+\item 
+def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a8a8b5dd68c2c1dbd9315ac2ea4bd5219}{start\-\_\-excluding\-\_\-directories}
 \item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_ad17bb7d3209b7242defee5aa54ca828e}{stop}
 \item 
+def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a1f122fd8f929a5d8e56d8d1bad9cc465}{reload}
+\item 
+def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a6ea1d1193be9c118752f6b7a4c53df92}{stop\-\_\-watching\-\_\-directory}
+\item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a7cc4774d8ed31ffe42ca2f955501ee45}{restart}
+\item 
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_aa7dd2095cfc8b080fba7047654e92eb9}{def {\bfseries list\-\_\-watched\-\_\-directories}}\label{classfuse__kafka_1_1FuseKafkaService_aa7dd2095cfc8b080fba7047654e92eb9}
+
 \item 
 def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a6e9278183d970e683d7060610bb9bc6f}{get\-\_\-status}
 \item 
@@ -28,6 +38,9 @@ def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a9cf98c6a35fb986e6877dfdca61
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_ae104081d0b1ec3c4c44cfd4ccf75b01e}{{\bfseries prefix}}\label{classfuse__kafka_1_1FuseKafkaService_ae104081d0b1ec3c4c44cfd4ccf75b01e}
 
 \item 
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a1238f08c265e4c19a8a721f57bd7dafe}{{\bfseries proc\-\_\-mount\-\_\-path}}\label{classfuse__kafka_1_1FuseKafkaService_a1238f08c265e4c19a8a721f57bd7dafe}
+
+\item 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_afd89f62981d0dcbb3efee6f56c949642}{{\bfseries configuration}}\label{classfuse__kafka_1_1FuseKafkaService_afd89f62981d0dcbb3efee6f56c949642}
 
 \end{DoxyCompactItemize}
@@ -37,7 +50,7 @@ def \hyperlink{classfuse__kafka_1_1FuseKafkaService_a9cf98c6a35fb986e6877dfdca61
 \begin{DoxyVerb}Utility class to run multiple fuse_kafka processes as one service \end{DoxyVerb}
  
 
-\-Definition at line 145 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 160 of file fuse\-\_\-kafka.\-py.
 
 
 
@@ -54,7 +67,7 @@ Also installs this action in the crontab so it is launched
 every minute. \end{DoxyVerb}
  
 
-\-Definition at line 198 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 245 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a08ccfab12ff2c998f5bc466de9c9afa4}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!do@{do}}
 \index{do@{do}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
@@ -71,7 +84,7 @@ action - the action name
 \end{DoxyVerb}
  
 
-\-Definition at line 152 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 168 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a6e9278183d970e683d7060610bb9bc6f}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!get\-\_\-status@{get\-\_\-status}}
 \index{get\-\_\-status@{get\-\_\-status}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
@@ -83,7 +96,21 @@ action - the action name
 \begin{DoxyVerb}Displays the status of fuse_kafka processes \end{DoxyVerb}
  
 
-\-Definition at line 183 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 232 of file fuse\-\_\-kafka.\-py.
+
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a1f122fd8f929a5d8e56d8d1bad9cc465}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!reload@{reload}}
+\index{reload@{reload}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
+\subsubsection[{reload}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-reload} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{var\-\_\-run\-\_\-path = {\ttfamily \char`\"{}/var/run\char`\"{}}}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1FuseKafkaService_a1f122fd8f929a5d8e56d8d1bad9cc465}
+\begin{DoxyVerb}if fuse_kafka is running, reloads the dynamic part of 
+the configuration. If it is not running, starts it \end{DoxyVerb}
+ 
+
+\-Definition at line 201 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_a7cc4774d8ed31ffe42ca2f955501ee45}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!restart@{restart}}
 \index{restart@{restart}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
@@ -95,19 +122,20 @@ action - the action name
 \begin{DoxyVerb}Stops and starts fuse_kafka processes \end{DoxyVerb}
  
 
-\-Definition at line 178 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 220 of file fuse\-\_\-kafka.\-py.
 
-\hypertarget{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!start@{start}}
-\index{start@{start}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
-\subsubsection[{start}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-start} (
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a8a8b5dd68c2c1dbd9315ac2ea4bd5219}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!start\-\_\-excluding\-\_\-directories@{start\-\_\-excluding\-\_\-directories}}
+\index{start\-\_\-excluding\-\_\-directories@{start\-\_\-excluding\-\_\-directories}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
+\subsubsection[{start\-\_\-excluding\-\_\-directories}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-start\-\_\-excluding\-\_\-directories} (
 \begin{DoxyParamCaption}
-\item[{}]{self}
+\item[{}]{self, }
+\item[{}]{excluded}
 \end{DoxyParamCaption}
-)}}\label{classfuse__kafka_1_1FuseKafkaService_a2d8e0d317d293fa8f932e3e8882549f5}
+)}}\label{classfuse__kafka_1_1FuseKafkaService_a8a8b5dd68c2c1dbd9315ac2ea4bd5219}
 \begin{DoxyVerb}Starts fuse_kafka processes \end{DoxyVerb}
  
 
-\-Definition at line 159 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 180 of file fuse\-\_\-kafka.\-py.
 
 \hypertarget{classfuse__kafka_1_1FuseKafkaService_ad17bb7d3209b7242defee5aa54ca828e}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!stop@{stop}}
 \index{stop@{stop}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
@@ -119,7 +147,20 @@ action - the action name
 \begin{DoxyVerb}Stops fuse_kafka processes \end{DoxyVerb}
  
 
-\-Definition at line 173 of file fuse\-\_\-kafka.\-py.
+\-Definition at line 196 of file fuse\-\_\-kafka.\-py.
+
+\hypertarget{classfuse__kafka_1_1FuseKafkaService_a6ea1d1193be9c118752f6b7a4c53df92}{\index{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}!stop\-\_\-watching\-\_\-directory@{stop\-\_\-watching\-\_\-directory}}
+\index{stop\-\_\-watching\-\_\-directory@{stop\-\_\-watching\-\_\-directory}!fuse_kafka::FuseKafkaService@{fuse\-\_\-kafka\-::\-Fuse\-Kafka\-Service}}
+\subsubsection[{stop\-\_\-watching\-\_\-directory}]{\setlength{\rightskip}{0pt plus 5cm}def {\bf fuse\-\_\-kafka.\-Fuse\-Kafka\-Service.\-stop\-\_\-watching\-\_\-directory} (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{to\-\_\-stop\-\_\-watching}
+\end{DoxyParamCaption}
+)}}\label{classfuse__kafka_1_1FuseKafkaService_a6ea1d1193be9c118752f6b7a4c53df92}
+\begin{DoxyVerb}Stops fuse_kafka process for a specific directory \end{DoxyVerb}
+ 
+
+\-Definition at line 215 of file fuse\-\_\-kafka.\-py.
 
 
 
