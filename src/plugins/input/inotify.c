@@ -1,5 +1,6 @@
 #include <input_plugin.h>
 requires(glib-2.0)
+#include <dirent.h>
 #include <sys/inotify.h>
 #include <glib.h>
 #include <stdio.h>
