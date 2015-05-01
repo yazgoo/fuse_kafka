@@ -27,6 +27,12 @@ handle_file_modified(struct inotify_event* event, GHashTable* offsets, GHashTabl
     free(path);
     free(line);
 }
+handle_file_deleted(struct inotify_event* event, GHashTable* offsets, GHashTable* watches, char* root)
+{
+    char* path = get_event_path(event, watches);
+    g_hash_table_remove(offsets, path);
+    free(path);
+}
 void watch_directory(char* directory, int fd, GHashTable* watches)
 {
     int wd = inotify_add_watch(fd, directory, IN_CREATE | IN_MODIFY);
@@ -50,6 +56,11 @@ void setup_watches(char* directory, int fd, GHashTable* watches)
     }
     closedir(dir);
 }
+void teardown_watches(char* directory, int fd, GHashTable* watches)
+{
+    /* TODO write */
+    free(directory);
+}
 handle_event(struct inotify_event* event, int fd, GHashTable* offsets, GHashTable* watches, char* root)
 {
     if ( event->len ) {
@@ -61,6 +72,17 @@ handle_event(struct inotify_event* event, int fd, GHashTable* offsets, GHashTabl
             }
             else {
                 printf( "New file %s created.\n", event->name );
+            }
+        }
+        if ( event->mask & IN_DELETE ) {
+            if ( event->mask & IN_ISDIR ) {
+                printf( "New directory %s deleted.\n", event->name );
+                char* path = get_event_path(event, watches);
+                teardown_watches(path, fd, watches);
+            }
+            else {
+                printf( "New file %s deleted.\n", event->name );
+                handle_file_deleted(event, offsets, watches, root);
             }
         }
         if ( event->mask & IN_MODIFY ) {
