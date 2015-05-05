@@ -12,6 +12,7 @@
  * @brief a wrapping structure for kafka client and fuse_kafka
  * configuration
  **/
+#include "server_list.h"
 typedef struct _kafka_t
 {
     rd_kafka_t* rk;
@@ -20,6 +21,7 @@ typedef struct _kafka_t
     /* were brokers given added to kafka (in zk mode): */
     char no_brokers;
     zhandle_t* zhandle;
+    server_list* broker_list;
 } kafka_t;
 #include "zookeeper.c"
 /**

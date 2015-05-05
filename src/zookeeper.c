@@ -42,6 +42,7 @@
  */
 #include <jansson.h>
 #define BROKER_PATH "/brokers/ids"
+#include "server_list.c"
 static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
 {
     if (zzh)
@@ -100,9 +101,10 @@ static void watcher(zhandle_t *zh, int type,
     {
         brokers[0] = '\0';
         set_brokerlist_from_zookeeper(zh, brokers);
-        if (brokers[0] != '\0' && k->rk != NULL)
+        if (brokers[0] != '\0' && k->rk != NULL && !server_list_contains(&(k->broker_list), brokers))
         {
             rd_kafka_brokers_add(k->rk, brokers);
+            server_list_add(&(k->broker_list), brokers);
             k->no_brokers = 0;
             rd_kafka_poll(k->rk, 10);
             topic_conf = rd_kafka_topic_conf_new();
