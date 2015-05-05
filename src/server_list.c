@@ -1,5 +1,17 @@
+/** @file
+ * Allows to maintain a server list to check
+ * that these servers are not added;
+ * Currently, there is no parsing of the string argument given.
+ * In the future there might be (to handle server lists) ala zookeeper
+ **/
 #include "server_list.h"
 #define SERVER_LIST_DEFAULT_MAX_SIZE 10
+/** @brief Public: checks if the list contains a string
+ *
+ * @param servers a pointer to the server_list
+ * 
+ * @return 0 if *servers is NULL or the list does 
+ * not contain the string, 1 otherwise */
 int server_list_contains(server_list** servers, char* string)
 {
     int i;
@@ -8,6 +20,9 @@ int server_list_contains(server_list** servers, char* string)
         if(strcmp((*servers)->array[i], string) == 0) return 1;
     return 0;
 }
+/** @brief creates a new server_list
+ * @return 0 if the creation was a success
+ **/
 int server_list_new(server_list** servers)
 {
     if(((*servers) = malloc(sizeof(server_list))) == NULL) return 1;
@@ -17,6 +32,7 @@ int server_list_new(server_list** servers)
             == NULL) return 2;
     return 0;
 }
+/** @brief deletes the server list **/
 void server_list_free(server_list** servers)
 {
     if((*servers) == NULL) return;
@@ -24,6 +40,10 @@ void server_list_free(server_list** servers)
     (*servers)->array = NULL;
     free((*servers));
 }
+/**
+ * @brief resizes the server list
+ * @return 1 if resize failed, 0 otherwise
+ **/
 int server_list_resize(server_list** servers)
 {
     int new_size = (*servers)->max_size + SERVER_LIST_DEFAULT_MAX_SIZE;
@@ -33,6 +53,10 @@ int server_list_resize(server_list** servers)
     (*servers)->max_size = new_size;
     return 0;
 }
+/**
+ * @brief adds a string to the servers list
+ * @return 0 if adding was successfull
+ **/
 int server_list_add(server_list** servers, char* string)
 {
     char* str;
