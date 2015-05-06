@@ -93,6 +93,7 @@ static void watcher(zhandle_t *zh, int type,
 {
     char brokers[1024];
     kafka_t* k = (kafka_t*) param;
+    k->broker_list = NULL;
     rd_kafka_topic_conf_t *topic_conf;
     if(k->conf == NULL) return;
     char* topic = k->conf->topic[0];

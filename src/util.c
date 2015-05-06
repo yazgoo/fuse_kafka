@@ -116,6 +116,37 @@ char* array_to_container_string(char** array, size_t n, char open_char,
     sprintf(str + k, "%c", close_char);
     return str;
 }
+#ifdef TEST
+int* falloc_fails()
+{
+    static int result = 0;
+    return &result;
+}
+int* fcalloc_fails()
+{
+    static int result = 0;
+    return &result;
+}
+void* fmalloc(size_t size)
+{
+    if(*falloc_fails()) return NULL;
+    return malloc(size);
+}
+void* fcalloc(size_t nmemb, size_t size)
+{
+    if(*falloc_fails() || *fcalloc_fails()) return NULL;
+    return calloc(nmemb, size);
+}
+void* frealloc(void* ptr, size_t size)
+{
+    if(*falloc_fails()) return NULL;
+    return realloc(ptr, size);
+}
+#else
+#define fmalloc malloc
+#define fcalloc calloc
+#define frealloc realloc
+#endif
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \

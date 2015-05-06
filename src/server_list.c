@@ -25,17 +25,21 @@ int server_list_contains(server_list** servers, char* string)
  **/
 int server_list_new(server_list** servers)
 {
-    if(((*servers) = malloc(sizeof(server_list))) == NULL) return 1;
+    if(((*servers) = fmalloc(sizeof(server_list))) == NULL) return 1;
     (*servers)->max_size = SERVER_LIST_DEFAULT_MAX_SIZE;
     (*servers)->size = 0;
-    if(((*servers)->array = calloc((*servers)->max_size, sizeof(char*)))
+    if(((*servers)->array = fcalloc((*servers)->max_size, sizeof(char*)))
             == NULL) return 2;
     return 0;
 }
 /** @brief deletes the server list **/
 void server_list_free(server_list** servers)
 {
+    int i;
     if((*servers) == NULL) return;
+    if((*servers)->array != NULL)
+        for(i = 0; i < (*servers)->size; i++)
+            free((*servers)->array[i]);
     free((*servers)->array);
     (*servers)->array = NULL;
     free((*servers));
@@ -48,9 +52,10 @@ int server_list_resize(server_list** servers)
 {
     int new_size = (*servers)->max_size + SERVER_LIST_DEFAULT_MAX_SIZE;
     char** new_array;
-    if((new_array = (char**) realloc((*servers)->array,
+    if((new_array = (char**) frealloc((*servers)->array,
                     new_size * sizeof(char*))) == NULL) return 1;
     (*servers)->max_size = new_size;
+    (*servers)->array = new_array;
     return 0;
 }
 /**
@@ -63,7 +68,7 @@ int server_list_add(server_list** servers, char* string)
     if((*servers) == NULL && server_list_new(servers)) return 1;
     if((*servers)->size >= (*servers)->max_size && server_list_resize(servers))
         return 2;
-    if((str = (char*) calloc(strlen(string) + 1, sizeof(char))) == NULL)
+    if((str = (char*) fcalloc(strlen(string) + 1, sizeof(char))) == NULL)
         return 3;
     (*servers)->array[(*servers)->size] = str;
     strcpy((*servers)->array[(*servers)->size++], string);
