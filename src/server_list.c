@@ -18,8 +18,10 @@ int server_list_contains(server_list** servers, char* string)
     if((*servers) == NULL)
         return 0;
     for(i = 0; i < (*servers)->size; i++)
+    {
         if(strcmp((*servers)->array[i], string) == 0)
             return 1;
+    }
     return 0;
 }
 /** @brief creates a new server_list
@@ -79,6 +81,15 @@ int server_list_add(server_list** servers, char* string)
     if((str = (char*) fcalloc(strlen(string) + 1, sizeof(char))) == NULL)
         return 3;
     (*servers)->array[(*servers)->size] = str;
-    strcpy((*servers)->array[(*servers)->size++], string);
+    strcpy((*servers)->array[(*servers)->size], string);
+    (*servers)->size++;
     return 0;
+}
+int server_list_add_once(server_list** servers, char* string)
+{
+    if(server_list_contains(servers, string))
+        return 0;
+    if(server_list_add(servers, string))
+        return 2;
+    return 1;
 }

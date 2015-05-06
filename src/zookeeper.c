@@ -93,7 +93,6 @@ static void watcher(zhandle_t *zh, int type,
 {
     char brokers[1024];
     kafka_t* k = (kafka_t*) param;
-    k->broker_list = NULL;
     rd_kafka_topic_conf_t *topic_conf;
     if(k->conf == NULL) return;
     char* topic = k->conf->topic[0];
@@ -102,10 +101,10 @@ static void watcher(zhandle_t *zh, int type,
     {
         brokers[0] = '\0';
         set_brokerlist_from_zookeeper(zh, brokers);
-        if (brokers[0] != '\0' && k->rk != NULL && !server_list_contains(&(k->broker_list), brokers))
+        if (brokers[0] != '\0' && k->rk != NULL &&
+                server_list_add_once(&(k->broker_list), brokers))
         {
             rd_kafka_brokers_add(k->rk, brokers);
-            server_list_add(&(k->broker_list), brokers);
             k->no_brokers = 0;
             rd_kafka_poll(k->rk, 10);
             topic_conf = rd_kafka_topic_conf_new();
@@ -119,6 +118,7 @@ static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
 {
     zoo_set_debug_level(ZOO_LOG_LEVEL_ERROR);
     ((kafka_t*) param)->no_brokers = 1;
+    ((kafka_t*) param)->broker_list = NULL;
     zhandle_t *zh;
     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
     if (zh == NULL)
