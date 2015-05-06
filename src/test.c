@@ -269,62 +269,89 @@ static char* test_time_queue()
     time_queue_delete(queue);
     return 0;
 }
-int verbose_server_list_add(server_list** list, char* word)
+int verbose_string_list_add(string_list** list, char* word)
 {
     printf("adding %s on a list(%d, %d)\n",
             word, (*list)->size, (*list)->max_size);
-    return server_list_add(list, word);
+    return string_list_add(list, word);
 }
-static char* test_server_list_fillup_to(
-        char* word, server_list* list, size_t size)
+static char* test_string_list_fillup_to(
+        char* word, string_list* list, size_t size)
 {
     int i;
     for(i = 0; i < size; i++)
     {
         word[4] = '0' + i;
         mu_assert("server list add should work",
-                !verbose_server_list_add(&list, word));
+                !verbose_string_list_add(&list, word));
     }
     return 0;
 }
-static char* test_server_list()
+static char* test_string_list()
 {
-    server_list* list, *list2, *list3 = NULL;
+    string_list* list = NULL, *list2 = NULL, *list3 = NULL;
     mu_assert("server list should not contain blah",
-            !server_list_contains(&list, "blah"));
+            !string_list_contains(&list, "blah"));
     mu_assert("server list add should work",    
-            !server_list_add(&list, "blah"));
+            !string_list_add(&list, "blah"));
     mu_assert("server list should not contain foo",
-            !server_list_contains(&list, "foo"));
+            !string_list_contains(&list, "foo"));
     mu_assert("server list should contain blah",
-            server_list_contains(&list, "blah"));
+            string_list_contains(&list, "blah"));
     char word[10];
     strcpy(word, "word_");
-    test_server_list_fillup_to(word, list,
+    test_string_list_fillup_to(word, list,
             SERVER_LIST_DEFAULT_MAX_SIZE);
     word[3] = 'm';
-    test_server_list_fillup_to(word, list,
+    test_string_list_fillup_to(word, list,
             SERVER_LIST_DEFAULT_MAX_SIZE - 1);
     *(falloc_fails()) = 1;
     word[1] = 'a';
     mu_assert("adding word should fail since the list resize should fail",
-            verbose_server_list_add(&list, word));
+            verbose_string_list_add(&list, word));
     *(falloc_fails()) = 0;
     *(fcalloc_fails()) = 1;
     mu_assert("adding word should fail because of calloc fail",
-            verbose_server_list_add(&list, word));
+            verbose_string_list_add(&list, word));
+    mu_assert("list add once should fail",
+            2 == string_list_add_once(&list, word));
     *(fcalloc_fails()) = 0;
-    server_list_free(&list);
+    string_list_free(&list);
     *(fcalloc_fails()) = 1;
     mu_assert("creating a new list should fail because of calloc failure",
-            server_list_new(&list2));
+            string_list_new(&list2));
     *(fcalloc_fails()) = 0;
-    server_list_free(&list2);
+    string_list_free(&list2);
     *(falloc_fails()) = 1;
     mu_assert("creating a new list should fail because of malloc failure",
-            server_list_add(&list3, word));
+            string_list_add(&list3, word));
     *(falloc_fails()) = 0;
-    server_list_free(&list3);
+    string_list_free(&list3);
+    return 0;
+}
+static char* test_server_list()
+{
+    server_list* list = NULL;
+    char blah[] = "blah";
+    char blah_foo[] = "blah,foo";
+    char foo[] = "foo";
+    char foo_blah[] = "foo,blah";
+    char empty[] = "";
+    mu_assert("adding blah once should succeed",
+            server_list_add_once(&list, blah));
+    mu_assert("adding blah once should fail since it was already added",
+            !server_list_add_once(&list, blah));
+    mu_assert("adding blah once should succed: foo was not registered",
+            server_list_add_once(&list, blah_foo));
+    mu_assert("adding blah once should not succed: foo was registered",
+            !server_list_add_once(&list, foo));
+    mu_assert("adding blah once should not succed: foo and blah registered",
+            !server_list_add_once(&list, foo_blah));
+    mu_assert("adding empty once should succeed",
+            server_list_add_once(&list, empty));
+    mu_assert("adding NULL once should fail",
+            !server_list_add_once(&list, NULL));
+    server_list_free(&list);
     return 0;
 }
 static char* test_zookeeper()
@@ -404,6 +431,7 @@ static char* all_tests()
     mu_run_test(test_zookeeper);
     mu_run_test(test_trace);
     mu_run_test(test_dynamic_configuration);
+    mu_run_test(test_string_list);
     mu_run_test(test_server_list);
     return 0;
 }
