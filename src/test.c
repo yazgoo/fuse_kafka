@@ -319,10 +319,12 @@ static char* test_server_list()
     mu_assert("creating a new list should fail because of calloc failure",
             server_list_new(&list2));
     *(fcalloc_fails()) = 0;
+    server_list_free(&list2);
     *(falloc_fails()) = 1;
     mu_assert("creating a new list should fail because of malloc failure",
             server_list_add(&list3, word));
     *(falloc_fails()) = 0;
+    server_list_free(&list3);
     return 0;
 }
 static char* test_zookeeper()
