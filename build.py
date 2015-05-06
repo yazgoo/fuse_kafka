@@ -287,9 +287,9 @@ def c_test():
         run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c","-o", ".")
         if binary_exists("lcov"):
-            run("lcov", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+            run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/" + source + ".info")
             if binary_exists("genhtml"):
-                run("genhtml", "src/" + source + ".info", "-o", "./out/c")
+                run("genhtml", "--rc", "lcov_branch_coverage=1", "src/" + source + ".info", "-o", "./out/c")
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("find", "out")
