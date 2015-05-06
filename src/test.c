@@ -347,6 +347,11 @@ static char* test_zookeeper()
     test_with()->zoo_get_children_returns = 0;
     mu_assert("zhandle_t should not be null",
             initialize_zookeeper("", &k) != NULL);
+    /* for coverage */
+    rd_kafka_destroy(NULL);
+    rd_kafka_wait_destroyed(42);
+    rd_kafka_topic_destroy(NULL);
+    zookeeper_close(NULL);
     return 0;
 }
 static char* test_trace()
