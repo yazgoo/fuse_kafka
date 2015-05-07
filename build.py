@@ -10,7 +10,7 @@ sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-flags = ["-I../librdkafka", "-L../librdkafka", "-D_FILE_OFFSET_BITS=64"]
+flags = ["-D_FILE_OFFSET_BITS=64"]
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
