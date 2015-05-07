@@ -10,7 +10,9 @@ sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-flags = ['-D_FILE_OFFSET_BITS=64']
+flags = ["-I../librdkafka", "-L../librdkafka", "-D_FILE_OFFSET_BITS=64"]
+if "CFLAGS" in os.environ:
+    flags = os.environ["CFLAGS"].split() + flags
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
 kafka_server = "http://mir2.ovh.net/ftp.apache.org/dist/kafka/"
 kafka_version = "0.8.1.1"

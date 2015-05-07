@@ -204,6 +204,9 @@ Installing from sources
     # installing:
     $ ./build.py install
 
+    You can add c compiling flags via CFLAGS environment variable:
+
+    $ ./build.py CFLAGS=-Wall ./build.py
 
 Using valgrind or another dynamic analysis tool
 ===============================================
