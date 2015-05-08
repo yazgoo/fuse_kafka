@@ -1,0 +1,134 @@
+\hypertarget{string__list_8c}{\section{src/string\-\_\-list.c \-File \-Reference}
+\label{string__list_8c}\index{src/string\-\_\-list.\-c@{src/string\-\_\-list.\-c}}
+}
+{\ttfamily \#include \char`\"{}string\-\_\-list.\-h\char`\"{}}\*
+\subsection*{\-Defines}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{string__list_8c_ad7af0fd27f68adefa67ba893ca170e85}{\#define {\bfseries \-S\-E\-R\-V\-E\-R\-\_\-\-L\-I\-S\-T\-\_\-\-D\-E\-F\-A\-U\-L\-T\-\_\-\-M\-A\-X\-\_\-\-S\-I\-Z\-E}~10}\label{string__list_8c_ad7af0fd27f68adefa67ba893ca170e85}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{string__list_8c_acfc154add66caeef5109e12ef7b6cad8}{string\-\_\-list\-\_\-contains} (string\-\_\-list $\ast$$\ast$servers, char $\ast$string)
+\begin{DoxyCompactList}\small\item\em \-Public\-: checks if the list contains a string. \end{DoxyCompactList}\item 
+int \hyperlink{string__list_8c_a26054d043b2c75dbd7feaeb9fce46a84}{string\-\_\-list\-\_\-new} (string\-\_\-list $\ast$$\ast$servers)
+\begin{DoxyCompactList}\small\item\em creates a new string\-\_\-list \end{DoxyCompactList}\item 
+\hypertarget{string__list_8c_af41acd10b654ef8a1b7ec19016365dca}{void \hyperlink{string__list_8c_af41acd10b654ef8a1b7ec19016365dca}{string\-\_\-list\-\_\-free} (string\-\_\-list $\ast$$\ast$servers)}\label{string__list_8c_af41acd10b654ef8a1b7ec19016365dca}
+
+\begin{DoxyCompactList}\small\item\em deletes the server list \end{DoxyCompactList}\item 
+int \hyperlink{string__list_8c_ad73d745e2f4af42084cddba9f21825ec}{string\-\_\-list\-\_\-resize} (string\-\_\-list $\ast$$\ast$servers)
+\begin{DoxyCompactList}\small\item\em resizes the server list \end{DoxyCompactList}\item 
+int \hyperlink{string__list_8c_ad339e7e85d8b6bb769c96373866ca8da}{string\-\_\-list\-\_\-add} (string\-\_\-list $\ast$$\ast$servers, char $\ast$string)
+\begin{DoxyCompactList}\small\item\em adds a string to the servers list \end{DoxyCompactList}\item 
+int \hyperlink{string__list_8c_a9d5141269959be12e42f1ec2fd93f714}{string\-\_\-list\-\_\-add\-\_\-once} (string\-\_\-list $\ast$$\ast$servers, char $\ast$string)
+\begin{DoxyCompactList}\small\item\em add item to list if it is not in it already \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Allows to maintain a server list to check that these servers are not added; \-Currently, there is no parsing of the string argument given. \-In the future there might be (to handle server lists) ala zookeeper 
+
+\-Definition in file \hyperlink{string__list_8c_source}{string\-\_\-list.\-c}.
+
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{string__list_8c_ad339e7e85d8b6bb769c96373866ca8da}{\index{string\-\_\-list.\-c@{string\-\_\-list.\-c}!string\-\_\-list\-\_\-add@{string\-\_\-list\-\_\-add}}
+\index{string\-\_\-list\-\_\-add@{string\-\_\-list\-\_\-add}!string_list.c@{string\-\_\-list.\-c}}
+\subsubsection[{string\-\_\-list\-\_\-add}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf string\-\_\-list\-\_\-add} (
+\begin{DoxyParamCaption}
+\item[{string\-\_\-list $\ast$$\ast$}]{servers, }
+\item[{char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}}\label{string__list_8c_ad339e7e85d8b6bb769c96373866ca8da}
+
+
+adds a string to the servers list 
+
+\begin{DoxyReturn}{\-Returns}
+0 if adding was successfull 
+\end{DoxyReturn}
+
+
+\-Definition at line 73 of file string\-\_\-list.\-c.
+
+\hypertarget{string__list_8c_a9d5141269959be12e42f1ec2fd93f714}{\index{string\-\_\-list.\-c@{string\-\_\-list.\-c}!string\-\_\-list\-\_\-add\-\_\-once@{string\-\_\-list\-\_\-add\-\_\-once}}
+\index{string\-\_\-list\-\_\-add\-\_\-once@{string\-\_\-list\-\_\-add\-\_\-once}!string_list.c@{string\-\_\-list.\-c}}
+\subsubsection[{string\-\_\-list\-\_\-add\-\_\-once}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf string\-\_\-list\-\_\-add\-\_\-once} (
+\begin{DoxyParamCaption}
+\item[{string\-\_\-list $\ast$$\ast$}]{servers, }
+\item[{char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}}\label{string__list_8c_a9d5141269959be12e42f1ec2fd93f714}
+
+
+add item to list if it is not in it already 
+
+\begin{DoxyReturn}{\-Returns}
+0 if item already is in the list 2 if item is not in the list but could not be added 1 if item was not in the list and was successfully added 
+\end{DoxyReturn}
+
+
+\-Definition at line 95 of file string\-\_\-list.\-c.
+
+\hypertarget{string__list_8c_acfc154add66caeef5109e12ef7b6cad8}{\index{string\-\_\-list.\-c@{string\-\_\-list.\-c}!string\-\_\-list\-\_\-contains@{string\-\_\-list\-\_\-contains}}
+\index{string\-\_\-list\-\_\-contains@{string\-\_\-list\-\_\-contains}!string_list.c@{string\-\_\-list.\-c}}
+\subsubsection[{string\-\_\-list\-\_\-contains}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf string\-\_\-list\-\_\-contains} (
+\begin{DoxyParamCaption}
+\item[{string\-\_\-list $\ast$$\ast$}]{servers, }
+\item[{char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}}\label{string__list_8c_acfc154add66caeef5109e12ef7b6cad8}
+
+
+\-Public\-: checks if the list contains a string. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em servers} & a pointer to the string\-\_\-list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+0 if $\ast$servers is \-N\-U\-L\-L or the list does not contain the string, 1 otherwise 
+\end{DoxyReturn}
+
+
+\-Definition at line 15 of file string\-\_\-list.\-c.
+
+\hypertarget{string__list_8c_a26054d043b2c75dbd7feaeb9fce46a84}{\index{string\-\_\-list.\-c@{string\-\_\-list.\-c}!string\-\_\-list\-\_\-new@{string\-\_\-list\-\_\-new}}
+\index{string\-\_\-list\-\_\-new@{string\-\_\-list\-\_\-new}!string_list.c@{string\-\_\-list.\-c}}
+\subsubsection[{string\-\_\-list\-\_\-new}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf string\-\_\-list\-\_\-new} (
+\begin{DoxyParamCaption}
+\item[{string\-\_\-list $\ast$$\ast$}]{servers}
+\end{DoxyParamCaption}
+)}}\label{string__list_8c_a26054d043b2c75dbd7feaeb9fce46a84}
+
+
+creates a new string\-\_\-list 
+
+\begin{DoxyReturn}{\-Returns}
+0 if the creation was a success 
+\end{DoxyReturn}
+
+
+\-Definition at line 30 of file string\-\_\-list.\-c.
+
+\hypertarget{string__list_8c_ad73d745e2f4af42084cddba9f21825ec}{\index{string\-\_\-list.\-c@{string\-\_\-list.\-c}!string\-\_\-list\-\_\-resize@{string\-\_\-list\-\_\-resize}}
+\index{string\-\_\-list\-\_\-resize@{string\-\_\-list\-\_\-resize}!string_list.c@{string\-\_\-list.\-c}}
+\subsubsection[{string\-\_\-list\-\_\-resize}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf string\-\_\-list\-\_\-resize} (
+\begin{DoxyParamCaption}
+\item[{string\-\_\-list $\ast$$\ast$}]{servers}
+\end{DoxyParamCaption}
+)}}\label{string__list_8c_ad73d745e2f4af42084cddba9f21825ec}
+
+
+resizes the server list 
+
+\begin{DoxyReturn}{\-Returns}
+1 if resize failed, 0 otherwise 
+\end{DoxyReturn}
+
+
+\-Definition at line 58 of file string\-\_\-list.\-c.
+

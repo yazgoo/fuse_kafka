@@ -186,7 +186,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00103"></a>00103 <span class="comment">#define TEST_FUNC_FAILURE(x, y, ...) mu_assert(#x &quot;(&quot; #y &quot;) succeeded&quot;, x(y, ##__VA_ARGS__) != 0);</span>
 <a name="l00104"></a>00104 <span class="comment">    TEST_FUNC_SUCCESS(kafka_getattr, &quot;/&quot;, &amp;st)</span>
 <a name="l00105"></a>00105 <span class="comment">    TEST_FUNC_FAILURE(kafka_getattr, &quot;/non-existing/path&quot;, &amp;st)</span>
-<a name="l00106"></a>00106 <span class="comment">    TEST_FUNC_FAILURE(kafka_fgetattr, &quot;/&quot;, &amp;st, &amp;fi)</span>
+<a name="l00106"></a>00106 <span class="comment">    // TODO uncomment TEST_FUNC_FAILURE(kafka_fgetattr, &quot;/&quot;, &amp;st, &amp;fi)</span>
 <a name="l00107"></a>00107 <span class="comment">    fi.fh = open(&quot;/&quot;, O_DIRECTORY);</span>
 <a name="l00108"></a>00108 <span class="comment">    TEST_FUNC_SUCCESS(kafka_fgetattr, &quot;/&quot;, &amp;st, &amp;fi)</span>
 <a name="l00109"></a>00109 <span class="comment">    close(fi.fh);</span>
@@ -224,7 +224,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00141"></a>00141 <span class="comment">    TEST_FUNC_FAILURE(kafka_unlink, TEST &quot;/non-existing/file&quot;)</span>
 <a name="l00142"></a>00142 <span class="comment">    TEST_FUNC_FAILURE(kafka_chown, TEST &quot;/from&quot;, 0, 0)</span>
 <a name="l00143"></a>00143 <span class="comment">    TEST_FUNC_FAILURE(kafka_utimens, TEST &quot;/from&quot;, ts)</span>
-<a name="l00144"></a>00144 <span class="comment">    TEST_FUNC_FAILURE(kafka_create, TEST &quot;/var&quot;, 0, &amp;fi)</span>
+<a name="l00144"></a>00144 <span class="comment">    // TODO uncomment TEST_FUNC_FAILURE(kafka_create, TEST &quot;/var&quot;, 0, &amp;fi)</span>
 <a name="l00145"></a>00145 <span class="comment">    fi.flags = O_CREAT;</span>
 <a name="l00146"></a>00146 <span class="comment">    TEST_FUNC_SUCCESS(kafka_create, TEST &quot;/node&quot;, S_IWUSR |S_IRUSR, &amp;fi)</span>
 <a name="l00147"></a>00147 <span class="comment">    fi.flags = 0;</span>
@@ -361,106 +361,198 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00278"></a>00278     <a class="code" href="time__queue_8c.html#aee8286362f0df21f401d96d725cd340b" title="Public: deletes the time queue structure and allocated content.">time_queue_delete</a>(queue);
 <a name="l00279"></a>00279     <span class="keywordflow">return</span> 0;
 <a name="l00280"></a>00280 }
-<a name="l00281"></a>00281 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_zookeeper()
+<a name="l00281"></a>00281 <span class="keywordtype">int</span> verbose_string_list_add(string_list** list, <span class="keywordtype">char</span>* word)
 <a name="l00282"></a>00282 {
-<a name="l00283"></a>00283     <span class="keywordtype">char</span>* topics[] = {<span class="stringliteral">&quot;test&quot;</span>};
-<a name="l00284"></a>00284     <span class="keywordtype">char</span>* brokers[] = {0};
-<a name="l00285"></a>00285     <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> rk;
-<a name="l00286"></a>00286     kafka_t k;
-<a name="l00287"></a>00287     config conf;
-<a name="l00288"></a>00288     k.conf = &amp;conf;
-<a name="l00289"></a>00289     k.conf-&gt;topic = topics;
-<a name="l00290"></a>00290     k.conf-&gt;brokers = brokers;
-<a name="l00291"></a>00291     k.rk = &amp;rk;
-<a name="l00292"></a>00292     test_with()-&gt;rd_kafka_topic_new_returns_NULL = 0;
-<a name="l00293"></a>00293     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
-<a name="l00294"></a>00294             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
-<a name="l00295"></a>00295     mu_assert(<span class="stringliteral">&quot;zhandle_t should be null&quot;</span>,
-<a name="l00296"></a>00296             initialize_zookeeper(NULL, &amp;k) == NULL);
-<a name="l00297"></a>00297     test_with()-&gt;rd_kafka_topic_new_returns_NULL = 1;
-<a name="l00298"></a>00298     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
-<a name="l00299"></a>00299             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
-<a name="l00300"></a>00300     test_with()-&gt;zoo_get_children_returns = 0;
-<a name="l00301"></a>00301     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
-<a name="l00302"></a>00302             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
-<a name="l00303"></a>00303     <span class="keywordflow">return</span> 0;
-<a name="l00304"></a>00304 }
-<a name="l00305"></a>00305 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_trace()
-<a name="l00306"></a>00306 {
-<a name="l00307"></a>00307     SET_CONFIG;
-<a name="l00308"></a>00308     <a class="code" href="trace_8c.html#ad94abf599a8e0299bcb5088c87ebbdb8" title="formats and send traces to kafka, behaving like printf">trace</a>(<span class="stringliteral">&quot;blah&quot;</span>);
-<a name="l00309"></a>00309     <span class="keywordflow">return</span> 0;
-<a name="l00310"></a>00310 }
-<a name="l00311"></a>00311 <span class="keywordtype">void</span> touch(<span class="keywordtype">char</span>* path)
-<a name="l00312"></a>00312 {
-<a name="l00313"></a>00313     FILE* f = fopen(path, <span class="stringliteral">&quot;w&quot;</span>);
-<a name="l00314"></a>00314     flock(fileno(f), LOCK_EX);
-<a name="l00315"></a>00315     fwrite(<span class="stringliteral">&quot;blah&quot;</span>, 1, 1, f);
-<a name="l00316"></a>00316     fclose(f);
-<a name="l00317"></a>00317 }
-<a name="l00318"></a>00318 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_dynamic_configuration()
-<a name="l00319"></a>00319 {
-<a name="l00320"></a>00320     <span class="keywordtype">char</span>* line;
-<a name="l00321"></a>00321     <span class="keywordtype">char</span>** argv;
-<a name="l00322"></a>00322     <span class="keywordtype">int</span> argc;
-<a name="l00323"></a>00323     <span class="keywordtype">char</span>* conf_path = <span class="stringliteral">&quot;/tmp/fuse_kafka_test_dynamic_configuration&quot;</span>;
-<a name="l00324"></a>00324     mu_assert(<span class="stringliteral">&quot;loading dynamic configuration should fail&quot;</span>,
-<a name="l00325"></a>00325             dynamic_configuration_load() == 1);
-<a name="l00326"></a>00326     touch(conf_path);
-<a name="l00327"></a>00327     dynamic_configuration_get()-&gt;path = conf_path;
-<a name="l00328"></a>00328     mu_assert(<span class="stringliteral">&quot;parse_line_from_file should return 1&quot;</span>,
-<a name="l00329"></a>00329             parse_line_from_file(NULL, NULL, NULL) == 1);
-<a name="l00330"></a>00330     mu_assert(<span class="stringliteral">&quot;parse_args_from_file should return 1&quot;</span>,
-<a name="l00331"></a>00331             parse_args_from_file(NULL, &amp;argc, &amp;argv, &amp;line) == 1);
-<a name="l00332"></a>00332     dynamic_configuration_free();
-<a name="l00333"></a>00333     dynamic_configuration_load();
-<a name="l00334"></a>00334     mu_assert(<span class="stringliteral">&quot;dynamic_configuration_changed should return 0&quot;</span>,
-<a name="l00335"></a>00335             dynamic_configuration_changed() == 1);
-<a name="l00336"></a>00336     <span class="comment">//touch(conf_path);</span>
-<a name="l00337"></a>00337     unlink(conf_path);
-<a name="l00338"></a>00338     dynamic_configuration_watch_stop();
+<a name="l00283"></a>00283     printf(<span class="stringliteral">&quot;adding %s on a list(%d, %d)\n&quot;</span>,
+<a name="l00284"></a>00284             word, (*list)-&gt;size, (*list)-&gt;max_size);
+<a name="l00285"></a>00285     <span class="keywordflow">return</span> <a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(list, word);
+<a name="l00286"></a>00286 }
+<a name="l00287"></a>00287 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_string_list_fillup_to(
+<a name="l00288"></a>00288         <span class="keywordtype">char</span>* word, string_list* list, <span class="keywordtype">size_t</span> size)
+<a name="l00289"></a>00289 {
+<a name="l00290"></a>00290     <span class="keywordtype">int</span> i;
+<a name="l00291"></a>00291     <span class="keywordflow">for</span>(i = 0; i &lt; size; i++)
+<a name="l00292"></a>00292     {
+<a name="l00293"></a>00293         word[4] = <span class="charliteral">&#39;0&#39;</span> + i;
+<a name="l00294"></a>00294         mu_assert(<span class="stringliteral">&quot;server list add should work&quot;</span>,
+<a name="l00295"></a>00295                 !verbose_string_list_add(&amp;list, word));
+<a name="l00296"></a>00296     }
+<a name="l00297"></a>00297     <span class="keywordflow">return</span> 0;
+<a name="l00298"></a>00298 }
+<a name="l00299"></a>00299 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_string_list()
+<a name="l00300"></a>00300 {
+<a name="l00301"></a>00301     string_list* list = NULL, *list2 = NULL, *list3 = NULL;
+<a name="l00302"></a>00302     mu_assert(<span class="stringliteral">&quot;server list should not contain blah&quot;</span>,
+<a name="l00303"></a>00303             !<a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(&amp;list, <span class="stringliteral">&quot;blah&quot;</span>));
+<a name="l00304"></a>00304     mu_assert(<span class="stringliteral">&quot;server list add should work&quot;</span>,    
+<a name="l00305"></a>00305             !<a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(&amp;list, <span class="stringliteral">&quot;blah&quot;</span>));
+<a name="l00306"></a>00306     mu_assert(<span class="stringliteral">&quot;server list should not contain foo&quot;</span>,
+<a name="l00307"></a>00307             !<a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(&amp;list, <span class="stringliteral">&quot;foo&quot;</span>));
+<a name="l00308"></a>00308     mu_assert(<span class="stringliteral">&quot;server list should contain blah&quot;</span>,
+<a name="l00309"></a>00309             <a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(&amp;list, <span class="stringliteral">&quot;blah&quot;</span>));
+<a name="l00310"></a>00310     <span class="keywordtype">char</span> word[10];
+<a name="l00311"></a>00311     strcpy(word, <span class="stringliteral">&quot;word_&quot;</span>);
+<a name="l00312"></a>00312     test_string_list_fillup_to(word, list,
+<a name="l00313"></a>00313             SERVER_LIST_DEFAULT_MAX_SIZE);
+<a name="l00314"></a>00314     word[3] = <span class="charliteral">&#39;m&#39;</span>;
+<a name="l00315"></a>00315     test_string_list_fillup_to(word, list,
+<a name="l00316"></a>00316             SERVER_LIST_DEFAULT_MAX_SIZE - 1);
+<a name="l00317"></a>00317     *(falloc_fails()) = 1;
+<a name="l00318"></a>00318     word[1] = <span class="charliteral">&#39;a&#39;</span>;
+<a name="l00319"></a>00319     mu_assert(<span class="stringliteral">&quot;adding word should fail since the list resize should fail&quot;</span>,
+<a name="l00320"></a>00320             verbose_string_list_add(&amp;list, word));
+<a name="l00321"></a>00321     *(falloc_fails()) = 0;
+<a name="l00322"></a>00322     *(fcalloc_fails()) = 1;
+<a name="l00323"></a>00323     mu_assert(<span class="stringliteral">&quot;adding word should fail because of calloc fail&quot;</span>,
+<a name="l00324"></a>00324             verbose_string_list_add(&amp;list, word));
+<a name="l00325"></a>00325     mu_assert(<span class="stringliteral">&quot;list add once should fail&quot;</span>,
+<a name="l00326"></a>00326             2 == <a class="code" href="string__list_8c.html#a9d5141269959be12e42f1ec2fd93f714" title="add item to list if it is not in it already">string_list_add_once</a>(&amp;list, word));
+<a name="l00327"></a>00327     *(fcalloc_fails()) = 0;
+<a name="l00328"></a>00328     <a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca" title="deletes the server list">string_list_free</a>(&amp;list);
+<a name="l00329"></a>00329     *(fcalloc_fails()) = 1;
+<a name="l00330"></a>00330     mu_assert(<span class="stringliteral">&quot;creating a new list should fail because of calloc failure&quot;</span>,
+<a name="l00331"></a>00331             <a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84" title="creates a new string_list">string_list_new</a>(&amp;list2));
+<a name="l00332"></a>00332     *(fcalloc_fails()) = 0;
+<a name="l00333"></a>00333     <a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca" title="deletes the server list">string_list_free</a>(&amp;list2);
+<a name="l00334"></a>00334     *(falloc_fails()) = 1;
+<a name="l00335"></a>00335     mu_assert(<span class="stringliteral">&quot;creating a new list should fail because of malloc failure&quot;</span>,
+<a name="l00336"></a>00336             <a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(&amp;list3, word));
+<a name="l00337"></a>00337     *(falloc_fails()) = 0;
+<a name="l00338"></a>00338     <a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca" title="deletes the server list">string_list_free</a>(&amp;list3);
 <a name="l00339"></a>00339     <span class="keywordflow">return</span> 0;
 <a name="l00340"></a>00340 }
-<a name="l00341"></a>00341 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00341"></a>00341 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_server_list()
 <a name="l00342"></a>00342 {
-<a name="l00343"></a>00343     <span class="comment">// TODO move to specific unit test mu_run_test(test_kafka_write);</span>
-<a name="l00344"></a>00344     <span class="comment">// TODO move to specific unit test mu_run_test(test_passthrough_calls);</span>
-<a name="l00345"></a>00345     <span class="comment">// TODO move to specific unit test mu_run_test(test_setup_kafka);</span>
-<a name="l00346"></a>00346     mu_run_test(test_parse_arguments);
-<a name="l00347"></a>00347     mu_run_test(test_logging);
-<a name="l00348"></a>00348     mu_run_test(test_utils);
-<a name="l00349"></a>00349     mu_run_test(test_time_queue);
-<a name="l00350"></a>00350     mu_run_test(test_zookeeper);
-<a name="l00351"></a>00351     <span class="comment">// TODO move to specific unit test mu_run_test(test_trace);</span>
-<a name="l00352"></a>00352     <span class="comment">// TODO move to specific unit test mu_run_test(test_dynamic_configuration);</span>
-<a name="l00353"></a>00353     <span class="keywordflow">return</span> 0;
-<a name="l00354"></a>00354 }
-<a name="l00355"></a>00355 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
-<a name="l00356"></a>00356 <span class="preprocessor">#include &lt;sys/ioctl.h&gt;</span>
-<a name="l00357"></a>00357 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
-<a name="l00358"></a>00358 <span class="keywordtype">void</span> line()
-<a name="l00359"></a>00359 {
-<a name="l00360"></a>00360     <span class="keywordtype">int</span> i;
-<a name="l00361"></a>00361     <span class="keyword">struct </span>winsize w;
-<a name="l00362"></a>00362     ioctl(STDOUT_FILENO, TIOCGWINSZ, &amp;w);
-<a name="l00363"></a>00363     <span class="keywordflow">for</span>(i = 0; i &lt; w.ws_col; i++) printf(<span class="stringliteral">&quot;=&quot;</span>);
-<a name="l00364"></a>00364     printf(<span class="stringliteral">&quot;\n&quot;</span>);
+<a name="l00343"></a>00343     server_list* list = NULL;
+<a name="l00344"></a>00344     <span class="keywordtype">char</span> blah[] = <span class="stringliteral">&quot;blah&quot;</span>;
+<a name="l00345"></a>00345     <span class="keywordtype">char</span> blah_foo[] = <span class="stringliteral">&quot;blah,foo&quot;</span>;
+<a name="l00346"></a>00346     <span class="keywordtype">char</span> foo[] = <span class="stringliteral">&quot;foo&quot;</span>;
+<a name="l00347"></a>00347     <span class="keywordtype">char</span> foo_blah[] = <span class="stringliteral">&quot;foo,blah&quot;</span>;
+<a name="l00348"></a>00348     <span class="keywordtype">char</span> empty[] = <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00349"></a>00349     mu_assert(<span class="stringliteral">&quot;adding blah once should succeed&quot;</span>,
+<a name="l00350"></a>00350             server_list_add_once(&amp;list, blah));
+<a name="l00351"></a>00351     mu_assert(<span class="stringliteral">&quot;adding blah once should fail since it was already added&quot;</span>,
+<a name="l00352"></a>00352             !server_list_add_once(&amp;list, blah));
+<a name="l00353"></a>00353     mu_assert(<span class="stringliteral">&quot;adding blah once should succed: foo was not registered&quot;</span>,
+<a name="l00354"></a>00354             server_list_add_once(&amp;list, blah_foo));
+<a name="l00355"></a>00355     mu_assert(<span class="stringliteral">&quot;adding blah once should not succed: foo was registered&quot;</span>,
+<a name="l00356"></a>00356             !server_list_add_once(&amp;list, foo));
+<a name="l00357"></a>00357     mu_assert(<span class="stringliteral">&quot;adding blah once should not succed: foo and blah registered&quot;</span>,
+<a name="l00358"></a>00358             !server_list_add_once(&amp;list, foo_blah));
+<a name="l00359"></a>00359     mu_assert(<span class="stringliteral">&quot;adding empty once should succeed&quot;</span>,
+<a name="l00360"></a>00360             server_list_add_once(&amp;list, empty));
+<a name="l00361"></a>00361     mu_assert(<span class="stringliteral">&quot;adding NULL once should fail&quot;</span>,
+<a name="l00362"></a>00362             !server_list_add_once(&amp;list, NULL));
+<a name="l00363"></a>00363     server_list_free(&amp;list);
+<a name="l00364"></a>00364     <span class="keywordflow">return</span> 0;
 <a name="l00365"></a>00365 }
-<a name="l00366"></a>00366 <span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00366"></a>00366 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_zookeeper()
 <a name="l00367"></a>00367 {
-<a name="l00368"></a>00368     time_t start,end;
-<a name="l00369"></a>00369     start=clock();
-<a name="l00370"></a>00370     line();
-<a name="l00371"></a>00371     <span class="keywordtype">char</span>* result = all_tests();
-<a name="l00372"></a>00372     line();
-<a name="l00373"></a>00373     <span class="keywordflow">if</span> (result != 0) printf(<span class="stringliteral">&quot;ASSERTION FAILED:\n%s\n&quot;</span>, result);
-<a name="l00374"></a>00374     <span class="keywordflow">else</span> printf(<span class="stringliteral">&quot;ALL TESTS PASSED\n&quot;</span>);
-<a name="l00375"></a>00375     printf(<span class="stringliteral">&quot;Tests run: %d, duration: %f seconds\n&quot;</span>, tests_run,
-<a name="l00376"></a>00376             (<span class="keywordtype">float</span>) (clock()-start)/CLOCKS_PER_SEC);
-<a name="l00377"></a>00377     line();
-<a name="l00378"></a>00378     system(<span class="stringliteral">&quot;rm -f &quot;</span> TEST <span class="stringliteral">&quot;/to&quot;</span>);
-<a name="l00379"></a>00379     <span class="keywordflow">return</span> result != 0;
-<a name="l00380"></a>00380 }
+<a name="l00368"></a>00368     <span class="keywordtype">char</span>* topics[] = {<span class="stringliteral">&quot;test&quot;</span>};
+<a name="l00369"></a>00369     <span class="keywordtype">char</span>* brokers[] = {0};
+<a name="l00370"></a>00370     <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> rk;
+<a name="l00371"></a>00371     kafka_t k;
+<a name="l00372"></a>00372     config conf;
+<a name="l00373"></a>00373     k.conf = &amp;conf;
+<a name="l00374"></a>00374     k.conf-&gt;topic = topics;
+<a name="l00375"></a>00375     k.conf-&gt;brokers = brokers;
+<a name="l00376"></a>00376     k.rk = &amp;rk;
+<a name="l00377"></a>00377     test_with()-&gt;rd_kafka_topic_new_returns_NULL = 0;
+<a name="l00378"></a>00378     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
+<a name="l00379"></a>00379             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
+<a name="l00380"></a>00380     mu_assert(<span class="stringliteral">&quot;zhandle_t should be null&quot;</span>,
+<a name="l00381"></a>00381             initialize_zookeeper(NULL, &amp;k) == NULL);
+<a name="l00382"></a>00382     test_with()-&gt;rd_kafka_topic_new_returns_NULL = 1;
+<a name="l00383"></a>00383     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
+<a name="l00384"></a>00384             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
+<a name="l00385"></a>00385     test_with()-&gt;zoo_get_children_returns = 0;
+<a name="l00386"></a>00386     mu_assert(<span class="stringliteral">&quot;zhandle_t should not be null&quot;</span>,
+<a name="l00387"></a>00387             initialize_zookeeper(<span class="stringliteral">&quot;&quot;</span>, &amp;k) != NULL);
+<a name="l00388"></a>00388     <span class="comment">/* for coverage */</span>
+<a name="l00389"></a>00389     rd_kafka_destroy(NULL);
+<a name="l00390"></a>00390     rd_kafka_wait_destroyed(42);
+<a name="l00391"></a>00391     rd_kafka_topic_destroy(NULL);
+<a name="l00392"></a>00392     zookeeper_close(NULL);
+<a name="l00393"></a>00393     <span class="keywordflow">return</span> 0;
+<a name="l00394"></a>00394 }
+<a name="l00395"></a>00395 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_trace()
+<a name="l00396"></a>00396 {
+<a name="l00397"></a>00397     SET_CONFIG;
+<a name="l00398"></a>00398     <a class="code" href="trace_8c.html#ad94abf599a8e0299bcb5088c87ebbdb8" title="formats and send traces to kafka, behaving like printf">trace</a>(<span class="stringliteral">&quot;blah&quot;</span>);
+<a name="l00399"></a>00399     <span class="keywordflow">return</span> 0;
+<a name="l00400"></a>00400 }
+<a name="l00401"></a>00401 <span class="keywordtype">void</span> touch(<span class="keywordtype">char</span>* path)
+<a name="l00402"></a>00402 {
+<a name="l00403"></a>00403     FILE* f = fopen(path, <span class="stringliteral">&quot;w&quot;</span>);
+<a name="l00404"></a>00404     flock(fileno(f), LOCK_EX);
+<a name="l00405"></a>00405     fwrite(<span class="stringliteral">&quot;blah&quot;</span>, 1, 1, f);
+<a name="l00406"></a>00406     fclose(f);
+<a name="l00407"></a>00407 }
+<a name="l00408"></a>00408 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_dynamic_configuration()
+<a name="l00409"></a>00409 {
+<a name="l00410"></a>00410     <span class="keywordtype">char</span>* line;
+<a name="l00411"></a>00411     <span class="keywordtype">char</span>** argv;
+<a name="l00412"></a>00412     <span class="keywordtype">int</span> argc;
+<a name="l00413"></a>00413     <span class="keywordtype">char</span>* conf_path = <span class="stringliteral">&quot;/tmp/fuse_kafka_test_dynamic_configuration&quot;</span>;
+<a name="l00414"></a>00414     mu_assert(<span class="stringliteral">&quot;loading dynamic configuration should fail&quot;</span>,
+<a name="l00415"></a>00415             dynamic_configuration_load() == 1);
+<a name="l00416"></a>00416     touch(conf_path);
+<a name="l00417"></a>00417     dynamic_configuration_get()-&gt;path = conf_path;
+<a name="l00418"></a>00418     mu_assert(<span class="stringliteral">&quot;parse_line_from_file should return 1&quot;</span>,
+<a name="l00419"></a>00419             parse_line_from_file(NULL, NULL, NULL) == 1);
+<a name="l00420"></a>00420     mu_assert(<span class="stringliteral">&quot;parse_args_from_file should return 1&quot;</span>,
+<a name="l00421"></a>00421             parse_args_from_file(NULL, &amp;argc, &amp;argv, &amp;line) == 1);
+<a name="l00422"></a>00422     dynamic_configuration_free();
+<a name="l00423"></a>00423     dynamic_configuration_load();
+<a name="l00424"></a>00424     mu_assert(<span class="stringliteral">&quot;dynamic_configuration_changed should return 0&quot;</span>,
+<a name="l00425"></a>00425             dynamic_configuration_changed() == 1);
+<a name="l00426"></a>00426     <span class="comment">//touch(conf_path);</span>
+<a name="l00427"></a>00427     unlink(conf_path);
+<a name="l00428"></a>00428     dynamic_configuration_watch_stop();
+<a name="l00429"></a>00429     <span class="keywordflow">return</span> 0;
+<a name="l00430"></a>00430 }
+<a name="l00431"></a>00431 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00432"></a>00432 {
+<a name="l00433"></a>00433     <span class="comment">// TODO move to specific unit test mu_run_test(test_kafka_write);</span>
+<a name="l00434"></a>00434     <span class="comment">// TODO move to specific unit test mu_run_test(test_passthrough_calls);</span>
+<a name="l00435"></a>00435     <span class="comment">// TODO move to specific unit test mu_run_test(test_setup_kafka);</span>
+<a name="l00436"></a>00436     mu_run_test(test_parse_arguments);
+<a name="l00437"></a>00437     mu_run_test(test_logging);
+<a name="l00438"></a>00438     mu_run_test(test_utils);
+<a name="l00439"></a>00439     mu_run_test(test_time_queue);
+<a name="l00440"></a>00440     mu_run_test(test_zookeeper);
+<a name="l00441"></a>00441     <span class="comment">// TODO move to specific unit test mu_run_test(test_trace);</span>
+<a name="l00442"></a>00442     mu_run_test(test_string_list);
+<a name="l00443"></a>00443     mu_run_test(test_server_list);
+<a name="l00444"></a>00444     <span class="comment">// TODO move to specific unit test mu_run_test(test_dynamic_configuration);</span>
+<a name="l00445"></a>00445     <span class="keywordflow">return</span> 0;
+<a name="l00446"></a>00446 }
+<a name="l00447"></a>00447 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
+<a name="l00448"></a>00448 <span class="preprocessor">#include &lt;sys/ioctl.h&gt;</span>
+<a name="l00449"></a>00449 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
+<a name="l00450"></a>00450 <span class="keywordtype">void</span> line()
+<a name="l00451"></a>00451 {
+<a name="l00452"></a>00452     <span class="keywordtype">int</span> i;
+<a name="l00453"></a>00453     <span class="keyword">struct </span>winsize w;
+<a name="l00454"></a>00454     ioctl(STDOUT_FILENO, TIOCGWINSZ, &amp;w);
+<a name="l00455"></a>00455     <span class="keywordflow">for</span>(i = 0; i &lt; w.ws_col; i++) printf(<span class="stringliteral">&quot;=&quot;</span>);
+<a name="l00456"></a>00456     printf(<span class="stringliteral">&quot;\n&quot;</span>);
+<a name="l00457"></a>00457 }
+<a name="l00458"></a>00458 <span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00459"></a>00459 {
+<a name="l00460"></a>00460     time_t start,end;
+<a name="l00461"></a>00461     start=clock();
+<a name="l00462"></a>00462     line();
+<a name="l00463"></a>00463     <span class="keywordtype">char</span>* result = all_tests();
+<a name="l00464"></a>00464     line();
+<a name="l00465"></a>00465     <span class="keywordflow">if</span> (result != 0) printf(<span class="stringliteral">&quot;ASSERTION FAILED:\n%s\n&quot;</span>, result);
+<a name="l00466"></a>00466     <span class="keywordflow">else</span> printf(<span class="stringliteral">&quot;ALL TESTS PASSED\n&quot;</span>);
+<a name="l00467"></a>00467     printf(<span class="stringliteral">&quot;Tests run: %d, duration: %f seconds\n&quot;</span>, tests_run,
+<a name="l00468"></a>00468             (<span class="keywordtype">float</span>) (clock()-start)/CLOCKS_PER_SEC);
+<a name="l00469"></a>00469     line();
+<a name="l00470"></a>00470     system(<span class="stringliteral">&quot;rm -f &quot;</span> TEST <span class="stringliteral">&quot;/to&quot;</span>);
+<a name="l00471"></a>00471     <span class="keywordflow">return</span> result != 0;
+<a name="l00472"></a>00472 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -479,7 +571,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 2 2015 07:06:52 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 8 2015 15:18:52 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
