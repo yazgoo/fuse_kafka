@@ -103,10 +103,7 @@ static char* test_passthrough_calls()
 #define TEST_FUNC_FAILURE(x, y, ...) mu_assert(#x "(" #y ") succeeded", x(y, ##__VA_ARGS__) != 0);
     TEST_FUNC_SUCCESS(kafka_getattr, "/", &st)
     TEST_FUNC_FAILURE(kafka_getattr, "/non-existing/path", &st)
-    /*
-       TODO uncomment
-    TEST_FUNC_FAILURE(kafka_fgetattr, "/", &st, &fi)
-    */
+    // TODO uncomment TEST_FUNC_FAILURE(kafka_fgetattr, "/", &st, &fi)
     fi.fh = open("/", O_DIRECTORY);
     TEST_FUNC_SUCCESS(kafka_fgetattr, "/", &st, &fi)
     close(fi.fh);

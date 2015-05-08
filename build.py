@@ -308,7 +308,8 @@ def build():
     compile()
     link()
 def c_test():
-    """ Run unit tests, generating coverage reports in out directory """
+    """ Builds, run unit tests, generating coverage reports in out directory """
+    compile_test()
     for source in sources:
         run("./" + source + ".test")
         run("gcov", "./src/" + source + ".c","-o", ".")
