@@ -148,36 +148,43 @@ int main(void)
 }
 ````
 
-    $ gcc first.c
+````shell
+$ gcc first.c
+````
 
 Then start a test consumer, displaying only the path and message\_size-added fields
 
 Launch the segfaulting program in fuse-kafka-test directory:
 
-    $ /path/to/a.out
-
+````shell
+$ /path/to/a.out
+````
 A new core file should appear in fused directory.
 
 Here is the consumer output:
 
-    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
-    event:
-        message_size-added: 4096
-        path: /tmp/fuse-kafka-test/core
-    ...
-    event:
-        message_size-added: 4096
-        path: /tmp/fuse-kafka-test/core
+````shell
+$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+...
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+````
 
 Here we see many messages.
 
 Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
 launch the segfaulting program,
         
-    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
-    event:
-        message_size-added: 64
-        path: /tmp/fuse-kafka-test/core
+````shell
+$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 64
+    path: /tmp/fuse-kafka-test/core
+````
 
 This time, we only receive the first write.
 
