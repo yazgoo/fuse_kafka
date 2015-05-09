@@ -22,7 +22,7 @@ handle_file_modified(struct inotify_event* event, GHashTable* offsets, GHashTabl
     fseek(f, offset, SEEK_SET);
     ssize_t size;
     while((size = getline(&line, &length, f)) > 0)
-        actual_kafka_write(path + strlen(root) - 1, line, size + 1, 0);
+        output_write(path + strlen(root) - 1, line, size + 1, 0);
     g_hash_table_insert(offsets, path, (void*) ftell(f));
     fclose(f);
     free(path);

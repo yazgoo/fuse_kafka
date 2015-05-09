@@ -29,7 +29,6 @@ typedef struct
     int rd_kafka_produce_returns;
     int zoo_get_children_returns;
     int asprintf_sets_NULL;
-    int test_filler_returns;
 } test_config;
 static test_config* test_with()
 {

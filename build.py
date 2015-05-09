@@ -20,11 +20,15 @@ def get_define(source, name):
 class InputPlugins:
     def __init__(self):
         _dir = "src/plugins/input/"
+        self.tests_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
+        self.tests_paths = [_dir.replace("src/", "") + x for x in self.tests_sources]
         self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
+        self.libraries_sources = [x for x in self.libraries_sources if x not in self.tests_sources]
         self.libs_of = {}
         self.includes_of = {}
         self.shareds_objects = {}
         self.objects = {}
+        self.test_of = {}
         prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
         for lib in self.libraries_sources:
             cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
@@ -33,6 +37,7 @@ class InputPlugins:
             if required_str != '': required = required_str.split("\n")
             self.libs_of[lib] = required + default_libs
             self.includes_of[lib] = required
+            self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
             self.shareds_objects[lib] = prefix + lib + ".so"
             self.objects[lib] = prefix + lib + ".o"
 sources = ['fuse_kafka']
@@ -307,16 +312,23 @@ def build():
     """ Builds fuse_kafka binary """
     compile()
     link()
+def run_c_test(source):
+    bin_path = get_test_bin(source)
+    if os.path.exists(bin_path):
+        run("./" + bin_path)
+    else:
+        print("warning: no binary test {}".format(bin_path))
 def c_test():
     """ Builds, run unit tests, generating coverage reports in out directory """
     compile_test()
-    for source in sources:
-        run("./" + source + ".test")
-        run("gcov", "./src/" + source + ".c","-o", ".")
-        if binary_exists("lcov"):
-            run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-            if binary_exists("genhtml"):
-                run("genhtml", "--rc", "lcov_branch_coverage=1", "src/" + source + ".info", "-o", "./out/c")
+    for source in sources: run_c_test(source)
+    for library_source in input_plugins.libraries_sources:
+        run_c_test(input_plugins.test_of[library_source])
+    run("gcov", "./src/" + source + ".c","-o", ".")
+    if binary_exists("lcov"):
+        run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+        if binary_exists("genhtml"):
+            run("genhtml", "--rc", "lcov_branch_coverage=1", "src/" + source + ".info", "-o", "./out/c")
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("find", "out")
@@ -338,11 +350,23 @@ def compile():
     compile_input_plugins()
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
+def get_test_bin(source):
+    return source.replace("/", "_") +'.test'
+def compile_test_with_libs(source, libs):
+    """ Builds unit test binary """
+    path = "./src/" + source +'.c'
+    if not os.path.exists(path):
+        print("warning: no test for {}".format(path))
+    else: 
+        run('gcc', '-I', 'src', '-g', '-o', get_test_bin(source), path, flags,
+                test_flags, to_links(libs))
 def compile_test():
     """ Builds unit test binary """
     for source in sources:
-        run('gcc', '-I', 'src', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
-                test_flags, to_links(common_libs))
+        compile_test_with_libs(source, common_libs)
+    for library_source in input_plugins.libraries_sources:
+        compile_test_with_libs(input_plugins.test_of[library_source],
+                input_plugins.libs_of[library_source])
 def link():
     """ Finalize the binary generation by linking all object files """
     objects = [s+'.o' for s in sources]
@@ -568,7 +592,7 @@ class TestMininet(unittest.TestCase):
         time.sleep(2)
     def check(self):
         self.assertTrue(os.path.exists(self.fuse_kafka_path),
-                "you must build fuse kafka to run tests")
+            "you must build fuse kafka to run tests")
         os.stat("/tmp/fuse-kafka-test")
     def get_consumed_events(self, expected_number):
         from mininet.util import pmonitor

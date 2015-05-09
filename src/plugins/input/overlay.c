@@ -2,6 +2,7 @@
 #include <fuse.h>
 #ifdef HAVE_SETXATTR
 #include <sys/xattr.h>
+#endif
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -9,6 +10,7 @@
 #include <dirent.h>
 #include <input_plugin.h>
 requires(fuse)
+requires(crypto)
 /**
  * @brief write the data to kafka and to the overlaid fs if it should
  * be done
@@ -22,8 +24,7 @@ static int kafka_write(const char *path, const char *buf,
         size_t size, off_t offset, struct fuse_file_info *fi)
 {
     int res;
-    if(should_write_to_kafka(path, size))
-            actual_kafka_write(path, buf, size, offset);
+    output_write(path, buf, size, offset);
     DO_AS_CALLER(
             res = pwrite(fi->fh, buf, size, offset);
     )
@@ -529,4 +530,3 @@ int input_setup(int argc, char** argv, void* conf)
 {
     return fuse_main(argc, argv, &kafka_oper, conf);
 }
-#endif
