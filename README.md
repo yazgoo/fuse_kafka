@@ -459,13 +459,8 @@ Input plugin unit testing
 
 Each input plugin should have a unit test (with the suffix `_test`).
 
-For example, 
-
-    src/plugins/input/overlay.c
-
-Has a unit test
-
-    src/plugins/input/overlay_test.c
+For example, `src/plugins/input/overlay.c` has a unit test 
+`src/plugins/input/overlay_test.c`
 
 As for the rest of the project, We use minunit for that.
 Just include `minuti.h`, your plugin source.
