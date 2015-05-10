@@ -14,7 +14,8 @@ static int trace(const char* fmt, ...)
     va_start(ap, fmt);
     vasprintf(&str, fmt, ap);
     va_end(ap);
-    res = actual_kafka_write("./fuse_kafka.log", str, strlen(str), 0);
+    //res = actual_kafka_write("./fuse_kafka.log", str, strlen(str), 0);
+    printf("%s\n", str);
     free(str);
     return res;
 }

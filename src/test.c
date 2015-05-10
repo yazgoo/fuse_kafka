@@ -4,9 +4,9 @@
 #include <dirent.h>
 #include "fuse.h"
 #include "kafka_client.c"
+#define fuse_get_context(a) test_fuse_get_context(a)
 #include "output.c"
 /* end added after modular_input */
-#define fuse_get_context(a) test_fuse_get_context(a)
 #define STRINGIFY(x) #x
 #include "minunit.h"
 // LCOV_EXCL_START
@@ -136,6 +136,17 @@ static char* test_utils()
     mu_assert("parsing argument should have failed",
             !fuse_kafka_main(3, args2));
     free(container);
+    char* result = concat(args[0], args[1]);
+    mu_assert("concatenation result should not be null",
+            result != NULL);
+    printf("result is %s\n", result);
+    mu_assert("concatenation should be lol/xd",
+            strcmp("lol/xd", result) == 0);
+    free(result);
+    char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000";
+    set_timestamp(timestamp);
+    mu_assert("timestamp should not be empty",
+            timestamp[0] != 0);
     return 0;
 }
 static char* test_time_queue()
@@ -305,13 +316,13 @@ static char* test_dynamic_configuration()
 }
 static char* all_tests()
 {
-    // TODO move to specific unit test mu_run_test(test_setup_kafka);
+    mu_run_test(test_setup_kafka);
     mu_run_test(test_parse_arguments);
     mu_run_test(test_logging);
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
-    // TODO move to specific unit test mu_run_test(test_trace);
+    mu_run_test(test_trace);
     mu_run_test(test_string_list);
     mu_run_test(test_server_list);
     mu_run_test(test_dynamic_configuration);
