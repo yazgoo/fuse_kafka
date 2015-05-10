@@ -6,6 +6,20 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "overlay.c"
+#define SET_CONFIG \
+    static char* directories[] = {"/lol/"};\
+    static char* excluded_files[] = {"xd"};\
+    config conf;\
+    conf.directories = directories;\
+    conf.directory_n = 0;\
+    conf.excluded_files_n = 1;\
+    conf.excluded_files = excluded_files;\
+    conf.fields_s = "{}";\
+    conf.tags_s = "";\
+    conf.quota_queue = NULL;\
+    conf.quota_n = 0;\
+    struct fuse_context* context = fuse_get_context();\
+    context->pid = getpid();
 typedef struct
 {
     int setup;

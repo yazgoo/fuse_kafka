@@ -10,6 +10,23 @@
 #define STRINGIFY(x) #x
 #include "minunit.h"
 // LCOV_EXCL_START
+#define SET_CONFIG \
+    static char* directories[] = {"/lol/"};\
+    static char* excluded_files[] = {"xd"};\
+    config conf;\
+    conf.directories = directories;\
+    conf.directory_n = 0;\
+    conf.excluded_files_n = 1;\
+    conf.excluded_files = excluded_files;\
+    conf.fields_s = "{}";\
+    conf.tags_s = "";\
+    conf.quota_queue = NULL;\
+    conf.quota_n = 0;\
+    struct fuse_context* context = fuse_get_context();\
+    context->pid = getpid();\
+    kafka_t private_data;\
+    private_data.conf = &conf;\
+    context->private_data = (void*) &private_data;
 static char* get_file_content(char* path)
 {
     struct stat st;
@@ -280,7 +297,7 @@ static char* test_dynamic_configuration()
     dynamic_configuration_free();
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
-            dynamic_configuration_changed() == 1);
+            dynamic_configuration_changed() == 0);
     //touch(conf_path);
     unlink(conf_path);
     dynamic_configuration_watch_stop();
@@ -294,10 +311,10 @@ static char* all_tests()
     mu_run_test(test_utils);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
-    mu_run_test(test_trace);
+    // TODO move to specific unit test mu_run_test(test_trace);
     mu_run_test(test_string_list);
     mu_run_test(test_server_list);
-    // TODO move to specific unit test mu_run_test(test_dynamic_configuration);
+    mu_run_test(test_dynamic_configuration);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

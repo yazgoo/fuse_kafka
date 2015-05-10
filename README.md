@@ -454,6 +454,50 @@ If you require some library, you should refer to its pkg-config name via the mac
 require(your-library)
 ````
 
+Input plugin unit testing
+=========================
+
+Each input plugin should have a unit test (with the suffix `_test`).
+
+For example, 
+
+    src/plugins/input/overlay.c
+
+Has a unit test
+
+    src/plugins/input/overlay_test.c
+
+As for the rest of the project, We use minunit for that.
+Just include `minuti.h`, your plugin source.
+Define your unit test functions, as for example:
+
+```C
+static char* test_something()
+{
+    /*...*/
+    mu_assert("42 is 42", 42 == 42);
+    /*...*/
+    return 0;
+}
+````C
+
+And then define an `all_test()` function calling all tests
+
+````C
+static char* all_tests()
+{
+    mu_run_test(test_something);
+    mu_run_test(test_something_else);
+    return 0;
+}
+````
+
+and include "minunit.c"
+
+````C
+#include "minunit.c"
+````
+
 Licensing
 =========
 

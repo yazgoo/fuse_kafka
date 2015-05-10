@@ -324,11 +324,15 @@ def c_test():
     for source in sources: run_c_test(source)
     for library_source in input_plugins.libraries_sources:
         run_c_test(input_plugins.test_of[library_source])
-    run("gcov", "./src/" + source + ".c","-o", ".")
+    tests = sources + map(
+                        lambda x: input_plugins.test_of[library_source],
+                        input_plugins.libraries_sources)
+    run("gcov", ["src/" + x + ".c" for x in tests] ,"-o", ".")
     if binary_exists("lcov"):
-        run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/" + source + ".info")
+        run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/coverage.info")
         if binary_exists("genhtml"):
-            run("genhtml", "--rc", "lcov_branch_coverage=1", "src/" + source + ".info", "-o", "./out/c")
+            run("genhtml", "--rc", "lcov_branch_coverage=1", 
+                    "./src/coverage.info", "-o", "./out/c")
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("find", "out")

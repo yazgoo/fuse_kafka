@@ -1,4 +1,5 @@
 /** @file */ 
+// LCOV_EXCL_START
 #include <limits.h>
 static struct fuse_context* test_fuse_get_context()
 {
@@ -139,3 +140,4 @@ int deallocate_String_vector(struct String_vector *v)
     free(v->data);
     return 1;
 }
+// LCOV_EXCL_STOP
