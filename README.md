@@ -492,6 +492,13 @@ and then
 ````C
 #include "minunit.c"
 ````
+Also, you should exclude your test file from code coverage, using:
+
+````C
+// LCOV_EXCL_START
+/* code to exclude */
+// LCOV_EXCL_STOP
+````
 
 Licensing
 =========

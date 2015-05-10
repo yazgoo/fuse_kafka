@@ -1,3 +1,4 @@
+// LCOV_EXCL_START
 #include "minunit.h"
 #define _GNU_SOURCE // for get_current_dir_name
 #include <unistd.h>
@@ -180,3 +181,4 @@ static char* all_tests()
     return 0;
 }
 #include "minunit.c"
+// LCOV_EXCL_STOP
