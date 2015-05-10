@@ -1,3 +1,4 @@
+// LCOV_EXCL_START
 #include <sys/ioctl.h>
 #include <unistd.h>
 int tests_run = 0;
@@ -24,3 +25,4 @@ int main(int argc, char** argv)
     system("rm -f " TEST "/to");
     return result != 0;
 }
+// LCOV_EXCL_STOP
