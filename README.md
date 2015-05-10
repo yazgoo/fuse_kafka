@@ -462,8 +462,8 @@ Each input plugin should have a unit test (with the suffix `_test`).
 For example, `src/plugins/input/overlay.c` has a unit test 
 `src/plugins/input/overlay_test.c`
 
-As for the rest of the project, We use minunit for that.
-Just include `minuti.h`, your plugin source.
+As for the rest of the project, we use minunit for that.
+Just include `minuti.h` and your plugin source.
 Define your unit test functions, as for example:
 
 ```C
@@ -487,7 +487,7 @@ static char* all_tests()
 }
 ````
 
-and include "minunit.c"
+and then
 
 ````C
 #include "minunit.c"
