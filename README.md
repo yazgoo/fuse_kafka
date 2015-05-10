@@ -479,7 +479,7 @@ static char* test_something()
     /*...*/
     return 0;
 }
-````C
+````
 
 And then define an `all_test()` function calling all tests
 
