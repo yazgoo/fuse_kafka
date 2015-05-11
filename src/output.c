@@ -86,6 +86,7 @@ void output_write(const char *path, const char *buf,
 void output_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
+    if(k == NULL) return;
     if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
     if(k->zhandle != NULL) zookeeper_close(k->zhandle);
     if(k->rkt != NULL) rd_kafka_topic_destroy(k->rkt);

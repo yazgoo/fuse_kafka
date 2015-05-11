@@ -314,6 +314,19 @@ static char* test_dynamic_configuration()
     dynamic_configuration_watch_stop();
     return 0;
 }
+static char* test_output()
+{
+    SET_CONFIG;
+    test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
+    test_with()->rd_kafka_topic_new_returns_NULL = 0;
+    void* output = output_init(&conf);
+    mu_assert("output is not null", output != NULL);
+    mu_assert("sending empty string succeeds",
+            send_kafka(output, "", 0) == 0);
+    output_write("", "", 0, 0);
+    output_destroy(output);
+    return 0;
+}
 static char* all_tests()
 {
     mu_run_test(test_setup_kafka);
@@ -326,6 +339,7 @@ static char* all_tests()
     mu_run_test(test_string_list);
     mu_run_test(test_server_list);
     mu_run_test(test_dynamic_configuration);
+    mu_run_test(test_output);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
