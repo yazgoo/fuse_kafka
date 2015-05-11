@@ -309,7 +309,7 @@ static char* test_dynamic_configuration()
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
             dynamic_configuration_changed() == 0);
-    //touch(conf_path);
+    touch(conf_path);
     unlink(conf_path);
     dynamic_configuration_watch_stop();
     return 0;
@@ -319,11 +319,16 @@ static char* test_output()
     SET_CONFIG;
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
+    conf.quota_queue = time_queue_new(10, 42);
     void* output = output_init(&conf);
     mu_assert("output is not null", output != NULL);
     mu_assert("sending empty string succeeds",
             send_kafka(output, "", 0) == 0);
     output_write("", "", 0, 0);
+    conf.zookeepers_n = conf.brokers_n = 0;
+    input_setup_internal(0, NULL, &conf);
+    ((kafka_t*)output)->zhandle = (void*) 1;
+    setup_from_dynamic_configuration(0, NULL, output);
     output_destroy(output);
     return 0;
 }
