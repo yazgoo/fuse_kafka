@@ -45,6 +45,7 @@
 #include <jansson.h>
 #define BROKER_PATH "/brokers/ids"
 #include "server_list.c"
+#include "trace.h"
 static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
 {
     if (zzh)
@@ -97,7 +98,13 @@ static void watcher(zhandle_t *zh, int type,
     kafka_t* k = (kafka_t*) param;
     rd_kafka_topic_conf_t *topic_conf;
     if(k->conf == NULL) return;
-    char* topic = k->conf->topic[0];
+    char* topic;
+    if(k->conf->topic_n <= 0)
+    {
+        trace("topic missing");
+        return;
+    }
+    topic = k->conf->topic[0];
     if (k->no_brokers || type == ZOO_CHILD_EVENT && strncmp(
                 path, BROKER_PATH, sizeof(BROKER_PATH) - 1) == 0)
     {

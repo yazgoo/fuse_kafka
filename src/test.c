@@ -63,6 +63,13 @@ static char* test_setup_kafka()
     fuse_get_context()->private_data = (void*) &private_data;
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     mu_assert("setup_kafka failed", setup_kafka(&k) == 0);
+    private_data.topic_n = 1;
+    private_data.topic = brokers;
+    private_data.zookeepers = brokers;
+    private_data.zookeepers_n = 1;
+    k.conf = NULL;
+    mu_assert("setup_kafka with zookeepers should succeed", setup_kafka(&k) == 0);
+    private_data.zookeepers_n = 0;
     test_with()->rd_kafka_conf_set_returns = 0;
     mu_assert("setup_kafka succeeded", setup_kafka(&k) == 1);
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
@@ -124,7 +131,9 @@ static char* test_utils()
     char* args[] = {"lol", "xd", "pdtr"};
     char* args2[] = {"xd", "--", "--lol"};
     char* container;
+    *get_command_line_size() = 1;
     printf("command line is %s\n", get_command_line(1));
+    *get_command_line_size() = 256;
     mu_assert("cmdline for process #1 should contain init or boot.sh or '/bin/bash /ds/build.sh install'",
             strstr(get_command_line(1), "aW5pd") != NULL
             || strstr(get_command_line(1), "Ym9vd") != NULL
@@ -287,8 +296,9 @@ static char* test_trace()
 void touch(char* path)
 {
     FILE* f = fopen(path, "w");
+    char* str = "blah   blih        bloooh         ";
     flock(fileno(f), LOCK_EX);
-    fwrite("blah", 1, 1, f);
+    fwrite(str, strlen(str), 1, f);
     fclose(f);
 }
 static char* test_dynamic_configuration()
@@ -305,6 +315,8 @@ static char* test_dynamic_configuration()
             parse_line_from_file(NULL, NULL, NULL) == 1);
     mu_assert("parse_args_from_file should return 1",
             parse_args_from_file(NULL, &argc, &argv, &line) == 1);
+    mu_assert("parse_args_from_file should return 0",
+            parse_args_from_file(conf_path, &argc, &argv, &line) == 0);
     dynamic_configuration_free();
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
@@ -317,18 +329,40 @@ static char* test_dynamic_configuration()
 static char* test_output()
 {
     SET_CONFIG;
+    char* excluded = "excluded";
+    char* quota = "10000";
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
-    conf.quota_queue = time_queue_new(10, 42);
+    test_with()->rd_kafka_conf_set_returns = 0;
     void* output = output_init(&conf);
+    mu_assert("output should be null", output == NULL);
+    test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
+    output = output_init(&conf);
+    mu_assert("output is not null", output != NULL);
+    conf.quota_queue = time_queue_new(10, 42);
+    conf.quota_n = 1;
+    conf.quota = &quota;
+    output_destroy(output);
+    output = output_init(&conf);
     mu_assert("output is not null", output != NULL);
     mu_assert("sending empty string succeeds",
             send_kafka(output, "", 0) == 0);
     output_write("", "", 0, 0);
+    test_with()->asprintf_sets_NULL = 1;
+    conf.excluded_files_n = 1;
+    conf.excluded_files = &excluded;
+    mu_assert("should not write to kafka excluded file",
+            should_write_to_kafka(excluded, 0) == 0);
+    mu_assert("actual_kafka_write should return 1 if asprintf is failing",
+            actual_kafka_write("", "", 0, 0) == 1);
+    test_with()->asprintf_sets_NULL = 0;
     conf.zookeepers_n = conf.brokers_n = 0;
     input_setup_internal(0, NULL, &conf);
     ((kafka_t*)output)->zhandle = (void*) 1;
     setup_from_dynamic_configuration(0, NULL, output);
+    char* argv[] = {"--zookeepers", "zk"};
+    int argc = sizeof(argv)/sizeof(char*);
+    setup_from_dynamic_configuration(argc, argv, output);
     output_destroy(output);
     return 0;
 }

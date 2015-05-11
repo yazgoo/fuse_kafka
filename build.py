@@ -329,7 +329,7 @@ def c_test():
                         input_plugins.libraries_sources)
     run("gcov", ["src/" + x + ".c" for x in tests] ,"-o", ".")
     if binary_exists("lcov"):
-        run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/coverage.info")
+        run("lcov", "--no-external", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/coverage.info")
         if binary_exists("genhtml"):
             run("genhtml", "--rc", "lcov_branch_coverage=1", 
                     "./src/coverage.info", "-o", "./out/c")

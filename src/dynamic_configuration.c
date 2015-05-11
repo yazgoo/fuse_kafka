@@ -71,7 +71,7 @@ int parse_line_from_file(char* path, char** linep, int* sizep)
  * @param argcp a pointer to hold the array size of parsed argument
  * @param argvp a pointer to hold the array of parsed argument, to be freed once used
  * @param linep a pointer to a string which will hold the line, to free once used
- * @return 0 if sucesseeded, otherwise there is nothing to free
+ * @return 0 if succeeded, otherwise there is nothing to free
  */
 int parse_args_from_file(char* path, int* argcp, char*** argvp, char** linep)
 {

@@ -38,6 +38,11 @@ char *base64(const unsigned char *input, int length)
     BIO_free_all(b64);
     return buff;
 }
+int* get_command_line_size()
+{
+    static int command_line_size = 256;
+    return &command_line_size;
+}
 /**
  * @brief get the command line corresponding to a process
  * @param pid process id
@@ -46,7 +51,7 @@ char *base64(const unsigned char *input, int length)
  **/
 static char* get_command_line(int pid)
 {
-    size_t size = 256;
+    size_t size = *get_command_line_size();;
     size_t i = 0;
     char* path;
     FILE* f;
@@ -61,7 +66,7 @@ static char* get_command_line(int pid)
             if(c == 0) c = ' ';
             if(i >= (size - 1))
             {
-                size += 256;
+                size += *get_command_line_size();
                 command_line = (char*) realloc(
                         command_line, size * sizeof(char));
             }
