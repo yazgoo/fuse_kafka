@@ -296,7 +296,7 @@ static char* test_trace()
 void touch(char* path)
 {
     FILE* f = fopen(path, "w");
-    char* str = "--zookeepers test";
+    char* str = "--zookeepers  test ";
     flock(fileno(f), LOCK_EX);
     fwrite(str, strlen(str), 1, f);
     fclose(f);
@@ -363,11 +363,22 @@ static char* test_output()
     test_with()->asprintf_sets_NULL = 1;
     conf.excluded_files_n = 1;
     conf.excluded_files = &excluded;
+    conf.quota_queue = time_queue_new(10, 42);
+    conf.quota_n = 1;
+    conf.quota = &quota;
+    conf.topic_n = 0;
+    ((kafka_t*) output)->rkt = (void*) 1;
+    fuse_get_context()->private_data = output;
     mu_assert("should not write to kafka excluded file",
             should_write_to_kafka(excluded, 0) == 0);
+    mu_assert("should write to kafka not excluded file",
+            should_write_to_kafka("test", 0) == 1);
     mu_assert("actual_kafka_write should return 1 if asprintf is failing",
             actual_kafka_write("", "", 0, 0) == 1);
     test_with()->asprintf_sets_NULL = 0;
+    output_write("", "", 0, 0);
+    mu_assert("actual_kafka_write should return 0 if asprintf is not failing",
+            actual_kafka_write("", "", 0, 0) == 0);
     conf.zookeepers_n = conf.brokers_n = 0;
     input_setup_internal(0, NULL, &conf);
     ((kafka_t*)output)->zhandle = (void*) 1;

@@ -235,7 +235,6 @@ int send_kafka(kafka_t* k, char* buf, size_t len)
 }
 input_setup_internal(int argc, char** argv, void* conf)
 {
-    fuse_get_context()->private_data = conf;
     fuse_get_context()->private_data = output_init((config*) conf);
 #ifndef TEST
     input_setup(argc, argv, conf);
