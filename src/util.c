@@ -158,6 +158,16 @@ char* concat(char* a, char* b)
     strcpy(++middle, b);
     return result;
 }
+int* fk_sleep_enabled()
+{
+    static int enabled = 1;
+    return &enabled;
+}
+int fk_sleep(int n)
+{
+    if(*(fk_sleep_enabled())) return sleep(n);
+    return 0;
+}
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \

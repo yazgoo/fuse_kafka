@@ -1,5 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
+#include <stdlib.h>
 #define CONFIG_ITEM(name) char** name; size_t name ## _n;
 #include "time_queue.h"
 /**

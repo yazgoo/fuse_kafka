@@ -296,10 +296,14 @@ static char* test_trace()
 void touch(char* path)
 {
     FILE* f = fopen(path, "w");
-    char* str = "blah   blih        bloooh         ";
+    char* str = "--zookeepers test";
     flock(fileno(f), LOCK_EX);
     fwrite(str, strlen(str), 1, f);
     fclose(f);
+}
+void dynamic_configuration_handler(int argc, char**argv, void* context)
+{
+    *dynamic_configuration_watch_routine_running() = 0;
 }
 static char* test_dynamic_configuration()
 {
@@ -321,9 +325,15 @@ static char* test_dynamic_configuration()
     dynamic_configuration_load();
     mu_assert("dynamic_configuration_changed should return 0",
             dynamic_configuration_changed() == 0);
-    touch(conf_path);
-    unlink(conf_path);
     dynamic_configuration_watch_stop();
+    *(dynamic_configuration_get_last_change()) = 1;
+    dynamic_configuration_get()->context = (void*) 1;
+    dynamic_configuration_watch_routine(dynamic_configuration_handler);
+    mu_assert("dynamic configuration watch routine should have been fired up",
+            *dynamic_configuration_watch_routine_running() == 0);
+    *dynamic_configuration_watch_routine_running() = 1;
+    dynamic_configuration_get()->context = NULL;
+    unlink(conf_path);
     return 0;
 }
 static char* test_output()
@@ -334,6 +344,7 @@ static char* test_output()
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
     test_with()->rd_kafka_conf_set_returns = 0;
+    conf.brokers_n = 0;
     void* output = output_init(&conf);
     mu_assert("output should be null", output == NULL);
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
@@ -342,6 +353,7 @@ static char* test_output()
     conf.quota_queue = time_queue_new(10, 42);
     conf.quota_n = 1;
     conf.quota = &quota;
+    conf.topic_n = 0;
     output_destroy(output);
     output = output_init(&conf);
     mu_assert("output is not null", output != NULL);
@@ -368,6 +380,7 @@ static char* test_output()
 }
 static char* all_tests()
 {
+    *(fk_sleep_enabled()) = 0;
     mu_run_test(test_setup_kafka);
     mu_run_test(test_parse_arguments);
     mu_run_test(test_logging);

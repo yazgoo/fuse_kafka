@@ -187,6 +187,7 @@ int setup_kafka(kafka_t* k)
 }
 void* output_init(config* conf)
 {
+    fuse_get_context()->private_data = (void*) conf;
     dynamic_configuration_watch(&setup_from_dynamic_configuration);
     int directory_fd = conf->directory_fd;
     int time_queue_size;
