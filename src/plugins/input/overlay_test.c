@@ -109,7 +109,7 @@ static char* test_passthrough_calls()
 #define TEST_FUNC_FAILURE(x, y, ...) mu_assert(#x "(" #y ") succeeded", x(y, ##__VA_ARGS__) != 0);
     TEST_FUNC_SUCCESS(kafka_getattr, "/", &st)
     TEST_FUNC_FAILURE(kafka_getattr, "/non-existing/path", &st)
-    // TODO uncomment TEST_FUNC_FAILURE(kafka_fgetattr, "/", &st, &fi)
+     TEST_FUNC_FAILURE(kafka_fgetattr, "/", &st, &fi)
     fi.fh = open("/", O_DIRECTORY);
     TEST_FUNC_SUCCESS(kafka_fgetattr, "/", &st, &fi)
     close(fi.fh);
@@ -147,7 +147,7 @@ static char* test_passthrough_calls()
     TEST_FUNC_FAILURE(kafka_unlink, TEST "/non-existing/file")
     TEST_FUNC_FAILURE(kafka_chown, TEST "/from", 0, 0)
     TEST_FUNC_FAILURE(kafka_utimens, TEST "/from", ts)
-    // TODO uncomment TEST_FUNC_FAILURE(kafka_create, TEST "/var", 0, &fi)
+    TEST_FUNC_FAILURE(kafka_create, TEST "/var", 0, &fi)
     fi.flags = O_CREAT;
     TEST_FUNC_SUCCESS(kafka_create, TEST "/node", S_IWUSR |S_IRUSR, &fi)
     fi.flags = 0;
@@ -174,10 +174,18 @@ static char* test_passthrough_calls()
     free(str);
     return NULL;
 }
+static char* test_other_functions()
+{
+    char* argv[] = {}; 
+    kafka_init(NULL);
+    mu_assert("input_setup should return -1", input_setup(0, NULL, NULL) == -1);
+    return 0;
+}
 static char* all_tests()
 {
     mu_run_test(test_passthrough_calls);
     mu_run_test(test_kafka_write);
+    mu_run_test(test_other_functions);
     return 0;
 }
 #include "minunit.c"

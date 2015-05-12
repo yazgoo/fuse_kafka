@@ -476,10 +476,6 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
     return 0;
 }
 */
-void kafka_destroy(void* untyped)
-{
-    output_destroy(untyped);
-}
 void* kafka_init(struct fuse_conn_info *conn)
 {
     return output_init((config*) fuse_get_context()->private_data);
@@ -488,7 +484,7 @@ void* kafka_init(struct fuse_conn_info *conn)
 
 static struct fuse_operations kafka_oper = {
     .init       = kafka_init,
-    .destroy    = kafka_destroy,
+    .destroy    = output_destroy,
     .getattr    = kafka_getattr,
     .fgetattr   = kafka_fgetattr,
     .access     = kafka_access,
@@ -528,5 +524,5 @@ static struct fuse_operations kafka_oper = {
 
 int input_setup(int argc, char** argv, void* conf)
 {
-    return fuse_main(argc, argv, &kafka_oper, conf);
+    return argv == NULL? -1 : fuse_main(argc, argv, &kafka_oper, conf);
 }
