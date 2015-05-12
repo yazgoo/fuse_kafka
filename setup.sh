@@ -32,7 +32,9 @@ install_yum() {
     [ -z "$downloaddir" ] || $remotely yum install -y yum-downloadonly
     if [ -z "$tar_path" ]
     then
-        for who in edenhill yazgoo
+        # TODO re-enable edenhill when issue with DNS flooding is solved
+        # for who in edenhill yazgoo
+        for who in yazgoo
         do
             $remotely wget http://download.opensuse.org/repositories/home:$who/$1/home:$who.repo
             $remotely cp  home:$who.repo /etc/yum.repos.d/
@@ -49,7 +51,9 @@ install_yum() {
     fi
 }
 install_CentOS() {
-    install_yum CentOS_CentOS-6 CentOS-6
+    # TODO re-enable edenhill when issue with DNS flooding is solved
+    # install_yum CentOS_CentOS-6 CentOS-6
+    install_yum CentOS-6
 }
 install_Fedora() {
     distro=Fedora_${distro_version}
