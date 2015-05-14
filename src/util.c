@@ -159,6 +159,11 @@ char* concat(char* a, char* b)
     strcpy(++middle, b);
     return result;
 }
+int* fk_sleep_return_value()
+{
+    static int value = 0;
+    return &value;
+}
 int* fk_sleep_enabled()
 {
     static int enabled = 1;
@@ -167,7 +172,7 @@ int* fk_sleep_enabled()
 int fk_sleep(int n)
 {
     if(*(fk_sleep_enabled())) return sleep(n);
-    return 0;
+    return *(fk_sleep_return_value());
 }
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \
