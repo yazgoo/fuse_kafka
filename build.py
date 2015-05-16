@@ -356,13 +356,13 @@ def compile():
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
 def get_test_bin(source):
     return source.replace("/", "_") +'.test'
-def compile_test_with_libs(source, libs):
+def compile_test_with_libs(source, libs, includes = []):
     """ Builds unit test binary """
     path = "./src/" + source +'.c'
     if not os.path.exists(path):
         print("warning: no test for {}".format(path))
     else: 
-        run('gcc', '-I', 'src', '-g', '-o', get_test_bin(source), path, flags,
+        run('gcc', '-I', 'src', to_includes(includes), '-g', '-o', get_test_bin(source), path, flags,
                 test_flags, to_links(libs))
 def compile_test():
     """ Builds unit test binary """
@@ -370,7 +370,7 @@ def compile_test():
         compile_test_with_libs(source, common_libs)
     for library_source in input_plugins.libraries_sources:
         compile_test_with_libs(input_plugins.test_of[library_source],
-                input_plugins.libs_of[library_source])
+                input_plugins.libs_of[library_source], input_plugins.includes_of[library_source])
 def link():
     """ Finalize the binary generation by linking all object files """
     objects = [s+'.o' for s in sources]

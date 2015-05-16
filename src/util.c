@@ -150,9 +150,15 @@ void* frealloc(void* ptr, size_t size)
     if(*falloc_fails()) return NULL;
     return realloc(ptr, size);
 }
+/**
+ * @return null if a or b is null, a + "/" + b otherwise
+ */
 char* concat(char* a, char* b)
 {
-    char* result = (char*) malloc(strlen(a) + strlen(b) + 2);
+    if(a == NULL || b == NULL) return NULL;
+    int length = strlen(a) + strlen(b) + 2;
+    char* result = (char*) malloc(length);
+    result[length - 1] = 0;
     char* middle = result + strlen(a);
     strcpy(result, a);
     middle[0] = '/';

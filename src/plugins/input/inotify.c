@@ -11,9 +11,10 @@ char* get_event_path(struct inotify_event* event, GHashTable* watches)
     printf("new event on %d\n", event->wd);
     return concat((char*) g_hash_table_lookup(watches, (void*) event->wd), event->name);
 }
-handle_file_modified(struct inotify_event* event, GHashTable* offsets, GHashTable* watches, char* root)
+void handle_file_modified(struct inotify_event* event, GHashTable* offsets, GHashTable* watches, char* root)
 {
     char* path = get_event_path(event, watches);
+    if(path == NULL) return;
     int offset = (int) g_hash_table_lookup(offsets, (void*) path);
     printf("File %s modified.\n", path);
     char* line = 0;
@@ -42,8 +43,10 @@ void watch_directory(char* directory, int fd, GHashTable* watches)
 }
 void setup_watches(char* directory, int fd, GHashTable* watches)
 {
+    if(directory == NULL) return;
     watch_directory(directory, fd, watches);
     DIR* dir = opendir(directory);
+    if(dir == NULL) return;
     struct dirent* file;
     printf("reading %s\n", directory);
     while(file = readdir(dir))
@@ -96,28 +99,35 @@ handle_event(struct inotify_event* event, int fd, GHashTable* offsets, GHashTabl
         }
     }
 }
+void on_event(char* buffer, int length, char* directory, int fd, GHashTable* offsets, GHashTable* watches)
+{
+    int i = 0;
+    while ( i < length ) {
+        struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
+        handle_event(event, fd, offsets, watches, directory);
+        i += EVENT_SIZE + event->len;
+    }
+}
+int* inotify_runnning()
+{
+    static int value = 1;
+    return &value;
+}
 int input_setup(int argc, char** argv, void* conf)
 {
-    fuse_get_context()->private_data = conf;
-    fuse_get_context()->private_data = output_init((config*) conf);
+    output_init((config*) conf);
     GHashTable* offsets = g_hash_table_new(NULL, NULL);
     GHashTable* watches = g_hash_table_new(NULL, NULL);
+    if (argc <= 1) return -1;
     char* directory = argv[1];
     int fd = inotify_init();
     setup_watches(directory, fd, watches);
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 
-    while(length = read(fd, buffer, EVENT_BUF_LEN))
-    {
-        int i = 0;
-        while ( i < length ) {
-            struct inotify_event *event = ( struct inotify_event * ) &buffer[ i ];
-            handle_event(event, fd, offsets, watches, directory);
-            i += EVENT_SIZE + event->len;
-        }
-    }
-    g_hash_table_foreach(watches, free, NULL);
+    while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
+        on_event(buffer, length, directory, fd, offsets, watches);
+    //g_hash_table_foreach(watches, free, NULL);
     g_hash_table_destroy(offsets);
     g_hash_table_destroy(watches);
     return 0;
