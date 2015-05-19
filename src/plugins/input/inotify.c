@@ -35,11 +35,12 @@ handle_file_deleted(struct inotify_event* event, GHashTable* offsets, GHashTable
     g_hash_table_remove(offsets, path);
     free(path);
 }
-void watch_directory(char* directory, int fd, GHashTable* watches)
+int watch_directory(char* directory, int fd, GHashTable* watches)
 {
     int wd = inotify_add_watch(fd, directory, IN_CREATE | IN_MODIFY);
     printf("watching directory %s (%d)\n", directory, wd);
     g_hash_table_insert(watches, (void*) wd, directory);
+    return wd;
 }
 void setup_watches(char* directory, int fd, GHashTable* watches)
 {
