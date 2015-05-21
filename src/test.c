@@ -406,7 +406,7 @@ static char* test_fk_hash()
     mu_assert("test should be -1", fk_hash_get(hash, "test", 1) == -1);
     fk_hash_remove(hash, "teest", 1);
     mu_assert("test should be -1", fk_hash_get(hash, "teest", 1) == -1);
-    fk_hash_delete(hash);
+    fk_hash_delete(hash, 0, 0);
     return 0;
 }
 static char* all_tests()

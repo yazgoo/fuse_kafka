@@ -139,8 +139,7 @@ int input_setup(int argc, char** argv, void* conf)
     int length; 
     while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
         on_event(buffer, length, directory, fd, offsets, watches);
-    //g_hash_table_foreach(watches, free, NULL);
-    fk_hash_delete(offsets);
-    fk_hash_delete(watches);
+    fk_hash_delete(offsets, 1, 0);
+    fk_hash_delete(watches, 0, 1);
     return 0;
 }

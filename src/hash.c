@@ -38,7 +38,7 @@ fk_hash_list* fk_hash_list_new(void* key, void* value)
 }
 /**
  * @brief put an item in the hash
- * @param key_is_string 1 if key is string, 0 if it is an integer
+ * @param key_is_string 1 if key is string, 0 if it is an integer (used for hashing)
  */
 void fk_hash_put(fk_hash hash, void* key, void* value, int key_is_string)
 {
@@ -57,6 +57,10 @@ void fk_hash_put(fk_hash hash, void* key, void* value, int key_is_string)
         current->next = fk_hash_list_new(key, value);
     }
 }
+/**
+ * @brief put an item in the hash
+ * @param key_is_string 1 if key is string, 0 if it is an integer (used for hashing)
+ */
 void* fk_hash_get(fk_hash hash, void* key, int key_is_string)
 {
     if (hash == NULL) return (void*) -1;
@@ -91,7 +95,22 @@ void fk_hash_remove(fk_hash hash, void* key, int key_is_string)
         previous = current;
     }
 }
-int fk_hash_delete(fk_hash hash)
+void fk_hash_list_delete(fk_hash_list* list, int delete_keys, int delete_value)
 {
+    if(list == NULL) return;
+    fk_hash_list_delete(list->next, delete_keys, delete_value);
+    if(delete_keys) free(list->key);
+    if(delete_value) free(list->value);
+    free(list);
+}
+void fk_hash_delete(fk_hash hash, int delete_keys, int delete_value)
+{
+    int i;
+    if(hash == NULL) return;
+    for(i = 0; i < FK_HASH_SIZE; i++)
+    {
+        fk_hash_list_delete(hash[i], delete_keys, delete_value);
+        hash[i] = NULL;
+    }
     free(hash);
 }
