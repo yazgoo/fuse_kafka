@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include "fuse.h"
+#include "hash.c"
 #include "kafka_client.c"
 #define fuse_get_context(a) test_fuse_get_context(a)
 #include "output.c"
@@ -389,6 +390,22 @@ static char* test_output()
     output_destroy(output);
     return 0;
 }
+static char* test_fk_hash()
+{
+    fk_hash hash = fk_hash_new();
+    fk_hash_put(hash, "test", 42, 1);
+    mu_assert("test should be 42", fk_hash_get(hash, "test", 1) == 42);
+    // teest hashes the same
+    fk_hash_put(hash, "teest", 43, 1);
+    mu_assert("teest should be 43", fk_hash_get(hash, "teest", 1) == 43);
+    printf("HASH %d\n", fk_hash_hash("test", 1));
+    fk_hash_remove(hash, "test", 1);
+    mu_assert("test should be -1", fk_hash_get(hash, "test", 1) == -1);
+    fk_hash_remove(hash, "teest", 1);
+    mu_assert("test should be -1", fk_hash_get(hash, "teest", 1) == -1);
+    fk_hash_delete(hash);
+    return 0;
+}
 static char* all_tests()
 {
     *(fk_sleep_enabled()) = 0;
@@ -403,6 +420,7 @@ static char* all_tests()
     mu_run_test(test_server_list);
     mu_run_test(test_dynamic_configuration);
     mu_run_test(test_output);
+    mu_run_test(test_fk_hash);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

@@ -208,6 +208,7 @@ void* output_init(config* conf)
                 time_queue_size, atoi(conf->quota[0]));
     }
     dynamic_configuration_get()->context = (void*) k;
+    fuse_get_context()->private_data = (void*) k;
     return (void*) k;
 }
 /**

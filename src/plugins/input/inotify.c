@@ -1,48 +1,59 @@
 #include <input_plugin.h>
-requires(glib-2.0)
+#include <hash.c>
 #include <dirent.h>
 #include <sys/inotify.h>
-#include <glib.h>
 #include <stdio.h>
 #define EVENT_SIZE  ( sizeof (struct inotify_event) )
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
-char* get_event_path(struct inotify_event* event, GHashTable* watches)
+char* get_event_path(struct inotify_event* event, fk_hash watches)
 {
     printf("new event on %d\n", event->wd);
-    return concat((char*) g_hash_table_lookup(watches, (void*) event->wd), event->name);
+    char* a = (char*) fk_hash_get(watches, (void*) (long int) event->wd, 0);
+    if(a == (char*) -1) a = NULL;
+    return concat(a, event->name);
 }
-void handle_file_modified(struct inotify_event* event, GHashTable* offsets, GHashTable* watches, char* root)
+void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
     char* path = get_event_path(event, watches);
     if(path == NULL) return;
-    int offset = (int) g_hash_table_lookup(offsets, (void*) path);
-    printf("File %s modified.\n", path);
+    long int offset = (long int) fk_hash_get(offsets, path, 1);
+    if(offset == -1)
+    {
+        path = strdup(path);
+        offset = 0;
+    }
+    printf("File %s modified, offset being %ld.\n", path, offset);
     char* line = 0;
     size_t length;
     FILE* f = fopen(path, "r");
     fseek(f, offset, SEEK_SET);
     ssize_t size;
     while((size = getline(&line, &length, f)) > 0)
+    {
+        printf("File %s, writing %s\n", path, line);
         output_write(path + strlen(root) - 1, line, size + 1, 0);
-    g_hash_table_insert(offsets, path, (void*) ftell(f));
+    }
+    if(ftell(f) > offset)
+        printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
+    fk_hash_put(offsets, path, (void*) ftell(f), 1);
     fclose(f);
     free(path);
     free(line);
 }
-handle_file_deleted(struct inotify_event* event, GHashTable* offsets, GHashTable* watches, char* root)
+handle_file_deleted(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
     char* path = get_event_path(event, watches);
-    g_hash_table_remove(offsets, path);
+    fk_hash_remove(offsets, path, 1);
     free(path);
 }
-int watch_directory(char* directory, int fd, GHashTable* watches)
+int watch_directory(char* directory, int fd, fk_hash watches)
 {
     int wd = inotify_add_watch(fd, directory, IN_CREATE | IN_MODIFY);
     printf("watching directory %s (%d)\n", directory, wd);
-    g_hash_table_insert(watches, (void*) wd, directory);
+    fk_hash_put(watches, (void*) (long int) wd, strdup(directory), 0);
     return wd;
 }
-void setup_watches(char* directory, int fd, GHashTable* watches)
+void setup_watches(char* directory, int fd, fk_hash watches)
 {
     if(directory == NULL) return;
     watch_directory(directory, fd, watches);
@@ -61,12 +72,12 @@ void setup_watches(char* directory, int fd, GHashTable* watches)
     }
     closedir(dir);
 }
-void teardown_watches(char* directory, int fd, GHashTable* watches)
+void teardown_watches(char* directory, int fd, fk_hash watches)
 {
     /* TODO write */
     free(directory);
 }
-handle_event(struct inotify_event* event, int fd, GHashTable* offsets, GHashTable* watches, char* root)
+handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watches, char* root)
 {
     if ( event->len ) {
         if ( event->mask & IN_CREATE ) {
@@ -100,7 +111,7 @@ handle_event(struct inotify_event* event, int fd, GHashTable* offsets, GHashTabl
         }
     }
 }
-void on_event(char* buffer, int length, char* directory, int fd, GHashTable* offsets, GHashTable* watches)
+void on_event(char* buffer, int length, char* directory, int fd, fk_hash offsets, fk_hash watches)
 {
     int i = 0;
     while ( i < length ) {
@@ -117,8 +128,8 @@ int* inotify_runnning()
 int input_setup(int argc, char** argv, void* conf)
 {
     output_init((config*) conf);
-    GHashTable* offsets = g_hash_table_new(NULL, NULL);
-    GHashTable* watches = g_hash_table_new(NULL, NULL);
+    fk_hash offsets = fk_hash_new();
+    fk_hash watches = fk_hash_new();
     if (argc <= 1) return -1;
     char* directory = argv[1];
     int fd = inotify_init();
@@ -129,7 +140,7 @@ int input_setup(int argc, char** argv, void* conf)
     while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
         on_event(buffer, length, directory, fd, offsets, watches);
     //g_hash_table_foreach(watches, free, NULL);
-    g_hash_table_destroy(offsets);
-    g_hash_table_destroy(watches);
+    fk_hash_delete(offsets);
+    fk_hash_delete(watches);
     return 0;
 }
