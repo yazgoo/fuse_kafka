@@ -398,7 +398,10 @@ static char* test_fk_hash()
     // teest hashes the same
     fk_hash_put(hash, "teest", 43, 1);
     mu_assert("teest should be 43", fk_hash_get(hash, "teest", 1) == 43);
-    printf("HASH %d\n", fk_hash_hash("test", 1));
+    fk_hash_put(hash, "teeest", 44, 1);
+    mu_assert("teeest should be 44", fk_hash_get(hash, "teeest", 1) == 44);
+    fk_hash_remove(hash, "teeest", 1);
+    mu_assert("teeest should be -1", fk_hash_get(hash, "teeest", 1) == -1);
     fk_hash_remove(hash, "test", 1);
     mu_assert("test should be -1", fk_hash_get(hash, "test", 1) == -1);
     fk_hash_remove(hash, "teest", 1);

@@ -13,6 +13,10 @@ fk_hash fk_hash_new()
     fk_hash hash = (fk_hash) malloc(sizeof(fk_hash_list*) * FK_HASH_SIZE);
     memset(hash, 0, sizeof(fk_hash_list*) * FK_HASH_SIZE);
 }
+/**
+ * @returns a hash value corresponding to a key
+ * @param key_is_string 1 if value to hash is a string, 0 if it is an integer
+ */
 int fk_hash_hash(void* key, int key_is_string)
 {
     char* k = (char*) key;
@@ -20,6 +24,9 @@ int fk_hash_hash(void* key, int key_is_string)
     if(key_is_string && key == NULL) return 0;
     return ((key_is_string? (k[0] + k[strlen(k) - 1]): (i < 0? -i : i)) % FK_HASH_SIZE);
 }
+/**
+ * @brief allocates and initializes a new hash item
+ */
 fk_hash_list* fk_hash_list_new(void* key, void* value)
 {
     char* k = (char*) key;
@@ -29,6 +36,10 @@ fk_hash_list* fk_hash_list_new(void* key, void* value)
     list->next = 0;
     return list;
 }
+/**
+ * @brief put an item in the hash
+ * @param key_is_string 1 if key is string, 0 if it is an integer
+ */
 void fk_hash_put(fk_hash hash, void* key, void* value, int key_is_string)
 {
     if(hash == NULL) return;
