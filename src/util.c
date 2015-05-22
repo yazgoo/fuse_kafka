@@ -145,7 +145,7 @@ void* frealloc(void* ptr, size_t size)
     struct fuse_context* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \
     uid_t __uid = geteuid(); \
-    int r = setegid(__context->gid); \
+    setegid(__context->gid); \
     seteuid(__context->uid); \
     action \
     seteuid(__uid); \
