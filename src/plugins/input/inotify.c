@@ -43,7 +43,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
 handle_file_deleted(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
     char* path = get_event_path(event, watches);
-    fk_hash_remove(offsets, path, 1);
+    fk_hash_remove(offsets, path, 1, 0, 1);
     free(path);
 }
 int watch_directory(char* directory, int fd, fk_hash watches)
