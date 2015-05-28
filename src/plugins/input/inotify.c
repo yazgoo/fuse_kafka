@@ -127,7 +127,6 @@ int* inotify_runnning()
 }
 int input_setup(int argc, char** argv, void* conf)
 {
-    output_init((config*) conf);
     fk_hash offsets = fk_hash_new();
     fk_hash watches = fk_hash_new();
     if (argc <= 1) return -1;

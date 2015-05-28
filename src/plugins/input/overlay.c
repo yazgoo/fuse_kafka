@@ -478,7 +478,9 @@ static int kafka_flock(const char *path, struct fuse_file_info *fi, int op)
 */
 void* kafka_init(struct fuse_conn_info *conn)
 {
+    /* TODO remove output_init */
     return output_init((config*) fuse_get_context()->private_data);
+    //return fuse_get_context()->private_data;
 }
 
 
