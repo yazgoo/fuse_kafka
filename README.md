@@ -362,6 +362,14 @@ Licensing
 licensed under Apache v 2.0, see LICENSE file
 
 
+Tagging
+=======
+
+- for versions, use github release tags, for example 0.1.4
+- for OBS source release number, we use ligthweight tag: for example the package 
+    fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
+
+
 Code of conduct
 ===============
 
