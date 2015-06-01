@@ -92,6 +92,27 @@ void configuration_clean()
 {
     free_fields_and_tags(&conf);
 }
+int my_input_setup(int argc, char** argv, int limit)
+{
+    char* input = "overlay";
+    if(conf.input_n > 0) input = conf.input[0];
+    char*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
+    strcpy(lib, INPUT_PLUGIN_PREFIX);
+    strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
+    strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), ".so");
+    void* handle = dlopen(lib, RTLD_LAZY);
+    free(lib);
+    if(handle == NULL)
+    {
+        printf("%s\n", dlerror());
+        return 1;
+    }
+    else
+    {
+        input_setup_t f = dlsym(handle, "input_setup_internal");
+        return f(limit, argv, &conf);
+    }
+}
 int fuse_kafka_main(int argc, char *argv[])
 {
     int i;
@@ -100,37 +121,7 @@ int fuse_kafka_main(int argc, char *argv[])
     memset(&conf, 0, sizeof(config));
     if(parse_arguments(argc - limit - 1, argv + limit + 1, &conf))
     {
-        for(conf.directory_n = 0; conf.directory_n < conf.directories_n;
-                conf.directory_n++)
-        {
-            argv[1] = conf.directories[conf.directory_n];
-            if(!fork())
-            {
-#ifdef TEST
-                break;
-#endif
-                conf.directory_fd = open(conf.directories[conf.directory_n],
-                        O_RDONLY);
-                char* input = "overlay";
-                if(conf.input_n > 0) input = conf.input[0];
-                char*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
-                strcpy(lib, INPUT_PLUGIN_PREFIX);
-                strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
-                strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), ".so");
-                void* handle = dlopen(lib, RTLD_LAZY);
-                free(lib);
-                if(handle == NULL)
-                {
-                    printf("%s\n", dlerror());
-                    return 1;
-                }
-                else
-                {
-                    input_setup_t f = dlsym(handle, "input_setup_internal");
-                    return f(limit, argv, &conf);
-                }
-            }
-        }
+        my_input_setup(argc, argv, limit);
     }
     wait(NULL);
     return 0;

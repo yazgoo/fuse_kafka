@@ -524,7 +524,21 @@ static struct fuse_operations kafka_oper = {
     /*.flock      = kafka_flock,*/
 };
 
-int input_setup(int argc, char** argv, void* conf)
+int input_setup(int argc, char** argv, void* cfg)
 {
-    return argv == NULL? -1 : fuse_main(argc, argv, &kafka_oper, conf);
+    config* conf = (config*) cfg;
+    for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
+            conf->directory_n++)
+    {
+        argv[1] = conf->directories[conf->directory_n];
+        if(!fork())
+        {
+#ifdef TEST
+            break;
+#endif
+            conf->directory_fd = open(conf->directories[conf->directory_n],
+                    O_RDONLY);
+            return argv == NULL? -1 : fuse_main(argc, argv, &kafka_oper, conf);
+        }
+    }
 }

@@ -3,6 +3,8 @@
 #include <dirent.h>
 #include <sys/inotify.h>
 #include <stdio.h>
+#include <pthread.h>
+requires(pthread)
 #define EVENT_SIZE  ( sizeof (struct inotify_event) )
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 char* get_event_path(struct inotify_event* event, fk_hash watches)
@@ -31,7 +33,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     while((size = getline(&line, &length, f)) > 0)
     {
         printf("File %s, writing %s\n", path, line);
-        output_write(path + strlen(root) - 1, line, size + 1, 0);
+        output_write(path, line, size + 1, 0);
     }
     if(ftell(f) > offset)
         printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
@@ -125,19 +127,20 @@ int* inotify_runnning()
     static int value = 1;
     return &value;
 }
-int input_setup(int argc, char** argv, void* conf)
+int input_setup(int argc, char** argv, void* cfg)
 {
+    config* conf = (config*) cfg;
     fk_hash offsets = fk_hash_new();
     fk_hash watches = fk_hash_new();
-    if (argc <= 1) return -1;
-    char* directory = argv[1];
     int fd = inotify_init();
-    setup_watches(directory, fd, watches);
+    for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
+            conf->directory_n++)
+        setup_watches(conf->directories[conf->directory_n], fd, watches);
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 
     while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
-        on_event(buffer, length, directory, fd, offsets, watches);
+        on_event(buffer, length, NULL, fd, offsets, watches);
     fk_hash_delete(offsets, 1, 0);
     fk_hash_delete(watches, 0, 1);
     return 0;
