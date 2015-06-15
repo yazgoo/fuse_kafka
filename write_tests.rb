@@ -12,6 +12,7 @@ class Tester
         n_partition = 2
         stop_file = dir + "stop"
         start_file = dir + "start"
+        write_file = dir + "blah"
         done = false
         threads = n_partition.times.collect do |partition|
             Thread.new do
@@ -39,7 +40,7 @@ class Tester
         loop { sleep 1; File.write(start_file, "startup"); break if started }
         ["a", "w", "w+", "a", "a+"].each do |mode|
             [true, false].each do |flush|
-                File.open(dir + "blah", mode) do |f|
+                File.open(write_file, mode) do |f|
                     100.times do
                         f.write "#{n} "
                         n += 1
@@ -58,3 +59,4 @@ File.open(ARGV[0], "w") do |f|
         f.puts "#{event["@timestamp"]} #{event["path"]}: #{event["@message"]}"
     end
 end
+[stop_file, start_file, write_file].each { |f| File.delete(f) }
