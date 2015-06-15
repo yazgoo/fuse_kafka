@@ -33,7 +33,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     while((size = getline(&line, &length, f)) > 0)
     {
         printf("File %s, writing %s\n", path, line);
-        output_write(path, line, size + 1, 0);
+        output_write(path, line, size, 0);
     }
     if(ftell(f) > offset)
         printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
@@ -136,6 +136,7 @@ int input_setup(int argc, char** argv, void* cfg)
     for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
             conf->directory_n++)
         setup_watches(conf->directories[conf->directory_n], fd, watches);
+    conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 

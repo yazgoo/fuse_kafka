@@ -500,6 +500,18 @@ Also, you should exclude your test file from code coverage, using:
 // LCOV_EXCL_STOP
 ````
 
+Write tests
+===========
+
+To compare inotify output plugin with overlay output plugin, run:
+
+    rm -rf /tmp/zookeeper /tmp/kafka-logs;./build.py write_tests
+
+This will generate two files, /tmp/write_tests.overlay 
+and /tmp/write_tests.inotify with the writes received by kafka.
+
+This uses the file write_test.rb
+
 Licensing
 =========
 

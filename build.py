@@ -438,8 +438,37 @@ def create_topic_command(zkconnect):
 
     - zkconnect: the zookeeper cluster endpoint to kafka
     """
-    return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 1 --replication-factor 1'.format(zkconnect)
-def quickstart():
+    return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 2 --replication-factor 1'.format(zkconnect)
+def wait_for_input():
+    try:
+        raw_input(">")
+    except:
+        print("done")
+fuse_kafka_input_line = "fuse_kafka_input=[\"{}\"]"
+overlay_line = fuse_kafka_input_line.format("overlay")
+inotify_line = fuse_kafka_input_line.format("inotify")
+def ruby_write_tests():
+    print(">> launching overlay write")
+    cmd = "ruby write_tests.rb /tmp/write_tests."
+    os.system('cat ./conf/fuse_kafka.properties')
+    os.system(cmd + "overlay")
+    comment_conf(overlay_line)
+    uncomment_conf(inotify_line)
+    os.system('./src/fuse_kafka.py restart')
+    print(">> launching inotify write")
+    os.system('cat ./conf/fuse_kafka.properties')
+    os.system(cmd + "inotify")
+def comment_conf(what, first = "", second = "#"):
+    os.system("sed -i 's/^{}{}$/{}{}/' conf/fuse_kafka.properties".format(
+        first, what.replace("[", ".").replace("]", "."), second, what))
+def uncomment_conf(what):
+    comment_conf(what, first = "#", second = "")
+def write_tests():
+    """ Launches kafka, zookeeper, fuse_kafka """
+    uncomment_conf(overlay_line)
+    comment_conf(inotify_line)
+    quickstart(consumer = False, synchronous_action = "ruby_write_tests")
+def quickstart(consumer = True, synchronous_action = "wait_for_input"):
     """ Launches kafka, zookeeper, fuse_kafka and a console consumer locally """
     klog = '/tmp/kafka.log'
     zlog = '/tmp/zookeeper.log'
@@ -447,7 +476,8 @@ def quickstart():
     if os.path.exists(zlog): shutil.rmtree(zlog)
     p1 = multiprocessing.Process(target=zookeeper_start, args=())
     p2 = multiprocessing.Process(target=kafka_start, args=())
-    p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
+    p3 = None
+    if consumer: p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
     p1.start()
     p2.start()
     result = 1
@@ -455,15 +485,22 @@ def quickstart():
         result = os.system(create_topic_command('localhost'))
         time.sleep(0.2)
     os.system('./src/fuse_kafka.py start')
-    p3.start()
+    if consumer: p3.start()
     try:
-        raw_input(">")
-    except:
-        print("done")
+        f = globals()[synchronous_action]
+        if f == None:
+            f = locals()[synchronous_action]
+            if f != None:
+                f()
+        else:
+            f()
+    except e:
+        print(e)
     p1.terminate()
     p2.terminate()
-    p3.terminate()
-    os.system('pkill -9 -f java.*kafka.consumer.ConsoleConsumer')
+    if consumer:
+        p3.terminate()
+        os.system('pkill -9 -f java.*kafka.consumer.ConsoleConsumer')
     os.system('./src/fuse_kafka.py stop')
     os.system(kafka_bin_directory + 'kafka-server-stop.sh')
     os.system(kafka_bin_directory + 'zookeeper-server-stop.sh')

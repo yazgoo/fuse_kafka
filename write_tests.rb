@@ -55,6 +55,6 @@ end
 tester = Tester.new
 File.open(ARGV[0], "w") do |f|
     tester.events.each do |event|
-        f.puts "#{event["@timestamp"]} #{event["@path"]}: #{event["@message"]}"
+        f.puts "#{event["@timestamp"]} #{event["path"]}: #{event["@message"]}"
     end
 end
