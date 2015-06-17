@@ -312,6 +312,8 @@ static char* test_dynamic_configuration()
     char** argv;
     int argc;
     char* conf_path = "/tmp/fuse_kafka_test_dynamic_configuration";
+    unlink(conf_path);
+    unlink("/tmp/fuse_kafka.args");
     mu_assert("loading dynamic configuration should fail",
             dynamic_configuration_load() == 1);
     touch(conf_path);

@@ -121,8 +121,10 @@ static char* test_passthrough_calls()
     TEST_FUNC_FAILURE(kafka_opendir, "/non-existing/path", &fi)
     TEST_FUNC_SUCCESS(kafka_opendir, "/", &fi)
     TEST_FUNC_SUCCESS(kafka_releasedir, "/", &fi)
+    unlink(TEST "/node");
     TEST_FUNC_SUCCESS(kafka_mknod, TEST "/node", S_IFREG, 0)
     TEST_FUNC_FAILURE(kafka_mknod, "/", S_IFREG, 0)
+    unlink(TEST "/fifo");
     TEST_FUNC_SUCCESS(kafka_mknod, TEST "/fifo", S_IFIFO, 0)
     TEST_FUNC_SUCCESS(kafka_mkdir, TEST "/dir", 0)
     TEST_FUNC_FAILURE(kafka_mkdir, TEST "/non-existing/dir", 0)
@@ -133,6 +135,7 @@ static char* test_passthrough_calls()
     TEST_FUNC_FAILURE(kafka_rename, TEST "/from", TEST "/to")
     TEST_FUNC_SUCCESS(kafka_rename, TEST "/node", TEST "/renamed")
     TEST_FUNC_FAILURE(kafka_link, TEST "/from", TEST "/to")
+    unlink(TEST "/lol");
     TEST_FUNC_SUCCESS(kafka_link, TEST "/renamed", TEST "/lol")
     TEST_FUNC_FAILURE(kafka_chmod, TEST "/from", 0)
     TEST_FUNC_SUCCESS(kafka_chmod, TEST "/renamed", S_IWUSR | S_IRUSR)
