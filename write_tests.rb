@@ -13,6 +13,7 @@ class Tester
         stop_file = dir + "stop"
         start_file = dir + "start"
         write_file = dir + "blah"
+        write_files = []
         done = false
         threads = n_partition.times.collect do |partition|
             Thread.new do
@@ -36,27 +37,57 @@ class Tester
                 end
             end
         end
-        n = 0
+        @n = 0
         loop { sleep 1; File.write(start_file, "startup"); break if started }
         ["a", "w", "w+", "a", "a+"].each do |mode|
             [true, false].each do |flush|
-                File.open(write_file, mode) do |f|
+                write_files += [write_file + @n.to_s]
+                File.open(write_files.last, mode) do |f|
                     100.times do
-                        f.write "#{n} "
-                        n += 1
+                        f.write "#{@n} "
+                        @n += 1
                         f.flush if flush
                     end
                 end
             end
         end
-        n_partition.times.each { File.write(stop_file, "shutdown") }
+        (n_partition * 10).times.each { File.write(stop_file, "shutdown") }
         threads.each { |t| t.join }
+        write_files + [stop_file, start_file].each { |f| File.delete(f) }
+    end
+    def save path
+        values = []
+        File.open(path, "w") do |f|
+            @events.each do |event|
+                values += event["@message"].split(" ").collect { |x| x.to_i }
+                f.puts "#{event["@timestamp"]} #{event["path"]}: #{event["@message"]}"
+            end
+        end
+        print_missing values
+    end
+    def print_missing_summary first, last
+        if not first.nil?
+            puts "#{first}...#{last} missing"
+        end
+        nil
+    end
+    def print_missing values
+        first = nil
+        last = nil
+        @n.times do |i|
+            if not values.include?(i)
+                if not first.nil?
+                    last = i
+                else
+                    last = first = i
+                end
+            else
+                first = print_missing_summary first, last
+            end
+        end 
+        print_missing_summary first, last
+        puts "saved #{@events.size} events"
     end
 end
 tester = Tester.new
-File.open(ARGV[0], "w") do |f|
-    tester.events.each do |event|
-        f.puts "#{event["@timestamp"]} #{event["path"]}: #{event["@message"]}"
-    end
-end
-[stop_file, start_file, write_file].each { |f| File.delete(f) }
+tester.save ARGV[0]

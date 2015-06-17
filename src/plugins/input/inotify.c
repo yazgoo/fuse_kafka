@@ -17,6 +17,7 @@ char* get_event_path(struct inotify_event* event, fk_hash watches)
 void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
     char* path = get_event_path(event, watches);
+    char* old_path = path;
     if(path == NULL) return;
     long int offset = (long int) fk_hash_get(offsets, path, 1);
     if(offset == -1)
@@ -28,6 +29,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     char* line = 0;
     size_t length;
     FILE* f = fopen(path, "r");
+    fseek(f, 0, SEEK_END); if(ftell(f) < offset) offset = 0;
     fseek(f, offset, SEEK_SET);
     ssize_t size;
     while((size = getline(&line, &length, f)) > 0)
@@ -37,7 +39,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     }
     if(ftell(f) > offset)
         printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
-    fk_hash_put(offsets, path, (void*) ftell(f), 1);
+    fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
     fclose(f);
     free(path);
     free(line);
@@ -47,6 +49,16 @@ handle_file_deleted(struct inotify_event* event, fk_hash offsets, fk_hash watche
     char* path = get_event_path(event, watches);
     fk_hash_remove(offsets, path, 1, 0, 1);
     free(path);
+}
+handle_file_created(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
+{
+    printf( "New file %s created.\n", event->name );
+    /*
+    char* path = get_event_path(event, watches);
+    fk_hash_put(offsets, path, 0, 1);
+    printf( "New file %s created.\n", path );
+    free(path);
+    */
 }
 int watch_directory(char* directory, int fd, fk_hash watches)
 {
@@ -89,7 +101,7 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
                 setup_watches(path, fd, watches);
             }
             else {
-                printf( "New file %s created.\n", event->name );
+                handle_file_created(event, offsets, watches, root);
             }
         }
         if ( event->mask & IN_DELETE ) {
@@ -141,7 +153,9 @@ int input_setup(int argc, char** argv, void* cfg)
     char buffer[EVENT_BUF_LEN];
     int length; 
     while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
+    {
         on_event(buffer, length, NULL, fd, offsets, watches);
+    }
     fk_hash_delete(offsets, 1, 0);
     fk_hash_delete(watches, 0, 1);
     return 0;

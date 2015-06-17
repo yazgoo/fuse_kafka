@@ -29,8 +29,7 @@ int fk_hash_hash(void* key, int key_is_string)
  */
 fk_hash_list* fk_hash_list_new(void* key, void* value)
 {
-    char* k = (char*) key;
-    fk_hash_list* list = malloc(sizeof(fk_hash_list));
+    fk_hash_list* list = malloc(sizeof(struct _fk_hash_list));
     list->key = key; 
     list->value = value;
     list->next = 0;
@@ -56,17 +55,24 @@ void fk_hash_put(fk_hash hash, void* key, void* value, int key_is_string)
 {
     if(hash == NULL) return;
     int h = fk_hash_hash(key, key_is_string);
-    if(hash[h] == NULL) hash[h] = fk_hash_list_new(key, value);
+    if(hash[h] == NULL)
+    {
+        hash[h] = fk_hash_list_new(key, value);
+    }
     else
     {
         fk_hash_list* current;
-        for(current = hash[h]; current->next != NULL; current = current->next)
+        for(current = hash[h]; current != NULL; current = current->next)
+        {
             if((key_is_string && strcmp(current->key, key) == 0) || (!key_is_string && current->key == key))
             {
                 current->value = value;
                 return;
             }
-        current->next = fk_hash_list_new(key, value);
+        }
+        fk_hash_list* new =  fk_hash_list_new(key, value);
+        new->next = hash[h];
+        hash[h] = new;
     }
 }
 /**
