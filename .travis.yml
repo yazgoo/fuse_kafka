@@ -22,7 +22,7 @@ install:
 script:
     - ./build.py clean
     - ./build.py
-    - ./build.py test
+    - BACKTRACE_CRASH=true ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
     - sudo ./build.py install
