@@ -31,7 +31,7 @@ after_failure:
     - cat /proc/sys/kernel/core_pattern
     - dmesg
     - bash -c "[ -z \"${SHIPPABLE}\" ] && sudo cat /var/log/messages || echo"
-    - bash -c "[ -z \"${SHIPPABLE}\" ] && sudo cat /var/log/messages || echo"
+    - ls -ltr /var/crash
     - bash -c 'for i in /var/crash/*.crash; do cat $i; done'
     - gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" fuse_kafka.test core*
 after_success:
