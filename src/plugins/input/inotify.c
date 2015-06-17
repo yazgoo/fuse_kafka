@@ -9,7 +9,7 @@ requires(pthread)
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 char* get_event_path(struct inotify_event* event, fk_hash watches)
 {
-    printf("new event on %d\n", event->wd);
+    // printf("new event on %d\n", event->wd);
     char* a = (char*) fk_hash_get(watches, (void*) (long int) event->wd, 0);
     if(a == (char*) -1) a = NULL;
     return concat(a, event->name);
@@ -25,7 +25,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
         path = strdup(path);
         offset = 0;
     }
-    printf("File %s modified, offset being %ld.\n", path, offset);
+    // printf("File %s modified, offset being %ld.\n", path, offset);
     char* line = 0;
     size_t length;
     FILE* f = fopen(path, "r");
@@ -34,11 +34,13 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     ssize_t size;
     while((size = getline(&line, &length, f)) > 0)
     {
-        printf("File %s, writing %s\n", path, line);
+        // printf("File %s, writing %s\n", path, line);
         output_write(path, line, size, 0);
     }
     if(ftell(f) > offset)
-        printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
+    {
+        // printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
+    }
     fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
     fclose(f);
     free(path);
@@ -96,7 +98,7 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
     if ( event->len ) {
         if ( event->mask & IN_CREATE ) {
             if ( event->mask & IN_ISDIR ) {
-                printf( "New directory %s created.\n", event->name );
+                // printf( "New directory %s created.\n", event->name );
                 char* path = get_event_path(event, watches);
                 setup_watches(path, fd, watches);
             }
@@ -106,18 +108,18 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
         }
         if ( event->mask & IN_DELETE ) {
             if ( event->mask & IN_ISDIR ) {
-                printf( "New directory %s deleted.\n", event->name );
+                // printf( "New directory %s deleted.\n", event->name );
                 char* path = get_event_path(event, watches);
                 teardown_watches(path, fd, watches);
             }
             else {
-                printf( "New file %s deleted.\n", event->name );
+                // printf( "New file %s deleted.\n", event->name );
                 handle_file_deleted(event, offsets, watches, root);
             }
         }
         if ( event->mask & IN_MODIFY ) {
             if ( event->mask & IN_ISDIR ) {
-                printf( "Directory %s modified.\n", event->name );
+                // printf( "Directory %s modified.\n", event->name );
             }
             else {
                 handle_file_modified(event, offsets, watches, root);

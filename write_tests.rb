@@ -6,6 +6,7 @@ require 'awesome_print'
 class Tester
     attr_reader :events
     def initialize
+        start = Time.new
         dir = "/tmp/fuse-kafka-test/"
         started = false
         @events = []
@@ -54,10 +55,12 @@ class Tester
         (n_partition * 10).times.each { File.write(stop_file, "shutdown") }
         threads.each { |t| t.join }
         write_files + [stop_file, start_file].each { |f| File.delete(f) }
+        @duration = Time.new - start
     end
     def save path
         values = []
         File.open(path, "w") do |f|
+            f.puts "duration: #{@duration}"
             @events.each do |event|
                 values += event["@message"].split(" ").collect { |x| x.to_i }
                 f.puts "#{event["@timestamp"]} #{event["path"]}: #{event["@message"]}"
