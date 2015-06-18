@@ -139,6 +139,7 @@ void on_event(char* buffer, int length, char* directory, int fd, fk_hash offsets
 int* inotify_runnning()
 {
     static int value = 1;
+    if(value < 0) value++;
     return &value;
 }
 int input_setup(int argc, char** argv, void* cfg)

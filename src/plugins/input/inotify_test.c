@@ -10,12 +10,11 @@ int inotify_init_test()
 #include "inotify.c"
 static char* test_input_setup()
 {
-    char* argv[] = {"blah", "/tmp"}; 
+    char* argv[] = {"/tmp"}; 
     int n = sizeof(argv)/sizeof(char*);
-    // TODO uncomment mu_assert("input_setup should return -1", input_setup(0, NULL, NULL) == -1);
     *(inotify_runnning()) = 0;
     mu_assert("input_setup should return 0", input_setup(n, argv, NULL) == 0);
-    // TODO uncomment *(inotify_runnning()) = 1;
+    *(inotify_runnning()) = -2;
     mu_assert("input_setup should return 0", input_setup(n, argv, NULL) == 0);
     *(inotify_runnning()) = 0;
     config c;
