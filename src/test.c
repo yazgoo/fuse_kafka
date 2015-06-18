@@ -421,6 +421,15 @@ static char* test_fk_hash()
     fk_hash_list_delete(fk_hash_list_new(0, 0), 0, 0);
     return 0;
 }
+static char* test_my_input_setup()
+{
+    conf.input_n = 1;
+    char* argv[] = {"nonexisting"};
+    conf.input = argv;
+    mu_assert("test_my_input_setup should return 1", 
+            my_input_setup(0, NULL, argv) == 1);
+    return 0;
+}
 static char* all_tests()
 {
     *(fk_sleep_enabled()) = 0;
@@ -436,6 +445,7 @@ static char* all_tests()
     mu_run_test(test_dynamic_configuration);
     mu_run_test(test_output);
     mu_run_test(test_fk_hash);
+    mu_run_test(test_my_input_setup);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests
