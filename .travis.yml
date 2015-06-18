@@ -22,6 +22,7 @@ install:
 script:
     - ./build.py clean
     - ./build.py
+    - sysctl -w kernel.core_name_format=%e.core
     - ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
@@ -31,10 +32,8 @@ after_failure:
     - cat /proc/sys/kernel/core_pattern
     - dmesg
     - bash -c "[ -z \"${SHIPPABLE}\" ] && sudo cat /var/log/messages || echo"
-    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || cat /etc/apport/crashdb.conf"
     - gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" fuse_kafka.test core*
-#    - ls -ltr /var/crash
-#    - bash -c 'for i in /var/crash/*.crash; do cat $i; done'
+    -  bash -c 'for f in core*;do gdb --batch --quiet -ex "thread apply all bt full" -ex quit $(echo $f|sed "s/^core.//") $f;done'
 after_success:
     - bash -c "[ -z \"${SHIPPABLE}\" ] && coveralls --exclude bin --exclude tests --gcov-options '\-lp' || echo"
     - git config --global user.name "${GIT_NAME}"
