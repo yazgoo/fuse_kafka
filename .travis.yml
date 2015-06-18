@@ -22,7 +22,6 @@ install:
 script:
     - ./build.py clean
     - ./build.py
-    - sysctl -w kernel.core_pattern=%e.core
     - ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
