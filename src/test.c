@@ -399,6 +399,7 @@ static char* test_fk_hash()
 {
     fk_hash hash = fk_hash_new();
     fk_hash_put(hash, "test", 42, 1);
+    printf("test value: %d\n", fk_hash_get(hash, "test", 1));
     mu_assert("test should be 42", fk_hash_get(hash, "test", 1) == 42);
     // teest hashes the same
     fk_hash_put(hash, "teest", 43, 1);
