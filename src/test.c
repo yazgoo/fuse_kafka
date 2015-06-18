@@ -75,8 +75,10 @@ static char* test_setup_kafka()
     mu_assert("setup_kafka succeeded", setup_kafka(&k) == 1);
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_new_returns_NULL = 1;
+    private_data.zookeepers = NULL;
     mu_assert("setup_kafka with kafka "
             "new returning NULL succeeded", setup_kafka(&k) == 1);
+    private_data.zookeepers = brokers;
     test_with()->rd_kafka_new_returns_NULL = 0;
     test_with()->rd_kafka_brokers_add_returns = 0;
     mu_assert("setup_kafka with kafka rokers add failing",
