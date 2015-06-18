@@ -10,8 +10,9 @@ before_install:
     - sudo add-apt-repository -y ppa:fkrull/deadsnakes
     - sudo apt-get -y update
     - sudo apt-get -y install python2.6 python2.7 python3.3 python3.4 python
-    - sudo apt-get -y install wget ruby-1.9 rubygems
-    - sudo gem install poseidon
+    - sudo apt-get -y install wget rvm
+    - rvm install 1.9
+    - gem install poseidon
     - sudo pip install tox
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo apt-get -y -f install mininet openvswitch-controller openvswitch-common"
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo DEBIAN_FRONTEND=noninteractive apt-get -y install --reinstall linux-image-$(uname -r)"
@@ -27,7 +28,7 @@ script:
     - LD_LIBRARY_PATH=. ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
-    - ./build.py write_tests
+#    - ./build.py write_tests
     - head -1 /tmp/write_tests.overlay /tmp/write_tests.inotify
     - sudo ./build.py install
 after_failure:
