@@ -184,6 +184,8 @@ static char* test_other_functions()
     kafka_init(NULL);
     config c;
     c.directory_n = 0;
+    c.directories_n = 0;
+    c.directory_n = argv;
     mu_assert("input_setup should return -1", input_setup(0, NULL, &c) == 0);
     c.directories_n = 1;
     c.directories = argv2;
