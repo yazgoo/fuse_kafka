@@ -488,36 +488,41 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00405"></a>00405     fk_hash_put(hash, <span class="stringliteral">&quot;teest&quot;</span>, 43, 1);
 <a name="l00406"></a>00406     mu_assert(<span class="stringliteral">&quot;teest should be 43&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == 43);
 <a name="l00407"></a>00407     mu_assert(<span class="stringliteral">&quot;test #2 should be 42&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == 42);
-<a name="l00408"></a>00408     fk_hash_put(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 44, 1);
-<a name="l00409"></a>00409     mu_assert(<span class="stringliteral">&quot;teeest should be 44&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == 44);
-<a name="l00410"></a>00410     fk_hash_remove(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1, 0, 0);
-<a name="l00411"></a>00411     mu_assert(<span class="stringliteral">&quot;teeest should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == -1);
-<a name="l00412"></a>00412     fk_hash_remove(hash, <span class="stringliteral">&quot;test&quot;</span>, 1, 0, 0);
-<a name="l00413"></a>00413     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == -1);
-<a name="l00414"></a>00414     fk_hash_remove(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1, 0, 0);
-<a name="l00415"></a>00415     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == -1);
-<a name="l00416"></a>00416     fk_hash_delete(hash, 0, 0);
-<a name="l00417"></a>00417     <span class="keywordflow">return</span> 0;
-<a name="l00418"></a>00418 }
-<a name="l00419"></a>00419 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
-<a name="l00420"></a>00420 {
-<a name="l00421"></a>00421     *(fk_sleep_enabled()) = 0;
-<a name="l00422"></a>00422     mu_run_test(test_setup_kafka);
-<a name="l00423"></a>00423     mu_run_test(test_parse_arguments);
-<a name="l00424"></a>00424     mu_run_test(test_logging);
-<a name="l00425"></a>00425     mu_run_test(test_utils);
-<a name="l00426"></a>00426     mu_run_test(test_time_queue);
-<a name="l00427"></a>00427     mu_run_test(test_zookeeper);
-<a name="l00428"></a>00428     mu_run_test(test_trace);
-<a name="l00429"></a>00429     mu_run_test(test_string_list);
-<a name="l00430"></a>00430     mu_run_test(test_server_list);
-<a name="l00431"></a>00431     mu_run_test(test_dynamic_configuration);
-<a name="l00432"></a>00432     mu_run_test(test_output);
-<a name="l00433"></a>00433     mu_run_test(test_fk_hash);
-<a name="l00434"></a>00434     <span class="keywordflow">return</span> 0;
-<a name="l00435"></a>00435 }
-<a name="l00436"></a>00436 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
-<a name="l00437"></a>00437 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
+<a name="l00408"></a>00408     fk_hash_put(hash, <span class="stringliteral">&quot;test&quot;</span>, 40, 1);
+<a name="l00409"></a>00409     mu_assert(<span class="stringliteral">&quot;test #3 should be 40&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == 40);
+<a name="l00410"></a>00410     fk_hash_remove(hash, <span class="stringliteral">&quot;test&quot;</span>, 1, 0, 0);
+<a name="l00411"></a>00411     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == -1);
+<a name="l00412"></a>00412     fk_hash_put(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 44, 1);
+<a name="l00413"></a>00413     mu_assert(<span class="stringliteral">&quot;teeest should be 44&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == 44);
+<a name="l00414"></a>00414     fk_hash_remove(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1, 0, 0);
+<a name="l00415"></a>00415     mu_assert(<span class="stringliteral">&quot;teeest should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == -1);
+<a name="l00416"></a>00416     fk_hash_remove(hash, <span class="stringliteral">&quot;test&quot;</span>, 1, 0, 0);
+<a name="l00417"></a>00417     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == -1);
+<a name="l00418"></a>00418     fk_hash_remove(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1, 0, 0);
+<a name="l00419"></a>00419     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == -1);
+<a name="l00420"></a>00420     fk_hash_delete(hash, 0, 0);
+<a name="l00421"></a>00421     fk_hash_list_delete(fk_hash_list_new(0, 0), 0, 0);
+<a name="l00422"></a>00422     <span class="keywordflow">return</span> 0;
+<a name="l00423"></a>00423 }
+<a name="l00424"></a>00424 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00425"></a>00425 {
+<a name="l00426"></a>00426     *(fk_sleep_enabled()) = 0;
+<a name="l00427"></a>00427     mu_run_test(test_setup_kafka);
+<a name="l00428"></a>00428     mu_run_test(test_parse_arguments);
+<a name="l00429"></a>00429     mu_run_test(test_logging);
+<a name="l00430"></a>00430     mu_run_test(test_utils);
+<a name="l00431"></a>00431     mu_run_test(test_time_queue);
+<a name="l00432"></a>00432     mu_run_test(test_zookeeper);
+<a name="l00433"></a>00433     mu_run_test(test_trace);
+<a name="l00434"></a>00434     mu_run_test(test_string_list);
+<a name="l00435"></a>00435     mu_run_test(test_server_list);
+<a name="l00436"></a>00436     mu_run_test(test_dynamic_configuration);
+<a name="l00437"></a>00437     mu_run_test(test_output);
+<a name="l00438"></a>00438     mu_run_test(test_fk_hash);
+<a name="l00439"></a>00439     <span class="keywordflow">return</span> 0;
+<a name="l00440"></a>00440 }
+<a name="l00441"></a>00441 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
+<a name="l00442"></a>00442 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -536,7 +541,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jun 18 2015 13:14:05 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 18 2015 14:37:44 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
