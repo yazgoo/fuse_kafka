@@ -149,6 +149,7 @@ int setup_kafka(kafka_t* k)
     rd_kafka_conf_t *conf;
     conf = rd_kafka_conf_new();
     rd_kafka_conf_set_dr_cb(conf, msg_delivered);
+    printf("UGUU 0\n");
     if(rd_kafka_conf_set(conf, "debug", "all",
                 errstr, sizeof(errstr)) != RD_KAFKA_CONF_OK || 
             rd_kafka_conf_set(conf, "batch.num.messages", "1",
@@ -157,6 +158,7 @@ int setup_kafka(kafka_t* k)
                 errstr, "all");
         return(1);
     }
+    printf("UGUU 1\n");
     if (!(k->rk = rd_kafka_new(RD_KAFKA_PRODUCER, conf,
                     errstr, sizeof(errstr)))) {
         fprintf(stderr,
@@ -164,15 +166,19 @@ int setup_kafka(kafka_t* k)
                 errstr);
         return(1);
     }
+    printf("UGUU 2\n");
     rd_kafka_set_logger(k->rk, logger);
     rd_kafka_set_log_level(k->rk, 7);
     if (zookeepers != NULL)
     {
+        printf("UGUU 3\n");
         k->zhandle = initialize_zookeeper(zookeepers, k);
         return 0;
     }
     else if(brokers != NULL)
     {
+        printf("UGUU 4\n");
+        k->zhandle = initialize_zookeeper(zookeepers, k);
         if (rd_kafka_brokers_add(k->rk, brokers) == 0) {
             fprintf(stderr, "%% No valid brokers specified\n");
             return(1);
@@ -183,6 +189,7 @@ int setup_kafka(kafka_t* k)
             printf("topic %s creation failed\n", topic);
         return k->rkt == NULL;
     }
+    printf("UGUU 5\n");
     return 0;
 }
 void* output_init(config* conf)
