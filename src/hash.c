@@ -81,8 +81,10 @@ void fk_hash_put(fk_hash hash, void* key, void* value, int key_is_string)
  */
 void* fk_hash_get(fk_hash hash, void* key, int key_is_string)
 {
+    printf("UGUU 0");
     if (hash == NULL) return (void*) -1;
     int h = fk_hash_hash(key, key_is_string);
+    printf("UGUU 1");
     if(hash[h] == NULL) return (void*) -1;
     fk_hash_list* current;
     for(current = hash[h]; current != NULL; current = current->next)
@@ -92,6 +94,7 @@ void* fk_hash_get(fk_hash hash, void* key, int key_is_string)
             return current->value;
         }
     }
+    printf("UGUU 2");
     return (void*) -1;
 }
 void fk_hash_remove(fk_hash hash, void* key, int key_is_string, int delete_keys, int delete_value)
