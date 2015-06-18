@@ -314,8 +314,12 @@ def build():
     link()
 def run_c_test(source):
     bin_path = get_test_bin(source)
+    batch = "-batch"
+    if os.getenv("NO_BATCH") != None: batch = ""
     if os.path.exists(bin_path):
-        run("./" + bin_path)
+        result = os.system("gdb " + batch + " -return-child-result --eval-command=run --eval-command=where --args " + "./" + bin_path)
+        if result != 0:
+            exit(result)
     else:
         print("warning: no binary test {}".format(bin_path))
 def c_test():

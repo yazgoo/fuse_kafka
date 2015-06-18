@@ -330,6 +330,9 @@ To launch unit tests, issue a:
     ./build.py test
 ````
 
+C unit test will be launched with gdb.
+If you set NO_BATCH environment variable, you will get gdb prompts.
+
 To test against multiple python versions (provided tox is installed), issue a:
 
 ````shell

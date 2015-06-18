@@ -147,10 +147,13 @@ int input_setup(int argc, char** argv, void* cfg)
     fk_hash offsets = fk_hash_new();
     fk_hash watches = fk_hash_new();
     int fd = inotify_init();
-    for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
-            conf->directory_n++)
-        setup_watches(conf->directories[conf->directory_n], fd, watches);
-    conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
+    if(conf != NULL)
+    {
+        for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
+                conf->directory_n++)
+            setup_watches(conf->directories[conf->directory_n], fd, watches);
+        conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
+    }
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 
