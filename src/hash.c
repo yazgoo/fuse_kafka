@@ -84,7 +84,6 @@ void* fk_hash_get(fk_hash hash, void* key, int key_is_string)
 {
     if (hash == NULL) return (void*) -1;
     int h = fk_hash_hash(key, key_is_string);
-    if(hash[h] == NULL) return (void*) -1;
     fk_hash_list* current;
     for(current = hash[h]; current != NULL; current = current->next)
     {
@@ -99,7 +98,6 @@ void fk_hash_remove(fk_hash hash, void* key, int key_is_string, int delete_keys,
 {
     if(hash == NULL) return;
     int h = fk_hash_hash(key, key_is_string);
-    if(hash[h] == NULL) return;
     fk_hash_list* current, *previous;
     previous = NULL;
     for(current = hash[h]; current != NULL; current = current->next)

@@ -18,6 +18,10 @@ static char* test_input_setup()
     // TODO uncomment *(inotify_runnning()) = 1;
     mu_assert("input_setup should return 0", input_setup(n, argv, NULL) == 0);
     *(inotify_runnning()) = 0;
+    config c;
+    c.directories_n = 1;
+    c.directories = argv;
+    mu_assert("input_setup should return -1", input_setup(1, argv, &c) == 0);
     return 0;
 }
 static char* test_handle_event()

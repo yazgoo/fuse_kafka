@@ -180,8 +180,14 @@ static char* test_passthrough_calls()
 static char* test_other_functions()
 {
     char* argv[] = {}; 
+    char* argv2[] = {"/tmp"}; 
     kafka_init(NULL);
-    // TODO uncomment mu_assert("input_setup should return -1", input_setup(0, NULL, NULL) == -1);
+    config c;
+    c.directory_n = 0;
+    mu_assert("input_setup should return -1", input_setup(0, NULL, &c) == 0);
+    c.directories_n = 1;
+    c.directories = argv2;
+    mu_assert("input_setup should return -1", input_setup(1, argv2, &c) == 0);
     return 0;
 }
 static char* all_tests()

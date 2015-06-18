@@ -405,6 +405,10 @@ static char* test_fk_hash()
     fk_hash_put(hash, "teest", 43, 1);
     mu_assert("teest should be 43", fk_hash_get(hash, "teest", 1) == 43);
     mu_assert("test #2 should be 42", fk_hash_get(hash, "test", 1) == 42);
+    fk_hash_put(hash, "test", 40, 1);
+    mu_assert("test #3 should be 40", fk_hash_get(hash, "test", 1) == 40);
+    fk_hash_remove(hash, "test", 1, 0, 0);
+    mu_assert("test should be -1", fk_hash_get(hash, "test", 1) == -1);
     fk_hash_put(hash, "teeest", 44, 1);
     mu_assert("teeest should be 44", fk_hash_get(hash, "teeest", 1) == 44);
     fk_hash_remove(hash, "teeest", 1, 0, 0);
@@ -414,6 +418,7 @@ static char* test_fk_hash()
     fk_hash_remove(hash, "teest", 1, 0, 0);
     mu_assert("test should be -1", fk_hash_get(hash, "teest", 1) == -1);
     fk_hash_delete(hash, 0, 0);
+    fk_hash_list_delete(fk_hash_list_new(0, 0), 0, 0);
     return 0;
 }
 static char* all_tests()

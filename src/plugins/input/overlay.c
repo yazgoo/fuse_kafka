@@ -541,4 +541,5 @@ int input_setup(int argc, char** argv, void* cfg)
             return argv == NULL? -1 : fuse_main(argc, argv, &kafka_oper, conf);
         }
     }
+    return 0;
 }
