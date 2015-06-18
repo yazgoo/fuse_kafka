@@ -158,11 +158,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep</b> (int n)</
 <b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \
     uid_t __uid = geteuid(); \
-    seteuid(__context-&gt;uid); \
     setegid(__context-&gt;gid); \
+    seteuid(__context-&gt;uid); \
     action \
-    setegid(__gid); \
-    seteuid(__uid);
+    seteuid(__uid); \
+    setegid(__gid);
 </pre></div>
 <p>Definition at line <a class="el" href="util_8c_source.html#l00183">183</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
@@ -344,7 +344,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep</b> (int n)</
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jun 18 2015 16:03:08 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 18 2015 20:10:23 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

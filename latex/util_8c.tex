@@ -88,11 +88,11 @@ utility functions
 struct fuse_context* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \
     uid_t __uid = geteuid(); \
-    seteuid(__context->uid); \
     setegid(__context->gid); \
+    seteuid(__context->uid); \
     action \
-    setegid(__gid); \
-    seteuid(__uid);
+    seteuid(__uid); \
+    setegid(__gid);
 \end{DoxyCode}
 
 
