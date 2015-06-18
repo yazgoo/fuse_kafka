@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;openssl/pem.h&gt;</code><br/>
 <code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;string.h&gt;</code><br/>
+<code>#include &lt;unistd.h&gt;</code><br/>
 </div>
 <p><a href="util_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -106,6 +107,8 @@ Functions</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>strcmp</b> (const char *s1, const char *s2)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9">base64</a> (const unsigned char *input, int length)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the input to base64  <a href="#afb4e6c2974525e7bca75f0a0c1ef94d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc47fc1477875c66eb440867da1c3cdf"></a><!-- doxytag: member="util.c::get_command_line_size" ref="afc47fc1477875c66eb440867da1c3cdf" args="()" -->
+int *&#160;</td><td class="memItemRight" valign="bottom"><b>get_command_line_size</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">get_command_line</a> (int pid)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get the command line corresponding to a process  <a href="#ad0e8a9673662b67246c1af0ce7e7b06c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">set_timestamp</a> (char *timestamp)</td></tr>
@@ -125,8 +128,13 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><b>fmalloc</b> (size_t
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>fcalloc</b> (size_t nmemb, size_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a254cadff829d59e06bf85fffaa41799d"></a><!-- doxytag: member="util.c::frealloc" ref="a254cadff829d59e06bf85fffaa41799d" args="(void *ptr, size_t size)" -->
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>frealloc</b> (void *ptr, size_t size)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a595bb2010e077b76450c9c04e2b25e16"></a><!-- doxytag: member="util.c::concat" ref="a595bb2010e077b76450c9c04e2b25e16" args="(char *a, char *b)" -->
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a, char *b)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a> (char *a, char *b)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad90feff5ba4ef7c3fbbc8ce001ab0e1c"></a><!-- doxytag: member="util.c::fk_sleep_return_value" ref="ad90feff5ba4ef7c3fbbc8ce001ab0e1c" args="()" -->
+int *&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep_return_value</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7b32ae92cbc167cab4a12bc4babffad7"></a><!-- doxytag: member="util.c::fk_sleep_enabled" ref="a7b32ae92cbc167cab4a12bc4babffad7" args="()" -->
+int *&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep_enabled</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a7724d430eac361ba7bf823fdd92868"></a><!-- doxytag: member="util.c::fk_sleep" ref="a8a7724d430eac361ba7bf823fdd92868" args="(int n)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep</b> (int n)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>utility functions </p>
@@ -156,7 +164,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
     setegid(__gid); \
     seteuid(__uid);
 </pre></div>
-<p>Definition at line <a class="el" href="util_8c_source.html#l00156">156</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00183">183</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -196,7 +204,37 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a newly allocated string with the base64 data which should be free'd by the user </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00024">24</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00025">25</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a595bb2010e077b76450c9c04e2b25e16"></a><!-- doxytag: member="util.c::concat" ref="a595bb2010e077b76450c9c04e2b25e16" args="(char *a, char *b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* <a class="el" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a> </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl class="return"><dt><b>Returns:</b></dt><dd>null if a or b is null, a + "/" + b otherwise </dd></dl>
+
+<p>Definition at line <a class="el" href="util_8c_source.html#l00156">156</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -224,7 +262,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a base64 encoded string with the process command line, or an empty string if it could not be extrcated </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00047">47</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00053">53</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -256,7 +294,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00097">97</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00103">103</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -284,7 +322,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00083">83</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00089">89</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -306,7 +344,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>concat</b> (char *a
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 8 2015 15:27:36 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 18 2015 07:15:41 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

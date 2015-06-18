@@ -174,76 +174,81 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00109"></a>00109     ftime(&amp;t);
 <a name="l00110"></a>00110     <span class="keywordflow">return</span> t.time * 1000 + t.millitm;
 <a name="l00111"></a>00111 }
-<a name="l00115"></a>00115 <span class="keywordtype">int</span> dynamic_configuration_changed()
-<a name="l00116"></a>00116 {
-<a name="l00117"></a>00117     <span class="keyword">static</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> last_change = 0;
-<a name="l00118"></a>00118     <span class="keywordtype">long</span> <span class="keywordtype">long</span> new_change;
-<a name="l00119"></a>00119     <span class="keyword">struct </span>stat stats;
-<a name="l00120"></a>00120     <span class="keywordflow">if</span>(last_change == 0) last_change = millisecond_clock();
-<a name="l00121"></a>00121     <span class="keywordflow">if</span>(stat(dynamic_configuration_get_path(), &amp;stats) != 0)
-<a name="l00122"></a>00122         <span class="keywordflow">return</span> 0;
-<a name="l00123"></a>00123     new_change = millisecond(&amp;stats);
-<a name="l00124"></a>00124     <span class="keywordflow">if</span>(new_change &lt;= last_change) <span class="keywordflow">return</span> 0;
-<a name="l00125"></a>00125     last_change = new_change;
-<a name="l00126"></a>00126     <span class="keywordflow">return</span> 1;
-<a name="l00127"></a>00127 }
-<a name="l00131"></a>00131 <span class="keywordtype">void</span> dynamic_configuration_free()
-<a name="l00132"></a>00132 {
-<a name="l00133"></a>00133     <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
-<a name="l00134"></a>00134     free(conf-&gt;line);
-<a name="l00135"></a>00135     free(conf-&gt;argv);
-<a name="l00136"></a>00136 }
-<a name="l00140"></a>00140 <span class="keywordtype">int</span> dynamic_configuration_load()
-<a name="l00141"></a>00141 {
-<a name="l00142"></a>00142     <span class="keywordtype">char</span>* line;
-<a name="l00143"></a>00143     <span class="keywordtype">char</span>** argv;
-<a name="l00144"></a>00144     <span class="keywordtype">int</span> argc;
-<a name="l00145"></a>00145     <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
-<a name="l00146"></a>00146     <span class="keywordflow">if</span>(parse_args_from_file(dynamic_configuration_get_path(),
-<a name="l00147"></a>00147                 &amp;argc, &amp;argv, &amp;line) == 0)
-<a name="l00148"></a>00148     {
-<a name="l00149"></a>00149         <span class="keywordflow">if</span>(conf-&gt;loaded) dynamic_configuration_free();
-<a name="l00150"></a>00150         conf-&gt;argc = argc;
-<a name="l00151"></a>00151         conf-&gt;line = line;
-<a name="l00152"></a>00152         conf-&gt;argv = argv;
-<a name="l00153"></a>00153         conf-&gt;loaded = 1;
-<a name="l00154"></a>00154         <span class="keywordflow">return</span> 0;
-<a name="l00155"></a>00155     }
-<a name="l00156"></a>00156     <span class="keywordflow">return</span> 1;
-<a name="l00157"></a>00157 }
-<a name="l00162"></a>00162 <span class="keywordtype">void</span>* dynamic_configuration_watch_routine(<span class="keywordtype">void</span>(*f)(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">void</span>* context))
-<a name="l00163"></a>00163 {
-<a name="l00164"></a>00164     <span class="keywordflow">while</span>(1)
-<a name="l00165"></a>00165     {
-<a name="l00166"></a>00166         <span class="keywordflow">if</span>(dynamic_configuration_get()-&gt;context &amp;&amp; 
-<a name="l00167"></a>00167                 dynamic_configuration_changed() &amp;&amp; dynamic_configuration_load() == 0)
-<a name="l00168"></a>00168         {
-<a name="l00169"></a>00169 <span class="preprocessor">#ifdef NO_SLEEP_TEST</span>
-<a name="l00170"></a>00170 <span class="preprocessor"></span>            printf(<span class="stringliteral">&quot;changed\n&quot;</span>);
-<a name="l00171"></a>00171 <span class="preprocessor">#endif</span>
-<a name="l00172"></a>00172 <span class="preprocessor"></span>            <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
-<a name="l00173"></a>00173             f(conf-&gt;argc, conf-&gt;argv, conf-&gt;context);
-<a name="l00174"></a>00174 <span class="preprocessor">#ifdef NO_SLEEP_TEST</span>
-<a name="l00175"></a>00175 <span class="preprocessor"></span>            system(<span class="stringliteral">&quot;touch /tmp/done&quot;</span>);
-<a name="l00176"></a>00176 <span class="preprocessor">#endif</span>
-<a name="l00177"></a>00177 <span class="preprocessor"></span>        }
-<a name="l00178"></a>00178 <span class="preprocessor">#ifndef NO_SLEEP_TEST</span>
-<a name="l00179"></a>00179 <span class="preprocessor"></span>        sleep(5);
-<a name="l00180"></a>00180 <span class="preprocessor">#endif</span>
-<a name="l00181"></a>00181 <span class="preprocessor"></span>    }
-<a name="l00182"></a>00182     <span class="keywordflow">return</span> NULL;
-<a name="l00183"></a>00183 }
-<a name="l00187"></a>00187 <span class="keywordtype">void</span> dynamic_configuration_watch(<span class="keywordtype">void</span>(*f)(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">void</span>* context))
-<a name="l00188"></a>00188 {
-<a name="l00189"></a>00189     pthread_create(&amp;(dynamic_configuration_get()-&gt;thread), NULL, 
-<a name="l00190"></a>00190             (<span class="keywordtype">void</span> * (*)(<span class="keywordtype">void</span> *))
-<a name="l00191"></a>00191             dynamic_configuration_watch_routine, (<span class="keywordtype">void</span>*) f);
-<a name="l00192"></a>00192 }
-<a name="l00193"></a>00193 <span class="keywordtype">void</span> dynamic_configuration_watch_stop()
-<a name="l00194"></a>00194 {
-<a name="l00195"></a>00195     pthread_cancel(dynamic_configuration_get()-&gt;thread);
-<a name="l00196"></a>00196     pthread_join(dynamic_configuration_get()-&gt;thread, NULL);
-<a name="l00197"></a>00197 }
+<a name="l00112"></a>00112 <span class="keywordtype">long</span> <span class="keywordtype">long</span>* dynamic_configuration_get_last_change()
+<a name="l00113"></a>00113 {
+<a name="l00114"></a>00114     <span class="keyword">static</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> last_change = 0;
+<a name="l00115"></a>00115     <span class="keywordflow">return</span> &amp;last_change;
+<a name="l00116"></a>00116 }
+<a name="l00120"></a>00120 <span class="keywordtype">int</span> dynamic_configuration_changed()
+<a name="l00121"></a>00121 {
+<a name="l00122"></a>00122     <span class="keywordtype">long</span> <span class="keywordtype">long</span> * last_change = dynamic_configuration_get_last_change();
+<a name="l00123"></a>00123     <span class="keywordtype">long</span> <span class="keywordtype">long</span> new_change;
+<a name="l00124"></a>00124     <span class="keyword">struct </span>stat stats;
+<a name="l00125"></a>00125     <span class="keywordflow">if</span>(*last_change == 0) *last_change = millisecond_clock();
+<a name="l00126"></a>00126     <span class="keywordflow">if</span>(stat(dynamic_configuration_get_path(), &amp;stats) != 0)
+<a name="l00127"></a>00127         <span class="keywordflow">return</span> 0;
+<a name="l00128"></a>00128     new_change = millisecond(&amp;stats);
+<a name="l00129"></a>00129     <span class="keywordflow">if</span>(new_change &lt;= *last_change) <span class="keywordflow">return</span> 0;
+<a name="l00130"></a>00130     *last_change = new_change;
+<a name="l00131"></a>00131     <span class="keywordflow">return</span> 1;
+<a name="l00132"></a>00132 }
+<a name="l00136"></a>00136 <span class="keywordtype">void</span> dynamic_configuration_free()
+<a name="l00137"></a>00137 {
+<a name="l00138"></a>00138     <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
+<a name="l00139"></a>00139     free(conf-&gt;line);
+<a name="l00140"></a>00140     free(conf-&gt;argv);
+<a name="l00141"></a>00141 }
+<a name="l00145"></a>00145 <span class="keywordtype">int</span> dynamic_configuration_load()
+<a name="l00146"></a>00146 {
+<a name="l00147"></a>00147     <span class="keywordtype">char</span>* line;
+<a name="l00148"></a>00148     <span class="keywordtype">char</span>** argv;
+<a name="l00149"></a>00149     <span class="keywordtype">int</span> argc;
+<a name="l00150"></a>00150     <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
+<a name="l00151"></a>00151     <span class="keywordflow">if</span>(parse_args_from_file(dynamic_configuration_get_path(),
+<a name="l00152"></a>00152                 &amp;argc, &amp;argv, &amp;line) == 0)
+<a name="l00153"></a>00153     {
+<a name="l00154"></a>00154         <span class="keywordflow">if</span>(conf-&gt;loaded) dynamic_configuration_free();
+<a name="l00155"></a>00155         conf-&gt;argc = argc;
+<a name="l00156"></a>00156         conf-&gt;line = line;
+<a name="l00157"></a>00157         conf-&gt;argv = argv;
+<a name="l00158"></a>00158         conf-&gt;loaded = 1;
+<a name="l00159"></a>00159         <span class="keywordflow">return</span> 0;
+<a name="l00160"></a>00160     }
+<a name="l00161"></a>00161     <span class="keywordflow">return</span> 1;
+<a name="l00162"></a>00162 }
+<a name="l00163"></a>00163 <span class="keywordtype">int</span>* dynamic_configuration_watch_routine_running()
+<a name="l00164"></a>00164 {
+<a name="l00165"></a>00165     <span class="keyword">static</span> <span class="keywordtype">int</span> running = 1;
+<a name="l00166"></a>00166     <span class="keywordflow">return</span> &amp;running;
+<a name="l00167"></a>00167 }
+<a name="l00172"></a>00172 <span class="keywordtype">void</span>* dynamic_configuration_watch_routine(<span class="keywordtype">void</span>(*f)(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">void</span>* context))
+<a name="l00173"></a>00173 {
+<a name="l00174"></a>00174     <span class="keywordflow">while</span>(*dynamic_configuration_watch_routine_running())
+<a name="l00175"></a>00175     {
+<a name="l00176"></a>00176         <span class="keywordflow">if</span>(dynamic_configuration_get()-&gt;context &amp;&amp; 
+<a name="l00177"></a>00177                 dynamic_configuration_changed() &amp;&amp;
+<a name="l00178"></a>00178                 dynamic_configuration_load() == 0)
+<a name="l00179"></a>00179         {
+<a name="l00180"></a>00180             <a class="code" href="structdynamic__configuration.html">dynamic_configuration</a>* conf = dynamic_configuration_get();
+<a name="l00181"></a>00181             f(conf-&gt;argc, conf-&gt;argv, conf-&gt;context);
+<a name="l00182"></a>00182         }
+<a name="l00183"></a>00183         fk_sleep(5);
+<a name="l00184"></a>00184     }
+<a name="l00185"></a>00185     <span class="keywordflow">return</span> NULL;
+<a name="l00186"></a>00186 }
+<a name="l00190"></a>00190 <span class="keywordtype">void</span> dynamic_configuration_watch(<span class="keywordtype">void</span>(*f)(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">void</span>* context))
+<a name="l00191"></a>00191 {
+<a name="l00192"></a>00192     pthread_create(&amp;(dynamic_configuration_get()-&gt;thread), NULL, 
+<a name="l00193"></a>00193             (<span class="keywordtype">void</span> * (*)(<span class="keywordtype">void</span> *))
+<a name="l00194"></a>00194             dynamic_configuration_watch_routine, (<span class="keywordtype">void</span>*) f);
+<a name="l00195"></a>00195 }
+<a name="l00196"></a>00196 <span class="keywordtype">void</span> dynamic_configuration_watch_stop()
+<a name="l00197"></a>00197 {
+<a name="l00198"></a>00198     *dynamic_configuration_watch_routine_running() = 0;
+<a name="l00199"></a>00199     pthread_cancel(dynamic_configuration_get()-&gt;thread);
+<a name="l00200"></a>00200     pthread_join(dynamic_configuration_get()-&gt;thread, NULL);
+<a name="l00201"></a>00201     *dynamic_configuration_watch_routine_running() = 1;
+<a name="l00202"></a>00202 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -262,7 +267,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 8 2015 15:27:36 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 18 2015 07:15:41 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
