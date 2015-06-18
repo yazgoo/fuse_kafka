@@ -5,6 +5,7 @@
 #include <sys/timeb.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/file.h>
 #ifdef TEST
 #define FUSE_KAFKA_DYNAMIC_CONFIGURATION_PATH "/tmp/fuse_kafka.args"
 #else
@@ -70,7 +71,7 @@ int parse_line_from_file(char* path, char** linep, int* sizep)
  * @param argcp a pointer to hold the array size of parsed argument
  * @param argvp a pointer to hold the array of parsed argument, to be freed once used
  * @param linep a pointer to a string which will hold the line, to free once used
- * @return 0 if sucesseeded, otherwise there is nothing to free
+ * @return 0 if succeeded, otherwise there is nothing to free
  */
 int parse_args_from_file(char* path, int* argcp, char*** argvp, char** linep)
 {
@@ -108,20 +109,25 @@ unsigned long long millisecond_clock()
     ftime(&t);
     return t.time * 1000 + t.millitm;
 }
+long long* dynamic_configuration_get_last_change()
+{
+    static long long last_change = 0;
+    return &last_change;
+}
 /**
  * @return 1 if the configuration file has changed since last check, 0 otherwise
  */
 int dynamic_configuration_changed()
 {
-    static long long last_change = 0;
+    long long * last_change = dynamic_configuration_get_last_change();
     long long new_change;
     struct stat stats;
-    if(last_change == 0) last_change = millisecond_clock();
+    if(*last_change == 0) *last_change = millisecond_clock();
     if(stat(dynamic_configuration_get_path(), &stats) != 0)
         return 0;
     new_change = millisecond(&stats);
-    if(new_change <= last_change) return 0;
-    last_change = new_change;
+    if(new_change <= *last_change) return 0;
+    *last_change = new_change;
     return 1;
 }
 /**
@@ -154,29 +160,27 @@ int dynamic_configuration_load()
     }
     return 1;
 }
+int* dynamic_configuration_watch_routine_running()
+{
+    static int running = 1;
+    return &running;
+}
 /**
  * @brief on every dynamic configuration change, calls f
  * @param f the routine which will be called with parsed arguments
  */
 void* dynamic_configuration_watch_routine(void(*f)(int argc, char** argv, void* context))
 {
-    while(1)
+    while(*dynamic_configuration_watch_routine_running())
     {
         if(dynamic_configuration_get()->context && 
-                dynamic_configuration_changed() && dynamic_configuration_load() == 0)
+                dynamic_configuration_changed() &&
+                dynamic_configuration_load() == 0)
         {
-#ifdef NO_SLEEP_TEST
-            printf("changed\n");
-#endif
             dynamic_configuration* conf = dynamic_configuration_get();
             f(conf->argc, conf->argv, conf->context);
-#ifdef NO_SLEEP_TEST
-            system("touch /tmp/done");
-#endif
         }
-#ifndef NO_SLEEP_TEST
-        sleep(5);
-#endif
+        fk_sleep(5);
     }
     return NULL;
 }
@@ -191,6 +195,8 @@ void dynamic_configuration_watch(void(*f)(int argc, char** argv, void* context))
 }
 void dynamic_configuration_watch_stop()
 {
+    *dynamic_configuration_watch_routine_running() = 0;
     pthread_cancel(dynamic_configuration_get()->thread);
     pthread_join(dynamic_configuration_get()->thread, NULL);
+    *dynamic_configuration_watch_routine_running() = 1;
 }

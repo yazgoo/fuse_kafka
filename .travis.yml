@@ -17,11 +17,12 @@ before_install:
 install:
     - sed -i 's/_mt/_st/' build.py
     - sudo apt-get -y install python-coverage libfuse-dev librdkafka-dev libjansson-dev libzookeeper-st-dev
+    - bash -c "[ -z \"${SHIPPABLE}\" ] || sudo apt-get -y install libglib2.0"
     - sudo pip install fabricate cpp-coveralls
 script:
     - ./build.py clean
     - ./build.py
-    - ./build.py test
+    - LD_LIBRARY_PATH=. ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
     - sudo ./build.py install
@@ -29,8 +30,9 @@ after_failure:
     - find
     - cat /proc/sys/kernel/core_pattern
     - dmesg
-    - sudo cat /var/log/messages
+    - bash -c "[ -z \"${SHIPPABLE}\" ] && sudo cat /var/log/messages || echo"
     - gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" fuse_kafka.test core*
+    -  bash -c 'for f in core*;do gdb --batch --quiet -ex "thread apply all bt full" -ex quit $(echo $f|sed "s/^core.//") $f;done'
 after_success:
     - bash -c "[ -z \"${SHIPPABLE}\" ] && coveralls --exclude bin --exclude tests --gcov-options '\-lp' || echo"
     - git config --global user.name "${GIT_NAME}"

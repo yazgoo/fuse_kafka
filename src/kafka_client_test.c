@@ -1,4 +1,5 @@
 /** @file */ 
+// LCOV_EXCL_START
 #include <limits.h>
 static struct fuse_context* test_fuse_get_context()
 {
@@ -29,7 +30,6 @@ typedef struct
     int rd_kafka_produce_returns;
     int zoo_get_children_returns;
     int asprintf_sets_NULL;
-    int test_filler_returns;
 } test_config;
 static test_config* test_with()
 {
@@ -140,3 +140,4 @@ int deallocate_String_vector(struct String_vector *v)
     free(v->data);
     return 1;
 }
+// LCOV_EXCL_STOP

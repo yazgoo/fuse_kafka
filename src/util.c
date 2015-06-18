@@ -1,10 +1,14 @@
 /** @file 
  * @brief utility functions
  **/ 
+#ifndef UTIL_C
+#define UTIL_C
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 int strcmp(const char* s1, const char* s2)
 {
     while(*s1 && (*s1==*s2))
@@ -35,6 +39,11 @@ char *base64(const unsigned char *input, int length)
     BIO_free_all(b64);
     return buff;
 }
+int* get_command_line_size()
+{
+    static int command_line_size = 256;
+    return &command_line_size;
+}
 /**
  * @brief get the command line corresponding to a process
  * @param pid process id
@@ -43,7 +52,7 @@ char *base64(const unsigned char *input, int length)
  **/
 static char* get_command_line(int pid)
 {
-    size_t size = 256;
+    size_t size = *get_command_line_size();;
     size_t i = 0;
     char* path;
     FILE* f;
@@ -58,7 +67,7 @@ static char* get_command_line(int pid)
             if(c == 0) c = ' ';
             if(i >= (size - 1))
             {
-                size += 256;
+                size += *get_command_line_size();
                 command_line = (char*) realloc(
                         command_line, size * sizeof(char));
             }
@@ -141,6 +150,36 @@ void* frealloc(void* ptr, size_t size)
     if(*falloc_fails()) return NULL;
     return realloc(ptr, size);
 }
+/**
+ * @return null if a or b is null, a + "/" + b otherwise
+ */
+char* concat(char* a, char* b)
+{
+    if(a == NULL || b == NULL) return NULL;
+    int length = strlen(a) + strlen(b) + 2;
+    char* result = (char*) malloc(length);
+    result[length - 1] = 0;
+    char* middle = result + strlen(a);
+    strcpy(result, a);
+    middle[0] = '/';
+    strcpy(++middle, b);
+    return result;
+}
+int* fk_sleep_return_value()
+{
+    static int value = 0;
+    return &value;
+}
+int* fk_sleep_enabled()
+{
+    static int enabled = 1;
+    return &enabled;
+}
+int fk_sleep(int n)
+{
+    if(*(fk_sleep_enabled())) return sleep(n);
+    return *(fk_sleep_return_value());
+}
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \
     gid_t __gid = getegid(); \
@@ -150,3 +189,4 @@ void* frealloc(void* ptr, size_t size)
     action \
     seteuid(__uid); \
     setegid(__gid);
+#endif

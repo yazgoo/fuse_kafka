@@ -6,11 +6,47 @@ try:
 except ImportError, e:
     print "failed importing module", e
 from fabricate import *
+def get_define(source, name):
+    """ Returns the current define for fuse_kafka based on src/source """
+    f = open("src/" + source + ".h")
+    result = []
+    while True:
+        result = f.readline().split()
+        if len(result) == 3 and result[0] == "#define" and result[1] == name:
+            break;
+    result = result[-1][1:-1]
+    f.close()
+    return result
+class InputPlugins:
+    def __init__(self):
+        _dir = "src/plugins/input/"
+        self.tests_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
+        self.tests_paths = [_dir.replace("src/", "") + x for x in self.tests_sources]
+        self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
+        self.libraries_sources = [x for x in self.libraries_sources if x not in self.tests_sources]
+        self.libs_of = {}
+        self.includes_of = {}
+        self.shareds_objects = {}
+        self.objects = {}
+        self.test_of = {}
+        prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
+        for lib in self.libraries_sources:
+            cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
+            required_str = os.popen(cmd).read().rstrip()
+            required = []
+            if required_str != '': required = required_str.split("\n")
+            self.libs_of[lib] = required + default_libs
+            self.includes_of[lib] = required
+            self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
+            self.shareds_objects[lib] = prefix + lib + ".so"
+            self.objects[lib] = prefix + lib + ".o"
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-flags = ["-D_FILE_OFFSET_BITS=64"]
+default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
+input_plugins = InputPlugins()
+flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
@@ -170,15 +206,7 @@ class FuseKafkaLog:
                 print line
 def get_version():
     """ Returns the current version for fuse_kafka based on src/version.h """
-    f = open("src/version.h")
-    result = []
-    while True:
-        result = f.readline().split()
-        if len(result) == 3 and result[0] == "#define" and result[1] == "VERSION":
-            break;
-    result = result[-1][1:-1]
-    f.close()
-    return result
+    return get_define("version", "VERSION")
 def bump_version():
     """ Changes the version number if v variable if specified:
             - The version number is changed in src/version.h
@@ -262,7 +290,8 @@ def to_links(libs):
 
     Returns the new converted list
     """
-    return [filter_link(a) for a in ['-l'+s for s in libs]]
+    #return [filter_link(a) for a in ['-l'+s for s in libs]]
+    return [a for a in ['-l'+s for s in libs]]
 def binary_exists(name):
     """ Checks if a binary exists (requires 'which' utility)
     Returns true if the binary exists
@@ -283,15 +312,31 @@ def build():
     """ Builds fuse_kafka binary """
     compile()
     link()
+def run_c_test(source):
+    bin_path = get_test_bin(source)
+    batch = "-batch"
+    if os.getenv("NO_BATCH") != None: batch = ""
+    if os.path.exists(bin_path):
+        result = os.system("gdb " + batch + " -return-child-result --eval-command=run --eval-command=where --args " + "./" + bin_path)
+        if result != 0:
+            exit(result)
+    else:
+        print("warning: no binary test {}".format(bin_path))
 def c_test():
-    """ Run unit tests, generating coverage reports in out directory """
-    for source in sources:
-        run("./" + source + ".test")
-        run("gcov", "./src/" + source + ".c","-o", ".")
-        if binary_exists("lcov"):
-            run("lcov", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/" + source + ".info")
-            if binary_exists("genhtml"):
-                run("genhtml", "--rc", "lcov_branch_coverage=1", "src/" + source + ".info", "-o", "./out/c")
+    """ Builds, run unit tests, generating coverage reports in out directory """
+    compile_test()
+    for source in sources: run_c_test(source)
+    for library_source in input_plugins.libraries_sources:
+        run_c_test(input_plugins.test_of[library_source])
+    tests = sources + map(
+                        lambda x: input_plugins.test_of[library_source],
+                        input_plugins.libraries_sources)
+    run("gcov", ["src/" + x + ".c" for x in tests] ,"-o", ".")
+    if binary_exists("lcov"):
+        run("lcov", "--no-external", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/coverage.info")
+        if binary_exists("genhtml"):
+            run("genhtml", "--rc", "lcov_branch_coverage=1", 
+                    "./src/coverage.info", "-o", "./out/c")
 def python_test():
     run("python-coverage", "run", "src/fuse_kafka_test.py")
     run("find", "out")
@@ -302,15 +347,34 @@ def python_test():
 def test_run():
     c_test()
     python_test()
+def to_includes(what):
+    return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
+def compile_input_plugins():
+    for library_source in input_plugins.libraries_sources:
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
+        run('gcc', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
+    compile_input_plugins()
     for source in sources:
         run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
+def get_test_bin(source):
+    return source.replace("/", "_") +'.test'
+def compile_test_with_libs(source, libs, includes = []):
+    """ Builds unit test binary """
+    path = "./src/" + source +'.c'
+    if not os.path.exists(path):
+        print("warning: no test for {}".format(path))
+    else: 
+        run('gcc', '-I', 'src', to_includes(includes), '-g', '-o', get_test_bin(source), path, flags,
+                test_flags, to_links(libs))
 def compile_test():
     """ Builds unit test binary """
     for source in sources:
-        run('gcc', '-g', '-o', source+'.test', "./src/" + source+'.c', flags,
-                test_flags, to_links(common_libs))
+        compile_test_with_libs(source, common_libs)
+    for library_source in input_plugins.libraries_sources:
+        compile_test_with_libs(input_plugins.test_of[library_source],
+                input_plugins.libs_of[library_source], input_plugins.includes_of[library_source])
 def link():
     """ Finalize the binary generation by linking all object files """
     objects = [s+'.o' for s in sources]
@@ -329,10 +393,12 @@ def install():
         root = os.environ.get('BUILDROOT') + "/"
     build()
     install_directory = root + 'usr/bin/'
+    lib_directory = root + 'usr/lib/'
     init_directory = root + 'etc/init.d/'
     conf_directory = root + 'etc/'
     [run('mkdir', '-p', d) for d in
-            [conf_directory, init_directory, install_directory]]
+            [conf_directory, init_directory, install_directory, lib_directory]]
+    for key in input_plugins.shareds_objects: run('cp', input_plugins.shareds_objects[key], lib_directory)
     run('cp', binary_name, install_directory)
     [run('cp', 'src/' + init_name + '.py', init_directory + init_name)
             for init_name in ["fuse_kafka", "fuse_kafka_umounter"]]
@@ -376,8 +442,37 @@ def create_topic_command(zkconnect):
 
     - zkconnect: the zookeeper cluster endpoint to kafka
     """
-    return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 1 --replication-factor 1'.format(zkconnect)
-def quickstart():
+    return kafka_bin_directory + 'kafka-topics.sh --create --topic logs --zookeeper {} --partitions 2 --replication-factor 1'.format(zkconnect)
+def wait_for_input():
+    try:
+        raw_input(">")
+    except:
+        print("done")
+fuse_kafka_input_line = "fuse_kafka_input=[\"{}\"]"
+overlay_line = fuse_kafka_input_line.format("overlay")
+inotify_line = fuse_kafka_input_line.format("inotify")
+def ruby_write_tests():
+    print(">> launching overlay write")
+    cmd = "ruby write_tests.rb /tmp/write_tests."
+    os.system('cat ./conf/fuse_kafka.properties')
+    os.system(cmd + "overlay")
+    comment_conf(overlay_line)
+    uncomment_conf(inotify_line)
+    os.system('./src/fuse_kafka.py restart')
+    print(">> launching inotify write")
+    os.system('cat ./conf/fuse_kafka.properties')
+    os.system(cmd + "inotify")
+def comment_conf(what, first = "", second = "#"):
+    os.system("sed -i 's/^{}{}$/{}{}/' conf/fuse_kafka.properties".format(
+        first, what.replace("[", ".").replace("]", "."), second, what))
+def uncomment_conf(what):
+    comment_conf(what, first = "#", second = "")
+def write_tests():
+    """ Launches kafka, zookeeper, fuse_kafka """
+    uncomment_conf(overlay_line)
+    comment_conf(inotify_line)
+    quickstart(consumer = False, synchronous_action = "ruby_write_tests")
+def quickstart(consumer = True, synchronous_action = "wait_for_input"):
     """ Launches kafka, zookeeper, fuse_kafka and a console consumer locally """
     klog = '/tmp/kafka.log'
     zlog = '/tmp/zookeeper.log'
@@ -385,7 +480,8 @@ def quickstart():
     if os.path.exists(zlog): shutil.rmtree(zlog)
     p1 = multiprocessing.Process(target=zookeeper_start, args=())
     p2 = multiprocessing.Process(target=kafka_start, args=())
-    p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
+    p3 = None
+    if consumer: p3 = multiprocessing.Process(target=kafka_consumer_start, args=())
     p1.start()
     p2.start()
     result = 1
@@ -393,15 +489,22 @@ def quickstart():
         result = os.system(create_topic_command('localhost'))
         time.sleep(0.2)
     os.system('./src/fuse_kafka.py start')
-    p3.start()
+    if consumer: p3.start()
     try:
-        raw_input(">")
-    except:
-        print("done")
+        f = globals()[synchronous_action]
+        if f == None:
+            f = locals()[synchronous_action]
+            if f != None:
+                f()
+        else:
+            f()
+    except e:
+        print(e)
     p1.terminate()
     p2.terminate()
-    p3.terminate()
-    os.system('pkill -9 -f java.*kafka.consumer.ConsoleConsumer')
+    if consumer:
+        p3.terminate()
+        os.system('pkill -9 -f java.*kafka.consumer.ConsoleConsumer')
     os.system('./src/fuse_kafka.py stop')
     os.system(kafka_bin_directory + 'kafka-server-stop.sh')
     os.system(kafka_bin_directory + 'zookeeper-server-stop.sh')
@@ -534,7 +637,7 @@ class TestMininet(unittest.TestCase):
         time.sleep(2)
     def check(self):
         self.assertTrue(os.path.exists(self.fuse_kafka_path),
-                "you must build fuse kafka to run tests")
+            "you must build fuse kafka to run tests")
         os.stat("/tmp/fuse-kafka-test")
     def get_consumed_events(self, expected_number):
         from mininet.util import pmonitor

@@ -70,9 +70,12 @@ The default configuration is conf/fuse\_kafka.properties.
 An important piece of configuration is fuse\_kafka\_directories:
 
     $ grep fuse_kafka_directories conf/fuse_kafka.properties -B2
-    # directories fuse_kafka will listen to (launch script will try to
-    # create them if they don't exist)
-    fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+
+````python
+# directories fuse_kafka will listen to (launch script will try to
+# create them if they don't exist)
+fuse_kafka_directories=["/tmp/fuse-kafka-test"]
+````
 
 Start fuse\_kafka using the init script:
 
@@ -103,21 +106,23 @@ Then start writing to a file under the overlay directory:
 
 You should have an output from the consumer similar to this:
 
-    event:
-        group: users
-        uid: 1497
-        @tags:
-            -  test
-        @fields:
-             hostname: test
-        @timestamp: 2014-10-03T09:07:04.000+0000
-        pid: 6485
-        gid: 604
-        command: bash -c echo "foo"
-        @message: foo
-        path: /tmp/fuse-kafka-test/bar
-        @version: 0.1.3
-        user: yazgoo
+````yaml
+event:
+    group: users
+    uid: 1497
+    @tags:
+        -  test
+    @fields:
+         hostname: test
+    @timestamp: 2014-10-03T09:07:04.000+0000
+    pid: 6485
+    gid: 604
+    command: bash -c echo "foo"
+    @message: foo
+    path: /tmp/fuse-kafka-test/bar
+    @version: 0.1.3
+    user: yazgoo
+````
 
 When you're done, you can stop fuse\_kafka:
 
@@ -135,41 +140,51 @@ Then, start fuse kafka.
 Let's create a segfaulting program:
 
     $ cat first.c
-    int main(void)
-    {
-        *((int*)0) = 1;
-    }
 
-    $ gcc first.c
+````c
+int main(void)
+{
+    *((int*)0) = 1;
+}
+````
+
+````shell
+$ gcc first.c
+````
 
 Then start a test consumer, displaying only the path and message\_size-added fields
 
 Launch the segfaulting program in fuse-kafka-test directory:
 
-    $ /path/to/a.out
-
+````shell
+$ /path/to/a.out
+````
 A new core file should appear in fused directory.
 
 Here is the consumer output:
 
-    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
-    event:
-        message_size-added: 4096
-        path: /tmp/fuse-kafka-test/core
-    ...
-    event:
-        message_size-added: 4096
-        path: /tmp/fuse-kafka-test/core
+````shell
+$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+...
+event:
+    message_size-added: 4096
+    path: /tmp/fuse-kafka-test/core
+````
 
 Here we see many messages.
 
 Then, uncomment fuse\_kafka\_quota in conf/fuse\_kafka.properties and 
 launch the segfaulting program,
         
-    $ SELECT="message_size-added path" ./build.py kafka_consumer_start
-    event:
-        message_size-added: 64
-        path: /tmp/fuse-kafka-test/core
+````shell
+$ SELECT="message_size-added path" ./build.py kafka_consumer_start
+event:
+    message_size-added: 64
+    path: /tmp/fuse-kafka-test/core
+````
 
 This time, we only receive the first write.
 
@@ -178,16 +193,18 @@ Event format
 
 We use a logstash event, except the message and command are base64 encoded:
 
-    {"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
-    "@message": "aGVsbG8gd29ybGQ=",
-    "@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
-    "root",
-    "command": "L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC",
-    "@version": "0.1.2",
-    "@fields": {
-        "first_field": "first_value",
-        "second_field": "second_value" },
-    "@tags": ["mytag"]}
+````json
+{"path": "/var/log/redis_6380.log", "pid": 1262, "uid": 0, "gid": 0,
+"@message": "aGVsbG8gd29ybGQ=",
+"@timestamp": "2014-09-11T14:19:09.000+0000","user": "root", "group":
+"root",
+"command": "L3Vzci9sb2NhbC9iaW4vcmVkaXMtc2VydmVyIC",
+"@version": "0.1.2",
+"@fields": {
+    "first_field": "first_value",
+    "second_field": "second_value" },
+"@tags": ["mytag"]}
+````
 
 
 Installing from sources
@@ -218,6 +235,14 @@ perform analyses while running (like memcheck):
     FUSE_KAFKA_PREFIX="valgrind --leak-check=yes" ./src/fuse_kafka.py start
 
 
+Debugging with gdb
+==================
+
+You can also debug using FUSE\_KAFKA\_PREFIX, here is how to do so:
+
+    $ echo -e "set follow-fork-mode child\nrun\nwhere" > /tmp/gdb_opts
+    $ FUSE_KAFKA_PREFIX="gdb -x /tmp/gdb_opts --args" ./src/fuse_kafka.py start
+
 Anti hanging
 ============
 
@@ -246,12 +271,16 @@ Here are available options:
 
 For example, this will download packages on a remote server:
 
-    ./setup.sh -r mykey.pem root@myserver -d
+````shell
+$ ./setup.sh -r mykey.pem root@myserver -d
+````
 
 This will generate an archive that will be copied locally.
 You can then install that archive via:
 
-    ./setup.sh -f fuse_kafka.tar.bz2
+````shell
+$ ./setup.sh -f fuse_kafka.tar.bz2
+````
 
 
 Networking tests
@@ -259,7 +288,9 @@ Networking tests
 
 A more realistic network setup test can be launched (as root) via:
 
-    sudo ./build.py mininet
+````shell
+$ sudo ./build.py mininet
+````
 
 This requires [mininet](http://mininet.org).
 
@@ -269,7 +300,9 @@ fuse_kafka is running on h3 (host number three).
 This will launch a mininet shell.
 For example, if you want to try and write on fuse_kafka host, issue a:
 
-    mininet> h3 echo lol > /tmp/fuse-kafka-test/xd
+````shell
+mininet> h3 echo lol > /tmp/fuse-kafka-test/xd
+````
 
 The consumer log is available via (/tmp/kafka_consumer.log). 
 
@@ -284,18 +317,27 @@ A logstash input plugin to read from kafka is available in src/logstash/inputs/k
 Provided you have kafka installed in . (which `./build.py kafka_start` should do),
 you can try it by downloading logastash and running:
 
-    /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
+````shell
+$ /path/to/bin/logstash -p ./src/ -f ./conf/logstash.conf
+````
 
 Unit testing
 ============
 
 To launch unit tests, issue a:
 
+````shell
     ./build.py test
+````
+
+C unit test will be launched with gdb.
+If you set NO_BATCH environment variable, you will get gdb prompts.
 
 To test against multiple python versions (provided tox is installed), issue a:
 
-    tox
+````shell
+$ tox
+````
 
 (see .travis.yml `# prerequisites for tox` to install these versions on ubuntu).
 
@@ -305,7 +347,9 @@ C Unit testing
 
 To run c unit tests, do a:
 
-    $ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test && ./build.py c_test
+````shell
+$ rm -rf out/ ; mkdir -p out/c ; ./build.py compile_test && ./build.py c_test
+````
 
 
 Working with other logging systems
@@ -319,7 +363,9 @@ for example by restarting the process.
 For example, If you're using rsyslogd and it is writing to /var/log/syslog,
 after starting fuse_kafka on /var/log, you should issue a:
 
-    service rsyslogd restart
+````shell
+$ service rsyslogd restart
+````
 
 After stopping fuse_kafka, you should also restart rsyslogd so 
 it re-acquires a file descriptor on the actual FS.
@@ -329,7 +375,9 @@ Benchmarks
 
 Provided you have bonnie++ installed, you can run benchmarks with
 
-    ./build.py bench
+````shell
+$ ./build.py bench
+````
 
 This will generate `bench/results.js`, which you can see via `benchs/benchmarks.html`
 
@@ -341,20 +389,131 @@ But when it starts, you might not have all its configuration available yet.
 Or you might want to add brokers or use new zookeepers.
 
 Dynamic configuration allows to modify the configuration on the fly.
-You won't be able to add watched directory on the fly, but you will be able to:
+You will be able to:
 
 * point to new zookeepers/brokers
 * update tags, fields
+* modify watched directories
 
 Just update your configuration, then, issue a:
 
-    sevice fuse_kafka reload
+````shell
+$ sevice fuse_kafka reload
+````
 
 Or, if you using the developer version:
 
-    ./src/fuse_kafka.py reload
+````shell
+./src/fuse_kafka.py reload
+````
 
 To use this feature, you must make sure that /var/run/fuse_kafka.args is accessible to fuse_kafka.
+
+
+Input plugin
+============
+
+You can write your own input plugins in `src/plugins/input`.
+An example input plugin is available in `src/plugins/input/example.c`.
+A plugin should include:
+
+````c
+#include <input_plugin.h>
+````
+
+Its entry point is the function:
+
+````c
+int input_setup(int argc, char** argv, void* conf)
+````
+
+With parameters being:
+
+parameter name | description
+---------------|------------
+argc           | number of command line arguments (without arguments given after `--` )
+argv           | array of arguments
+conf           | parsed configuration based on arguments given after `--` (see config.h)
+
+It should output it's data using:
+
+````c
+void output_write(const char *path, const char *buf,
+        size_t size, off_t offset)
+````
+
+With parameters being:
+
+parameter name | description
+---------------|------------
+path           | path of the file where the log line comes from
+buf            | buffer containing the log line
+size           | size of the log line
+offset         | start of the log line in buf
+
+If you require some library, you should refer to its pkg-config name via the macro:
+
+````c
+require(your-library)
+````
+
+Input plugin unit testing
+=========================
+
+Each input plugin should have a unit test (with the suffix `_test`).
+
+For example, `src/plugins/input/overlay.c` has a unit test 
+`src/plugins/input/overlay_test.c`
+
+As for the rest of the project, we use minunit for that.
+Just include `minuti.h` and your plugin source.
+Define your unit test functions, as for example:
+
+```C
+static char* test_something()
+{
+    /*...*/
+    mu_assert("42 is 42", 42 == 42);
+    /*...*/
+    return 0;
+}
+````
+
+And then define an `all_test()` function calling all tests
+
+````C
+static char* all_tests()
+{
+    mu_run_test(test_something);
+    mu_run_test(test_something_else);
+    return 0;
+}
+````
+
+and then
+
+````C
+#include "minunit.c"
+````
+Also, you should exclude your test file from code coverage, using:
+
+````C
+// LCOV_EXCL_START
+/* code to exclude */
+// LCOV_EXCL_STOP
+````
+
+Write tests
+===========
+
+To compare inotify output plugin with overlay output plugin, run:
+
+    rm -rf /tmp/zookeeper /tmp/kafka-logs;./build.py write_tests
+
+This will generate two files, /tmp/write_tests.overlay 
+and /tmp/write_tests.inotify with the writes received by kafka.
+
+This uses the file write_test.rb
 
 Licensing
 =========

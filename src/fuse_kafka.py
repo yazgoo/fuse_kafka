@@ -195,6 +195,8 @@ class FuseKafkaService:
             print("fuse_kafka started")
     def stop(self):
         """ Stops fuse_kafka processes """
+        for dir in self.list_watched_directories():
+            subprocess.call(["fusermount", "-uz", dir])
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
