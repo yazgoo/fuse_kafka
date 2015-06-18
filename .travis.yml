@@ -27,7 +27,7 @@ script:
     - LD_LIBRARY_PATH=. ./build.py test
     - tox # to test fuse_kafka against multiple python versions
 #    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || sudo ./build.py mininet"
-#    - ./build.py write_tests
+    - ./build.py write_tests
     - head -1 /tmp/write_tests.overlay /tmp/write_tests.inotify
     - sudo ./build.py install
 after_failure:
