@@ -56,6 +56,7 @@ static char* test_setup_kafka()
         TEST "a", "--fields", "a", "b", "--tags", "1"};
     int argc = sizeof(argv)/sizeof(char*);
     private_data.brokers = brokers;
+    private_data.brokers_n = 1;
     private_data.topic = &topic;
     private_data.zookeepers_n = 0;
     private_data.quota_n = 1;
