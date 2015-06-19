@@ -602,6 +602,11 @@ class TestMininet(unittest.TestCase):
                 .format(self.zookeeper.IP(), conf))
         self.cmd(self.fuse_kafka, "ln -s {}/fuse_kafka {}/../fuse_kafka"
                 .format(cwd, conf))
+        for path in glob.glob(cwd + "/*.so"):
+            self.cmd(self.fuse_kafka, "ln -s {} {}/../{}"
+                    .format(path, conf, path.split("/")[-1]))
+        self.cmd(self.fuse_kafka, "ln -s {}/fuse_kafka {}/../fuse_kafka"
+                .format(cwd, conf))
         self.cmd(self.fuse_kafka, 'bash -c "cd {}/..;{}src/fuse_kafka.py start > {} 2>&1"'
                 .format(conf, cwd, self.log_path('fuse_kafka')))
     def consumer_start(self):
@@ -611,6 +616,7 @@ class TestMininet(unittest.TestCase):
         command = os.getcwd() + "/" + kafka_bin_directory
         command += "kafka-console-consumer.sh --zookeeper "
         command += self.zookeeper.IP() + " --topic logs"
+        print(command)
         self.impersonate() # popen require setns()
         self.consumer = self.client.popen(command)
         self.impersonate(False)

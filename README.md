@@ -289,6 +289,7 @@ Networking tests
 A more realistic network setup test can be launched (as root) via:
 
 ````shell
+$ ./build.py
 $ sudo ./build.py mininet
 ````
 
@@ -297,7 +298,8 @@ This requires [mininet](http://mininet.org).
 This will launch kafka, zookeeper, fuse_kafka, and a consumer 
 on their own mininet virtual hosts with their own network stacks.
 fuse_kafka is running on h3 (host number three).
-This will launch a mininet shell.
+
+You can also launch a mininet shell.
 For example, if you want to try and write on fuse_kafka host, issue a:
 
 ````shell
@@ -308,6 +310,11 @@ The consumer log is available via (/tmp/kafka_consumer.log).
 
 `quit` or `^D` will stop mininet and cleanup the virtual network.
 
+To debug, you should start having a look at 
+
+- /tmp/fuse_kafka.log
+- /tmp/zookeeper.log
+- /tmp/kafka.log
 
 Logstash input plugin
 =====================
