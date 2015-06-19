@@ -685,135 +685,141 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00602"></a>00602                 .format(self.zookeeper.IP(), conf))
 <a name="l00603"></a>00603         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;ln -s {}/fuse_kafka {}/../fuse_kafka&quot;</span>
 <a name="l00604"></a>00604                 .format(cwd, conf))
-<a name="l00605"></a>00605         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;bash -c &quot;cd {}/..;{}src/fuse_kafka.py start &gt; {} 2&gt;&amp;1&quot;&#39;</span>
-<a name="l00606"></a>00606                 .format(conf, cwd, self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;fuse_kafka&#39;</span>)))
-<a name="l00607"></a><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">00607</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>(self):
-<a name="l00608"></a>00608         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka consumer &quot;&quot;&quot;</span>
-<a name="l00609"></a>00609         <span class="keywordflow">if</span> os.path.exists(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>)):
-<a name="l00610"></a>00610             os.remove(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>))
-<a name="l00611"></a>00611         command = os.getcwd() + <span class="stringliteral">&quot;/&quot;</span> + kafka_bin_directory
-<a name="l00612"></a>00612         command += <span class="stringliteral">&quot;kafka-console-consumer.sh --zookeeper &quot;</span>
-<a name="l00613"></a>00613         command += self.zookeeper.IP() + <span class="stringliteral">&quot; --topic logs&quot;</span>
-<a name="l00614"></a>00614         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>() <span class="comment"># popen require setns()</span>
-<a name="l00615"></a>00615         self.<a class="code" href="classbuild_1_1TestMininet.html#af92602e538061b48fc4324a5c4abdbdc">consumer</a> = self.client.popen(command)
-<a name="l00616"></a>00616         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(<span class="keyword">False</span>)
-<a name="l00617"></a><a class="code" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">00617</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">tearDown</a>(self):
-<a name="l00618"></a>00618         <span class="stringliteral">&quot;&quot;&quot; stops fuse_kafka, zookeeper, kafka, cleans their working directory and </span>
-<a name="l00619"></a>00619 <span class="stringliteral">        stops the virtual topology &quot;&quot;&quot;</span>
-<a name="l00620"></a>00620         <span class="keywordflow">for</span> host <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a>: self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(host, <span class="stringliteral">&#39;pkill -9 java&#39;</span>) 
-<a name="l00621"></a>00621         self.consumer.kill()
-<a name="l00622"></a>00622         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;src/fuse_kafka.py stop&#39;</span>)
-<a name="l00623"></a>00623         os.remove(self.<a class="code" href="classbuild_1_1TestMininet.html#af204dd0350ebd9e7852ab138ebfc4ff8">kafka_config</a>.name)
-<a name="l00624"></a>00624         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
-<a name="l00625"></a>00625         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>()
-<a name="l00626"></a>00626         self.net.stop()
-<a name="l00627"></a><a class="code" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">00627</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">setUp</a>(self):
-<a name="l00628"></a>00628         <span class="stringliteral">&quot;&quot;&quot; starts the topology, downloads kafka, does a data directory</span>
-<a name="l00629"></a>00629 <span class="stringliteral">        cleanup in case of previous run &quot;&quot;&quot;</span>
-<a name="l00630"></a>00630         self.<a class="code" href="classbuild_1_1TestMininet.html#a0409fdeedd0876acc047a7df996676dc">launch</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-start.sh &#39;</span>
-<a name="l00631"></a>00631         self.<a class="code" href="classbuild_1_1TestMininet.html#aeb337ea4cb2d7f587a5f954339220dd3">stop</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-stop.sh &#39;</span>
-<a name="l00632"></a>00632         self.<a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>()
-<a name="l00633"></a>00633         kafka_download()
-<a name="l00634"></a>00634         self.<a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>()
-<a name="l00635"></a>00635         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
-<a name="l00636"></a>00636         self.<a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>()
-<a name="l00637"></a>00637         <span class="comment"># wait for fuse-kafka to be ready</span>
-<a name="l00638"></a>00638         time.sleep(2)
-<a name="l00639"></a>00639     <span class="keyword">def </span>check(self):
-<a name="l00640"></a>00640         self.assertTrue(os.path.exists(self.<a class="code" href="classbuild_1_1TestMininet.html#aa5a80d6dbd7c8ec8c1a729d941cb7429">fuse_kafka_path</a>),
-<a name="l00641"></a>00641             <span class="stringliteral">&quot;you must build fuse kafka to run tests&quot;</span>)
-<a name="l00642"></a>00642         os.stat(<span class="stringliteral">&quot;/tmp/fuse-kafka-test&quot;</span>)
-<a name="l00643"></a>00643     <span class="keyword">def </span>get_consumed_events(self, expected_number):
-<a name="l00644"></a>00644         <span class="keyword">from</span> mininet.util <span class="keyword">import</span> pmonitor
-<a name="l00645"></a>00645         events = []
-<a name="l00646"></a>00646         log = <a class="code" href="classbuild_1_1FuseKafkaLog.html">FuseKafkaLog</a>()
-<a name="l00647"></a>00647         popens = {}
-<a name="l00648"></a>00648         popens[self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a>] = self.<a class="code" href="classbuild_1_1TestMininet.html#af92602e538061b48fc4324a5c4abdbdc">consumer</a>
-<a name="l00649"></a>00649         <span class="keywordflow">for</span> host, line <span class="keywordflow">in</span> pmonitor(popens):
-<a name="l00650"></a>00650             self.consumer.poll()
-<a name="l00651"></a>00651             events.append(log.load_fuse_kafka_event(line))
-<a name="l00652"></a>00652             <span class="keywordflow">if</span> len(events) &gt;= expected_number:
-<a name="l00653"></a>00653                 <span class="keywordflow">break</span>
-<a name="l00654"></a>00654         self.assertEqual(expected_number, len(events))
-<a name="l00655"></a>00655         <span class="keywordflow">return</span> events
-<a name="l00656"></a>00656     <span class="keyword">def </span>write_to_log(self, what = &quot;test&quot;):
-<a name="l00657"></a>00657         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;echo -n {} &gt; /tmp/fuse-kafka-test/xd 2&gt;&amp;1&quot;</span>.format(what))
-<a name="l00658"></a><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">00658</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>(self):
-<a name="l00659"></a>00659         <span class="stringliteral">&quot;&quot;&quot; starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer &quot;&quot;&quot;</span>
-<a name="l00660"></a>00660         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
-<a name="l00661"></a>00661         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
-<a name="l00662"></a>00662         self.<a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>()
-<a name="l00663"></a>00663         self.<a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>()
-<a name="l00664"></a><a class="code" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">00664</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">test_basic</a>(self):
-<a name="l00665"></a>00665         <span class="stringliteral">&quot;&quot;&quot; runs the topology with a mininet shell &quot;&quot;&quot;</span>
-<a name="l00666"></a>00666         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00667"></a>00667         <span class="keywordflow">for</span> message <span class="keywordflow">in</span> [<span class="stringliteral">&quot;hello&quot;</span>, <span class="stringliteral">&quot;world&quot;</span>]:
-<a name="l00668"></a>00668             self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>(message)
-<a name="l00669"></a>00669             events = self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00670"></a>00670             self.assertEqual(message, events[0][<span class="stringliteral">&quot;@message&quot;</span>])
-<a name="l00671"></a>00671         expected = [<span class="stringliteral">&quot;foo&quot;</span>, <span class="stringliteral">&quot;bar&quot;</span>]
-<a name="l00672"></a>00672         <span class="keywordflow">for</span> message <span class="keywordflow">in</span> expected:
-<a name="l00673"></a>00673             self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>(message)
-<a name="l00674"></a>00674         actual = [event[<span class="stringliteral">&quot;@message&quot;</span>] <span class="keywordflow">for</span> event <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(2)]
-<a name="l00675"></a>00675         self.assertEqual(sorted(expected), sorted(actual))
-<a name="l00676"></a>00676     <span class="keyword">def </span>test_shutting_down_kafka(self):
-<a name="l00677"></a>00677         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00678"></a>00678         self.<a class="code" href="classbuild_1_1TestMininet.html#a98246d1c87247c0a177700aaf62b9bf8">kafka_stop</a>()
-<a name="l00679"></a>00679         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00680"></a>00680         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
-<a name="l00681"></a>00681         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00682"></a>00682     <span class="keyword">def </span>test_shutting_down_zookeeper(self):
+<a name="l00605"></a>00605         <span class="keywordflow">for</span> path <span class="keywordflow">in</span> glob.glob(cwd + <span class="stringliteral">&quot;/*.so&quot;</span>):
+<a name="l00606"></a>00606             self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;ln -s {} {}/../{}&quot;</span>
+<a name="l00607"></a>00607                     .format(path, conf, path.split(<span class="stringliteral">&quot;/&quot;</span>)[-1]))
+<a name="l00608"></a>00608         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;ln -s {}/fuse_kafka {}/../fuse_kafka&quot;</span>
+<a name="l00609"></a>00609                 .format(cwd, conf))
+<a name="l00610"></a>00610         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;bash -c &quot;cd {}/..;{}src/fuse_kafka.py start &gt; {} 2&gt;&amp;1&quot;&#39;</span>
+<a name="l00611"></a>00611                 .format(conf, cwd, self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;fuse_kafka&#39;</span>)))
+<a name="l00612"></a><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">00612</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>(self):
+<a name="l00613"></a>00613         <span class="stringliteral">&quot;&quot;&quot; starts fuse_kafka consumer &quot;&quot;&quot;</span>
+<a name="l00614"></a>00614         <span class="keywordflow">if</span> os.path.exists(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>)):
+<a name="l00615"></a>00615             os.remove(self.<a class="code" href="classbuild_1_1TestMininet.html#a8523c1dd0a6bb4fbd65f52c7a819924e">log_path</a>(<span class="stringliteral">&#39;consumer&#39;</span>))
+<a name="l00616"></a>00616         command = os.getcwd() + <span class="stringliteral">&quot;/&quot;</span> + kafka_bin_directory
+<a name="l00617"></a>00617         command += <span class="stringliteral">&quot;kafka-console-consumer.sh --zookeeper &quot;</span>
+<a name="l00618"></a>00618         command += self.zookeeper.IP() + <span class="stringliteral">&quot; --topic logs&quot;</span>
+<a name="l00619"></a>00619         print(command)
+<a name="l00620"></a>00620         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>() <span class="comment"># popen require setns()</span>
+<a name="l00621"></a>00621         self.<a class="code" href="classbuild_1_1TestMininet.html#af92602e538061b48fc4324a5c4abdbdc">consumer</a> = self.client.popen(command)
+<a name="l00622"></a>00622         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>(<span class="keyword">False</span>)
+<a name="l00623"></a><a class="code" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">00623</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a12a916934ea6a0ebf8e8e530f66575ac">tearDown</a>(self):
+<a name="l00624"></a>00624         <span class="stringliteral">&quot;&quot;&quot; stops fuse_kafka, zookeeper, kafka, cleans their working directory and </span>
+<a name="l00625"></a>00625 <span class="stringliteral">        stops the virtual topology &quot;&quot;&quot;</span>
+<a name="l00626"></a>00626         <span class="keywordflow">for</span> host <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a3f2a95206e01e7d4c096df1366cabab9">java_clients</a>: self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(host, <span class="stringliteral">&#39;pkill -9 java&#39;</span>) 
+<a name="l00627"></a>00627         self.consumer.kill()
+<a name="l00628"></a>00628         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&#39;src/fuse_kafka.py stop&#39;</span>)
+<a name="l00629"></a>00629         os.remove(self.<a class="code" href="classbuild_1_1TestMininet.html#af204dd0350ebd9e7852ab138ebfc4ff8">kafka_config</a>.name)
+<a name="l00630"></a>00630         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
+<a name="l00631"></a>00631         self.<a class="code" href="classbuild_1_1TestMininet.html#a8e289e361dade20ec1ad1c4e21cadd1a">impersonate</a>()
+<a name="l00632"></a>00632         self.net.stop()
+<a name="l00633"></a><a class="code" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">00633</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a9aaae0dd51d2509a40d597bdb90d375a">setUp</a>(self):
+<a name="l00634"></a>00634         <span class="stringliteral">&quot;&quot;&quot; starts the topology, downloads kafka, does a data directory</span>
+<a name="l00635"></a>00635 <span class="stringliteral">        cleanup in case of previous run &quot;&quot;&quot;</span>
+<a name="l00636"></a>00636         self.<a class="code" href="classbuild_1_1TestMininet.html#a0409fdeedd0876acc047a7df996676dc">launch</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-start.sh &#39;</span>
+<a name="l00637"></a>00637         self.<a class="code" href="classbuild_1_1TestMininet.html#aeb337ea4cb2d7f587a5f954339220dd3">stop</a> = kafka_bin_directory + <span class="stringliteral">&#39;{}-server-stop.sh &#39;</span>
+<a name="l00638"></a>00638         self.<a class="code" href="classbuild_1_1TestMininet.html#ae28256d061cb92ca35a47abfa3352c6f">start_network</a>()
+<a name="l00639"></a>00639         kafka_download()
+<a name="l00640"></a>00640         self.<a class="code" href="classbuild_1_1TestMininet.html#aa222c3691d93c73ac4e047e163fa791c">clients_initialize</a>()
+<a name="l00641"></a>00641         self.<a class="code" href="classbuild_1_1TestMininet.html#a83b14b12435ff9ffa7332fc2b8e197ae">data_directories_cleanup</a>()
+<a name="l00642"></a>00642         self.<a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>()
+<a name="l00643"></a>00643         <span class="comment"># wait for fuse-kafka to be ready</span>
+<a name="l00644"></a>00644         time.sleep(2)
+<a name="l00645"></a>00645     <span class="keyword">def </span>check(self):
+<a name="l00646"></a>00646         self.assertTrue(os.path.exists(self.<a class="code" href="classbuild_1_1TestMininet.html#aa5a80d6dbd7c8ec8c1a729d941cb7429">fuse_kafka_path</a>),
+<a name="l00647"></a>00647             <span class="stringliteral">&quot;you must build fuse kafka to run tests&quot;</span>)
+<a name="l00648"></a>00648         os.stat(<span class="stringliteral">&quot;/tmp/fuse-kafka-test&quot;</span>)
+<a name="l00649"></a>00649     <span class="keyword">def </span>get_consumed_events(self, expected_number):
+<a name="l00650"></a>00650         <span class="keyword">from</span> mininet.util <span class="keyword">import</span> pmonitor
+<a name="l00651"></a>00651         events = []
+<a name="l00652"></a>00652         log = <a class="code" href="classbuild_1_1FuseKafkaLog.html">FuseKafkaLog</a>()
+<a name="l00653"></a>00653         popens = {}
+<a name="l00654"></a>00654         popens[self.<a class="code" href="classbuild_1_1TestMininet.html#ae4493ea1ec4b060509916390a2e3787b">client</a>] = self.<a class="code" href="classbuild_1_1TestMininet.html#af92602e538061b48fc4324a5c4abdbdc">consumer</a>
+<a name="l00655"></a>00655         <span class="keywordflow">for</span> host, line <span class="keywordflow">in</span> pmonitor(popens):
+<a name="l00656"></a>00656             self.consumer.poll()
+<a name="l00657"></a>00657             events.append(log.load_fuse_kafka_event(line))
+<a name="l00658"></a>00658             <span class="keywordflow">if</span> len(events) &gt;= expected_number:
+<a name="l00659"></a>00659                 <span class="keywordflow">break</span>
+<a name="l00660"></a>00660         self.assertEqual(expected_number, len(events))
+<a name="l00661"></a>00661         <span class="keywordflow">return</span> events
+<a name="l00662"></a>00662     <span class="keyword">def </span>write_to_log(self, what = &quot;test&quot;):
+<a name="l00663"></a>00663         self.<a class="code" href="classbuild_1_1TestMininet.html#aa13c4ec02d058002da3c771aff0114bd">cmd</a>(self.<a class="code" href="classbuild_1_1TestMininet.html#aad28b00ed30aa22a2fd5aa10acddb01f">fuse_kafka</a>, <span class="stringliteral">&quot;echo -n {} &gt; /tmp/fuse-kafka-test/xd 2&gt;&amp;1&quot;</span>.format(what))
+<a name="l00664"></a><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">00664</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#a595237e962e2bc7b55329097775624c8">components_start</a>(self):
+<a name="l00665"></a>00665         <span class="stringliteral">&quot;&quot;&quot; starts zookeepre, kafka, fuse_kafka, fuse_kafka consumer &quot;&quot;&quot;</span>
+<a name="l00666"></a>00666         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
+<a name="l00667"></a>00667         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
+<a name="l00668"></a>00668         self.<a class="code" href="classbuild_1_1TestMininet.html#a731ba3e4c942e40ebf114bfd1b01a287">fuse_kafka_start</a>()
+<a name="l00669"></a>00669         self.<a class="code" href="classbuild_1_1TestMininet.html#a8239e151542b50fc2152cfd431a71095">consumer_start</a>()
+<a name="l00670"></a><a class="code" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">00670</a>     <span class="keyword">def </span><a class="code" href="classbuild_1_1TestMininet.html#afa46c35fb764e203cc34a456c021ef7e">test_basic</a>(self):
+<a name="l00671"></a>00671         <span class="stringliteral">&quot;&quot;&quot; runs the topology with a mininet shell &quot;&quot;&quot;</span>
+<a name="l00672"></a>00672         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
+<a name="l00673"></a>00673         <span class="keywordflow">for</span> message <span class="keywordflow">in</span> [<span class="stringliteral">&quot;hello&quot;</span>, <span class="stringliteral">&quot;world&quot;</span>]:
+<a name="l00674"></a>00674             self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>(message)
+<a name="l00675"></a>00675             events = self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
+<a name="l00676"></a>00676             self.assertEqual(message, events[0][<span class="stringliteral">&quot;@message&quot;</span>])
+<a name="l00677"></a>00677         expected = [<span class="stringliteral">&quot;foo&quot;</span>, <span class="stringliteral">&quot;bar&quot;</span>]
+<a name="l00678"></a>00678         <span class="keywordflow">for</span> message <span class="keywordflow">in</span> expected:
+<a name="l00679"></a>00679             self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>(message)
+<a name="l00680"></a>00680         actual = [event[<span class="stringliteral">&quot;@message&quot;</span>] <span class="keywordflow">for</span> event <span class="keywordflow">in</span> self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(2)]
+<a name="l00681"></a>00681         self.assertEqual(sorted(expected), sorted(actual))
+<a name="l00682"></a>00682     <span class="keyword">def </span>test_shutting_down_kafka(self):
 <a name="l00683"></a>00683         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00684"></a>00684         self.<a class="code" href="classbuild_1_1TestMininet.html#a1fbdfc51881cb089360d8fae89f47430">zookeeper_stop</a>()
+<a name="l00684"></a>00684         self.<a class="code" href="classbuild_1_1TestMininet.html#a98246d1c87247c0a177700aaf62b9bf8">kafka_stop</a>()
 <a name="l00685"></a>00685         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00686"></a>00686         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
+<a name="l00686"></a>00686         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
 <a name="l00687"></a>00687         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00688"></a>00688     <span class="keyword">def </span>test_bringing_down_kafka(self):
+<a name="l00688"></a>00688     <span class="keyword">def </span>test_shutting_down_zookeeper(self):
 <a name="l00689"></a>00689         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00690"></a>00690         self.<a class="code" href="classbuild_1_1TestMininet.html#a98246d1c87247c0a177700aaf62b9bf8">kafka_stop</a>()
+<a name="l00690"></a>00690         self.<a class="code" href="classbuild_1_1TestMininet.html#a1fbdfc51881cb089360d8fae89f47430">zookeeper_stop</a>()
 <a name="l00691"></a>00691         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00692"></a>00692         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
+<a name="l00692"></a>00692         self.<a class="code" href="classbuild_1_1TestMininet.html#aa3eddff2c619b28456be8a68dfe0c8cd">zookeeper_start</a>()
 <a name="l00693"></a>00693         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00694"></a>00694     <span class="keyword">def </span>test_cutting_kafka(self):
+<a name="l00694"></a>00694     <span class="keyword">def </span>test_bringing_down_kafka(self):
 <a name="l00695"></a>00695         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00696"></a>00696         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00697"></a>00697         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
-<a name="l00698"></a>00698         self.assertRaises(ValueError, self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>, (1))
-<a name="l00699"></a>00699         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;up&quot;</span>) 
-<a name="l00700"></a>00700         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00701"></a>00701     <span class="keyword">def </span>test_cutting_zookeeper(self):
-<a name="l00702"></a>00702         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00703"></a>00703         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00704"></a>00704         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
-<a name="l00705"></a>00705         <span class="comment"># zookeeper being brought down should not influence an already launched producer</span>
+<a name="l00696"></a>00696         self.<a class="code" href="classbuild_1_1TestMininet.html#a98246d1c87247c0a177700aaf62b9bf8">kafka_stop</a>()
+<a name="l00697"></a>00697         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
+<a name="l00698"></a>00698         self.<a class="code" href="classbuild_1_1TestMininet.html#abea6fef76c2d624f8ab4f9834fa30825">kafka_start</a>()
+<a name="l00699"></a>00699         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
+<a name="l00700"></a>00700     <span class="keyword">def </span>test_cutting_kafka(self):
+<a name="l00701"></a>00701         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
+<a name="l00702"></a>00702         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
+<a name="l00703"></a>00703         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
+<a name="l00704"></a>00704         self.assertRaises(ValueError, self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>, (1))
+<a name="l00705"></a>00705         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;up&quot;</span>) 
 <a name="l00706"></a>00706         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00707"></a>00707     <span class="keyword">def </span>test_cutting_kafka_periodically(self):
+<a name="l00707"></a>00707     <span class="keyword">def </span>test_cutting_zookeeper(self):
 <a name="l00708"></a>00708         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
-<a name="l00709"></a>00709         ranges = {10: range(3), 1: range(4), 0: range(10)}
-<a name="l00710"></a>00710         <span class="keywordflow">for</span> sleep_time <span class="keywordflow">in</span> ranges:
-<a name="l00711"></a>00711             print(<span class="stringliteral">&quot;sleep time: &quot;</span> + str(sleep_time))
-<a name="l00712"></a>00712             <span class="keywordflow">for</span> i <span class="keywordflow">in</span> ranges[sleep_time]:
-<a name="l00713"></a>00713                 print(<span class="stringliteral">&quot;loop # &quot;</span> + str(i))
-<a name="l00714"></a>00714                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
-<a name="l00715"></a>00715                 time.sleep(sleep_time)
-<a name="l00716"></a>00716                 self.assertRaises(ValueError, self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>, (1))
-<a name="l00717"></a>00717                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;up&quot;</span>) 
-<a name="l00718"></a>00718                 <span class="keywordflow">if</span> sleep_time &gt; 1:
-<a name="l00719"></a>00719                     time.sleep(7) <span class="comment"># wait for kafka to be restarted</span>
-<a name="l00720"></a>00720                 self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
-<a name="l00721"></a>00721                 self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
-<a name="l00722"></a>00722 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
-<a name="l00723"></a>00723     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> <span class="keywordflow">not</span> (sys.argv[1] <span class="keywordflow">in</span> [<span class="stringliteral">&quot;quickstart&quot;</span>, <span class="stringliteral">&quot;mininet&quot;</span>, <span class="stringliteral">&quot;bench&quot;</span>, <span class="stringliteral">&quot;multiple&quot;</span>]):
-<a name="l00724"></a>00724         main()
-<a name="l00725"></a>00725     <span class="keywordflow">else</span>:
-<a name="l00726"></a>00726         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;multiple&quot;</span>:
-<a name="l00727"></a>00727             <span class="keywordflow">for</span> arg <span class="keywordflow">in</span> sys.argv[2:]:
-<a name="l00728"></a>00728                 locals()[arg]()
-<a name="l00729"></a>00729         <span class="keywordflow">elif</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
-<a name="l00730"></a>00730         <span class="keywordflow">elif</span> sys.argv[1] == <span class="stringliteral">&quot;bench&quot;</span>: bench()
-<a name="l00731"></a>00731         <span class="keywordflow">else</span>:
-<a name="l00732"></a>00732             sys.argv.pop(0)
-<a name="l00733"></a>00733             unittest.main()
+<a name="l00709"></a>00709         self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
+<a name="l00710"></a>00710         self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#aa22f4195bb2ba1e4f566fd0d0dd68644">zookeeper</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
+<a name="l00711"></a>00711         <span class="comment"># zookeeper being brought down should not influence an already launched producer</span>
+<a name="l00712"></a>00712         self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
+<a name="l00713"></a>00713     <span class="keyword">def </span>test_cutting_kafka_periodically(self):
+<a name="l00714"></a>00714         self.<a class="code" href="classbuild_1_1TestMininet.html#aadb6a354f440f7dcbf95529230a51ac7">check</a>()
+<a name="l00715"></a>00715         ranges = {10: range(3), 1: range(4), 0: range(10)}
+<a name="l00716"></a>00716         <span class="keywordflow">for</span> sleep_time <span class="keywordflow">in</span> ranges:
+<a name="l00717"></a>00717             print(<span class="stringliteral">&quot;sleep time: &quot;</span> + str(sleep_time))
+<a name="l00718"></a>00718             <span class="keywordflow">for</span> i <span class="keywordflow">in</span> ranges[sleep_time]:
+<a name="l00719"></a>00719                 print(<span class="stringliteral">&quot;loop # &quot;</span> + str(i))
+<a name="l00720"></a>00720                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;down&quot;</span>) 
+<a name="l00721"></a>00721                 time.sleep(sleep_time)
+<a name="l00722"></a>00722                 self.assertRaises(ValueError, self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>, (1))
+<a name="l00723"></a>00723                 self.net.configLinkStatus(self.<a class="code" href="classbuild_1_1TestMininet.html#a19fdf32f6e4a5c549ecdfd8d10154c9e">kafka</a>.name, self.<a class="code" href="classbuild_1_1TestMininet.html#a836f993654af8eeffe238b33897be3f7">switch</a>.name, <span class="stringliteral">&quot;up&quot;</span>) 
+<a name="l00724"></a>00724                 <span class="keywordflow">if</span> sleep_time &gt; 1:
+<a name="l00725"></a>00725                     time.sleep(7) <span class="comment"># wait for kafka to be restarted</span>
+<a name="l00726"></a>00726                 self.<a class="code" href="classbuild_1_1TestMininet.html#a49460fccee66fd9161039a6c4b487e47">write_to_log</a>()
+<a name="l00727"></a>00727                 self.<a class="code" href="classbuild_1_1TestMininet.html#a38fc197036598a9a97e5900260de259d">get_consumed_events</a>(1)
+<a name="l00728"></a>00728 <span class="keywordflow">if</span> __name__ == <span class="stringliteral">&quot;__main__&quot;</span>:
+<a name="l00729"></a>00729     <span class="keywordflow">if</span> len(sys.argv) &lt;= 1 <span class="keywordflow">or</span> <span class="keywordflow">not</span> (sys.argv[1] <span class="keywordflow">in</span> [<span class="stringliteral">&quot;quickstart&quot;</span>, <span class="stringliteral">&quot;mininet&quot;</span>, <span class="stringliteral">&quot;bench&quot;</span>, <span class="stringliteral">&quot;multiple&quot;</span>]):
+<a name="l00730"></a>00730         main()
+<a name="l00731"></a>00731     <span class="keywordflow">else</span>:
+<a name="l00732"></a>00732         <span class="keywordflow">if</span> sys.argv[1] == <span class="stringliteral">&quot;multiple&quot;</span>:
+<a name="l00733"></a>00733             <span class="keywordflow">for</span> arg <span class="keywordflow">in</span> sys.argv[2:]:
+<a name="l00734"></a>00734                 locals()[arg]()
+<a name="l00735"></a>00735         <span class="keywordflow">elif</span> sys.argv[1] == <span class="stringliteral">&quot;quickstart&quot;</span>: quickstart()
+<a name="l00736"></a>00736         <span class="keywordflow">elif</span> sys.argv[1] == <span class="stringliteral">&quot;bench&quot;</span>: bench()
+<a name="l00737"></a>00737         <span class="keywordflow">else</span>:
+<a name="l00738"></a>00738             sys.argv.pop(0)
+<a name="l00739"></a>00739             unittest.main()
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -832,7 +838,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jun 19 2015 08:03:21 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 19 2015 09:23:18 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
