@@ -195,8 +195,6 @@ class FuseKafkaService:
             print("fuse_kafka started")
     def stop(self):
         """ Stops fuse_kafka processes """
-        for dir in self.list_watched_directories():
-            subprocess.call(["fusermount", "-uz", dir])
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
@@ -206,17 +204,18 @@ class FuseKafkaService:
         if self.get_status() == 3: self.start()
         else:
             self.configuration = Configuration()
+            configured_directories = copy.deepcopy(self.configuration.conf['directories'])
             with open(var_run_path + "/fuse_kafka.args", "w") as f:
                 fcntl.fcntl(f, fcntl.LOCK_EX)
                 f.write(str(self.configuration))
             watched_directories = self.list_watched_directories()
             self.start_excluding_directories(watched_directories)
             for to_stop_watching in [a for a in watched_directories 
-                    if a not in self.configuration.conf['directories']]:
+                    if a not in configured_directories]:
                 self.stop_watching_directory(to_stop_watching)
     def stop_watching_directory(self, to_stop_watching):
         """ Stops fuse_kafka process for a specific directory """
-        subprocess.call(["fusermount", "-f", " ".join(self.prefix)])
+	subprocess.call(["fusermount", "-uz", to_stop_watching])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
     def restart(self):
