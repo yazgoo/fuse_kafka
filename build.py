@@ -474,6 +474,7 @@ def write_tests():
     quickstart(consumer = False, synchronous_action = "ruby_write_tests")
 def quickstart(consumer = True, synchronous_action = "wait_for_input"):
     """ Launches kafka, zookeeper, fuse_kafka and a console consumer locally """
+    kafka_download()
     klog = '/tmp/kafka.log'
     zlog = '/tmp/zookeeper.log'
     if os.path.exists(klog): shutil.rmtree(klog)
