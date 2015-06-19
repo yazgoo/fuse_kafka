@@ -49,14 +49,14 @@ after_success:
     - bash -c "[ -z \"${SHIPPABLE}\" ] && git commit -m 'auto updating documentation' || echo "
     - bash -c "[ -z \"${SHIPPABLE}\" ] && git push https://${GH_TOKEN}@github.com/yazgoo/fuse_kafka.git gh-pages || echo"
     # <write_tests>
-    - cd ..
-    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
-    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || (curl -sSL https://get.rvm.io | bash -s stable)"
-    - sudo apt-get -y install openjdk-7-jre
-    - rvm install 1.9
-    - gem install poseidon awesome_print
-    - ./build.py write_tests
-    - head -1 /tmp/write_tests.overlay /tmp/write_tests.inotify
+#    - cd ..
+#    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3"
+#    - bash -c "[ -z \"${SHIPPABLE}\" ] && echo || (curl -sSL https://get.rvm.io | bash -s stable)"
+#    - sudo apt-get -y install openjdk-7-jre
+#    - rvm install 1.9
+#    - gem install poseidon awesome_print
+#    - ./build.py write_tests
+#    - head -1 /tmp/write_tests.overlay /tmp/write_tests.inotify
     # </write_tests>
 env:
     global:
