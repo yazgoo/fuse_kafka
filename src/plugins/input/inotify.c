@@ -54,7 +54,7 @@ handle_file_deleted(struct inotify_event* event, fk_hash offsets, fk_hash watche
 }
 handle_file_created(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
-    printf( "New file %s created.\n", event->name );
+    // printf( "New file %s created.\n", event->name );
     /*
     char* path = get_event_path(event, watches);
     fk_hash_put(offsets, path, 0, 1);
@@ -65,7 +65,7 @@ handle_file_created(struct inotify_event* event, fk_hash offsets, fk_hash watche
 int watch_directory(char* directory, int fd, fk_hash watches)
 {
     int wd = inotify_add_watch(fd, directory, IN_CREATE | IN_MODIFY);
-    printf("watching directory %s (%d)\n", directory, wd);
+    // printf("watching directory %s (%d)\n", directory, wd);
     fk_hash_put(watches, (void*) (long int) wd, strdup(directory), 0);
     return wd;
 }
@@ -76,10 +76,10 @@ void setup_watches(char* directory, int fd, fk_hash watches)
     DIR* dir = opendir(directory);
     if(dir == NULL) return;
     struct dirent* file;
-    printf("reading %s\n", directory);
+    // printf("reading %s\n", directory);
     while(file = readdir(dir))
     {
-        printf("%s %d\n", file->d_name, file->d_type);
+        // printf("%s %d\n", file->d_name, file->d_type);
         if(file->d_type == DT_DIR && strcmp(".", file->d_name) && strcmp("..", file->d_name))
         {
             char* path = concat(directory, file->d_name);

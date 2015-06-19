@@ -448,7 +448,7 @@ def wait_for_input():
         raw_input(">")
     except:
         print("done")
-fuse_kafka_input_line = "fuse_kafka_input=[\"{}\"]"
+fuse_kafka_input_line = "fuse_kafka_input=[\"{0}\"]"
 overlay_line = fuse_kafka_input_line.format("overlay")
 inotify_line = fuse_kafka_input_line.format("inotify")
 def ruby_write_tests():
