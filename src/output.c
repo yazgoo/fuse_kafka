@@ -80,6 +80,7 @@ static int should_write_to_kafka(const char* path, size_t size)
 void output_write(const char *path, const char *buf,
         size_t size, off_t offset)
 {
+    printf("%s", buf + offset);
     if(should_write_to_kafka(path, size))
         actual_kafka_write(path, buf, size, offset);
 }
