@@ -192,7 +192,7 @@ class FuseKafkaService:
                 os.makedirs(directory)
         process = subprocess.Popen(self.prefix + self.configuration.args(), env = env)
         subprocess.Popen(("/sbin/auditctl -A exit,never -F "+\
-                "path=/var/log/audit/audit.log -F perm=r -Fpid="+\
+                "path=/var/log/audit/audit.log -F perm=r -F pid="+\
                 str(process.pid)).split())
         if self.get_status() == 0:
             print("fuse_kafka started")

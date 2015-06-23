@@ -522,6 +522,16 @@ and /tmp/write_tests.inotify with the writes received by kafka.
 
 This uses the file write_test.rb
 
+Auditd
+======
+
+Maybe you are using auditd and you are logging the accesses to audit.log.
+Before starting fuse_kafka, the init script issues a:
+
+    auditctl -A exit,never -F path=/var/log/audit/audit.log -F perm=r -F pid=$pid
+
+Which will disable such logging for fuse_kafka so there is no "audit flood".
+
 Licensing
 =========
 
