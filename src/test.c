@@ -350,7 +350,7 @@ static char* test_output()
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
     test_with()->rd_kafka_conf_set_returns = 0;
-    conf.brokers_n = 0;
+    conf.brokers_n = conf.zookeepers_n = 0;
     void* output = output_init(&conf);
     mu_assert("output should be null", output == NULL);
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
