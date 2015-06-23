@@ -69,7 +69,21 @@ int watch_directory(char* directory, int fd, fk_hash watches)
     fk_hash_put(watches, (void*) (long int) wd, strdup(directory), 0);
     return wd;
 }
-void setup_watches(char* directory, int fd, fk_hash watches)
+void setup_offset(char* path, fk_hash offsets)
+{
+    FILE* f = fopen(path, "r");
+    if(f)
+    {
+        fseek(f, 0, SEEK_END);
+        fk_hash_put(offsets, path, (void*) ftell(f), 1);
+        fclose(f);
+    }
+    else
+    {
+        free(path);
+    }
+}
+void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
 {
     if(directory == NULL) return;
     watch_directory(directory, fd, watches);
@@ -80,10 +94,14 @@ void setup_watches(char* directory, int fd, fk_hash watches)
     while(file = readdir(dir))
     {
         // printf("%s %d\n", file->d_name, file->d_type);
+        char* path = concat(directory, file->d_name);
         if(file->d_type == DT_DIR && strcmp(".", file->d_name) && strcmp("..", file->d_name))
         {
-            char* path = concat(directory, file->d_name);
-            setup_watches(path, fd, watches);
+            setup_watches(path, fd, watches, offsets);
+        }
+        else
+        {
+            setup_offset(path, offsets);
         }
     }
     closedir(dir);
@@ -100,7 +118,7 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
             if ( event->mask & IN_ISDIR ) {
                 // printf( "New directory %s created.\n", event->name );
                 char* path = get_event_path(event, watches);
-                setup_watches(path, fd, watches);
+                setup_watches(path, fd, watches, offsets);
             }
             else {
                 handle_file_created(event, offsets, watches, root);
@@ -152,7 +170,7 @@ int input_setup(int argc, char** argv, void* cfg)
     {
         for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
                 conf->directory_n++)
-            setup_watches(conf->directories[conf->directory_n], fd, watches);
+            setup_watches(conf->directories[conf->directory_n], fd, watches, offsets);
         conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
     }
     struct inotify_event event;

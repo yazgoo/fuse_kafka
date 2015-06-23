@@ -317,7 +317,9 @@ def run_c_test(source):
     batch = "-batch"
     if os.getenv("NO_BATCH") != None: batch = ""
     if os.path.exists(bin_path):
-        result = os.system("gdb " + batch + " -return-child-result --eval-command=run --eval-command=where --args " + "./" + bin_path)
+        result = os.system("gdb " + batch + " -return-child-result \
+                --eval-command=run --eval-command=where \
+                --eval-command='info locals' --args " + "./" + bin_path)
         if result != 0:
             exit(result)
     else:

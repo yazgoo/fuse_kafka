@@ -136,6 +136,7 @@ int dynamic_configuration_changed()
 void dynamic_configuration_free()
 {
     dynamic_configuration* conf = dynamic_configuration_get();
+    if(conf == NULL) return;
     free(conf->line);
     free(conf->argv);
 }
@@ -196,7 +197,11 @@ void dynamic_configuration_watch(void(*f)(int argc, char** argv, void* context))
 void dynamic_configuration_watch_stop()
 {
     *dynamic_configuration_watch_routine_running() = 0;
-    pthread_cancel(dynamic_configuration_get()->thread);
-    pthread_join(dynamic_configuration_get()->thread, NULL);
+    dynamic_configuration* conf = dynamic_configuration_get();
+    if(conf != NULL && conf->thread != 0)
+    {
+        pthread_cancel(conf->thread);
+        pthread_join(conf->thread, NULL);
+    }
     *dynamic_configuration_watch_routine_running() = 1;
 }
