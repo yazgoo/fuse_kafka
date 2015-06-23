@@ -18,12 +18,12 @@ __declspec(dllexport)
  **/
 typedef struct _kafka_t
 {
-    rd_kafka_t* rk;
-    rd_kafka_topic_t* rkt;
+    void* rk;
+    void* rkt;
     config* conf;
     /* were brokers given added to kafka (in zk mode): */
     char no_brokers;
-    zhandle_t* zhandle;
+    void* zhandle;
     server_list* broker_list;
 } kafka_t;
 #endif

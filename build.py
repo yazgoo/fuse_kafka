@@ -40,11 +40,21 @@ class InputPlugins:
         self.libs_of = {}
         self.targets_of = {}
         self.includes_of = {}
+        self.kind_of = {}
         self.shareds_objects = {}
         self.objects = {}
         self.test_of = {}
-        prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
-        for lib in self.libraries_sources:
+        for kind in ['input', 'output']:
+            self.fill_up(kind)
+    def fill_up(self, kind):
+        _dir = "src/plugins/" + kind + "/"
+        self.tests_sources += [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
+        self.tests_paths += [_dir.replace("src/", "") + x for x in self.tests_sources]
+        current_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
+        current_sources = [x for x in current_sources if x not in self.tests_sources]
+        prefix = get_define("version", kind.upper() + "_PLUGIN_PREFIX")
+        for lib in current_sources:
+            self.kind_of[lib] = kind
             required = self.get_requirements(_dir + lib)
             self.targets_of[lib] = self.get_target(_dir + lib)
             self.libs_of[lib] = required + default_libs
@@ -52,6 +62,7 @@ class InputPlugins:
             self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
             self.shareds_objects[lib] = prefix + lib + ".so"
             self.objects[lib] = prefix + lib + ".o"
+        self.libraries_sources +=  current_sources
 cc = 'gcc'
 if "CC" in os.environ:
     cc = os.environ["CC"]
@@ -72,7 +83,7 @@ if "LIBS" in os.environ:
     additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
     default_libs += additional_libs
     libs += additional_libs
-input_plugins = InputPlugins(cc)
+input_plugins = Plugins()
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -399,8 +410,8 @@ def compile_input_plugins():
         if not target_matched(input_plugins.targets_of[library_source]):
             print("skipping " + library_source + " plugin because not compiling for target")
             continue
-        run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
-        run(cc, '-g', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/" + input_plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
+        run('gcc', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_input_plugins()
