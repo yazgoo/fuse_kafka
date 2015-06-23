@@ -17,20 +17,28 @@ def get_define(source, name):
     result = result[-1][1:-1]
     f.close()
     return result
-class InputPlugins:
+class Plugins:
     def __init__(self):
-        _dir = "src/plugins/input/"
-        self.tests_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
-        self.tests_paths = [_dir.replace("src/", "") + x for x in self.tests_sources]
-        self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
-        self.libraries_sources = [x for x in self.libraries_sources if x not in self.tests_sources]
+        self.tests_sources = []
+        self.tests_paths = []
+        self.libraries_sources = []
         self.libs_of = {}
         self.includes_of = {}
+        self.kind_of = {}
         self.shareds_objects = {}
         self.objects = {}
         self.test_of = {}
-        prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
-        for lib in self.libraries_sources:
+        for kind in ['input', 'output']:
+            self.fill_up(kind)
+    def fill_up(self, kind):
+        _dir = "src/plugins/" + kind + "/"
+        self.tests_sources += [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
+        self.tests_paths += [_dir.replace("src/", "") + x for x in self.tests_sources]
+        current_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
+        current_sources = [x for x in current_sources if x not in self.tests_sources]
+        prefix = get_define("version", kind.upper() + "_PLUGIN_PREFIX")
+        for lib in current_sources:
+            self.kind_of[lib] = kind
             cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
             required_str = os.popen(cmd).read().rstrip()
             required = []
@@ -40,12 +48,13 @@ class InputPlugins:
             self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
             self.shareds_objects[lib] = prefix + lib + ".so"
             self.objects[lib] = prefix + lib + ".o"
+        self.libraries_sources +=  current_sources
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
 default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
-input_plugins = InputPlugins()
+input_plugins = Plugins()
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -353,7 +362,7 @@ def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
 def compile_input_plugins():
     for library_source in input_plugins.libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
+        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/" + input_plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
         run('gcc', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
