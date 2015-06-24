@@ -540,7 +540,7 @@ You can generate an rpm (provided rpm-build is installed) via:
     ./build.py rpm
 
 This will create a $HOME/rpmbuild directory, and generate the rpm in
-/root/rpmbuild/SRPMS.
+/root/rpmbuild/RPMS.
 
 Licensing
 =========
