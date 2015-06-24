@@ -12,7 +12,7 @@
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing, fcntl
+import re, sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing, fcntl
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
@@ -190,15 +190,28 @@ class FuseKafkaService:
             print("starting fuse_kafka on " + directory)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-        process = subprocess.Popen(self.prefix + self.configuration.args(), env = env)
-        subprocess.Popen(("/sbin/auditctl -A exit,never -F "+\
-                "path=/var/log/audit/audit.log -F perm=r -F pid="+\
-                str(process.pid)).split())
+        process = subprocess.Popen(
+                self.prefix + self.configuration.args(), env = env)
+        self.do_auditctl_rule(str(process.pid))
         if self.get_status() == 0:
             print("fuse_kafka started")
+    def do_auditctl_rule(self, pid, action = '-A'):
+        cmd = "/sbin/auditctl " + action + " exit,never -F "+\
+                "path=/var/log/audit/audit.log -F perm=r -F pid="+\
+                pid
+        subprocess.Popen(cmd.split())
+    def remove_auditctl_rules(self):
+        output = subprocess.Popen(["auditctl", "-l"],
+                stdout=subprocess.PIPE).communicate()[0]
+        p = re.compile(".*-a.*/var/log/audit/audit.log.*-F perm=r.* pid=([^ ]+).*")
+        pids = [found[0] for found in [p.findall(l) for l in
+            output.split("\n")] if len(found) > 0]
+        for pid in pids:
+            self.do_auditctl_rule(pid, "-d")
     def stop(self):
         """ Stops fuse_kafka processes """
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])
+        self.remove_auditctl_rules()
         if self.get_status() != 0:
             print("fuse_kafka stoped")
     def reload(self, var_run_path = "/var/run"):
