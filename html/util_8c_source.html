@@ -84,15 +84,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="util_8c.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
 <a name="l00004"></a>00004 <span class="preprocessor">#ifndef UTIL_C</span>
 <a name="l00005"></a>00005 <span class="preprocessor"></span><span class="preprocessor">#define UTIL_C</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#include &lt;openssl/bio.h&gt;</span>
-<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;openssl/evp.h&gt;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &lt;openssl/pem.h&gt;</span>
-<a name="l00009"></a>00009 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
-<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;string.h&gt;</span>
-<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;math.h&gt;</span>
+<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;string.h&gt;</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
+<a name="l00009"></a>00009 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
+<a name="l00010"></a>00010 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
+<a name="l00011"></a>00011 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;time.h&gt;</span>
+<a name="l00013"></a>00013 <span class="preprocessor">#include &lt;math.h&gt;</span>
+<a name="l00014"></a>00014 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
 <a name="l00015"></a>00015 <span class="keywordtype">int</span> strcmp(<span class="keyword">const</span> <span class="keywordtype">char</span>* s1, <span class="keyword">const</span> <span class="keywordtype">char</span>* s2)
 <a name="l00016"></a>00016 {
 <a name="l00017"></a>00017     <span class="keywordflow">while</span>(*s1 &amp;&amp; (*s1==*s2))
@@ -115,168 +115,182 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00034"></a>00034         snprintf(str, size, <span class="stringliteral">&quot;%s%d%s&quot;</span>, prefix, i, suffix);
 <a name="l00035"></a>00035     <span class="keywordflow">return</span> str;
 <a name="l00036"></a>00036 }
-<a name="l00044"></a><a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9">00044</a> <span class="keywordtype">char</span> *<a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *input, <span class="keywordtype">int</span> length)
-<a name="l00045"></a>00045 {
-<a name="l00046"></a>00046     BIO *bmem, *b64;
-<a name="l00047"></a>00047     BUF_MEM *bptr;
-<a name="l00048"></a>00048     b64 = BIO_new(BIO_f_base64());
-<a name="l00049"></a>00049     bmem = BIO_new(BIO_s_mem());
-<a name="l00050"></a>00050     b64 = BIO_push(b64, bmem);
-<a name="l00051"></a>00051     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-<a name="l00052"></a>00052     BIO_write(b64, input, length);
-<a name="l00053"></a>00053     BIO_flush(b64);
-<a name="l00054"></a>00054     BIO_get_mem_ptr(b64, &amp;bptr);
-<a name="l00055"></a>00055     <span class="keywordtype">char</span> *buff = (<span class="keywordtype">char</span> *)malloc(bptr-&gt;length + 1);
-<a name="l00056"></a>00056     memcpy(buff, bptr-&gt;data, bptr-&gt;length);
-<a name="l00057"></a>00057     buff[bptr-&gt;length] = 0;
-<a name="l00058"></a>00058     BIO_free_all(b64);
-<a name="l00059"></a>00059     <span class="keywordflow">return</span> buff;
-<a name="l00060"></a>00060 }
-<a name="l00061"></a>00061 <span class="keywordtype">int</span>* get_command_line_size()
-<a name="l00062"></a>00062 {
-<a name="l00063"></a>00063     <span class="keyword">static</span> <span class="keywordtype">int</span> command_line_size = 256;
-<a name="l00064"></a>00064     <span class="keywordflow">return</span> &amp;command_line_size;
-<a name="l00065"></a>00065 }
-<a name="l00072"></a><a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">00072</a> <span class="keyword">static</span> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(<span class="keywordtype">int</span> pid)
-<a name="l00073"></a>00073 {
-<a name="l00074"></a>00074     <span class="keywordtype">size_t</span> size = *get_command_line_size();;
-<a name="l00075"></a>00075     <span class="keywordtype">size_t</span> i = 0;
-<a name="l00076"></a>00076     <span class="keywordtype">char</span>* path;
-<a name="l00077"></a>00077     FILE* f;
-<a name="l00078"></a>00078     <span class="keywordtype">char</span> c;
-<a name="l00079"></a>00079     <span class="keywordtype">char</span>* command_line = (<span class="keywordtype">char</span>*) malloc(size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
-<a name="l00080"></a>00080     <span class="keywordtype">char</span>* b64;
-<a name="l00081"></a>00081     asprintf(&amp;path, <span class="stringliteral">&quot;/proc/%d/cmdline&quot;</span>, pid);
-<a name="l00082"></a>00082     <span class="keywordflow">if</span>((f = fopen(path, <span class="stringliteral">&quot;r&quot;</span>)) != NULL)
-<a name="l00083"></a>00083     {
-<a name="l00084"></a>00084         <span class="keywordflow">while</span>((c = fgetc(f)) != EOF)
-<a name="l00085"></a>00085         {
-<a name="l00086"></a>00086             <span class="keywordflow">if</span>(c == 0) c = <span class="charliteral">&#39; &#39;</span>;
-<a name="l00087"></a>00087             <span class="keywordflow">if</span>(i &gt;= (size - 1))
-<a name="l00088"></a>00088             {
-<a name="l00089"></a>00089                 size += *get_command_line_size();
-<a name="l00090"></a>00090                 command_line = (<span class="keywordtype">char</span>*) realloc(
-<a name="l00091"></a>00091                         command_line, size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
-<a name="l00092"></a>00092             }
-<a name="l00093"></a>00093             command_line[i++] = c;
-<a name="l00094"></a>00094         }
-<a name="l00095"></a>00095         fclose(f);
-<a name="l00096"></a>00096     }
-<a name="l00097"></a>00097     command_line[i] = 0;
-<a name="l00098"></a>00098     free(path);
-<a name="l00099"></a>00099     b64 = <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a>(command_line, strlen(command_line));
-<a name="l00100"></a>00100     free(command_line);
-<a name="l00101"></a>00101     <span class="keywordflow">return</span> b64;
-<a name="l00102"></a>00102 }
-<a name="l00108"></a><a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">00108</a> <span class="keywordtype">void</span> <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(<span class="keywordtype">char</span>* timestamp)
-<a name="l00109"></a>00109 {
-<a name="l00110"></a>00110     <span class="keyword">struct </span>timeval tv;
-<a name="l00111"></a>00111     <span class="keyword">struct </span>tm tm;
-<a name="l00112"></a>00112     gettimeofday(&amp;tv, NULL);
-<a name="l00113"></a>00113     localtime_r(&amp;tv.tv_sec, &amp;tm);
-<a name="l00114"></a>00114     strftime(timestamp, strlen(timestamp), <span class="stringliteral">&quot;%Y-%m-%dT%H:%M:%S.000%z&quot;</span>, &amp;tm);
+<a name="l00037"></a>00037 <span class="preprocessor">#define BASE64_CHARS \</span>
+<a name="l00038"></a>00038 <span class="preprocessor">    &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span>
+<a name="l00046"></a><a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999">00046</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* str, <span class="keywordtype">int</span> n)
+<a name="l00047"></a>00047 {
+<a name="l00048"></a>00048     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* base64chars = BASE64_CHARS;
+<a name="l00049"></a>00049     <span class="keywordtype">int</span> i = 0, j, k;
+<a name="l00050"></a>00050     <span class="keywordtype">int</span> added = n % 3;
+<a name="l00051"></a>00051     added = (added == 0? 0: (added == 1? 2 : 1));
+<a name="l00052"></a>00052     <span class="keywordtype">int</span> size = (n + added) * 8 / 6;
+<a name="l00053"></a>00053     <span class="keywordtype">char</span>* result = (<span class="keywordtype">char</span>*) calloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), size + added + 1);
+<a name="l00054"></a>00054     result[size + added] = 0;
+<a name="l00055"></a>00055     <span class="keywordflow">for</span>(j = 0; j &lt; (n + added); j++)
+<a name="l00056"></a>00056     {
+<a name="l00057"></a>00057         <span class="keywordtype">char</span> c = j &lt; size ? str[j] : 0;
+<a name="l00058"></a>00058         <span class="keywordflow">for</span>(k = 0; k &lt; 8; k++)
+<a name="l00059"></a>00059         {
+<a name="l00060"></a>00060             <span class="keywordtype">int</span> i_k = i + k;
+<a name="l00061"></a>00061             <span class="keywordtype">int</span> i_k_6 = i_k / 6;
+<a name="l00062"></a>00062             <span class="keywordflow">if</span>((i_k % 6) == 0)
+<a name="l00063"></a>00063             {
+<a name="l00064"></a>00064                 <span class="keywordflow">if</span>(i_k_6 &gt;= 1) result[i_k_6 - 1] = base64chars[result[i_k_6 - 1]];
+<a name="l00065"></a>00065                 result[i_k_6] = 0;
+<a name="l00066"></a>00066             }
+<a name="l00067"></a>00067             result[i_k_6] = (result[i_k_6] &lt;&lt; 1) | ((c &gt;&gt; (7 - k)) &amp; 1);
+<a name="l00068"></a>00068         }
+<a name="l00069"></a>00069         i += 8;
+<a name="l00070"></a>00070     }
+<a name="l00071"></a>00071     <span class="keywordflow">for</span>(j = 0; j &lt; added; j++) result[size + added - 1 - j] = <span class="charliteral">&#39;=&#39;</span>;
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> result;
+<a name="l00073"></a>00073 }
+<a name="l00074"></a>00074 <span class="keywordtype">int</span>* get_command_line_size()
+<a name="l00075"></a>00075 {
+<a name="l00076"></a>00076     <span class="keyword">static</span> <span class="keywordtype">int</span> command_line_size = 256;
+<a name="l00077"></a>00077     <span class="keywordflow">return</span> &amp;command_line_size;
+<a name="l00078"></a>00078 }
+<a name="l00085"></a><a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">00085</a> <span class="keyword">static</span> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(<span class="keywordtype">int</span> pid)
+<a name="l00086"></a>00086 {
+<a name="l00087"></a>00087     <span class="keywordtype">size_t</span> size = *get_command_line_size();;
+<a name="l00088"></a>00088     <span class="keywordtype">size_t</span> i = 0;
+<a name="l00089"></a>00089     <span class="keywordtype">char</span>* path;
+<a name="l00090"></a>00090     FILE* f;
+<a name="l00091"></a>00091     <span class="keywordtype">char</span> c;
+<a name="l00092"></a>00092     <span class="keywordtype">char</span>* command_line = (<span class="keywordtype">char</span>*) malloc(size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
+<a name="l00093"></a>00093     <span class="keywordtype">char</span>* b64;
+<a name="l00094"></a>00094     asprintf(&amp;path, <span class="stringliteral">&quot;/proc/%d/cmdline&quot;</span>, pid);
+<a name="l00095"></a>00095     <span class="keywordflow">if</span>((f = fopen(path, <span class="stringliteral">&quot;r&quot;</span>)) != NULL)
+<a name="l00096"></a>00096     {
+<a name="l00097"></a>00097         <span class="keywordflow">while</span>((c = fgetc(f)) != EOF)
+<a name="l00098"></a>00098         {
+<a name="l00099"></a>00099             <span class="keywordflow">if</span>(c == 0) c = <span class="charliteral">&#39; &#39;</span>;
+<a name="l00100"></a>00100             <span class="keywordflow">if</span>(i &gt;= (size - 1))
+<a name="l00101"></a>00101             {
+<a name="l00102"></a>00102                 size += *get_command_line_size();
+<a name="l00103"></a>00103                 command_line = (<span class="keywordtype">char</span>*) realloc(
+<a name="l00104"></a>00104                         command_line, size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
+<a name="l00105"></a>00105             }
+<a name="l00106"></a>00106             command_line[i++] = c;
+<a name="l00107"></a>00107         }
+<a name="l00108"></a>00108         fclose(f);
+<a name="l00109"></a>00109     }
+<a name="l00110"></a>00110     command_line[i] = 0;
+<a name="l00111"></a>00111     free(path);
+<a name="l00112"></a>00112     b64 = <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(command_line, strlen(command_line));
+<a name="l00113"></a>00113     free(command_line);
+<a name="l00114"></a>00114     <span class="keywordflow">return</span> b64;
 <a name="l00115"></a>00115 }
-<a name="l00122"></a><a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa">00122</a> <span class="keywordtype">int</span> <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
-<a name="l00123"></a>00123 {
-<a name="l00124"></a>00124     <span class="keywordtype">int</span> i = 0;
-<a name="l00125"></a>00125     <span class="keywordflow">for</span>(; i &lt; argc; i++) <span class="keywordflow">if</span>(!strcmp(argv[i], <span class="stringliteral">&quot;--&quot;</span>)) <span class="keywordflow">break</span>;
-<a name="l00126"></a>00126     <span class="keywordflow">return</span> i;
-<a name="l00127"></a>00127 }
-<a name="l00131"></a><a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd">00131</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(<span class="keywordtype">char</span>** array, <span class="keywordtype">size_t</span> n, <span class="keywordtype">char</span> open_char,
-<a name="l00132"></a>00132         <span class="keywordtype">char</span> close_char, <span class="keywordtype">char</span> sep1, <span class="keywordtype">char</span> sep2)
-<a name="l00133"></a>00133 {
-<a name="l00134"></a>00134     <span class="keywordtype">int</span> i = 0;
-<a name="l00135"></a>00135     <span class="keywordtype">char</span>* str = (<span class="keywordtype">char</span>*) malloc(3);
-<a name="l00136"></a>00136     <span class="keywordtype">int</span> k = sprintf(str, <span class="stringliteral">&quot;%c&quot;</span>, open_char);
-<a name="l00137"></a>00137     <span class="keywordflow">if</span>(array != NULL)
-<a name="l00138"></a>00138         <span class="keywordflow">for</span>(i = 0; i &lt; n; i++)
-<a name="l00139"></a>00139         {
-<a name="l00140"></a>00140             str = realloc(str, k + 1 + strlen(array[i]) + 2 + 2);
-<a name="l00141"></a>00141             k += sprintf(str + k, <span class="stringliteral">&quot;\&quot;%s\&quot;&quot;</span>, array[i]);
-<a name="l00142"></a>00142             <span class="keywordflow">if</span>(i != n-1) k += sprintf(str + k, <span class="stringliteral">&quot;%c &quot;</span>, i % 2 ? sep2 : sep1);
-<a name="l00143"></a>00143         }
-<a name="l00144"></a>00144     sprintf(str + k, <span class="stringliteral">&quot;%c&quot;</span>, close_char);
-<a name="l00145"></a>00145     <span class="keywordflow">return</span> str;
-<a name="l00146"></a>00146 }
-<a name="l00147"></a>00147 <span class="keywordtype">int</span>* falloc_fails()
-<a name="l00148"></a>00148 {
-<a name="l00149"></a>00149     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
-<a name="l00150"></a>00150     <span class="keywordflow">return</span> &amp;result;
-<a name="l00151"></a>00151 }
-<a name="l00152"></a>00152 <span class="keywordtype">int</span>* fcalloc_fails()
-<a name="l00153"></a>00153 {
-<a name="l00154"></a>00154     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
-<a name="l00155"></a>00155     <span class="keywordflow">return</span> &amp;result;
-<a name="l00156"></a>00156 }
-<a name="l00157"></a>00157 <span class="keywordtype">void</span>* fmalloc(<span class="keywordtype">size_t</span> size)
-<a name="l00158"></a>00158 {
-<a name="l00159"></a>00159     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00160"></a>00160     <span class="keywordflow">return</span> malloc(size);
-<a name="l00161"></a>00161 }
-<a name="l00162"></a>00162 <span class="keywordtype">void</span>* fcalloc(<span class="keywordtype">size_t</span> nmemb, <span class="keywordtype">size_t</span> size)
-<a name="l00163"></a>00163 {
-<a name="l00164"></a>00164     <span class="keywordflow">if</span>(*falloc_fails() || *fcalloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00165"></a>00165     <span class="keywordflow">return</span> calloc(nmemb, size);
-<a name="l00166"></a>00166 }
-<a name="l00167"></a>00167 <span class="keywordtype">void</span>* frealloc(<span class="keywordtype">void</span>* ptr, <span class="keywordtype">size_t</span> size)
-<a name="l00168"></a>00168 {
-<a name="l00169"></a>00169     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00170"></a>00170     <span class="keywordflow">return</span> realloc(ptr, size);
-<a name="l00171"></a>00171 }
-<a name="l00175"></a><a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">00175</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a>(<span class="keywordtype">char</span>* a, <span class="keywordtype">char</span>* b)
+<a name="l00121"></a><a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">00121</a> <span class="keywordtype">void</span> <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(<span class="keywordtype">char</span>* timestamp)
+<a name="l00122"></a>00122 {
+<a name="l00123"></a>00123     <span class="keyword">struct </span>timeval tv;
+<a name="l00124"></a>00124     <span class="keyword">struct </span>tm tm;
+<a name="l00125"></a>00125     gettimeofday(&amp;tv, NULL);
+<a name="l00126"></a>00126     localtime_r(&amp;tv.tv_sec, &amp;tm);
+<a name="l00127"></a>00127     strftime(timestamp, strlen(timestamp), <span class="stringliteral">&quot;%Y-%m-%dT%H:%M:%S.000%z&quot;</span>, &amp;tm);
+<a name="l00128"></a>00128 }
+<a name="l00135"></a><a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa">00135</a> <span class="keywordtype">int</span> <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00136"></a>00136 {
+<a name="l00137"></a>00137     <span class="keywordtype">int</span> i = 0;
+<a name="l00138"></a>00138     <span class="keywordflow">for</span>(; i &lt; argc; i++) <span class="keywordflow">if</span>(!strcmp(argv[i], <span class="stringliteral">&quot;--&quot;</span>)) <span class="keywordflow">break</span>;
+<a name="l00139"></a>00139     <span class="keywordflow">return</span> i;
+<a name="l00140"></a>00140 }
+<a name="l00144"></a><a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd">00144</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(<span class="keywordtype">char</span>** array, <span class="keywordtype">size_t</span> n, <span class="keywordtype">char</span> open_char,
+<a name="l00145"></a>00145         <span class="keywordtype">char</span> close_char, <span class="keywordtype">char</span> sep1, <span class="keywordtype">char</span> sep2)
+<a name="l00146"></a>00146 {
+<a name="l00147"></a>00147     <span class="keywordtype">int</span> i = 0;
+<a name="l00148"></a>00148     <span class="keywordtype">char</span>* str = (<span class="keywordtype">char</span>*) malloc(3);
+<a name="l00149"></a>00149     <span class="keywordtype">int</span> k = sprintf(str, <span class="stringliteral">&quot;%c&quot;</span>, open_char);
+<a name="l00150"></a>00150     <span class="keywordflow">if</span>(array != NULL)
+<a name="l00151"></a>00151         <span class="keywordflow">for</span>(i = 0; i &lt; n; i++)
+<a name="l00152"></a>00152         {
+<a name="l00153"></a>00153             str = realloc(str, k + 1 + strlen(array[i]) + 2 + 2);
+<a name="l00154"></a>00154             k += sprintf(str + k, <span class="stringliteral">&quot;\&quot;%s\&quot;&quot;</span>, array[i]);
+<a name="l00155"></a>00155             <span class="keywordflow">if</span>(i != n-1) k += sprintf(str + k, <span class="stringliteral">&quot;%c &quot;</span>, i % 2 ? sep2 : sep1);
+<a name="l00156"></a>00156         }
+<a name="l00157"></a>00157     sprintf(str + k, <span class="stringliteral">&quot;%c&quot;</span>, close_char);
+<a name="l00158"></a>00158     <span class="keywordflow">return</span> str;
+<a name="l00159"></a>00159 }
+<a name="l00160"></a>00160 <span class="keywordtype">int</span>* falloc_fails()
+<a name="l00161"></a>00161 {
+<a name="l00162"></a>00162     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
+<a name="l00163"></a>00163     <span class="keywordflow">return</span> &amp;result;
+<a name="l00164"></a>00164 }
+<a name="l00165"></a>00165 <span class="keywordtype">int</span>* fcalloc_fails()
+<a name="l00166"></a>00166 {
+<a name="l00167"></a>00167     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
+<a name="l00168"></a>00168     <span class="keywordflow">return</span> &amp;result;
+<a name="l00169"></a>00169 }
+<a name="l00170"></a>00170 <span class="keywordtype">void</span>* fmalloc(<span class="keywordtype">size_t</span> size)
+<a name="l00171"></a>00171 {
+<a name="l00172"></a>00172     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00173"></a>00173     <span class="keywordflow">return</span> malloc(size);
+<a name="l00174"></a>00174 }
+<a name="l00175"></a>00175 <span class="keywordtype">void</span>* fcalloc(<span class="keywordtype">size_t</span> nmemb, <span class="keywordtype">size_t</span> size)
 <a name="l00176"></a>00176 {
-<a name="l00177"></a>00177     <span class="keywordflow">if</span>(a == NULL || b == NULL) <span class="keywordflow">return</span> NULL;
-<a name="l00178"></a>00178     <span class="keywordtype">int</span> length = strlen(a) + strlen(b) + 2;
-<a name="l00179"></a>00179     <span class="keywordtype">char</span>* result = (<span class="keywordtype">char</span>*) malloc(length);
-<a name="l00180"></a>00180     result[length - 1] = 0;
-<a name="l00181"></a>00181     <span class="keywordtype">char</span>* middle = result + strlen(a);
-<a name="l00182"></a>00182     strcpy(result, a);
-<a name="l00183"></a>00183     middle[0] = <span class="charliteral">&#39;/&#39;</span>;
-<a name="l00184"></a>00184     strcpy(++middle, b);
-<a name="l00185"></a>00185     <span class="keywordflow">return</span> result;
-<a name="l00186"></a>00186 }
-<a name="l00187"></a>00187 <span class="keywordtype">int</span>* fk_sleep_return_value()
-<a name="l00188"></a>00188 {
-<a name="l00189"></a>00189     <span class="keyword">static</span> <span class="keywordtype">int</span> value = 0;
-<a name="l00190"></a>00190     <span class="keywordflow">return</span> &amp;value;
-<a name="l00191"></a>00191 }
-<a name="l00192"></a>00192 <span class="keywordtype">int</span>* fk_sleep_enabled()
-<a name="l00193"></a>00193 {
-<a name="l00194"></a>00194     <span class="keyword">static</span> <span class="keywordtype">int</span> enabled = 1;
-<a name="l00195"></a>00195     <span class="keywordflow">return</span> &amp;enabled;
-<a name="l00196"></a>00196 }
-<a name="l00197"></a>00197 <span class="keywordtype">int</span> fk_sleep(<span class="keywordtype">int</span> n)
-<a name="l00198"></a>00198 {
-<a name="l00199"></a>00199     <span class="keywordflow">if</span>(*(fk_sleep_enabled())) <span class="keywordflow">return</span> sleep(n);
-<a name="l00200"></a>00200     <span class="keywordflow">return</span> *(fk_sleep_return_value());
-<a name="l00201"></a>00201 }
-<a name="l00202"></a>00202 <span class="keyword">static</span> <span class="keywordtype">void</span> mkdir_p(<span class="keyword">const</span> <span class="keywordtype">char</span> *dir) {
-<a name="l00203"></a>00203         <span class="keywordtype">char</span> tmp[256];
-<a name="l00204"></a>00204         <span class="keywordtype">char</span> *p = NULL;
-<a name="l00205"></a>00205         <span class="keywordtype">size_t</span> len;
-<a name="l00206"></a>00206 
-<a name="l00207"></a>00207         snprintf(tmp, <span class="keyword">sizeof</span>(tmp),<span class="stringliteral">&quot;%s&quot;</span>,dir);
-<a name="l00208"></a>00208         len = strlen(tmp);
-<a name="l00209"></a>00209         <span class="keywordflow">if</span>(tmp[len - 1] == <span class="charliteral">&#39;/&#39;</span>)
-<a name="l00210"></a>00210                 tmp[len - 1] = 0;
-<a name="l00211"></a>00211         <span class="keywordflow">for</span>(p = tmp + 1; *p; p++)
-<a name="l00212"></a>00212                 <span class="keywordflow">if</span>(*p == <span class="charliteral">&#39;/&#39;</span>) {
-<a name="l00213"></a>00213                         *p = 0;
-<a name="l00214"></a>00214                         mkdir(tmp, S_IRWXU);
-<a name="l00215"></a>00215                         *p = <span class="charliteral">&#39;/&#39;</span>;
-<a name="l00216"></a>00216                 }
-<a name="l00217"></a>00217         mkdir(tmp, S_IRWXU);
-<a name="l00218"></a>00218 }
-<a name="l00219"></a>00219 <span class="preprocessor">#define DO_AS_CALLER(action) \</span>
-<a name="l00220"></a>00220 <span class="preprocessor">    struct fuse_context* __context = fuse_get_context(); \</span>
-<a name="l00221"></a>00221 <span class="preprocessor">    gid_t __gid = getegid(); \</span>
-<a name="l00222"></a>00222 <span class="preprocessor">    uid_t __uid = geteuid(); \</span>
-<a name="l00223"></a>00223 <span class="preprocessor">    setegid(__context-&gt;gid); \</span>
-<a name="l00224"></a>00224 <span class="preprocessor">    seteuid(__context-&gt;uid); \</span>
-<a name="l00225"></a>00225 <span class="preprocessor">    action \</span>
-<a name="l00226"></a>00226 <span class="preprocessor">    seteuid(__uid); \</span>
-<a name="l00227"></a>00227 <span class="preprocessor">    setegid(__gid);</span>
-<a name="l00228"></a>00228 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00177"></a>00177     <span class="keywordflow">if</span>(*falloc_fails() || *fcalloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00178"></a>00178     <span class="keywordflow">return</span> calloc(nmemb, size);
+<a name="l00179"></a>00179 }
+<a name="l00180"></a>00180 <span class="keywordtype">void</span>* frealloc(<span class="keywordtype">void</span>* ptr, <span class="keywordtype">size_t</span> size)
+<a name="l00181"></a>00181 {
+<a name="l00182"></a>00182     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00183"></a>00183     <span class="keywordflow">return</span> realloc(ptr, size);
+<a name="l00184"></a>00184 }
+<a name="l00188"></a><a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">00188</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a>(<span class="keywordtype">char</span>* a, <span class="keywordtype">char</span>* b)
+<a name="l00189"></a>00189 {
+<a name="l00190"></a>00190     <span class="keywordflow">if</span>(a == NULL || b == NULL) <span class="keywordflow">return</span> NULL;
+<a name="l00191"></a>00191     <span class="keywordtype">int</span> length = strlen(a) + strlen(b) + 2;
+<a name="l00192"></a>00192     <span class="keywordtype">char</span>* result = (<span class="keywordtype">char</span>*) malloc(length);
+<a name="l00193"></a>00193     result[length - 1] = 0;
+<a name="l00194"></a>00194     <span class="keywordtype">char</span>* middle = result + strlen(a);
+<a name="l00195"></a>00195     strcpy(result, a);
+<a name="l00196"></a>00196     middle[0] = <span class="charliteral">&#39;/&#39;</span>;
+<a name="l00197"></a>00197     strcpy(++middle, b);
+<a name="l00198"></a>00198     <span class="keywordflow">return</span> result;
+<a name="l00199"></a>00199 }
+<a name="l00200"></a>00200 <span class="keywordtype">int</span>* fk_sleep_return_value()
+<a name="l00201"></a>00201 {
+<a name="l00202"></a>00202     <span class="keyword">static</span> <span class="keywordtype">int</span> value = 0;
+<a name="l00203"></a>00203     <span class="keywordflow">return</span> &amp;value;
+<a name="l00204"></a>00204 }
+<a name="l00205"></a>00205 <span class="keywordtype">int</span>* fk_sleep_enabled()
+<a name="l00206"></a>00206 {
+<a name="l00207"></a>00207     <span class="keyword">static</span> <span class="keywordtype">int</span> enabled = 1;
+<a name="l00208"></a>00208     <span class="keywordflow">return</span> &amp;enabled;
+<a name="l00209"></a>00209 }
+<a name="l00210"></a>00210 <span class="keywordtype">int</span> fk_sleep(<span class="keywordtype">int</span> n)
+<a name="l00211"></a>00211 {
+<a name="l00212"></a>00212     <span class="keywordflow">if</span>(*(fk_sleep_enabled())) <span class="keywordflow">return</span> sleep(n);
+<a name="l00213"></a>00213     <span class="keywordflow">return</span> *(fk_sleep_return_value());
+<a name="l00214"></a>00214 }
+<a name="l00215"></a>00215 <span class="keyword">static</span> <span class="keywordtype">void</span> mkdir_p(<span class="keyword">const</span> <span class="keywordtype">char</span> *dir) {
+<a name="l00216"></a>00216         <span class="keywordtype">char</span> tmp[256];
+<a name="l00217"></a>00217         <span class="keywordtype">char</span> *p = NULL;
+<a name="l00218"></a>00218         <span class="keywordtype">size_t</span> len;
+<a name="l00219"></a>00219 
+<a name="l00220"></a>00220         snprintf(tmp, <span class="keyword">sizeof</span>(tmp),<span class="stringliteral">&quot;%s&quot;</span>,dir);
+<a name="l00221"></a>00221         len = strlen(tmp);
+<a name="l00222"></a>00222         <span class="keywordflow">if</span>(tmp[len - 1] == <span class="charliteral">&#39;/&#39;</span>)
+<a name="l00223"></a>00223                 tmp[len - 1] = 0;
+<a name="l00224"></a>00224         <span class="keywordflow">for</span>(p = tmp + 1; *p; p++)
+<a name="l00225"></a>00225                 <span class="keywordflow">if</span>(*p == <span class="charliteral">&#39;/&#39;</span>) {
+<a name="l00226"></a>00226                         *p = 0;
+<a name="l00227"></a>00227                         mkdir(tmp, S_IRWXU);
+<a name="l00228"></a>00228                         *p = <span class="charliteral">&#39;/&#39;</span>;
+<a name="l00229"></a>00229                 }
+<a name="l00230"></a>00230         mkdir(tmp, S_IRWXU);
+<a name="l00231"></a>00231 }
+<a name="l00232"></a>00232 <span class="preprocessor">#define DO_AS_CALLER(action) \</span>
+<a name="l00233"></a>00233 <span class="preprocessor">    struct fuse_context* __context = fuse_get_context(); \</span>
+<a name="l00234"></a>00234 <span class="preprocessor">    gid_t __gid = getegid(); \</span>
+<a name="l00235"></a>00235 <span class="preprocessor">    uid_t __uid = geteuid(); \</span>
+<a name="l00236"></a>00236 <span class="preprocessor">    setegid(__context-&gt;gid); \</span>
+<a name="l00237"></a>00237 <span class="preprocessor">    seteuid(__context-&gt;uid); \</span>
+<a name="l00238"></a>00238 <span class="preprocessor">    action \</span>
+<a name="l00239"></a>00239 <span class="preprocessor">    seteuid(__uid); \</span>
+<a name="l00240"></a>00240 <span class="preprocessor">    setegid(__gid);</span>
+<a name="l00241"></a>00241 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -295,7 +309,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 15:29:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 21:34:40 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

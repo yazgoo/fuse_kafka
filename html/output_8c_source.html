@@ -97,7 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00023"></a>00023     <span class="keywordtype">char</span>* ret = NULL;
 <a name="l00024"></a>00024     (void) path;
 <a name="l00025"></a>00025     <span class="keywordtype">char</span> timestamp[] = <span class="stringliteral">&quot;YYYY-MM-ddTHH:mm:ss.SSS+0000&quot;</span>;
-<a name="l00026"></a>00026     <span class="keywordtype">char</span>* text = <a class="code" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9" title="convert the input to base64">base64</a>(buf, size);
+<a name="l00026"></a>00026     <span class="keywordtype">char</span>* text = <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(buf, size);
 <a name="l00027"></a>00027     <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* context = fuse_get_context();
 <a name="l00028"></a>00028     <span class="keyword">struct </span>group* sgroup = getgrgid(context-&gt;gid);
 <a name="l00029"></a>00029     <span class="keyword">struct </span>passwd* suser = getpwuid(context-&gt;uid);
@@ -311,7 +311,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 15:29:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 21:34:40 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

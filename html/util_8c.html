@@ -87,15 +87,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>utility functions  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;openssl/bio.h&gt;</code><br/>
-<code>#include &lt;openssl/evp.h&gt;</code><br/>
-<code>#include &lt;openssl/pem.h&gt;</code><br/>
-<code>#include &lt;stdlib.h&gt;</code><br/>
+<div class="textblock"><code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;string.h&gt;</code><br/>
 <code>#include &lt;unistd.h&gt;</code><br/>
 <code>#include &lt;sys/stat.h&gt;</code><br/>
 <code>#include &lt;sys/types.h&gt;</code><br/>
+<code>#include &lt;sys/time.h&gt;</code><br/>
+<code>#include &lt;time.h&gt;</code><br/>
 <code>#include &lt;math.h&gt;</code><br/>
+<code>#include &lt;stdio.h&gt;</code><br/>
 </div>
 <p><a href="util_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -103,6 +103,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae71354ac9b6f7f2c808940036e7f30b7"></a><!-- doxytag: member="util.c::UTIL_C" ref="ae71354ac9b6f7f2c808940036e7f30b7" args="" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>UTIL_C</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28ec5a2ef0333a4c9a255a3ac079c001"></a><!-- doxytag: member="util.c::BASE64_CHARS" ref="a28ec5a2ef0333a4c9a255a3ac079c001" args="" -->
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>BASE64_CHARS</b>&#160;&#160;&#160;&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>DO_AS_CALLER</b>(action)</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -112,8 +114,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>strcmp</b> (const char
 int&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (char *path, char *str)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe6a523ecbb445e493e9404fe5ea2f97"></a><!-- doxytag: member="util.c::itoa" ref="afe6a523ecbb445e493e9404fe5ea2f97" args="(char *prefix, int i, char *suffix)" -->
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>itoa</b> (char *prefix, int i, char *suffix)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9">base64</a> (const unsigned char *input, int length)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the input to base64  <a href="#afb4e6c2974525e7bca75f0a0c1ef94d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ac89e3426b68975922920ac2502257999">base64</a> (const unsigned char *str, int n)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the input to base64  <a href="#ac89e3426b68975922920ac2502257999"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc47fc1477875c66eb440867da1c3cdf"></a><!-- doxytag: member="util.c::get_command_line_size" ref="afc47fc1477875c66eb440867da1c3cdf" args="()" -->
 int *&#160;</td><td class="memItemRight" valign="bottom"><b>get_command_line_size</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">get_command_line</a> (int pid)</td></tr>
@@ -173,26 +175,26 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
     seteuid(__uid); \
     setegid(__gid);
 </pre></div>
-<p>Definition at line <a class="el" href="util_8c_source.html#l00219">219</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00232">232</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
 <hr/><h2>Function Documentation</h2>
-<a class="anchor" id="afb4e6c2974525e7bca75f0a0c1ef94d9"></a><!-- doxytag: member="util.c::base64" ref="afb4e6c2974525e7bca75f0a0c1ef94d9" args="(const unsigned char *input, int length)" -->
+<a class="anchor" id="ac89e3426b68975922920ac2502257999"></a><!-- doxytag: member="util.c::base64" ref="ac89e3426b68975922920ac2502257999" args="(const unsigned char *str, int n)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* <a class="el" href="util_8c.html#afb4e6c2974525e7bca75f0a0c1ef94d9">base64</a> </td>
+          <td class="memname">char* <a class="el" href="util_8c.html#ac89e3426b68975922920ac2502257999">base64</a> </td>
           <td>(</td>
           <td class="paramtype">const unsigned char *&#160;</td>
-          <td class="paramname"><em>input</em>, </td>
+          <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>length</em>&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -213,7 +215,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a newly allocated string with the base64 data which should be free'd by the user </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00044">44</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00046">46</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -243,7 +245,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>null if a or b is null, a + "/" + b otherwise </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00175">175</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00188">188</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -271,7 +273,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a base64 encoded string with the process command line, or an empty string if it could not be extrcated </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00072">72</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00085">85</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -303,7 +305,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00122">122</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00135">135</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -331,7 +333,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00108">108</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00121">121</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -353,7 +355,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 15:29:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 21:34:40 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
