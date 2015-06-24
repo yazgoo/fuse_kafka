@@ -40,11 +40,14 @@ class InputPlugins:
             self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
             self.shareds_objects[lib] = prefix + lib + ".so"
             self.objects[lib] = prefix + lib + ".o"
+cc = 'gcc'
+if "CC" in os.environ:
+    cc = os.environ["CC"]
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["m", "crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
+common_libs = ["m", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson", "crypto"]
+default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson"]
 input_plugins = InputPlugins()
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
@@ -363,13 +366,13 @@ def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
 def compile_input_plugins():
     for library_source in input_plugins.libraries_sources:
-        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
-        run('gcc', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
+        run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
+        run(cc, '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_input_plugins()
     for source in sources:
-        run('gcc', '-g', '-c', "./src/" + source+'.c', flags)
+        run(cc, '-g', '-c', "./src/" + source+'.c', flags)
 def get_test_bin(source):
     return source.replace("/", "_") +'.test'
 def compile_test_with_libs(source, libs, includes = []):
@@ -378,7 +381,7 @@ def compile_test_with_libs(source, libs, includes = []):
     if not os.path.exists(path):
         print("warning: no test for {}".format(path))
     else: 
-        run('gcc', '-I', 'src', to_includes(includes), '-g', '-o', get_test_bin(source), path, flags,
+        run(cc, '-I', 'src', to_includes(includes), '-g', '-o', get_test_bin(source), path, flags,
                 test_flags, to_links(libs))
 def compile_test():
     """ Builds unit test binary """
@@ -390,7 +393,7 @@ def compile_test():
 def link():
     """ Finalize the binary generation by linking all object files """
     objects = [s+'.o' for s in sources]
-    run('gcc', '-g', objects, '-o', binary_name, flags, to_links(libs))
+    run(cc, '-g', objects, '-o', binary_name, flags, to_links(libs))
 def install():
     """ installs fuse kafka on current system, i.e. installs:
         - fuse_kafka binary in $BUILDROOT/usr/bin

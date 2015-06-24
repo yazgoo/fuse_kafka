@@ -163,6 +163,9 @@ static char* test_utils()
     char* dir = "/tmp/mylittledir/";
     rmdir(dir);
     mkdir_p(dir);
+    DIR* d = opendir(dir);
+    mu_assert("timestamp should not be empty", d != NULL);
+    closedir(d);
     return 0;
 }
 static char* test_time_queue()

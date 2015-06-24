@@ -3,15 +3,15 @@
  **/ 
 #ifndef UTIL_C
 #define UTIL_C
-#include <openssl/bio.h>
-#include <openssl/evp.h>
-#include <openssl/pem.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/time.h>
+#include <time.h>
 #include <math.h>
+#include <stdio.h>
 int strcmp(const char* s1, const char* s2)
 {
     while(*s1 && (*s1==*s2))
@@ -34,6 +34,8 @@ char* itoa(char* prefix, int i, char* suffix)
         snprintf(str, size, "%s%d%s", prefix, i, suffix);
     return str;
 }
+#define BASE64_CHARS \
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 /**
  * @brief convert the input to base64
  * @param input the input string
@@ -41,22 +43,33 @@ char* itoa(char* prefix, int i, char* suffix)
  * @return a newly allocated string with the base64 data which should
  * be free'd by the user
  **/
-char *base64(const unsigned char *input, int length)
+char* base64(const unsigned char* str, int n)
 {
-    BIO *bmem, *b64;
-    BUF_MEM *bptr;
-    b64 = BIO_new(BIO_f_base64());
-    bmem = BIO_new(BIO_s_mem());
-    b64 = BIO_push(b64, bmem);
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    BIO_write(b64, input, length);
-    BIO_flush(b64);
-    BIO_get_mem_ptr(b64, &bptr);
-    char *buff = (char *)malloc(bptr->length + 1);
-    memcpy(buff, bptr->data, bptr->length);
-    buff[bptr->length] = 0;
-    BIO_free_all(b64);
-    return buff;
+    static const char* base64chars = BASE64_CHARS;
+    int i = 0, j, k;
+    int added = n % 3;
+    added = (added == 0? 0: (added == 1? 2 : 1));
+    int size = (n + added) * 8 / 6;
+    char* result = (char*) calloc(sizeof(char), size + added + 1);
+    result[size + added] = 0;
+    for(j = 0; j < (n + added); j++)
+    {
+        char c = j < size ? str[j] : 0;
+        for(k = 0; k < 8; k++)
+        {
+            int i_k = i + k;
+            int i_k_6 = i_k / 6;
+            if((i_k % 6) == 0)
+            {
+                if(i_k_6 >= 1) result[i_k_6 - 1] = base64chars[result[i_k_6 - 1]];
+                result[i_k_6] = 0;
+            }
+            result[i_k_6] = (result[i_k_6] << 1) | ((c >> (7 - k)) & 1);
+        }
+        i += 8;
+    }
+    for(j = 0; j < added; j++) result[size + added - 1 - j] = '=';
+    return result;
 }
 int* get_command_line_size()
 {
