@@ -18,11 +18,13 @@ int strcmp(const char* s1, const char* s2)
         s1++,s2++;
     return *(const unsigned char*)s1-*(const unsigned char*)s2;
 }
-void touch(char* path, char* str)
+int touch(char* path, char* str)
 {
     FILE* f = fopen(path, "w");
+    if(f == NULL) return 0;
     fwrite(str, strlen(str), 1, f);
     fclose(f);
+    return 1;
 }
 char* itoa(char* prefix, int i, char* suffix)
 {

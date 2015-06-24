@@ -160,6 +160,9 @@ static char* test_utils()
     set_timestamp(timestamp);
     mu_assert("timestamp should not be empty",
             timestamp[0] != 0);
+    char* dir = "/tmp/mylittledir/";
+    rmdir(dir);
+    mkdir_p(dir);
     return 0;
 }
 static char* test_time_queue()
@@ -297,17 +300,17 @@ static char* test_trace()
     trace("blah");
     return 0;
 }
-void touch(char* path)
+void dynamic_configuration_handler(int argc, char**argv, void* context)
+{
+    *dynamic_configuration_watch_routine_running() = 0;
+}
+void zktouch(char* path)
 {
     FILE* f = fopen(path, "w");
     char* str = "--zookeepers  test ";
     flock(fileno(f), LOCK_EX);
     fwrite(str, strlen(str), 1, f);
     fclose(f);
-}
-void dynamic_configuration_handler(int argc, char**argv, void* context)
-{
-    *dynamic_configuration_watch_routine_running() = 0;
 }
 static char* test_dynamic_configuration()
 {
@@ -319,7 +322,7 @@ static char* test_dynamic_configuration()
     unlink("/tmp/fuse_kafka.args");
     mu_assert("loading dynamic configuration should fail",
             dynamic_configuration_load() == 1);
-    touch(conf_path);
+    zktouch(conf_path);
     dynamic_configuration_get()->path = conf_path;
     mu_assert("parse_line_from_file should return 1",
             parse_line_from_file(NULL, NULL, NULL) == 1);

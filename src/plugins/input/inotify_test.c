@@ -77,11 +77,11 @@ static char* test_handle_file_modified()
     strcpy(e->name, path);
     e->len = strlen(path);
     handle_file_modified(e, NULL, watches, tmp);
+    unlink(full_path);
+    handle_file_modified(e, NULL, watches, tmp);
     closedir(fd);
     teardown_watches(NULL, fd, watches);
     free(e);
-    unlink(full_path);
-    handle_file_modified(e, NULL, watches, tmp);
     free(full_path);
     return 0;
 

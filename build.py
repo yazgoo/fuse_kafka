@@ -42,9 +42,9 @@ class InputPlugins:
             self.objects[lib] = prefix + lib + ".o"
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
+common_libs = ["m", "crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
 libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
+default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson", "crypto"]
 input_plugins = InputPlugins()
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
