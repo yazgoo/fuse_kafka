@@ -9,11 +9,28 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <math.h>
 int strcmp(const char* s1, const char* s2)
 {
     while(*s1 && (*s1==*s2))
         s1++,s2++;
     return *(const unsigned char*)s1-*(const unsigned char*)s2;
+}
+void touch(char* path, char* str)
+{
+    FILE* f = fopen(path, "w");
+    fwrite(str, strlen(str), 1, f);
+    fclose(f);
+}
+char* itoa(char* prefix, int i, char* suffix)
+{
+    int size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*sizeof(char);
+    char *str = (char*) malloc((int)(size) + 1);
+    if(str != NULL)
+        snprintf(str, size, "%s%d%s", prefix, i, suffix);
+    return str;
 }
 /**
  * @brief convert the input to base64
@@ -179,6 +196,23 @@ int fk_sleep(int n)
 {
     if(*(fk_sleep_enabled())) return sleep(n);
     return *(fk_sleep_return_value());
+}
+static void mkdir_p(const char *dir) {
+        char tmp[256];
+        char *p = NULL;
+        size_t len;
+
+        snprintf(tmp, sizeof(tmp),"%s",dir);
+        len = strlen(tmp);
+        if(tmp[len - 1] == '/')
+                tmp[len - 1] = 0;
+        for(p = tmp + 1; *p; p++)
+                if(*p == '/') {
+                        *p = 0;
+                        mkdir(tmp, S_IRWXU);
+                        *p = '/';
+                }
+        mkdir(tmp, S_IRWXU);
 }
 #define DO_AS_CALLER(action) \
     struct fuse_context* __context = fuse_get_context(); \

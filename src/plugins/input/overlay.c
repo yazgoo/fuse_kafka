@@ -538,6 +538,7 @@ int input_setup(int argc, char** argv, void* cfg)
 #endif
             conf->directory_fd = open(conf->directories[conf->directory_n],
                     O_RDONLY);
+            input_is_watching_directory(argv[1]);
             return argv == NULL? -1 : fuse_main(argc, argv, &kafka_oper, conf);
         }
     }

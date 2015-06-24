@@ -12,7 +12,8 @@
 """ @package fuse_kafka
 Startup script for fuse_kafka.
 """
-import re, sys, getopt, json, glob, os, subprocess, copy, time, subprocess, multiprocessing, fcntl
+import fnmatch, re, sys, getopt, json, glob, os, subprocess,\
+    copy, time, subprocess, multiprocessing, fcntl
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
@@ -239,12 +240,24 @@ class FuseKafkaService:
         self.stop()
         while self.get_status() == 0: time.sleep(0.1)
         self.start()
-    def list_watched_directories(self):
+    def fuse_kafka_running_at(self, pid):
+        path = "/proc/" + pid + "/exe"
+        return os.path.isfile(path) and \
+                os.path.realpath(path).endswith("fuse_kafka")
+    def list_watched_directories(self, var_run_path = "/var/run"):
         result = []
-        with open(self.proc_mount_path) as f:
-            for line in f.readlines():
-                if line.startswith("fuse_kafka"):
-                    result.append(line.split()[1])
+        watched_dir = var_run_path + "/fuse_kafka/watched"
+        p = re.compile("^" + watched_dir + "(.*)/([^/]+).pid$")
+        for root, dirnames, filenames in os.walk(watched_dir):
+            for filename in fnmatch.filter(filenames, '*.pid'):
+                path = os.path.join(root, filename)
+                tuples = p.findall(path)
+                if len(tuples) > 0: 
+                    tuple = tuples[0]
+                    if self.fuse_kafka_running_at(tuple[1]):
+                        result.append(tuple[0])
+                    else:
+                        os.remove(path)
         return result
     def get_status(self):
         """ Displays the status of fuse_kafka processes """

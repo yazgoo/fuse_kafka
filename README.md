@@ -442,6 +442,13 @@ argc           | number of command line arguments (without arguments given after
 argv           | array of arguments
 conf           | parsed configuration based on arguments given after `--` (see config.h)
 
+Every process watching a given directory must declared itself with:
+
+````c
+void input_is_watching_directory(char* path)
+````
+
+
 It should output it's data using:
 
 ````c
@@ -541,6 +548,25 @@ You can generate an rpm (provided rpm-build is installed) via:
 
 This will create a $HOME/rpmbuild directory, and generate the rpm in
 /root/rpmbuild/RPMS.
+
+Status
+======
+
+To create a status per mount point, here is how we procede:
+
+* Each fuse_kafka process writes its pid and the directories it
+watches in /var/run/fuse_kafka/watched
+
+For example, if pid #1649 is watching /var/log, the following file
+will be generated:
+
+    /var/run/fuse_kafka/watched/var/log/1649.pid
+
+To list watched directories, fuse_kafka.py list such files, and checks if
+fuse_kafka is running with such a pid.
+
+If there is no process running or the process is not fuse_kafka, the
+.pid will be deleted.
 
 Licensing
 =========

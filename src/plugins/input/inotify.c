@@ -29,20 +29,25 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
     char* line = 0;
     size_t length;
     FILE* f = fopen(path, "r");
-    fseek(f, 0, SEEK_END); if(ftell(f) < offset) offset = 0;
-    fseek(f, offset, SEEK_SET);
-    ssize_t size;
-    while((size = getline(&line, &length, f)) > 0)
+    if(f != NULL)
     {
-        // printf("File %s, writing %s\n", path, line);
-        output_write(path, line, size, 0);
+        fseek(f, 0, SEEK_END); if(ftell(f) < offset) offset = 0;
+        fseek(f, offset, SEEK_SET);
+        ssize_t size;
+        while((size = getline(&line, &length, f)) > 0)
+        {
+            // printf("File %s, writing %s\n", path, line);
+            output_write(path, line, size, 0);
+        }
+        if(ftell(f) > offset)
+        {
+            // printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
+        }
+        fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
+        fclose(f);
     }
-    if(ftell(f) > offset)
-    {
-        // printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
-    }
-    fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
-    fclose(f);
+    else
+        if(old_path != path) free(old_path);
     free(path);
     free(line);
 }
@@ -170,7 +175,10 @@ int input_setup(int argc, char** argv, void* cfg)
     {
         for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
                 conf->directory_n++)
+        {
+            input_is_watching_directory(conf->directories[conf->directory_n]);
             setup_watches(conf->directories[conf->directory_n], fd, watches, offsets);
+        }
         conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
     }
     struct inotify_event event;

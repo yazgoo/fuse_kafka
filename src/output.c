@@ -4,6 +4,7 @@
 #include "zookeeper.c"
 #ifndef TEST
 #include "dynamic_configuration.c"
+#include "arguments.c"
 #endif
 #include <grp.h>
 #include <pwd.h>

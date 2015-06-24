@@ -61,12 +61,6 @@ static char* test_teardown()
     handle_file_deleted(&e, NULL, NULL, NULL);
     return 0;
 }
-void touch(char* path, char* str)
-{
-    FILE* f = fopen(path, "w");
-    fwrite(str, strlen(str), 1, f);
-    fclose(f);
-}
 static char* test_handle_file_modified()
 {
     struct inotify_event* e = malloc(sizeof(struct inotify_event)
@@ -87,6 +81,7 @@ static char* test_handle_file_modified()
     teardown_watches(NULL, fd, watches);
     free(e);
     unlink(full_path);
+    handle_file_modified(e, NULL, watches, tmp);
     free(full_path);
     return 0;
 
