@@ -253,12 +253,22 @@ def package():
         ./build.py package
         tar --transform s,^.,fuse_kafka-0.1.4, --exclude=.git --exclude=.nfs* --exclude=out -czf ../fuse_kafka-0.1.4.tar.gz .
     """
+    clean()
     name = binary_name + "-" + get_version()
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
             "--exclude=.git", 
             "--exclude=.nfs*",
             "--exclude=out", "-czf", tar , ".")
+def rpm():
+    name = binary_name + "-" + get_version()
+    package()
+    sources = os.environ["HOME"] + "/rpmbuild/SOURCES"
+    run("mkdir", "-p", sources)
+    tar = "../" + name + ".tar.gz"
+    run("cp", tar, sources)
+    run("rpmbuild", "-ba", "--define", "'_srcdefattr (-,root,root)'",
+            "packaging/fuse_kafka.spec")
 def filter_link(a):
     """ Filter function for link flags:
     takes a link flag and modifies it if necessary, i.e.

@@ -532,6 +532,16 @@ Before starting fuse_kafka, the init script issues a:
 
 Which will disable such logging for fuse_kafka so there is no "audit flood".
 
+RPM
+===
+
+You can generate an rpm (provided rpm-build is installed) via:
+
+    ./build.py rpm
+
+This will create a $HOME/rpmbuild directory, and generate the rpm in
+/root/rpmbuild/SRPMS.
+
 Licensing
 =========
 
