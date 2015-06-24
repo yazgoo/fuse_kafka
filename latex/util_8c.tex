@@ -12,6 +12,9 @@ utility functions
 {\ttfamily \#include $<$stdlib.\-h$>$}\*
 {\ttfamily \#include $<$string.\-h$>$}\*
 {\ttfamily \#include $<$unistd.\-h$>$}\*
+{\ttfamily \#include $<$sys/stat.\-h$>$}\*
+{\ttfamily \#include $<$sys/types.\-h$>$}\*
+{\ttfamily \#include $<$math.\-h$>$}\*
 \subsection*{\-Defines}
 \begin{DoxyCompactItemize}
 \item 
@@ -24,6 +27,12 @@ utility functions
 \begin{DoxyCompactItemize}
 \item 
 \hypertarget{util_8c_a11bd144d7d44914099a3aeddf1c8567d}{int {\bfseries strcmp} (const char $\ast$s1, const char $\ast$s2)}\label{util_8c_a11bd144d7d44914099a3aeddf1c8567d}
+
+\item 
+\hypertarget{util_8c_a73ce5cc4cbf435f763393006e53e4530}{int {\bfseries touch} (char $\ast$path, char $\ast$str)}\label{util_8c_a73ce5cc4cbf435f763393006e53e4530}
+
+\item 
+\hypertarget{util_8c_afe6a523ecbb445e493e9404fe5ea2f97}{char $\ast$ {\bfseries itoa} (char $\ast$prefix, int i, char $\ast$suffix)}\label{util_8c_afe6a523ecbb445e493e9404fe5ea2f97}
 
 \item 
 char $\ast$ \hyperlink{util_8c_afb4e6c2974525e7bca75f0a0c1ef94d9}{base64} (const unsigned char $\ast$input, int length)
@@ -65,6 +74,9 @@ char $\ast$ \hyperlink{util_8c_a595bb2010e077b76450c9c04e2b25e16}{concat} (char 
 \item 
 \hypertarget{util_8c_a8a7724d430eac361ba7bf823fdd92868}{int {\bfseries fk\-\_\-sleep} (int n)}\label{util_8c_a8a7724d430eac361ba7bf823fdd92868}
 
+\item 
+\hypertarget{util_8c_a1b718cc743329e813dee2ecce723e209}{static void {\bfseries mkdir\-\_\-p} (const char $\ast$dir)}\label{util_8c_a1b718cc743329e813dee2ecce723e209}
+
 \end{DoxyCompactItemize}
 
 
@@ -96,7 +108,7 @@ struct fuse_context* __context = fuse_get_context(); \
 \end{DoxyCode}
 
 
-\-Definition at line 183 of file util.\-c.
+\-Definition at line 219 of file util.\-c.
 
 
 
@@ -125,7 +137,7 @@ a newly allocated string with the base64 data which should be free'd by the user
 \end{DoxyReturn}
 
 
-\-Definition at line 25 of file util.\-c.
+\-Definition at line 44 of file util.\-c.
 
 \hypertarget{util_8c_a595bb2010e077b76450c9c04e2b25e16}{\index{util.\-c@{util.\-c}!concat@{concat}}
 \index{concat@{concat}!util.c@{util.\-c}}
@@ -140,7 +152,7 @@ null if a or b is null, a + \char`\"{}/\char`\"{} + b otherwise
 \end{DoxyReturn}
 
 
-\-Definition at line 156 of file util.\-c.
+\-Definition at line 175 of file util.\-c.
 
 \hypertarget{util_8c_ad0e8a9673662b67246c1af0ce7e7b06c}{\index{util.\-c@{util.\-c}!get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}}
 \index{get\-\_\-command\-\_\-line@{get\-\_\-command\-\_\-line}!util.c@{util.\-c}}
@@ -163,7 +175,7 @@ a base64 encoded string with the process command line, or an empty string if it 
 \end{DoxyReturn}
 
 
-\-Definition at line 53 of file util.\-c.
+\-Definition at line 72 of file util.\-c.
 
 \hypertarget{util_8c_adb849059403e0b01c44605d63d205daa}{\index{util.\-c@{util.\-c}!get\-\_\-limit@{get\-\_\-limit}}
 \index{get\-\_\-limit@{get\-\_\-limit}!util.c@{util.\-c}}
@@ -182,7 +194,7 @@ the index of the limit, argc if it is not found
 \end{DoxyReturn}
 
 
-\-Definition at line 103 of file util.\-c.
+\-Definition at line 122 of file util.\-c.
 
 \hypertarget{util_8c_a9cc3c9ae892455a66de3012f5b6fb8e0}{\index{util.\-c@{util.\-c}!set\-\_\-timestamp@{set\-\_\-timestamp}}
 \index{set\-\_\-timestamp@{set\-\_\-timestamp}!util.c@{util.\-c}}
@@ -205,5 +217,5 @@ void
 \end{DoxyReturn}
 
 
-\-Definition at line 89 of file util.\-c.
+\-Definition at line 108 of file util.\-c.
 

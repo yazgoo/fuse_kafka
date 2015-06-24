@@ -128,10 +128,10 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_server_
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_zookeeper</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f6b038f84fb322e0a604d8e285dfda3"></a><!-- doxytag: member="test.c::test_trace" ref="a3f6b038f84fb322e0a604d8e285dfda3" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_trace</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06e435f5f411a0d49a51b91cb60c7de9"></a><!-- doxytag: member="test.c::touch" ref="a06e435f5f411a0d49a51b91cb60c7de9" args="(char *path)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37112606a27d248ac5bb91130d623647"></a><!-- doxytag: member="test.c::dynamic_configuration_handler" ref="a37112606a27d248ac5bb91130d623647" args="(int argc, char **argv, void *context)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_configuration_handler</b> (int argc, char **argv, void *context)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af999e246a24441b9a030396604978754"></a><!-- doxytag: member="test.c::zktouch" ref="af999e246a24441b9a030396604978754" args="(char *path)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>zktouch</b> (char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06da128ec1670c30352f65fa5f2296ab"></a><!-- doxytag: member="test.c::test_dynamic_configuration" ref="a06da128ec1670c30352f65fa5f2296ab" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_dynamic_configuration</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accca406fc363c65a75f53bc6aef7a209"></a><!-- doxytag: member="test.c::test_output" ref="accca406fc363c65a75f53bc6aef7a209" args="()" -->
@@ -159,7 +159,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 <div class="memdoc">
 <b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">char</span>* directories[] = {<span class="stringliteral">&quot;/lol/&quot;</span>};\
     static <span class="keywordtype">char</span>* excluded_files[] = {<span class="stringliteral">&quot;xd&quot;</span>};\
-    config conf;\
+    config <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;\
     conf.directories = directories;\
     conf.directory_n = 0;\
     conf.excluded_files_n = 1;\
@@ -171,7 +171,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
     struct <a class="code" href="structfuse__context.html">fuse_context</a>* context = fuse_get_context();\
     context-&gt;pid = getpid();\
     kafka_t private_data;\
-    private_data.conf = &amp;conf;\
+    private_data.conf = &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;\
     context-&gt;private_data = (<span class="keywordtype">void</span>*) &amp;private_data;
 </pre></div>
 <p>Definition at line <a class="el" href="test_8c_source.html#l00014">14</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
@@ -184,7 +184,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -196,7 +196,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 08:33:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 15:29:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

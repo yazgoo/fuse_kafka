@@ -104,27 +104,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;sys/wait.h&gt;</code><br/>
 <code>#include &quot;dynamic_configuration.c&quot;</code><br/>
 <code>#include &quot;input.h&quot;</code><br/>
-<code>#include &quot;config.h&quot;</code><br/>
-<code>#include &quot;<a class="el" href="util_8c_source.html">util.c</a>&quot;</code><br/>
+<code>#include &quot;arguments.c&quot;</code><br/>
 </div>
 <p><a href="fuse__kafka_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr><td colspan="2"><h2><a name="define-members"></a>
-Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a369266c24eacffb87046522897a570d5"></a><!-- doxytag: member="fuse_kafka.c::_GNU_SOURCE" ref="a369266c24eacffb87046522897a570d5" args="" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>_GNU_SOURCE</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuse__kafka_8c.html#a6388870e639eee9c0a69446876f1f8cc">STR</a>(s)&#160;&#160;&#160;#s</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">declare a configuration item, which is a list of string an and a number of those  <a href="#a6388870e639eee9c0a69446876f1f8cc"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b">CONFIG_CURRENT</a>(expected)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">check if name matches a configuration name, if so points current_size pointer to the size of the matched configuration and sets the address of the string array for that configuration to next item in argv list  <a href="#a65146f5f302bf995aea3e0354f706b1b"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7763658a71b202489f76c657f15b540"></a><!-- doxytag: member="fuse_kafka.c::add_fields_and_tags" ref="ad7763658a71b202489f76c657f15b540" args="(config *conf)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add_fields_and_tags</b> (config *conf)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9965b16add97c7a848e6e305dc14434f"></a><!-- doxytag: member="fuse_kafka.c::free_fields_and_tags" ref="a9965b16add97c7a848e6e305dc14434f" args="(config *conf)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>free_fields_and_tags</b> (config *conf)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ed734361bd8d7781f51df400838a8f9"></a><!-- doxytag: member="fuse_kafka.c::parse_arguments" ref="a0ed734361bd8d7781f51df400838a8f9" args="(int argc, char **argv, config *conf)" -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>parse_arguments</b> (int argc, char **argv, config *conf)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00a727547d5cc5aea52bd3642a693821"></a><!-- doxytag: member="fuse_kafka.c::configuration_clean" ref="a00a727547d5cc5aea52bd3642a693821" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>configuration_clean</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5027c2286aa33d3f869c390d6899126"></a><!-- doxytag: member="fuse_kafka.c::my_input_setup" ref="af5027c2286aa33d3f869c390d6899126" args="(int argc, char **argv, int limit)" -->
@@ -136,7 +121,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (int argc, ch
 <tr><td colspan="2"><h2><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf331e5eb0c6c05b3c9b84b2118cda46"></a><!-- doxytag: member="fuse_kafka.c::conf" ref="adf331e5eb0c6c05b3c9b84b2118cda46" args="" -->
-config&#160;</td><td class="memItemRight" valign="bottom"><b>conf</b></td></tr>
+config&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46">conf</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">declare a configuration item, which is a list of string an and a number of those <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7353cae57e2530c316ddacb27ef14932"></a><!-- doxytag: member="fuse_kafka.c::cmd" ref="a7353cae57e2530c316ddacb27ef14932" args="" -->
 char *&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b> = NULL</td></tr>
 </table>
@@ -144,61 +130,13 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b> = NULL</td>
 <div class="textblock"><p>main fuse_kafka source </p>
 
 <p>Definition in file <a class="el" href="fuse__kafka_8c_source.html">fuse_kafka.c</a>.</p>
-</div><hr/><h2>Define Documentation</h2>
-<a class="anchor" id="a65146f5f302bf995aea3e0354f706b1b"></a><!-- doxytag: member="fuse_kafka.c::CONFIG_CURRENT" ref="a65146f5f302bf995aea3e0354f706b1b" args="(expected)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define <a class="el" href="fuse__kafka_8c.html#a65146f5f302bf995aea3e0354f706b1b">CONFIG_CURRENT</a></td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">expected</td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordflow">if</span>(!strcmp(name, <a class="code" href="fuse__kafka_8c.html#a6388870e639eee9c0a69446876f1f8cc" title="declare a configuration item, which is a list of string an and a number of those">STR</a>(expected))) { \
-        current_size = &amp;(conf-&gt;expected ## _n); \
-        conf-&gt;expected = argv + i + 1; \
-    }
-</pre></div>
-<p>check if name matches a configuration name, if so points current_size pointer to the size of the matched configuration and sets the address of the string array for that configuration to next item in argv list </p>
-
-<p>Definition at line <a class="el" href="fuse__kafka_8c_source.html#l00033">33</a> of file <a class="el" href="fuse__kafka_8c_source.html">fuse_kafka.c</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6388870e639eee9c0a69446876f1f8cc"></a><!-- doxytag: member="fuse_kafka.c::STR" ref="a6388870e639eee9c0a69446876f1f8cc" args="(s)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define <a class="el" href="fuse__kafka_8c.html#a6388870e639eee9c0a69446876f1f8cc">STR</a></td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">s</td><td>)</td>
-          <td>&#160;&#160;&#160;#s</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>declare a configuration item, which is a list of string an and a number of those </p>
-<p>convert a symbol to a string </p>
-
-<p>Definition at line <a class="el" href="fuse__kafka_8c_source.html#l00028">28</a> of file <a class="el" href="fuse__kafka_8c_source.html">fuse_kafka.c</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -210,7 +148,7 @@ char *&#160;</td><td class="memItemRight" valign="bottom"><b>cmd</b> = NULL</td>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 08:33:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 24 2015 15:29:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

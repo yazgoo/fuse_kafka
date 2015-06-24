@@ -22,29 +22,9 @@ main fuse\-\_\-kafka source
 {\ttfamily \#include $<$sys/wait.\-h$>$}\*
 {\ttfamily \#include \char`\"{}dynamic\-\_\-configuration.\-c\char`\"{}}\*
 {\ttfamily \#include \char`\"{}input.\-h\char`\"{}}\*
-{\ttfamily \#include \char`\"{}config.\-h\char`\"{}}\*
-{\ttfamily \#include \char`\"{}util.\-c\char`\"{}}\*
-\subsection*{\-Defines}
-\begin{DoxyCompactItemize}
-\item 
-\hypertarget{fuse__kafka_8c_a369266c24eacffb87046522897a570d5}{\#define {\bfseries \-\_\-\-G\-N\-U\-\_\-\-S\-O\-U\-R\-C\-E}}\label{fuse__kafka_8c_a369266c24eacffb87046522897a570d5}
-
-\item 
-\#define \hyperlink{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\-S\-T\-R}(s)~\#s
-\begin{DoxyCompactList}\small\item\em declare a configuration item, which is a list of string an and a number of those \end{DoxyCompactList}\item 
-\#define \hyperlink{fuse__kafka_8c_a65146f5f302bf995aea3e0354f706b1b}{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}(expected)
-\begin{DoxyCompactList}\small\item\em check if name matches a configuration name, if so points current\-\_\-size pointer to the size of the matched configuration and sets the address of the string array for that configuration to next item in argv list \end{DoxyCompactList}\end{DoxyCompactItemize}
+{\ttfamily \#include \char`\"{}arguments.\-c\char`\"{}}\*
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
-\item 
-\hypertarget{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}{void {\bfseries add\-\_\-fields\-\_\-and\-\_\-tags} (config $\ast$conf)}\label{fuse__kafka_8c_ad7763658a71b202489f76c657f15b540}
-
-\item 
-\hypertarget{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}{void {\bfseries free\-\_\-fields\-\_\-and\-\_\-tags} (config $\ast$conf)}\label{fuse__kafka_8c_a9965b16add97c7a848e6e305dc14434f}
-
-\item 
-\hypertarget{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}{int {\bfseries parse\-\_\-arguments} (int argc, char $\ast$$\ast$argv, config $\ast$conf)}\label{fuse__kafka_8c_a0ed734361bd8d7781f51df400838a8f9}
-
 \item 
 \hypertarget{fuse__kafka_8c_a00a727547d5cc5aea52bd3642a693821}{void {\bfseries configuration\-\_\-clean} ()}\label{fuse__kafka_8c_a00a727547d5cc5aea52bd3642a693821}
 
@@ -61,9 +41,9 @@ main fuse\-\_\-kafka source
 \subsection*{\-Variables}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}{config {\bfseries conf}}\label{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}
+\hypertarget{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}{config \hyperlink{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}{conf}}\label{fuse__kafka_8c_adf331e5eb0c6c05b3c9b84b2118cda46}
 
-\item 
+\begin{DoxyCompactList}\small\item\em declare a configuration item, which is a list of string an and a number of those \end{DoxyCompactList}\item 
 \hypertarget{fuse__kafka_8c_a7353cae57e2530c316ddacb27ef14932}{char $\ast$ {\bfseries cmd} = \-N\-U\-L\-L}\label{fuse__kafka_8c_a7353cae57e2530c316ddacb27ef14932}
 
 \end{DoxyCompactItemize}
@@ -73,44 +53,4 @@ main fuse\-\_\-kafka source
 main fuse\-\_\-kafka source 
 
 \-Definition in file \hyperlink{fuse__kafka_8c_source}{fuse\-\_\-kafka.\-c}.
-
-
-
-\subsection{\-Define \-Documentation}
-\hypertarget{fuse__kafka_8c_a65146f5f302bf995aea3e0354f706b1b}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T@{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}}
-\index{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T@{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
-\subsubsection[{\-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-C\-O\-N\-F\-I\-G\-\_\-\-C\-U\-R\-R\-E\-N\-T}(
-\begin{DoxyParamCaption}
-\item[{}]{expected}
-\end{DoxyParamCaption}
-)}}\label{fuse__kafka_8c_a65146f5f302bf995aea3e0354f706b1b}
-{\bfseries \-Value\-:}
-\begin{DoxyCode}
-if(!strcmp(name, STR(expected))) { \
-        current_size = &(conf->expected ## _n); \
-        conf->expected = argv + i + 1; \
-    }
-\end{DoxyCode}
-
-
-check if name matches a configuration name, if so points current\-\_\-size pointer to the size of the matched configuration and sets the address of the string array for that configuration to next item in argv list 
-
-
-
-\-Definition at line 33 of file fuse\-\_\-kafka.\-c.
-
-\hypertarget{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}{\index{fuse\-\_\-kafka.\-c@{fuse\-\_\-kafka.\-c}!\-S\-T\-R@{\-S\-T\-R}}
-\index{\-S\-T\-R@{\-S\-T\-R}!fuse_kafka.c@{fuse\-\_\-kafka.\-c}}
-\subsubsection[{\-S\-T\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define {\bf \-S\-T\-R}(
-\begin{DoxyParamCaption}
-\item[{}]{s}
-\end{DoxyParamCaption}
-)~\#s}}\label{fuse__kafka_8c_a6388870e639eee9c0a69446876f1f8cc}
-
-
-declare a configuration item, which is a list of string an and a number of those 
-
-convert a symbol to a string 
-
-\-Definition at line 28 of file fuse\-\_\-kafka.\-c.
 
