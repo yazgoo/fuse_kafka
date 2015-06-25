@@ -197,9 +197,15 @@ class FuseKafkaService:
         if self.get_status() == 0:
             print("fuse_kafka started")
     def do_auditctl_rule(self, pid, action = '-A'):
-        cmd = "/sbin/auditctl " + action + " exit,never -F "+\
-                "path=/var/log/audit/audit.log -F perm=r -F pid="+\
-                pid
+        rule = action + " exit,never -F "+\
+                "path=/var/log/audit/audit.log -F perm=r -F pid="+ pid
+        rule_file = "/etc/audit/audit.rules"
+        if action == '-A':
+            with open(rule_file, "a+") as f:
+                f.write(rule + "\n")
+        else:
+            os.remove(rule_file)
+        cmd = "/sbin/auditctl " + rule
         subprocess.Popen(cmd.split())
     def remove_auditctl_rules(self):
         output = subprocess.Popen(["auditctl", "-l"],
