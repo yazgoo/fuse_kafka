@@ -168,6 +168,31 @@ static char* test_utils()
     closedir(d);
     return 0;
 }
+static int expect_base64(char* input, char* expected)
+{
+    char* output = base64(input, strlen(input));
+    int result = (strcmp(expected, output) == 0);
+    printf("base64 output: %s\n", output);
+    free(output);
+    return result;
+}
+static char* test_utils_base64()
+{
+#define b64_assert(a, b) {\
+    mu_assert("base64 encoding \"" a "\" should return \"" b "\"", \
+            expect_base64(a, b)); }
+    mu_assert("base64(NULL) should return NULL", base64(NULL, 0) == NULL);
+    b64_assert("", "")
+    b64_assert("0", "MA==")
+    b64_assert("1", "MQ==")
+    b64_assert("42", "NDI=")
+    b64_assert("hello, world", "aGVsbG8sIHdvcmxk")
+    b64_assert("sit amet, consectetur adipiscing elit. Aenean ut gravida.",
+            "c2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gQWVuZWFuIHV0IGdyYXZpZGEu")
+    b64_assert("sit amet, consectetur adipiscing elit. Aenean ut gravida",
+            "c2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gQWVuZWFuIHV0IGdyYXZpZGE=")
+    return 0;
+}
 static char* test_time_queue()
 {
     time_queue* queue = time_queue_new(10, 42);
@@ -443,6 +468,7 @@ static char* all_tests()
     mu_run_test(test_parse_arguments);
     mu_run_test(test_logging);
     mu_run_test(test_utils);
+    mu_run_test(test_utils_base64);
     mu_run_test(test_time_queue);
     mu_run_test(test_zookeeper);
     mu_run_test(test_trace);

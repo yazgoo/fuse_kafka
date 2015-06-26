@@ -15,7 +15,7 @@ void input_is_watching_directory(char* path)
 {
     char* dir = concat(FUSE_KAFKA_WATCHED_DIRS, path);
     if(dir != NULL) mkdir_p(dir);
-    char* pid = itoa("", getpid(), ".pid");
+    char* pid = integer_concat("", getpid(), ".pid");
     if(pid != NULL)
     {
         char* pid_path = concat(dir, pid);

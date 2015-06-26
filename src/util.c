@@ -26,7 +26,7 @@ int touch(char* path, char* str)
     fclose(f);
     return 1;
 }
-char* itoa(char* prefix, int i, char* suffix)
+char* integer_concat(char* prefix, int i, char* suffix)
 {
     int size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*sizeof(char);
     char *str = (char*) malloc((int)(size) + 1);
@@ -46,12 +46,14 @@ char* itoa(char* prefix, int i, char* suffix)
 char* base64(const unsigned char* str, int n)
 {
     static const char* base64chars = BASE64_CHARS;
+    if(str == NULL) return NULL;
     int i = 0, j, k;
     int added = n % 3;
     added = (added == 0? 0: (added == 1? 2 : 1));
     int size = (n + added) * 8 / 6;
+    printf("added %d, size %d, n %d\n", added, size, n);
     char* result = (char*) calloc(sizeof(char), size + added + 1);
-    result[size + added] = 0;
+    result[size] = 0;
     for(j = 0; j < (n + added); j++)
     {
         char c = j < size ? str[j] : 0;
@@ -68,7 +70,9 @@ char* base64(const unsigned char* str, int n)
         }
         i += 8;
     }
-    for(j = 0; j < added; j++) result[size + added - 1 - j] = '=';
+    /* for last char, base64chars might not have been called: */
+    if(added == 0 && size > (added + 1)) result[size - 1 - added] = base64chars[result[size - 1 - added]];
+    for(j = 0; j < added; j++) result[size - 1 - j] = '=';
     return result;
 }
 int* get_command_line_size()
@@ -212,6 +216,9 @@ int fk_sleep(int n)
     if(*(fk_sleep_enabled())) return sleep(n);
     return *(fk_sleep_return_value());
 }
+#ifdef _WIN32
+#define mkdir( D, M ) _mkdir( D )
+#endif 
 static void mkdir_p(const char *dir) {
         char tmp[256];
         char *p = NULL;
