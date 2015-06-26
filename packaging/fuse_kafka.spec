@@ -11,7 +11,7 @@ Group: Development/Tools
 Requires(post): info
 Requires(preun): info
 
-BuildRequires: python, openssl-static, openssl-devel, fuse-devel, librdkafka-devel, zlib, libzookeeper, libzookeeper-devel, jansson-devel
+BuildRequires: python, fuse-devel, librdkafka-devel, zlib, libzookeeper, libzookeeper-devel, jansson-devel
 Requires: librdkafka1, fuse, openssl, glibc, libzookeeper, jansson
 # do not save library versions dependencies:
 AutoReqProv: no
