@@ -51,7 +51,6 @@ char* base64(const unsigned char* str, int n)
     int added = n % 3;
     added = (added == 0? 0: (added == 1? 2 : 1));
     int size = (n + added) * 8 / 6;
-    printf("added %d, size %d, n %d\n", added, size, n);
     char* result = (char*) calloc(sizeof(char), size + added + 1);
     result[size] = 0;
     for(j = 0; j < (n + added); j++)
