@@ -19,6 +19,8 @@
 
 \item 
 \#define {\bfseries \-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}
+\item 
+\#define {\bfseries b64\-\_\-assert}(a, b)
 \end{DoxyCompactItemize}
 \subsection*{\-Functions}
 \begin{DoxyCompactItemize}
@@ -36,6 +38,12 @@
 
 \item 
 \hypertarget{test_8c_afcf3349a0c73d983540c56c9d692abdd}{static char $\ast$ {\bfseries test\-\_\-utils} ()}\label{test_8c_afcf3349a0c73d983540c56c9d692abdd}
+
+\item 
+\hypertarget{test_8c_a97ff426783f1f7f47043214462e40606}{static int {\bfseries expect\-\_\-base64} (char $\ast$input, char $\ast$expected)}\label{test_8c_a97ff426783f1f7f47043214462e40606}
+
+\item 
+\hypertarget{test_8c_a981da269effaf63c0a18b3ec3fdc1d42}{static char $\ast$ {\bfseries test\-\_\-utils\-\_\-base64} ()}\label{test_8c_a981da269effaf63c0a18b3ec3fdc1d42}
 
 \item 
 \hypertarget{test_8c_a8730b72d5194e9bbcb66cd04dc5447bb}{static char $\ast$ {\bfseries test\-\_\-time\-\_\-queue} ()}\label{test_8c_a8730b72d5194e9bbcb66cd04dc5447bb}
@@ -90,6 +98,20 @@
 
 
 \subsection{\-Define \-Documentation}
+\hypertarget{test_8c_aed0eb399db9dc1b9bf9359fd5d242f1a}{\index{test.\-c@{test.\-c}!b64\-\_\-assert@{b64\-\_\-assert}}
+\index{b64\-\_\-assert@{b64\-\_\-assert}!test.c@{test.\-c}}
+\subsubsection[{b64\-\_\-assert}]{\setlength{\rightskip}{0pt plus 5cm}\#define b64\-\_\-assert(
+\begin{DoxyParamCaption}
+\item[{}]{a, }
+\item[{}]{b}
+\end{DoxyParamCaption}
+)}}\label{test_8c_aed0eb399db9dc1b9bf9359fd5d242f1a}
+{\bfseries \-Value\-:}
+\begin{DoxyCode}
+{\
+    mu_assert("base64 encoding \"" a "\" should return \"" b "\"", \
+            expect_base64(a, b)); }
+\end{DoxyCode}
 \hypertarget{test_8c_a03c9510ad1cf49128f06fbc48bb5a51d}{\index{test.\-c@{test.\-c}!\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G@{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}}
 \index{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G@{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}!test.c@{test.\-c}}
 \subsubsection[{\-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}]{\setlength{\rightskip}{0pt plus 5cm}\#define \-S\-E\-T\-\_\-\-C\-O\-N\-F\-I\-G}}\label{test_8c_a03c9510ad1cf49128f06fbc48bb5a51d}

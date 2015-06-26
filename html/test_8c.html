@@ -102,6 +102,7 @@ Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6df1d22fb5f09eccc23b9f399670cfd7"></a><!-- doxytag: member="test.c::STRINGIFY" ref="a6df1d22fb5f09eccc23b9f399670cfd7" args="(x)" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>STRINGIFY</b>(x)&#160;&#160;&#160;#x</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>SET_CONFIG</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>b64_assert</b>(a, b)</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4ce2f2b04dd85332081e4baad92fff"></a><!-- doxytag: member="test.c::get_file_content" ref="abd4ce2f2b04dd85332081e4baad92fff" args="(char *path)" -->
@@ -114,6 +115,10 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_parse_a
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_logging</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcf3349a0c73d983540c56c9d692abdd"></a><!-- doxytag: member="test.c::test_utils" ref="afcf3349a0c73d983540c56c9d692abdd" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_utils</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97ff426783f1f7f47043214462e40606"></a><!-- doxytag: member="test.c::expect_base64" ref="a97ff426783f1f7f47043214462e40606" args="(char *input, char *expected)" -->
+static int&#160;</td><td class="memItemRight" valign="bottom"><b>expect_base64</b> (char *input, char *expected)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a981da269effaf63c0a18b3ec3fdc1d42"></a><!-- doxytag: member="test.c::test_utils_base64" ref="a981da269effaf63c0a18b3ec3fdc1d42" args="()" -->
+static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_utils_base64</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8730b72d5194e9bbcb66cd04dc5447bb"></a><!-- doxytag: member="test.c::test_time_queue" ref="a8730b72d5194e9bbcb66cd04dc5447bb" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_time_queue</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a96f8a14467cb1811678175b899a356"></a><!-- doxytag: member="test.c::verbose_string_list_add" ref="a9a96f8a14467cb1811678175b899a356" args="(string_list **list, char *word)" -->
@@ -147,6 +152,36 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 <div class="textblock">
 <p>Definition in file <a class="el" href="test_8c_source.html">test.c</a>.</p>
 </div><hr/><h2>Define Documentation</h2>
+<a class="anchor" id="aed0eb399db9dc1b9bf9359fd5d242f1a"></a><!-- doxytag: member="test.c::b64_assert" ref="aed0eb399db9dc1b9bf9359fd5d242f1a" args="(a, b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define b64_assert</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<b>Value:</b><div class="fragment"><pre class="fragment">{\
+    mu_assert(<span class="stringliteral">&quot;base64 encoding \&quot;&quot;</span> a <span class="stringliteral">&quot;\&quot; should return \&quot;&quot;</span> b <span class="stringliteral">&quot;\&quot;&quot;</span>, \
+            expect_base64(a, b)); }
+</pre></div>
+</div>
+</div>
 <a class="anchor" id="a03c9510ad1cf49128f06fbc48bb5a51d"></a><!-- doxytag: member="test.c::SET_CONFIG" ref="a03c9510ad1cf49128f06fbc48bb5a51d" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -196,7 +231,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 24 2015 21:34:40 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 26 2015 10:03:35 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
