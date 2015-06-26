@@ -24,7 +24,8 @@ static int kafka_write(const char *path, const char *buf,
         size_t size, off_t offset, struct fuse_file_info *fi)
 {
     int res;
-    output_write(path, buf, size, offset);
+    output_write(*(input_get_last_watching_directory()),
+            path, buf, size, offset);
     DO_AS_CALLER(
             res = pwrite(fi->fh, buf, size, offset);
     )

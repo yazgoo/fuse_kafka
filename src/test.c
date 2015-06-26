@@ -396,7 +396,7 @@ static char* test_output()
     mu_assert("output is not null", output != NULL);
     mu_assert("sending empty string succeeds",
             send_kafka(output, "", 0) == 0);
-    output_write("", "", 0, 0);
+    output_write("", "", "", 0, 0);
     test_with()->asprintf_sets_NULL = 1;
     conf.excluded_files_n = 1;
     conf.excluded_files = &excluded;
@@ -411,11 +411,11 @@ static char* test_output()
     mu_assert("should write to kafka not excluded file",
             should_write_to_kafka("test", 0) == 1);
     mu_assert("actual_kafka_write should return 1 if asprintf is failing",
-            actual_kafka_write("", "", 0, 0) == 1);
+            actual_kafka_write("", "", "", 0, 0) == 1);
     test_with()->asprintf_sets_NULL = 0;
-    output_write("", "", 0, 0);
+    output_write("", "", "", 0, 0);
     mu_assert("actual_kafka_write should return 0 if asprintf is not failing",
-            actual_kafka_write("", "", 0, 0) == 0);
+            actual_kafka_write("", "", "", 0, 0) == 0);
     conf.zookeepers_n = conf.brokers_n = 0;
     input_setup_internal(0, NULL, &conf);
     ((kafka_t*)output)->zhandle = (void*) 1;

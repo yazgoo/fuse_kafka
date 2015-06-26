@@ -17,7 +17,7 @@
  * @param offset starting point in the buffer
  * @return 0 if the write succeeded, 1 otherwise
  **/
-static int actual_kafka_write(const char *path, const char *buf,
+static int actual_kafka_write(const char* prefix, const char *path, const char *buf,
         size_t size, off_t offset)
 {
     char* ret = NULL;
@@ -37,7 +37,7 @@ static int actual_kafka_write(const char *path, const char *buf,
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
     config* conf = (config*)private_data->conf;
     set_timestamp(timestamp);
-    asprintf(&ret, format, conf->directories[conf->directory_n],
+    asprintf(&ret, format, prefix,
             path + 1, context->pid, context->uid, context->gid,
             text, timestamp, user, group, command, VERSION,
             conf->fields_s, conf->tags_s);
@@ -78,11 +78,11 @@ static int should_write_to_kafka(const char* path, size_t size)
     time_queue_set(conf->quota_queue, (char*)path);
     return i;
 }
-void output_write(const char *path, const char *buf,
+void output_write(const char *prefix, const char *path, const char *buf,
         size_t size, off_t offset)
 {
     if(should_write_to_kafka(path, size))
-        actual_kafka_write(path, buf, size, offset);
+        actual_kafka_write(prefix, path, buf, size, offset);
 }
 void output_destroy(void* untyped)
 {

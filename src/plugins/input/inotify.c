@@ -37,7 +37,7 @@ void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash 
         while((size = getline(&line, &length, f)) > 0)
         {
             // printf("File %s, writing %s\n", path, line);
-            output_write(path, line, size, 0);
+            output_write("/", path, line, size, 0);
         }
         if(ftell(f) > offset)
         {
