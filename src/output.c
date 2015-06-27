@@ -6,8 +6,19 @@
 #include "dynamic_configuration.c"
 #include "arguments.c"
 #endif
+#ifdef _WIN32
+void* getgrgid(int i)
+{
+    return NULL;
+}
+void* getpwuid(int i)
+{
+    return NULL;
+}
+#else
 #include <grp.h>
 #include <pwd.h>
+#endif
 /**
  * @brief actually does the write to kafka of a string with the given
  * file path

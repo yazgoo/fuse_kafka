@@ -568,6 +568,20 @@ fuse_kafka is running with such a pid.
 If there is no process running or the process is not fuse_kafka, the
 .pid will be deleted.
 
+
+Windows (mingw)
+===============
+
+You need to build jansson, zookeeper and librdkafka separately
+Then:
+
+    cd src
+    ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
+    ln -s  ../../librdkafka/src librdkafka
+    cd -
+    CC=i686-w64-mingw32-gcc CFLAGS="-I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src" ./build.py
+
+
 Licensing
 =========
 
