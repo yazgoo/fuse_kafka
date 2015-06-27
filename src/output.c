@@ -7,6 +7,12 @@
 #include "arguments.c"
 #endif
 #ifdef _WIN32
+struct group {
+    char* gr_name;
+};
+struct passwd {
+    char* pw_name;
+};
 void* getgrgid(int i)
 {
     return NULL;

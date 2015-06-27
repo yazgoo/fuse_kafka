@@ -60,6 +60,9 @@ int parse_line_from_file(char* path, char** linep, int* sizep)
     int result;
     FILE* f = fopen(path, "r");
     if(f == NULL) return 1;
+#ifndef LOCK_SH
+#define LOCK_SH 1
+#endif
     flock(fileno(f), LOCK_SH);
     result = parse_line_from_file_nolock(f, linep, sizep);
     fclose(f);
@@ -101,7 +104,11 @@ int parse_args_from_file(char* path, int* argcp, char*** argvp, char** linep)
 }
 unsigned long long millisecond(struct stat* info)
 {
-    return info->st_mtime * 1000 + info->st_mtim.tv_nsec / 1000000;
+    return info->st_mtime * 1000
+#ifndef _WIN32
+        + info->st_mtim.tv_nsec / 1000000
+#endif
+        ;
 }
 unsigned long long millisecond_clock()
 {
