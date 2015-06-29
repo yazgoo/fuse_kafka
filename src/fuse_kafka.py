@@ -200,11 +200,10 @@ class FuseKafkaService:
         rule = action + " exit,never -F "+\
                 "path=/var/log/audit/audit.log -F perm=r -F pid="+ pid
         rule_file = "/etc/audit/audit.rules"
-        if action == '-A':
-            with open(rule_file, "a+") as f:
-                f.write(rule + "\n")
-        else:
-            os.remove(rule_file)
+        if os.path.isfile(rule_file):
+            if action == '-A':
+                with open(rule_file, "a+") as f:
+                    f.write(rule + "\n")
         cmd = "/sbin/auditctl " + rule
         subprocess.Popen(cmd.split())
     def remove_auditctl_rules(self):
