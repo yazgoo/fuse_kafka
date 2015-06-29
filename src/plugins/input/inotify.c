@@ -102,7 +102,9 @@ void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
         char* path = concat(directory, file->d_name);
         if(file->d_type == DT_DIR && strcmp(".", file->d_name) && strcmp("..", file->d_name))
         {
+#ifndef INOTIFY_NONRECURSIVE
             setup_watches(path, fd, watches, offsets);
+#endif
         }
         else
         {
@@ -122,8 +124,10 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
         if ( event->mask & IN_CREATE ) {
             if ( event->mask & IN_ISDIR ) {
                 // printf( "New directory %s created.\n", event->name );
+#ifndef INOTIFY_NONRECURSIVE
                 char* path = get_event_path(event, watches);
                 setup_watches(path, fd, watches, offsets);
+#endif
             }
             else {
                 handle_file_created(event, offsets, watches, root);
