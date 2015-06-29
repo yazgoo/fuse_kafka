@@ -43,8 +43,11 @@ class InputPlugins:
 cc = 'gcc'
 if "CC" in os.environ:
     cc = os.environ["CC"]
-if "CFLAGS" in os.environ:
-    cc = [cc, os.environ["CFLAGS"].split()]
+_flags = []
+for flag in ["CFLAGS", "LDFLAGS"]:
+    if flag in os.environ:
+        _flags = _flags + os.environ[flag].split()
+cc = [cc, _flags]
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["m", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
