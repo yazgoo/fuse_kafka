@@ -20,7 +20,7 @@ void watch_directory(char* dir, config* conf)
     DWORD lpBytesReturned;
     while(1)
     {
-        ReadDirectoryChangesW(
+        if(!ReadDirectoryChangesW(
                 hDir,
                 &info,
                 sizeof(info),
@@ -29,15 +29,19 @@ void watch_directory(char* dir, config* conf)
                 &lpBytesReturned,
                 NULL,
                 NULL
-                );
-        char* path = (char*) malloc(info[0].FileNameLength + 1);
+                )) continue;
+        char* path = (char*) malloc((info[0].FileNameLength + 1) * sizeof(char));
+        if(path == NULL) continue;
         snprintf(path, info[0].FileNameLength, "%S", info[0].FileName);
         path[info[0].FileNameLength] = 0; 
         printf("%s\n", path);
         char* full_path = concat(dir, path);
         free(path);
-        handle_file_modified(full_path, offsets, "");
-        free(full_path);
+        if(full_path != NULL)
+        {
+            handle_file_modified(full_path, offsets, "");
+            free(full_path);
+        }
     }
     fk_hash_delete(offsets, 1, 0);
 }

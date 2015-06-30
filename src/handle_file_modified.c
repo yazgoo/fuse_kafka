@@ -19,7 +19,7 @@ void handle_file_modified(char* path, fk_hash offsets, char* root)
         ssize_t size;
         while((size = getline(&line, &length, f)) > 0)
         {
-            printf("File %s, writing %s\n", path, line);
+            printf("File %s, writing %s %d\n", path, line, size);
             output_write("/", path, line, size, 0);
         }
         if(ftell(f) > offset)
