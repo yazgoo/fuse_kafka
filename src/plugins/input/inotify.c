@@ -1,58 +1,19 @@
 #include <input_plugin.h>
 #include <hash.c>
 #include <dirent.h>
-#ifndef MINGW_VER
 #include <sys/inotify.h>
-#else
-#include <inotify_win.c>
-#endif
 #include <stdio.h>
+target(.*linux.*)
 #define EVENT_SIZE  ( sizeof (struct inotify_event) )
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 ;    
+#include <handle_file_modified.c>
 char* get_event_path(struct inotify_event* event, fk_hash watches)
 {
     // printf("new event on %d\n", event->wd);
     char* a = (char*) fk_hash_get(watches, (void*) (long int) event->wd, 0);
     if(a == (char*) -1) a = NULL;
     return concat(a, event->name);
-}
-void handle_file_modified(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
-{
-    char* path = get_event_path(event, watches);
-    char* old_path = path;
-    if(path == NULL) return;
-    long int offset = (long int) fk_hash_get(offsets, path, 1);
-    if(offset == -1)
-    {
-        path = strdup(path);
-        offset = 0;
-    }
-    // printf("File %s modified, offset being %ld.\n", path, offset);
-    char* line = 0;
-    size_t length;
-    FILE* f = fopen(path, "r");
-    if(f != NULL)
-    {
-        fseek(f, 0, SEEK_END); if(ftell(f) < offset) offset = 0;
-        fseek(f, offset, SEEK_SET);
-        ssize_t size;
-        while((size = getline(&line, &length, f)) > 0)
-        {
-            // printf("File %s, writing %s\n", path, line);
-            output_write("/", path, line, size, 0);
-        }
-        if(ftell(f) > offset)
-        {
-            // printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
-        }
-        fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
-        fclose(f);
-    }
-    else
-        if(old_path != path) free(old_path);
-    free(path);
-    free(line);
 }
 handle_file_deleted(struct inotify_event* event, fk_hash offsets, fk_hash watches, char* root)
 {
@@ -93,11 +54,7 @@ void setup_offset(char* path, fk_hash offsets)
 }
 static inline int is_dir(struct dirent* file)
 {
-#ifdef MINGW_VER
-    return 0;
-#else
     return file->d_type == DT_DIR
-#endif
 }
 void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
 {
@@ -156,7 +113,8 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
                 // printf( "Directory %s modified.\n", event->name );
             }
             else {
-                handle_file_modified(event, offsets, watches, root);
+                char* path = get_event_path(event, watches);
+                handle_file_modified(path, offsets, root);
             }
         }
     }
