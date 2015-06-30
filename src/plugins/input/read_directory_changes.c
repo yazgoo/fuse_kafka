@@ -30,6 +30,8 @@ void watch_directory(char* dir, config* conf)
                 NULL,
                 NULL
                 )) continue;
+        printf("received %d bytes\n", lpBytesReturned);
+        if(lpBytesReturned == 0) continue;
         char* path = (char*) malloc((info[0].FileNameLength + 1) * sizeof(char));
         if(path != NULL)
         {
