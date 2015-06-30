@@ -161,6 +161,7 @@ class Configuration:
 class FuseKafkaService:
     """ Utility class to run multiple fuse_kafka processes as one service """
     def __init__(self):
+        self.auditctl_bin = "/sbin/auditctl"
         self.prefix = ["fuse_kafka", "_", "-oallow_other",
                 "-ononempty", "-omodules=subdir,subdir=.", "-f", "--"]
         self.proc_mount_path = "/proc/mounts"
@@ -204,16 +205,18 @@ class FuseKafkaService:
             if action == '-A':
                 with open(rule_file, "a+") as f:
                     f.write(rule + "\n")
-        cmd = "/sbin/auditctl " + rule
-        subprocess.Popen(cmd.split())
+        if os.path.isfile(self.auditctl_bin):
+            cmd =  self.auditctl_bin + " " + rule
+            subprocess.Popen(cmd.split())
     def remove_auditctl_rules(self):
-        output = subprocess.Popen(["auditctl", "-l"],
-                stdout=subprocess.PIPE).communicate()[0]
-        p = re.compile(".*-a.*/var/log/audit/audit.log.*-F perm=r.* pid=([^ ]+).*")
-        pids = [found[0] for found in [p.findall(l) for l in
-            output.split("\n")] if len(found) > 0]
-        for pid in pids:
-            self.do_auditctl_rule(pid, "-d")
+        if os.path.isfile(self.auditctl_bin):
+            output = subprocess.Popen(["auditctl", "-l"],
+                    stdout=subprocess.PIPE).communicate()[0]
+            p = re.compile(".*-a.*/var/log/audit/audit.log.*-F perm=r.* pid=([^ ]+).*")
+            pids = [found[0] for found in [p.findall(l) for l in
+                output.split("\n")] if len(found) > 0]
+            for pid in pids:
+                self.do_auditctl_rule(pid, "-d")
     def stop(self):
         """ Stops fuse_kafka processes """
         subprocess.call(["pkill", "-f", " ".join(self.prefix)])

@@ -591,6 +591,14 @@ Then:
     cd -
     CC=x86_64-w64-mingw32-gcc CFLAGS="-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED" LDFLAGS="-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/" LIBS="-lws2_32 -lpsapi" ./build.py
 
+For testing purposes, you can run fuse_kafka with wine:
+
+    ln -s fuse_kafka fuse_kafka.exe
+    cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll  .
+    cp ../librdkafka/src/librdkafka.so.1 .
+    cp /usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll .
+    FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
+
 
 Licensing
 =========
