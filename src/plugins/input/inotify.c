@@ -1,12 +1,15 @@
 #include <input_plugin.h>
 #include <hash.c>
 #include <dirent.h>
+#ifndef MINGW_VER
 #include <sys/inotify.h>
+#else
+#include <inotify_win.c>
+#endif
 #include <stdio.h>
-#include <pthread.h>
-requires(pthread)
 #define EVENT_SIZE  ( sizeof (struct inotify_event) )
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
+;    
 char* get_event_path(struct inotify_event* event, fk_hash watches)
 {
     // printf("new event on %d\n", event->wd);
@@ -88,6 +91,14 @@ void setup_offset(char* path, fk_hash offsets)
         free(path);
     }
 }
+static inline int is_dir(struct dirent* file)
+{
+#ifdef MINGW_VER
+    return 0;
+#else
+    return file->d_type == DT_DIR
+#endif
+}
 void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
 {
     if(directory == NULL) return;
@@ -100,7 +111,7 @@ void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
     {
         // printf("%s %d\n", file->d_name, file->d_type);
         char* path = concat(directory, file->d_name);
-        if(file->d_type == DT_DIR && strcmp(".", file->d_name) && strcmp("..", file->d_name))
+        if(is_dir(file) && strcmp(".", file->d_name) && strcmp("..", file->d_name))
         {
             setup_watches(path, fd, watches, offsets);
         }

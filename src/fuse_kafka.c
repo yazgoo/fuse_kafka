@@ -13,12 +13,13 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/time.h>
-#include <fnmatch.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include "time_queue.c"
 #include <sys/stat.h>
+#ifndef MINGW_VER
 #include <sys/wait.h>
+#endif
 #include "dynamic_configuration.c"
 #include "input.h"
 /** @brief declare a configuration item, which is a list of string an
@@ -61,7 +62,9 @@ int fuse_kafka_main(int argc, char *argv[])
     {
         my_input_setup(argc, argv, limit);
     }
+#ifndef MINGW_VER
     wait(NULL);
+#endif
     return 0;
 }
 char* cmd = NULL;

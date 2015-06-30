@@ -126,10 +126,69 @@ void set_timestamp(char* timestamp)
 {
     struct timeval tv;
     struct tm tm;
+    struct tm* tmp;
     gettimeofday(&tv, NULL);
+#ifdef MINGW_VER
+    tmp = localtime(&tv.tv_sec);
+#else
     localtime_r(&tv.tv_sec, &tm);
-    strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000%z", &tm);
+    tmp = &tm;
+#endif
+    strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000%z", tmp);
 }
+#ifdef MINGW_VER
+/* TODO implement */
+int fnmatch(char* pattern, char* string, int flags)
+{
+    return 0;
+}
+int flock(int fd, int operation)
+{
+    return 0;
+}
+int fchdir(int fd)
+{
+    return 0;
+}
+#include <errno.h>
+/* implementation from 
+http://stackoverflow.com/questions/27369580/codeblocks-and-c-undefined-reference-to-getline
+*/
+ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
+    int ch;
+    size_t i = 0;
+    if(!linep || !n || !fp){
+        errno = EINVAL;
+        return -1;
+    }
+    if(*linep == NULL){
+        if(NULL==(*linep = malloc(*n=128))){
+            *n = 0;
+            errno = ENOMEM;
+            return -1;
+        }
+    }
+    while((ch = fgetc(fp)) != EOF){
+        if(i + 1 >= *n){
+            char *temp = realloc(*linep, *n + 128);
+            if(!temp){
+                errno = ENOMEM;
+                return -1;
+            }
+            *n += 128;
+            *linep = temp;
+        }
+        (*linep)[i++] = ch;
+        if(ch == delim)
+            break;
+    }
+    (*linep)[i] = '\0';
+    return !i && ch == EOF ? -1 : i;
+}
+ssize_t getline(char **linep, size_t *n, FILE *fp){
+    return getdelim(linep, n, '\n', fp);
+}
+#endif
 /**
  * @brief look for the limit "--" in argv
  * @argc argument number

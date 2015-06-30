@@ -18,23 +18,35 @@ def get_define(source, name):
     f.close()
     return result
 class InputPlugins:
-    def __init__(self):
+    def get_macro_definition(self, name, path):
+        cmd = "sh -c \"grep --color=no '^"+name+"(' " + path + ".c | sed 's/^"+name+"(\(.*\))$/\\1/'\""
+        return os.popen(cmd).read().rstrip()
+    def get_target(self, path):
+        target_str = self.get_macro_definition("target", path)
+        if target_str == '': return '.*'
+        return target_str
+    def get_requirements(self, path):
+        required_str = self.get_macro_definition("requires", path)
+        required = []
+        if required_str != '': required = required_str.split("\n")
+        return required
+    def __init__(self, cc):
+        self.cc = cc
         _dir = "src/plugins/input/"
         self.tests_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
         self.tests_paths = [_dir.replace("src/", "") + x for x in self.tests_sources]
         self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
         self.libraries_sources = [x for x in self.libraries_sources if x not in self.tests_sources]
         self.libs_of = {}
+        self.targets_of = {}
         self.includes_of = {}
         self.shareds_objects = {}
         self.objects = {}
         self.test_of = {}
         prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
         for lib in self.libraries_sources:
-            cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
-            required_str = os.popen(cmd).read().rstrip()
-            required = []
-            if required_str != '': required = required_str.split("\n")
+            required = self.get_requirements(_dir + lib)
+            self.targets_of[lib] = self.get_target(_dir + lib)
             self.libs_of[lib] = required + default_libs
             self.includes_of[lib] = required
             self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
@@ -50,10 +62,14 @@ for flag in ["CFLAGS", "LDFLAGS"]:
 cc = [cc, _flags]
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["m", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
-libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
+common_libs = ["m", "dl", "pthread", "jansson"]#, "ulockmgr"]
+libs = ["zookeeper_mt", "rdkafka",  "z"] + common_libs
 default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson"]
-input_plugins = InputPlugins()
+if "LIBS" in os.environ:
+    additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
+    default_libs += additional_libs
+    libs += additional_libs
+input_plugins = InputPlugins(cc)
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -369,8 +385,17 @@ def test_run():
     python_test()
 def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
+def target_matched(target):
+    compiler = cc[0]
+    if type(cc) is str:
+        compiler = cc
+    cmd = "sh -c '" + compiler + " -v 2>&1|grep Target:|grep \"" + target + "\"'"
+    return len(os.popen(cmd).read().split()) > 0
 def compile_input_plugins():
     for library_source in input_plugins.libraries_sources:
+        if not target_matched(input_plugins.targets_of[library_source]):
+            print("skipping " + library_source + " plugin because not compiling for target")
+            continue
         run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
         run(cc, '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():

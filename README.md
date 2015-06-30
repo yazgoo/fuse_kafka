@@ -471,6 +471,16 @@ If you require some library, you should refer to its pkg-config name via the mac
 require(your-library)
 ````
 
+You can specify a target plateform regexp pattern if you want, for example:
+
+````c
+target(.*linux.*)
+````
+
+Will only build for linux. If not specified, the plugin will 
+be built for all target.
+
+
 Input plugin unit testing
 =========================
 
@@ -579,7 +589,7 @@ Then:
     ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
     ln -s  ../../librdkafka/src librdkafka
     cd -
-    CC=i686-w64-mingw32-gcc CFLAGS="-I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src" ./build.py
+    CC=x86_64-w64-mingw32-gcc CFLAGS="-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED" LDFLAGS="-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/" LIBS="-lws2_32 -lpsapi" ./build.py
 
 
 Licensing
