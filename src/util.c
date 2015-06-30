@@ -251,7 +251,8 @@ char* concat(char* a, char* b)
 {
     if(a == NULL || b == NULL) return NULL;
     int length = strlen(a) + strlen(b) + 2;
-    char* result = (char*) malloc(length);
+    char* result = (char*) malloc(length * sizeof(char));
+    if(result == NULL) return NULL;
     result[length - 1] = 0;
     char* middle = result + strlen(a);
     strcpy(result, a);

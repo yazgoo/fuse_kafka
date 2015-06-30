@@ -13,7 +13,12 @@
 Startup script for fuse_kafka.
 """
 import fnmatch, re, sys, getopt, json, glob, os, subprocess,\
-    copy, time, subprocess, multiprocessing, fcntl
+    copy, time, subprocess, multiprocessing
+canlock = True
+try:
+    import fcntl
+except:
+    canlock = False
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
 CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
@@ -59,11 +64,14 @@ class Configuration:
         Returns the first property value found in the given path with the
         given name, None if it was not found
         """
-        with open(path) as f:
+        f = open(path)
+        try:
             for line in f.readlines():
                 line = line.split('=', 1)
                 if len(line) == 2 and line[0] == name:
                     return line[1].strip()
+        finally:
+            f.close()
     def includes_subdir(self, dirs, subdir):
         """ Checks if a subdirectory is included in a list of prefix.
 
@@ -140,9 +148,12 @@ class Configuration:
         self.conf = {}
         for globbed in self.configurations:
             for config in glob.glob(globbed):
-                with open(config) as f:
+                f = open(config)
+                try:
                     for line in f.readlines():
                         self.parse_line(line, self.conf)
+                finally:
+                    f.close()
         if self.is_sleeping(var_run_path):
             self.exclude_from_conf(self.conf['sleep'])
         self.conf['directories'] = self.unique_directories(self.conf['directories'])
@@ -187,7 +198,9 @@ class FuseKafkaService:
         self.configuration = Configuration()
         self.configuration.exclude_from_conf(excluded)
         directories = copy.deepcopy(self.configuration.conf['directories'])
-        subprocess.call(["/sbin/modprobe", "fuse"])
+        modprobe = "/sbin/modprobe"
+        if os.path.exists(modprobe):
+            subprocess.call([modprobe, "fuse"])
         for directory in directories:
             print("starting fuse_kafka on " + directory)
             if not os.path.exists(directory):
@@ -203,8 +216,11 @@ class FuseKafkaService:
         rule_file = "/etc/audit/audit.rules"
         if os.path.isfile(rule_file):
             if action == '-A':
-                with open(rule_file, "a+") as f:
+                f = open(rule_file, "a+")
+                try:
                     f.write(rule + "\n")
+                finally:
+                    f.close()
         if os.path.isfile(self.auditctl_bin):
             cmd =  self.auditctl_bin + " " + rule
             subprocess.Popen(cmd.split())
@@ -230,9 +246,12 @@ class FuseKafkaService:
         else:
             self.configuration = Configuration()
             configured_directories = copy.deepcopy(self.configuration.conf['directories'])
-            with open(var_run_path + "/fuse_kafka.args", "w") as f:
-                fcntl.fcntl(f, fcntl.LOCK_EX)
+            f = open(var_run_path + "/fuse_kafka.args", "w")
+            try:
+                if canlock: fcntl.fcntl(f, fcntl.LOCK_EX)
                 f.write(str(self.configuration))
+            finally:
+                f.close()
             watched_directories = self.list_watched_directories()
             self.start_excluding_directories(watched_directories)
             for to_stop_watching in [a for a in watched_directories 
