@@ -397,7 +397,7 @@ def compile_input_plugins():
             print("skipping " + library_source + " plugin because not compiling for target")
             continue
         run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
-        run(cc, '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
+        run(cc, '-g', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_input_plugins()
