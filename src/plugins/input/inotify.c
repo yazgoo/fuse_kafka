@@ -114,7 +114,7 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
             }
             else {
                 char* path = get_event_path(event, watches);
-                handle_file_modified(path, offsets, root);
+                handle_file_modified(path, offsets, "/");
             }
         }
     }

@@ -6,6 +6,7 @@ target(.*mingw.*)
 
 void watch_directory(char* dir, config* conf)
 {
+    char prefix[] = {dir[0], 0};
     fk_hash offsets = fk_hash_new();
     HANDLE hDir = CreateFile(
             dir,
@@ -30,19 +31,16 @@ void watch_directory(char* dir, config* conf)
                 NULL,
                 NULL
                 )) continue;
-        printf("received %d bytes\n", lpBytesReturned);
         if(lpBytesReturned == 0) continue;
         if(!(info[0].Action & FILE_ACTION_MODIFIED)) continue;
         char* path = (char*) malloc((info[0].FileNameLength + 1) * sizeof(char));
         if(path != NULL)
         {
-            //wctombs(path, info[0].FileName, info[0].FileNameLength);
             snprintf(path, info[0].FileNameLength, "%S", info[0].FileName);
             path[info[0].FileNameLength] = 0; 
-            printf("%s\n", path);
             char* full_path = concat(dir, path);
             free(path);
-            if(full_path != NULL) handle_file_modified(full_path, offsets, "");
+            if(full_path != NULL) handle_file_modified(full_path, offsets, prefix);
         }
     }
     fk_hash_delete(offsets, 1, 0);

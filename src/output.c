@@ -39,7 +39,7 @@ static int actual_kafka_write(const char* prefix, const char *path, const char *
 {
     char* ret = NULL;
     (void) path;
-    char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000";
+    char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000                               ";
     char* text = base64(buf, size);
     struct fuse_context* context = fuse_get_context();
     struct group* sgroup = getgrgid(context->gid);

@@ -123,17 +123,37 @@ static char* get_command_line(int pid)
  **/
 void set_timestamp(char* timestamp)
 {
-    struct timeval tv;
     struct tm tm;
     struct tm* tmp;
-    gettimeofday(&tv, NULL);
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
 #ifdef MINGW_VER
-    tmp = localtime(&tv.tv_sec);
+#define TZ "+0000"
+    time_t ltime;
+    time(&ltime);
+    tmp = localtime(&ltime);
 #else
+#define TZ "%z"
     localtime_r(&tv.tv_sec, &tm);
     tmp = &tm;
 #endif
-    strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000%z", tmp);
+    size_t size = strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000" TZ, tmp);
+#ifdef MINGW_VER
+    set_timezone(timestamp, tz.tz_minuteswest);
+}
+void set_timezone(char* timestamp, int minutes)
+{
+    long hrs, mins;
+    timestamp[23] = minutes < 0 ? '+' : '-';
+    if(minutes < 0) minutes = -minutes;
+    hrs = minutes / 60;
+    mins = minutes % 60;
+    timestamp[24] += hrs/10;
+    timestamp[25] += hrs%10;
+    timestamp[26] += mins/10;
+    timestamp[27] += mins%10;
+#endif
 }
 #ifdef MINGW_VER
 /* TODO implement */
