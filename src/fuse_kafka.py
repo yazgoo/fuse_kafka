@@ -21,7 +21,7 @@ except:
     canlock = False
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
-CONFIGURATIONS_PATHS = ["./conf/*", "/etc/fuse_kafka.conf", "/etc/*.txt"]
+CONFIGURATIONS_PATHS = ["./conf/*", "./etc/fuse_kafka.conf", "/etc/fuse_kafka.conf", "/etc/*.txt"]
 class Crontab:
     """ manages a crontab """
     def add_line_if_necessary(self, line):

@@ -116,6 +116,20 @@ static char* get_command_line(int pid)
     free(command_line);
     return b64;
 }
+#ifdef MINGW_VER
+void set_timezone(char* timestamp, int minutes)
+{
+    long hrs, mins;
+    timestamp[23] = minutes < 0 ? '+' : '-';
+    if(minutes < 0) minutes = -minutes;
+    hrs = minutes / 60;
+    mins = minutes % 60;
+    timestamp[24] += hrs/10;
+    timestamp[25] += hrs%10;
+    timestamp[26] += mins/10;
+    timestamp[27] += mins%10;
+}
+#endif
 /**
  * @brief get a string representing the time in ISO8601 format
  * @param timestamp string to set to the given time
@@ -141,18 +155,6 @@ void set_timestamp(char* timestamp)
     size_t size = strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000" TZ, tmp);
 #ifdef MINGW_VER
     set_timezone(timestamp, tz.tz_minuteswest);
-}
-void set_timezone(char* timestamp, int minutes)
-{
-    long hrs, mins;
-    timestamp[23] = minutes < 0 ? '+' : '-';
-    if(minutes < 0) minutes = -minutes;
-    hrs = minutes / 60;
-    mins = minutes % 60;
-    timestamp[24] += hrs/10;
-    timestamp[25] += hrs%10;
-    timestamp[26] += mins/10;
-    timestamp[27] += mins%10;
 #endif
 }
 #ifdef MINGW_VER

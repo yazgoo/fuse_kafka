@@ -600,6 +600,22 @@ For testing purposes, you can run fuse_kafka with wine:
     FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
 
 
+Generating self contained archive from sources
+==============================================
+
+You can generate an archive with all dependencies with binary_archive target.
+
+For example, to generate an archive for windows, building with mingw:
+
+    SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS="-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760" LDFLAGS="-L$PWD/../out/lib" LIBS="-lwsock32 -lws2_32 -lpsapi" archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+
+This will:
+
+1. download source dependencies into SRCROOT
+2. build them and install them in BUILDROOT
+3. add additional libraries from wine
+3. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+
 Licensing
 =========
 
