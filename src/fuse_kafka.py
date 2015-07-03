@@ -193,8 +193,11 @@ class FuseKafkaService:
     def start_excluding_directories(self, excluded):
         """ Starts fuse_kafka processes """
         env = os.environ.copy()
-        env["PATH"] = ".:" + env["PATH"]
-        env["LD_LIBRARY_PATH"] = ":/usr/lib"
+        env["PATH"] = "." + os.pathsep + env["PATH"]
+        prefix = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))+ os.sep
+        for relative in ["usr" + os.sep + "bin", "usr" + os.sep + "lib", "lib"]:
+        	env["PATH"] = prefix + relative + os.pathsep + env["PATH"]
+        env["LD_LIBRARY_PATH"] = os.pathsep + os.sep + "usr" + os.sep + "lib"
         self.configuration = Configuration()
         self.configuration.exclude_from_conf(excluded)
         directories = copy.deepcopy(self.configuration.conf['directories'])
@@ -206,7 +209,8 @@ class FuseKafkaService:
             if not os.path.exists(directory):
                 os.makedirs(directory)
         process = subprocess.Popen(
-                self.prefix + self.configuration.args(), env = env)
+                self.prefix + self.configuration.args(),
+                    env = env, shell = True)
         self.do_auditctl_rule(str(process.pid))
         if self.get_status() == 0:
             print("fuse_kafka started")
@@ -235,7 +239,10 @@ class FuseKafkaService:
                 self.do_auditctl_rule(pid, "-d")
     def stop(self):
         """ Stops fuse_kafka processes """
-        subprocess.call(["pkill", "-f", " ".join(self.prefix)])
+        if os.sep == '/':
+            subprocess.call(["pkill", "-f", " ".join(self.prefix)])
+        else:
+            subprocess.call(["taskkill", "/f", "/im", self.prefix[0] + ".exe"])
         self.remove_auditctl_rules()
         if self.get_status() != 0:
             print("fuse_kafka stoped")
