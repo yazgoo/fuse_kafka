@@ -2,6 +2,12 @@
 #define OUTPUT_H
 #ifndef TEST
 #include <librdkafka/rdkafka.h>
+void
+#ifdef MINGW_VER
+__declspec(dllexport)
+#endif
+    input_setup_internal(int argc, char** argv, void* conf);
+/* beware: zookeeper.h undefs __declspec */
 #include <zookeeper/zookeeper.h>
 #include "config.h"
 #endif

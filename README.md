@@ -609,6 +609,8 @@ For example, to generate an archive for windows, building with mingw:
 
     SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS="-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760" LDFLAGS="-L$PWD/../out/lib" LIBS="-lwsock32 -lws2_32 -lpsapi" archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
 
+    http_proxy=http://install:98inst@10.6.69.50:8080 https_proxy=http://install:98inst@10.6.69.50:8080  SRCROOT=/tmp/lolo BUILDROOT=$PWD/../out/ CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS="-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760" LDFLAGS="-L$PWD/../out/lib -Xlinker --no-undefined -Xlinker --enable-runtime-pseudo-reloc" LIBS="-lwsock32 -lws2_32 -lpsapi" archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+
 This will:
 
 1. download source dependencies into SRCROOT

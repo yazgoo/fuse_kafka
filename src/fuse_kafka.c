@@ -43,6 +43,7 @@ int my_input_setup(int argc, char** argv, int limit)
     strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), ".so");
     trace_debug("my_input_setup: trying to open %s", lib);
     void* handle = dlopen(lib, RTLD_LAZY);
+    //void* handle = LoadLibraryA(lib);
     free(lib);
     if(handle == NULL)
     {
@@ -53,6 +54,7 @@ int my_input_setup(int argc, char** argv, int limit)
     {
         trace_debug("my_input_setup: loading input_setup_internal()");
         input_setup_t f = dlsym(handle, "input_setup_internal");
+        //input_setup_t f = GetProcAddress(handle, "input_setup_internal");
         if(f == NULL)
         {
             trace_debug("my_input_setup: loading setup function failed");
