@@ -94,71 +94,93 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 <span class="preprocessor">#include &lt;fcntl.h&gt;</span>
 <a name="l00014"></a>00014 <span class="preprocessor">#include &lt;errno.h&gt;</span>
 <a name="l00015"></a>00015 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
-<a name="l00016"></a>00016 <span class="preprocessor">#include &lt;fnmatch.h&gt;</span>
-<a name="l00017"></a>00017 <span class="preprocessor">#include &lt;stdarg.h&gt;</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
-<a name="l00019"></a>00019 <span class="preprocessor">#include &quot;<a class="code" href="time__queue_8c.html">time_queue.c</a>&quot;</span>
-<a name="l00020"></a>00020 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
-<a name="l00021"></a>00021 <span class="preprocessor">#include &lt;sys/wait.h&gt;</span>
-<a name="l00022"></a>00022 <span class="preprocessor">#include &quot;dynamic_configuration.c&quot;</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include &quot;input.h&quot;</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include &quot;arguments.c&quot;</span>
-<a name="l00027"></a>00027 <span class="comment">// global variable used in atexit</span>
-<a name="l00028"></a><a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46">00028</a> config <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
-<a name="l00029"></a>00029 <span class="keywordtype">void</span> configuration_clean()
-<a name="l00030"></a>00030 {
-<a name="l00031"></a>00031     free_fields_and_tags(&amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>);
-<a name="l00032"></a>00032 }
-<a name="l00033"></a>00033 <span class="keywordtype">int</span> my_input_setup(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">int</span> limit)
-<a name="l00034"></a>00034 {
-<a name="l00035"></a>00035     <span class="keywordtype">char</span>* input = <span class="stringliteral">&quot;overlay&quot;</span>;
-<a name="l00036"></a>00036     <span class="keywordflow">if</span>(<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>.input_n &gt; 0) input = <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>.input[0];
-<a name="l00037"></a>00037     <span class="keywordtype">char</span>*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
-<a name="l00038"></a>00038     strcpy(lib, INPUT_PLUGIN_PREFIX);
-<a name="l00039"></a>00039     strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
-<a name="l00040"></a>00040     strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), <span class="stringliteral">&quot;.so&quot;</span>);
-<a name="l00041"></a>00041     <span class="keywordtype">void</span>* handle = dlopen(lib, RTLD_LAZY);
-<a name="l00042"></a>00042     free(lib);
-<a name="l00043"></a>00043     <span class="keywordflow">if</span>(handle == NULL)
-<a name="l00044"></a>00044     {
-<a name="l00045"></a>00045         printf(<span class="stringliteral">&quot;%s\n&quot;</span>, dlerror());
-<a name="l00046"></a>00046         <span class="keywordflow">return</span> 1;
-<a name="l00047"></a>00047     }
-<a name="l00048"></a>00048     <span class="keywordflow">else</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &lt;stdarg.h&gt;</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<a name="l00018"></a>00018 <span class="preprocessor">#include &quot;<a class="code" href="time__queue_8c.html">time_queue.c</a>&quot;</span>
+<a name="l00019"></a>00019 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
+<a name="l00020"></a>00020 <span class="preprocessor">#ifndef MINGW_VER</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/wait.h&gt;</span>
+<a name="l00022"></a>00022 <span class="preprocessor">#endif</span>
+<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor">#include &quot;dynamic_configuration.c&quot;</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include &quot;input.h&quot;</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include &quot;arguments.c&quot;</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include &quot;<a class="code" href="trace_8c.html" title="Utility to send trace from fuse_kafka into kafka.">trace.c</a>&quot;</span>
+<a name="l00029"></a>00029 <span class="comment">// global variable used in atexit</span>
+<a name="l00030"></a><a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46">00030</a> config <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
+<a name="l00031"></a>00031 <span class="keywordtype">void</span> configuration_clean()
+<a name="l00032"></a>00032 {
+<a name="l00033"></a>00033     free_fields_and_tags(&amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>);
+<a name="l00034"></a>00034 }
+<a name="l00035"></a>00035 <span class="keywordtype">int</span> my_input_setup(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv, <span class="keywordtype">int</span> limit)
+<a name="l00036"></a>00036 {
+<a name="l00037"></a>00037     <span class="keywordtype">char</span>* input = <span class="stringliteral">&quot;overlay&quot;</span>;
+<a name="l00038"></a>00038     trace_debug(<span class="stringliteral">&quot;my_input_setup: starting, with %d inputs&quot;</span>, <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>.input_n);
+<a name="l00039"></a>00039     <span class="keywordflow">if</span>(<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>.input_n &gt; 0) input = <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>.input[0];
+<a name="l00040"></a>00040     <span class="keywordtype">char</span>*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
+<a name="l00041"></a>00041     strcpy(lib, INPUT_PLUGIN_PREFIX);
+<a name="l00042"></a>00042     strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
+<a name="l00043"></a>00043     strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), <span class="stringliteral">&quot;.so&quot;</span>);
+<a name="l00044"></a>00044     trace_debug(<span class="stringliteral">&quot;my_input_setup: trying to open %s&quot;</span>, lib);
+<a name="l00045"></a>00045     <span class="keywordtype">void</span>* handle = dlopen(lib, RTLD_LAZY);
+<a name="l00046"></a>00046     <span class="comment">//void* handle = LoadLibraryA(lib);</span>
+<a name="l00047"></a>00047     free(lib);
+<a name="l00048"></a>00048     <span class="keywordflow">if</span>(handle == NULL)
 <a name="l00049"></a>00049     {
-<a name="l00050"></a>00050         input_setup_t f = dlsym(handle, <span class="stringliteral">&quot;input_setup_internal&quot;</span>);
-<a name="l00051"></a>00051         <span class="keywordflow">return</span> f(limit, argv, &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>);
+<a name="l00050"></a>00050         printf(<span class="stringliteral">&quot;%s\n&quot;</span>, dlerror());
+<a name="l00051"></a>00051         <span class="keywordflow">return</span> 1;
 <a name="l00052"></a>00052     }
-<a name="l00053"></a>00053 }
-<a name="l00054"></a>00054 <span class="keywordtype">int</span> fuse_kafka_main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])
-<a name="l00055"></a>00055 {
-<a name="l00056"></a>00056     <span class="keywordtype">int</span> i;
-<a name="l00057"></a>00057     <span class="keywordtype">int</span> limit = <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(argc, argv);
-<a name="l00058"></a>00058     atexit(configuration_clean);
-<a name="l00059"></a>00059     memset(&amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>, 0, <span class="keyword">sizeof</span>(config));
-<a name="l00060"></a>00060     <span class="keywordflow">if</span>(parse_arguments(argc - limit - 1, argv + limit + 1, &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>))
-<a name="l00061"></a>00061     {
-<a name="l00062"></a>00062         my_input_setup(argc, argv, limit);
-<a name="l00063"></a>00063     }
-<a name="l00064"></a>00064     wait(NULL);
-<a name="l00065"></a>00065     <span class="keywordflow">return</span> 0;
-<a name="l00066"></a>00066 }
-<a name="l00067"></a>00067 <span class="keywordtype">char</span>* cmd = NULL;
-<a name="l00068"></a>00068 <span class="preprocessor">#ifdef TEST</span>
-<a name="l00069"></a>00069 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="test_8c.html">test.c</a>&quot;</span>
-<a name="l00070"></a>00070 <span class="preprocessor">#else</span>
-<a name="l00071"></a>00071 <span class="preprocessor"></span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
-<a name="l00072"></a>00072 {
-<a name="l00073"></a>00073     fuse_kafka_main(argc, argv);
-<a name="l00074"></a>00074 }
-<a name="l00075"></a>00075 <span class="preprocessor">#endif</span>
+<a name="l00053"></a>00053     <span class="keywordflow">else</span>
+<a name="l00054"></a>00054     {
+<a name="l00055"></a>00055         trace_debug(<span class="stringliteral">&quot;my_input_setup: loading input_setup_internal()&quot;</span>);
+<a name="l00056"></a>00056         input_setup_t f = dlsym(handle, <span class="stringliteral">&quot;input_setup_internal&quot;</span>);
+<a name="l00057"></a>00057         <span class="comment">//input_setup_t f = GetProcAddress(handle, &quot;input_setup_internal&quot;);</span>
+<a name="l00058"></a>00058         <span class="keywordflow">if</span>(f == NULL)
+<a name="l00059"></a>00059         {
+<a name="l00060"></a>00060             trace_debug(<span class="stringliteral">&quot;my_input_setup: loading setup function failed&quot;</span>);
+<a name="l00061"></a>00061             printf(<span class="stringliteral">&quot;%s\n&quot;</span>, dlerror());
+<a name="l00062"></a>00062             <span class="keywordflow">return</span> 1;
+<a name="l00063"></a>00063         }
+<a name="l00064"></a>00064         trace_debug(<span class="stringliteral">&quot;my_input_setup: calling setup function&quot;</span>);
+<a name="l00065"></a>00065         <span class="keywordflow">return</span> f(limit, argv, &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>);
+<a name="l00066"></a>00066     }
+<a name="l00067"></a>00067 }
+<a name="l00068"></a>00068 <span class="keywordtype">int</span> fuse_kafka_main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *argv[])
+<a name="l00069"></a>00069 {
+<a name="l00070"></a>00070     trace_debug(<span class="stringliteral">&quot;fuse_kafka_main: starting&quot;</span>);
+<a name="l00071"></a>00071     <span class="keywordtype">int</span> i;
+<a name="l00072"></a>00072     <span class="keywordtype">int</span> limit = <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(argc, argv);
+<a name="l00073"></a>00073     atexit(configuration_clean);
+<a name="l00074"></a>00074     memset(&amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>, 0, <span class="keyword">sizeof</span>(config));
+<a name="l00075"></a>00075     trace_debug(<span class="stringliteral">&quot;fuse_kafka_main:  calling parse_arguments(%d - %d - 1, %d + %d + 1, %d)&quot;</span>, argc, limit, argv, limit, &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>);
+<a name="l00076"></a>00076     <span class="keywordflow">if</span>(parse_arguments(argc - limit - 1, argv + limit + 1, &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>))
+<a name="l00077"></a>00077     {
+<a name="l00078"></a>00078         trace_debug(<span class="stringliteral">&quot;arguments parsed, input setup&quot;</span>);
+<a name="l00079"></a>00079         my_input_setup(argc, argv, limit);
+<a name="l00080"></a>00080         trace_debug(<span class="stringliteral">&quot;input_setup done&quot;</span>);
+<a name="l00081"></a>00081     }
+<a name="l00082"></a>00082 <span class="preprocessor">#ifndef MINGW_VER</span>
+<a name="l00083"></a>00083 <span class="preprocessor"></span>    wait(NULL);
+<a name="l00084"></a>00084 <span class="preprocessor">#endif</span>
+<a name="l00085"></a>00085 <span class="preprocessor"></span>    trace_debug(<span class="stringliteral">&quot;fuse_kafka_main: done&quot;</span>);
+<a name="l00086"></a>00086     <span class="keywordflow">return</span> 0;
+<a name="l00087"></a>00087 }
+<a name="l00088"></a>00088 <span class="keywordtype">char</span>* cmd = NULL;
+<a name="l00089"></a>00089 <span class="preprocessor">#ifdef TEST</span>
+<a name="l00090"></a>00090 <span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="test_8c.html">test.c</a>&quot;</span>
+<a name="l00091"></a>00091 <span class="preprocessor">#else</span>
+<a name="l00092"></a>00092 <span class="preprocessor"></span><span class="keywordtype">int</span> main(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00093"></a>00093 {
+<a name="l00094"></a>00094     trace_debug(<span class="stringliteral">&quot;main: calling fuse_kafka_main(%d, %d)&quot;</span>, argc, argv);
+<a name="l00095"></a>00095     fuse_kafka_main(argc, argv);
+<a name="l00096"></a>00096 }
+<a name="l00097"></a>00097 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -170,7 +192,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 29 2015 11:21:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 6 2015 19:44:56 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

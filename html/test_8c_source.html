@@ -408,7 +408,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00325"></a>00325 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_trace()
 <a name="l00326"></a>00326 {
 <a name="l00327"></a>00327     SET_CONFIG;
-<a name="l00328"></a>00328     <a class="code" href="trace_8c.html#ad94abf599a8e0299bcb5088c87ebbdb8" title="formats and send traces to kafka, behaving like printf">trace</a>(<span class="stringliteral">&quot;blah&quot;</span>);
+<a name="l00328"></a>00328     trace(<span class="stringliteral">&quot;blah&quot;</span>);
 <a name="l00329"></a>00329     <span class="keywordflow">return</span> 0;
 <a name="l00330"></a>00330 }
 <a name="l00331"></a>00331 <span class="keywordtype">void</span> dynamic_configuration_handler(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>**argv, <span class="keywordtype">void</span>* context)
@@ -571,7 +571,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -583,7 +583,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 29 2015 11:21:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 6 2015 19:44:56 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

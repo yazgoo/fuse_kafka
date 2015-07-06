@@ -554,131 +554,191 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00471"></a>00471 require(your-library)
 <a name="l00472"></a>00472 ````
 <a name="l00473"></a>00473 
-<a name="l00474"></a>00474 Input plugin unit testing
-<a name="l00475"></a>00475 =========================
-<a name="l00476"></a>00476 
-<a name="l00477"></a>00477 Each input plugin should have a unit test (with the suffix `_test`).
-<a name="l00478"></a>00478 
-<a name="l00479"></a>00479 For example, `src/plugins/input/overlay.c` has a unit test 
-<a name="l00480"></a>00480 `src/plugins/input/overlay_test.c`
-<a name="l00481"></a>00481 
-<a name="l00482"></a>00482 As <span class="keywordflow">for</span> the rest of the project, we use minunit <span class="keywordflow">for</span> that.
-<a name="l00483"></a>00483 Just include `minuti.h` and your plugin source.
-<a name="l00484"></a>00484 Define your unit test functions, as <span class="keywordflow">for</span> example:
-<a name="l00485"></a>00485 
-<a name="l00486"></a>00486 ```C
-<a name="l00487"></a>00487 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_something()
-<a name="l00488"></a>00488 {
-<a name="l00489"></a>00489     <span class="comment">/*...*/</span>
-<a name="l00490"></a>00490     mu_assert(<span class="stringliteral">&quot;42 is 42&quot;</span>, 42 == 42);
-<a name="l00491"></a>00491     <span class="comment">/*...*/</span>
-<a name="l00492"></a>00492     <span class="keywordflow">return</span> 0;
-<a name="l00493"></a>00493 }
-<a name="l00494"></a>00494 ````
+<a name="l00474"></a>00474 You can specify a target plateform regexp pattern <span class="keywordflow">if</span> you want, <span class="keywordflow">for</span> example:
+<a name="l00475"></a>00475 
+<a name="l00476"></a>00476 ````c
+<a name="l00477"></a>00477 target(.*linux.*)
+<a name="l00478"></a>00478 ````
+<a name="l00479"></a>00479 
+<a name="l00480"></a>00480 Will only build <span class="keywordflow">for</span> linux. If not specified, the plugin will 
+<a name="l00481"></a>00481 be built <span class="keywordflow">for</span> all target.
+<a name="l00482"></a>00482 
+<a name="l00483"></a>00483 
+<a name="l00484"></a>00484 Input plugin unit testing
+<a name="l00485"></a>00485 =========================
+<a name="l00486"></a>00486 
+<a name="l00487"></a>00487 Each input plugin should have a unit test (with the suffix `_test`).
+<a name="l00488"></a>00488 
+<a name="l00489"></a>00489 For example, `src/plugins/input/overlay.c` has a unit test 
+<a name="l00490"></a>00490 `src/plugins/input/overlay_test.c`
+<a name="l00491"></a>00491 
+<a name="l00492"></a>00492 As <span class="keywordflow">for</span> the rest of the project, we use minunit <span class="keywordflow">for</span> that.
+<a name="l00493"></a>00493 Just include `minuti.h` and your plugin source.
+<a name="l00494"></a>00494 Define your unit test functions, as <span class="keywordflow">for</span> example:
 <a name="l00495"></a>00495 
-<a name="l00496"></a>00496 And then define an `all_test()` <span class="keyword">function</span> calling all tests
-<a name="l00497"></a>00497 
-<a name="l00498"></a>00498 ````C
-<a name="l00499"></a>00499 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
-<a name="l00500"></a>00500 {
-<a name="l00501"></a>00501     mu_run_test(test_something);
-<a name="l00502"></a>00502     mu_run_test(test_something_else);
-<a name="l00503"></a>00503     <span class="keywordflow">return</span> 0;
-<a name="l00504"></a>00504 }
-<a name="l00505"></a>00505 ````
-<a name="l00506"></a>00506 
-<a name="l00507"></a>00507 and then
-<a name="l00508"></a>00508 
-<a name="l00509"></a>00509 ````C
-<a name="l00510"></a>00510 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
-<a name="l00511"></a>00511 ````
-<a name="l00512"></a>00512 Also, you should exclude your test file from code coverage, <span class="keyword">using</span>:
-<a name="l00513"></a>00513 
-<a name="l00514"></a>00514 ````C
-<a name="l00515"></a>00515 <span class="comment">// LCOV_EXCL_START</span>
-<a name="l00516"></a>00516 <span class="comment">/* code to exclude */</span>
-<a name="l00517"></a>00517 <span class="comment">// LCOV_EXCL_STOP</span>
-<a name="l00518"></a>00518 ````
-<a name="l00519"></a>00519 
-<a name="l00520"></a>00520 Write tests
-<a name="l00521"></a>00521 ===========
-<a name="l00522"></a>00522 
-<a name="l00523"></a>00523 To compare inotify output plugin with overlay output plugin, run:
-<a name="l00524"></a>00524 
-<a name="l00525"></a>00525     rm -rf /tmp/zookeeper /tmp/kafka-logs;./build.py write_tests
-<a name="l00526"></a>00526 
-<a name="l00527"></a>00527 This will generate two files, /tmp/write_tests.overlay 
-<a name="l00528"></a>00528 and /tmp/write_tests.inotify with the writes received by kafka.
+<a name="l00496"></a>00496 ```C
+<a name="l00497"></a>00497 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_something()
+<a name="l00498"></a>00498 {
+<a name="l00499"></a>00499     <span class="comment">/*...*/</span>
+<a name="l00500"></a>00500     mu_assert(<span class="stringliteral">&quot;42 is 42&quot;</span>, 42 == 42);
+<a name="l00501"></a>00501     <span class="comment">/*...*/</span>
+<a name="l00502"></a>00502     <span class="keywordflow">return</span> 0;
+<a name="l00503"></a>00503 }
+<a name="l00504"></a>00504 ````
+<a name="l00505"></a>00505 
+<a name="l00506"></a>00506 And then define an `all_test()` <span class="keyword">function</span> calling all tests
+<a name="l00507"></a>00507 
+<a name="l00508"></a>00508 ````C
+<a name="l00509"></a>00509 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00510"></a>00510 {
+<a name="l00511"></a>00511     mu_run_test(test_something);
+<a name="l00512"></a>00512     mu_run_test(test_something_else);
+<a name="l00513"></a>00513     <span class="keywordflow">return</span> 0;
+<a name="l00514"></a>00514 }
+<a name="l00515"></a>00515 ````
+<a name="l00516"></a>00516 
+<a name="l00517"></a>00517 and then
+<a name="l00518"></a>00518 
+<a name="l00519"></a>00519 ````C
+<a name="l00520"></a>00520 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
+<a name="l00521"></a>00521 ````
+<a name="l00522"></a>00522 Also, you should exclude your test file from code coverage, <span class="keyword">using</span>:
+<a name="l00523"></a>00523 
+<a name="l00524"></a>00524 ````C
+<a name="l00525"></a>00525 <span class="comment">// LCOV_EXCL_START</span>
+<a name="l00526"></a>00526 <span class="comment">/* code to exclude */</span>
+<a name="l00527"></a>00527 <span class="comment">// LCOV_EXCL_STOP</span>
+<a name="l00528"></a>00528 ````
 <a name="l00529"></a>00529 
-<a name="l00530"></a>00530 This uses the file write_test.rb
-<a name="l00531"></a>00531 
-<a name="l00532"></a>00532 Auditd
-<a name="l00533"></a>00533 ======
+<a name="l00530"></a>00530 Write tests
+<a name="l00531"></a>00531 ===========
+<a name="l00532"></a>00532 
+<a name="l00533"></a>00533 To compare inotify output plugin with overlay output plugin, run:
 <a name="l00534"></a>00534 
-<a name="l00535"></a>00535 Maybe you are <span class="keyword">using</span> auditd and you are logging the accesses to audit.log.
-<a name="l00536"></a>00536 Before starting fuse_kafka, the init script issues a:
-<a name="l00537"></a>00537 
-<a name="l00538"></a>00538     auditctl -A exit,never -F path=/var/log/audit/audit.log -F perm=r -F pid=$pid
+<a name="l00535"></a>00535     rm -rf /tmp/zookeeper /tmp/kafka-logs;./build.py write_tests
+<a name="l00536"></a>00536 
+<a name="l00537"></a>00537 This will generate two files, /tmp/write_tests.overlay 
+<a name="l00538"></a>00538 and /tmp/write_tests.inotify with the writes received by kafka.
 <a name="l00539"></a>00539 
-<a name="l00540"></a>00540 Which will disable such logging <span class="keywordflow">for</span> fuse_kafka so there is no <span class="stringliteral">&quot;audit flood&quot;</span>.
+<a name="l00540"></a>00540 This uses the file write_test.rb
 <a name="l00541"></a>00541 
-<a name="l00542"></a>00542 RPM
-<a name="l00543"></a>00543 ===
+<a name="l00542"></a>00542 Auditd
+<a name="l00543"></a>00543 ======
 <a name="l00544"></a>00544 
-<a name="l00545"></a>00545 You can generate an rpm (provided rpm-build is installed) via:
-<a name="l00546"></a>00546 
-<a name="l00547"></a>00547     ./build.py rpm
-<a name="l00548"></a>00548 
-<a name="l00549"></a>00549 This will create a $HOME/rpmbuild directory, and generate the rpm in
-<a name="l00550"></a>00550 /root/rpmbuild/RPMS.
+<a name="l00545"></a>00545 Maybe you are <span class="keyword">using</span> auditd and you are logging the accesses to audit.log.
+<a name="l00546"></a>00546 Before starting fuse_kafka, the init script issues a:
+<a name="l00547"></a>00547 
+<a name="l00548"></a>00548     auditctl -A exit,never -F path=/var/log/audit/audit.log -F perm=r -F pid=$pid
+<a name="l00549"></a>00549 
+<a name="l00550"></a>00550 Which will disable such logging <span class="keywordflow">for</span> fuse_kafka so there is no <span class="stringliteral">&quot;audit flood&quot;</span>.
 <a name="l00551"></a>00551 
-<a name="l00552"></a>00552 Status
-<a name="l00553"></a>00553 ======
+<a name="l00552"></a>00552 RPM
+<a name="l00553"></a>00553 ===
 <a name="l00554"></a>00554 
-<a name="l00555"></a>00555 To create a status per mount point, here is how we procede:
+<a name="l00555"></a>00555 You can generate an rpm (provided rpm-build is installed) via:
 <a name="l00556"></a>00556 
-<a name="l00557"></a>00557 * Each fuse_kafka process writes its pid and the directories it
-<a name="l00558"></a>00558 watches in /var/run/fuse_kafka/watched
-<a name="l00559"></a>00559 
-<a name="l00560"></a>00560 For example, <span class="keywordflow">if</span> pid #1649 is watching /var/log, the following file
-<a name="l00561"></a>00561 will be generated:
-<a name="l00562"></a>00562 
-<a name="l00563"></a>00563     /var/run/fuse_kafka/watched/var/log/1649.pid
+<a name="l00557"></a>00557     ./build.py rpm
+<a name="l00558"></a>00558 
+<a name="l00559"></a>00559 This will create a $HOME/rpmbuild directory, and generate the rpm in
+<a name="l00560"></a>00560 /root/rpmbuild/RPMS.
+<a name="l00561"></a>00561 
+<a name="l00562"></a>00562 Status
+<a name="l00563"></a>00563 ======
 <a name="l00564"></a>00564 
-<a name="l00565"></a>00565 To list watched directories, fuse_kafka.py list such files, and checks <span class="keywordflow">if</span>
-<a name="l00566"></a>00566 fuse_kafka is running with such a pid.
-<a name="l00567"></a>00567 
-<a name="l00568"></a>00568 If there is no process running or the process is not fuse_kafka, the
-<a name="l00569"></a>00569 .pid will be deleted.
-<a name="l00570"></a>00570 
-<a name="l00571"></a>00571 Licensing
-<a name="l00572"></a>00572 =========
-<a name="l00573"></a>00573 
-<a name="l00574"></a>00574 licensed under Apache v 2.0, see LICENSE file
-<a name="l00575"></a>00575 
-<a name="l00576"></a>00576 
-<a name="l00577"></a>00577 Tagging
-<a name="l00578"></a>00578 =======
-<a name="l00579"></a>00579 
-<a name="l00580"></a>00580 - <span class="keywordflow">for</span> versions, use github release tags, <span class="keywordflow">for</span> example 0.1.4
-<a name="l00581"></a>00581 - <span class="keywordflow">for</span> OBS source release number, we use ligthweight tag: <span class="keywordflow">for</span> example the <span class="keyword">package </span>
-<a name="l00582"></a>00582 <span class="keyword">    </span>fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
-<a name="l00583"></a>00583 
+<a name="l00565"></a>00565 To create a status per mount point, here is how we procede:
+<a name="l00566"></a>00566 
+<a name="l00567"></a>00567 * Each fuse_kafka process writes its pid and the directories it
+<a name="l00568"></a>00568 watches in /var/run/fuse_kafka/watched
+<a name="l00569"></a>00569 
+<a name="l00570"></a>00570 For example, <span class="keywordflow">if</span> pid #1649 is watching /var/log, the following file
+<a name="l00571"></a>00571 will be generated:
+<a name="l00572"></a>00572 
+<a name="l00573"></a>00573     /var/run/fuse_kafka/watched/var/log/1649.pid
+<a name="l00574"></a>00574 
+<a name="l00575"></a>00575 To list watched directories, fuse_kafka.py list such files, and checks <span class="keywordflow">if</span>
+<a name="l00576"></a>00576 fuse_kafka is running with such a pid.
+<a name="l00577"></a>00577 
+<a name="l00578"></a>00578 If there is no process running or the process is not fuse_kafka, the
+<a name="l00579"></a>00579 .pid will be deleted.
+<a name="l00580"></a>00580 
+<a name="l00581"></a>00581 
+<a name="l00582"></a>00582 Windows (mingw)
+<a name="l00583"></a>00583 ===============
 <a name="l00584"></a>00584 
-<a name="l00585"></a>00585 Code of conduct
-<a name="l00586"></a>00586 ===============
+<a name="l00585"></a>00585 You need to build jansson, zookeeper and librdkafka separately
+<a name="l00586"></a>00586 Then:
 <a name="l00587"></a>00587 
-<a name="l00588"></a>00588 Please note that this project is released with a Contributor Code of Conduct.
-<a name="l00589"></a>00589 By participating in this project you agree to abide by its terms.
-<a name="l00590"></a>00590 See CODE OF CONDUCT file.
-<a name="l00591"></a>00591 
+<a name="l00588"></a>00588     cd src
+<a name="l00589"></a>00589     ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
+<a name="l00590"></a>00590     ln -s  ../../librdkafka/src librdkafka
+<a name="l00591"></a>00591     cd -
+<a name="l00592"></a>00592     CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/&quot;</span> LIBS=<span class="stringliteral">&quot;-lws2_32 -lpsapi&quot;</span> ./build.py
+<a name="l00593"></a>00593 
+<a name="l00594"></a>00594 For testing purposes, you can run fuse_kafka with wine:
+<a name="l00595"></a>00595 
+<a name="l00596"></a>00596     ln -s fuse_kafka fuse_kafka.exe
+<a name="l00597"></a>00597     cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll  .
+<a name="l00598"></a>00598     cp ../librdkafka/src/librdkafka.so.1 .
+<a name="l00599"></a>00599     cp /usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll .
+<a name="l00600"></a>00600     FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
+<a name="l00601"></a>00601 
+<a name="l00602"></a>00602 
+<a name="l00603"></a>00603 Generating <span class="keyword">self</span> contained archive from sources
+<a name="l00604"></a>00604 ==============================================
+<a name="l00605"></a>00605 
+<a name="l00606"></a>00606 You can generate an archive with all dependencies with binary_archive target.
+<a name="l00607"></a>00607 
+<a name="l00608"></a>00608 For example, to generate an archive <span class="keywordflow">for</span> windows, building with mingw:
+<a name="l00609"></a>00609 
+<a name="l00610"></a>00610     SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L$PWD/../out/lib&quot;</span> LIBS=<span class="stringliteral">&quot;-lwsock32 -lws2_32 -lpsapi&quot;</span> archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+<a name="l00611"></a>00611 
+<a name="l00612"></a>00612     http_proxy=http:<span class="comment">//install:98inst@10.6.69.50:8080 https_proxy=http://install:98inst@10.6.69.50:8080  SRCROOT=/tmp/lolo BUILDROOT=$PWD/../out/ CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot; LDFLAGS=&quot;-L$PWD/../out/lib -Xlinker --no-undefined -Xlinker --enable-runtime-pseudo-reloc&quot; LIBS=&quot;-lwsock32 -lws2_32 -lpsapi&quot; archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive</span>
+<a name="l00613"></a>00613 
+<a name="l00614"></a>00614 This will:
+<a name="l00615"></a>00615 
+<a name="l00616"></a>00616 1. download source dependencies into SRCROOT
+<a name="l00617"></a>00617 1. build them and install them in BUILDROOT
+<a name="l00618"></a>00618 1. add additional libraries from wine <span class="keywordflow">if</span> we<span class="stringliteral">&#39;re building for windows</span>
+<a name="l00619"></a>00619 <span class="stringliteral">1. download python if we&#39;</span>re building <span class="keywordflow">for</span> windows
+<a name="l00620"></a>00620 1. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+<a name="l00621"></a>00621 
+<a name="l00622"></a>00622 
+<a name="l00623"></a>00623 Verbose tracing
+<a name="l00624"></a>00624 ===============
+<a name="l00625"></a>00625 
+<a name="l00626"></a>00626 You can enable verbose mode via
+<a name="l00627"></a>00627 
+<a name="l00628"></a>00628     CFLAGS=<span class="stringliteral">&quot;-DFK_DEBUG&quot;</span> ./build.py
+<a name="l00629"></a>00629 
+<a name="l00630"></a>00630 
+<a name="l00631"></a>00631 Licensing
+<a name="l00632"></a>00632 =========
+<a name="l00633"></a>00633 
+<a name="l00634"></a>00634 licensed under Apache v 2.0, see LICENSE file
+<a name="l00635"></a>00635 
+<a name="l00636"></a>00636 
+<a name="l00637"></a>00637 Tagging
+<a name="l00638"></a>00638 =======
+<a name="l00639"></a>00639 
+<a name="l00640"></a>00640 - <span class="keywordflow">for</span> versions, use github release tags, <span class="keywordflow">for</span> example 0.1.4
+<a name="l00641"></a>00641 - <span class="keywordflow">for</span> OBS source release number, we use ligthweight tag: <span class="keywordflow">for</span> example the <span class="keyword">package </span>
+<a name="l00642"></a>00642 <span class="keyword">    </span>fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
+<a name="l00643"></a>00643 
+<a name="l00644"></a>00644 
+<a name="l00645"></a>00645 Code of conduct
+<a name="l00646"></a>00646 ===============
+<a name="l00647"></a>00647 
+<a name="l00648"></a>00648 Please note that this project is released with a Contributor Code of Conduct.
+<a name="l00649"></a>00649 By participating in this project you agree to abide by its terms.
+<a name="l00650"></a>00650 See CODE OF CONDUCT file.
+<a name="l00651"></a>00651 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -690,7 +750,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 29 2015 11:21:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 6 2015 19:44:56 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

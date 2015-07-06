@@ -105,6 +105,8 @@ Defines</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>UTIL_C</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28ec5a2ef0333a4c9a255a3ac079c001"></a><!-- doxytag: member="util.c::BASE64_CHARS" ref="a28ec5a2ef0333a4c9a255a3ac079c001" args="" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>BASE64_CHARS</b>&#160;&#160;&#160;&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61e207056771b2f0cf4d48159d163def"></a><!-- doxytag: member="util.c::TZ" ref="a61e207056771b2f0cf4d48159d163def" args="" -->
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>TZ</b>&#160;&#160;&#160;&quot;%z&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>DO_AS_CALLER</b>(action)</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -175,7 +177,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
     seteuid(__uid); \
     setegid(__gid);
 </pre></div>
-<p>Definition at line <a class="el" href="util_8c_source.html#l00238">238</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00320">320</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -245,7 +247,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>null if a or b is null, a + "/" + b otherwise </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00191">191</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00272">272</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -305,7 +307,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00138">138</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00219">219</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -333,7 +335,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00124">124</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00138">138</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -343,7 +345,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -355,7 +357,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 29 2015 11:21:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 6 2015 19:44:56 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>fuse_kafka: src/input_plugin_test.c Source File</title>
+<title>fuse_kafka: inotify_event Struct Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -49,8 +49,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -71,29 +71,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>Globals</span></a></li>
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="classes.html"><span>Data&#160;Structure&#160;Index</span></a></li>
+      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
     </ul>
   </div>
 </div>
 <div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">src/input_plugin_test.c</div>  </div>
+<div class="title">inotify_event Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">// LCOV_EXCL_START</span>
-<a name="l00002"></a>00002 <span class="keywordtype">void</span>* output_init(config* <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>)
-<a name="l00003"></a>00003 {
-<a name="l00004"></a>00004 }
-<a name="l00005"></a>00005 <span class="keywordtype">void</span> output_write(<span class="keyword">const</span> <span class="keywordtype">char</span>* prefix, <span class="keyword">const</span> <span class="keywordtype">char</span> *path,
-<a name="l00006"></a>00006         <span class="keyword">const</span> <span class="keywordtype">char</span> *buf, <span class="keywordtype">size_t</span> size, off_t offset)
-<a name="l00007"></a>00007 {
-<a name="l00008"></a>00008 }
-<a name="l00009"></a>00009 <span class="keywordtype">void</span> output_destroy(<span class="keywordtype">void</span>* untyped)
-<a name="l00010"></a>00010 {
-<a name="l00011"></a>00011 }
-<a name="l00012"></a>00012 <span class="comment">// LCOV_EXCL_STOP</span>
-</pre></div></div><!-- contents -->
+<!-- doxytag: class="inotify_event" --><table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Data Fields</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a65f7a3509bf7d880d7edcf4dca5997c8"></a><!-- doxytag: member="inotify_event::wd" ref="a65f7a3509bf7d880d7edcf4dca5997c8" args="" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>wd</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f46a4a643372ee8ac4d2f85871fa91c"></a><!-- doxytag: member="inotify_event::mask" ref="a9f46a4a643372ee8ac4d2f85871fa91c" args="" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>mask</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebd8767d689dbe6c04a489fd84e38860"></a><!-- doxytag: member="inotify_event::len" ref="aebd8767d689dbe6c04a489fd84e38860" args="" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>len</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a856d3c3713003f54ea447e138352a07e"></a><!-- doxytag: member="inotify_event::name" ref="a856d3c3713003f54ea447e138352a07e" args="" -->
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>name</b></td></tr>
+</table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock">
+<p>Definition at line <a class="el" href="inotify__win_8c_source.html#l00001">1</a> of file <a class="el" href="inotify__win_8c_source.html">inotify_win.c</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>src/<a class="el" href="inotify__win_8c_source.html">inotify_win.c</a></li>
+</ul>
+</div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"

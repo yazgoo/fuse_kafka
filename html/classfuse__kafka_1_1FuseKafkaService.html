@@ -81,7 +81,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -132,6 +132,8 @@ def&#160;</td><td class="memItemRight" valign="bottom"><b>status</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuse__kafka_1_1FuseKafkaService.html#a9cf98c6a35fb986e6877dfdca61630c0">cleanup</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af430312adb56c1dc5af6974b045708a8"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::auditctl_bin" ref="af430312adb56c1dc5af6974b045708a8" args="" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>auditctl_bin</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae104081d0b1ec3c4c44cfd4ccf75b01e"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::prefix" ref="ae104081d0b1ec3c4c44cfd4ccf75b01e" args="" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>prefix</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1238f08c265e4c19a8a721f57bd7dafe"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::proc_mount_path" ref="a1238f08c265e4c19a8a721f57bd7dafe" args="" -->
@@ -141,7 +143,7 @@ Data Fields</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><div class="fragment"><pre class="fragment">Utility class to run multiple fuse_kafka processes as one service </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00161">161</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00172">172</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a9cf98c6a35fb986e6877dfdca61630c0"></a><!-- doxytag: member="fuse_kafka::FuseKafkaService::cleanup" ref="a9cf98c6a35fb986e6877dfdca61630c0" args="" -->
 <div class="memitem">
@@ -160,7 +162,7 @@ Data Fields</h2></td></tr>
 <div class="fragment"><pre class="fragment">if a fuse kafka mountpoint is not accessible, umount it.
 Also installs this action in the crontab so it is launched
 every minute. </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00280">280</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00309">309</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -193,7 +195,7 @@ every minute. </pre></div>
 action - the action name
 
 </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00169">169</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00181">181</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -212,7 +214,7 @@ action - the action name
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Displays the status of fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00267">267</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00296">296</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -242,7 +244,7 @@ action - the action name
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">if fuse_kafka is running, reloads the dynamic part of 
 the configuration. If it is not running, starts it </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00223">223</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00249">249</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -261,7 +263,7 @@ the configuration. If it is not running, starts it </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Stops and starts fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00243">243</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00272">272</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -290,7 +292,7 @@ the configuration. If it is not running, starts it </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Starts fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00181">181</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00193">193</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -309,7 +311,7 @@ the configuration. If it is not running, starts it </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Stops fuse_kafka processes </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00217">217</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00240">240</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -338,7 +340,7 @@ the configuration. If it is not running, starts it </pre></div>
 </div>
 <div class="memdoc">
 <div class="fragment"><pre class="fragment">Stops fuse_kafka process for a specific directory </pre></div> 
-<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00238">238</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
+<p>Definition at line <a class="el" href="fuse__kafka_8py_source.html#l00267">267</a> of file <a class="el" href="fuse__kafka_8py_source.html">fuse_kafka.py</a>.</p>
 
 </div>
 </div>
@@ -351,7 +353,7 @@ the configuration. If it is not running, starts it </pre></div>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -363,7 +365,7 @@ the configuration. If it is not running, starts it </pre></div>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jun 29 2015 11:21:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 6 2015 19:44:57 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
