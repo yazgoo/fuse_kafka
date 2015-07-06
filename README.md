@@ -471,6 +471,16 @@ If you require some library, you should refer to its pkg-config name via the mac
 require(your-library)
 ````
 
+You can specify a target plateform regexp pattern if you want, for example:
+
+````c
+target(.*linux.*)
+````
+
+Will only build for linux. If not specified, the plugin will 
+be built for all target.
+
+
 Input plugin unit testing
 =========================
 
@@ -567,6 +577,56 @@ fuse_kafka is running with such a pid.
 
 If there is no process running or the process is not fuse_kafka, the
 .pid will be deleted.
+
+
+Windows (mingw)
+===============
+
+You need to build jansson, zookeeper and librdkafka separately
+Then:
+
+    cd src
+    ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
+    ln -s  ../../librdkafka/src librdkafka
+    cd -
+    CC=x86_64-w64-mingw32-gcc CFLAGS="-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED" LDFLAGS="-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/" LIBS="-lws2_32 -lpsapi" ./build.py
+
+For testing purposes, you can run fuse_kafka with wine:
+
+    ln -s fuse_kafka fuse_kafka.exe
+    cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll  .
+    cp ../librdkafka/src/librdkafka.so.1 .
+    cp /usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll .
+    FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
+
+
+Generating self contained archive from sources
+==============================================
+
+You can generate an archive with all dependencies with binary_archive target.
+
+For example, to generate an archive for windows, building with mingw:
+
+    SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS="-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760" LDFLAGS="-L$PWD/../out/lib" LIBS="-lwsock32 -lws2_32 -lpsapi" archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+
+    http_proxy=http://install:98inst@10.6.69.50:8080 https_proxy=http://install:98inst@10.6.69.50:8080  SRCROOT=/tmp/lolo BUILDROOT=$PWD/../out/ CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS="-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760" LDFLAGS="-L$PWD/../out/lib -Xlinker --no-undefined -Xlinker --enable-runtime-pseudo-reloc" LIBS="-lwsock32 -lws2_32 -lpsapi" archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+
+This will:
+
+1. download source dependencies into SRCROOT
+1. build them and install them in BUILDROOT
+1. add additional libraries from wine if we're building for windows
+1. download python if we're building for windows
+1. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+
+
+Verbose tracing
+===============
+
+You can enable verbose mode via
+
+    CFLAGS="-DFK_DEBUG" ./build.py
+
 
 Licensing
 =========

@@ -18,23 +18,35 @@ def get_define(source, name):
     f.close()
     return result
 class InputPlugins:
-    def __init__(self):
+    def get_macro_definition(self, name, path):
+        cmd = "sh -c \"grep --color=no '^"+name+"(' " + path + ".c | sed 's/^"+name+"(\(.*\))$/\\1/'\""
+        return os.popen(cmd).read().rstrip()
+    def get_target(self, path):
+        target_str = self.get_macro_definition("target", path)
+        if target_str == '': return '.*'
+        return target_str
+    def get_requirements(self, path):
+        required_str = self.get_macro_definition("requires", path)
+        required = []
+        if required_str != '': required = required_str.split("\n")
+        return required
+    def __init__(self, cc):
+        self.cc = cc
         _dir = "src/plugins/input/"
         self.tests_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*_test.c")]
         self.tests_paths = [_dir.replace("src/", "") + x for x in self.tests_sources]
         self.libraries_sources = [os.path.splitext(os.path.basename(a))[0] for a in glob.glob(_dir + "*.c")]
         self.libraries_sources = [x for x in self.libraries_sources if x not in self.tests_sources]
         self.libs_of = {}
+        self.targets_of = {}
         self.includes_of = {}
         self.shareds_objects = {}
         self.objects = {}
         self.test_of = {}
         prefix = get_define("version", "INPUT_PLUGIN_PREFIX")
         for lib in self.libraries_sources:
-            cmd = "sh -c \"grep --color=no '^requires(' " + _dir + lib + ".c | sed 's/^requires(\(.*\))$/\\1/'\""
-            required_str = os.popen(cmd).read().rstrip()
-            required = []
-            if required_str != '': required = required_str.split("\n")
+            required = self.get_requirements(_dir + lib)
+            self.targets_of[lib] = self.get_target(_dir + lib)
             self.libs_of[lib] = required + default_libs
             self.includes_of[lib] = required
             self.test_of[lib] = ((_dir + lib) +  "_test").replace("src/", "")
@@ -43,12 +55,21 @@ class InputPlugins:
 cc = 'gcc'
 if "CC" in os.environ:
     cc = os.environ["CC"]
+_flags = []
+for flag in ["CFLAGS", "LDFLAGS"]:
+    if flag in os.environ:
+        _flags = _flags + os.environ[flag].split()
+cc = [cc, _flags]
 sources = ['fuse_kafka']
 binary_name = sources[0]
-common_libs = ["m", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
-libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
+common_libs = ["m", "dl", "pthread", "jansson"]#, "ulockmgr"]
+libs = ["zookeeper_mt", "rdkafka",  "z"] + common_libs
 default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson"]
-input_plugins = InputPlugins()
+if "LIBS" in os.environ:
+    additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
+    default_libs += additional_libs
+    libs += additional_libs
+input_plugins = InputPlugins(cc)
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -364,10 +385,19 @@ def test_run():
     python_test()
 def to_includes(what):
     return [os.popen("pkg-config --cflags " + a).read().split() for a in what]
+def target_matched(target):
+    compiler = cc[0]
+    if type(cc) is str:
+        compiler = cc
+    cmd = "sh -c '" + compiler + " -v 2>&1|grep Target:|grep \"" + target + "\"'"
+    return len(os.popen(cmd).read().split()) > 0
 def compile_input_plugins():
     for library_source in input_plugins.libraries_sources:
+        if not target_matched(input_plugins.targets_of[library_source]):
+            print("skipping " + library_source + " plugin because not compiling for target")
+            continue
         run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(input_plugins.includes_of[library_source]), "./src/plugins/input/" + library_source +'.c', flags, '-o', input_plugins.objects[library_source])
-        run(cc, '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
+        run(cc, '-g', '-shared', '-o', input_plugins.shareds_objects[library_source], input_plugins.objects[library_source], flags, to_links(input_plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_input_plugins()
@@ -413,12 +443,94 @@ def install():
     conf_directory = root + 'etc/'
     [run('mkdir', '-p', d) for d in
             [conf_directory, init_directory, install_directory, lib_directory]]
-    for key in input_plugins.shareds_objects: run('cp', input_plugins.shareds_objects[key], lib_directory)
+    for key in input_plugins.shareds_objects:
+        if not target_matched(input_plugins.targets_of[key]): continue
+        run('cp', input_plugins.shareds_objects[key], lib_directory)
     run('cp', binary_name, install_directory)
     [run('cp', 'src/' + init_name + '.py', init_directory + init_name)
             for init_name in ["fuse_kafka", "fuse_kafka_umounter"]]
     run('cp', 'conf/fuse_kafka.properties',
             conf_directory + "fuse_kafka.conf")
+def install_from_source(root, src, source):
+    path = src + source['name']
+    print(">> in " + path)
+    if not 'branch' in source: source['branch'] = "master"
+    if not 'append' in source: source['append'] = ""
+    if not 'ignore' in source: source['ignore'] = False 
+    if not os.path.exists(path):
+        run("git", "clone", "--single-branch", "--branch", source['branch'], source['url'], cwd = src)
+    if 'pre' in source: 
+        pre = source['pre']
+        run(*pre['action'], cwd = src + pre['cwd'])
+    wd = os.getcwd()
+    os.chdir(path)
+    if not os.path.exists("configure"): os.system("autoreconf -if")
+    if os.system("./configure --prefix=" + root + " " + source['append']) != 0 or\
+        (os.system("make") != 0 and not source['ignore']) or\
+        os.system("make install") != 0:
+            raise Exception("build failed for " + path)
+    os.chdir(wd)
+def install_dependencies():
+    if os.environ.get('BUILDROOT') == None:
+        print("no BUILDROOT specified")
+        return
+    if os.environ.get('SRCROOT') == None:
+        os.environ['SRCROOT'] = "/tmp/fuse_kafka_src"
+        return
+    root = os.environ.get('BUILDROOT') + "/"
+    src = os.environ.get('SRCROOT') + "/"
+    for d in [root, src]: run("mkdir", "-p", d)
+    for source in [
+            {
+                'name'  :   'zookeeper/src/c',
+                'pre'   :   {'cwd': 'zookeeper', 'action':  ["ant", "compile_jute"]},
+                'url'   :   'https://github.com/fuse-kafka/zookeeper.git',
+                'branch':   'mingw',
+                },
+            {
+                'name'  :   'zlib',
+                'url'   :   'https://github.com/fuse-kafka/zlib.git',
+                },
+            {
+                'name'  :   'jansson',
+                'url'   :   'https://github.com/akheron/jansson',
+                },
+            {
+                'name'  :   'dlfcn-win32',
+                'url'   :   'https://github.com/dlfcn-win32/dlfcn-win32',
+                'append':    '--cc=' + cc[0]
+                },
+            {
+                'name'  :   'librdkafka',
+                'url'   :   'https://github.com/yazgoo/librdkafka',
+                'branch':   'win32',
+                'ignore':   True,
+                },
+            ]: install_from_source(root, src, source)
+    if target_matched("mingw"):
+        for header in ["winconfig.h", "winstdint.h"]:
+            run("cp", src + "/zookeeper/src/c/include/" + header, root + "/include/")
+def binary_archive():
+    if os.environ.get('BUILDROOT') == None:
+        os.environ['BUILDROOT'] = "/tmp/" + binary_name + "_install"
+    install_dependencies()
+    install()
+    root = (os.environ.get('BUILDROOT') + "/").replace("//", "/")
+    main_bin = root + "/usr/bin/" + binary_name
+    if target_matched("mingw"):
+        run("cp", main_bin, main_bin + ".exe")
+        for dll in ["/usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll",
+                "/usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll"]:
+            run("cp", dll, root + "/usr/lib/")
+    name = binary_name + "-" + get_version()
+    package_name = "../" + name + "-bin"
+    tar = package_name + ".tar.gz"
+    if target_matched("mingw"):
+        _zip = "IronPython-2.7.5.zip"
+        run("wget", "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=ironpython&DownloadId=970326&FileTime=130623736032830000&Build=21024", "-O", _zip)
+        run("unzip", "-o", _zip, "-d", root)
+    run("tar", "czf", tar, root,  "-C", root)
+    run("zip", "-r", os.getcwd() + "/" + package_name + ".zip", os.path.basename(os.path.dirname(root)), cwd = root + "/..")
 def clean():
     """ Cleanups file generated by this script """
     autoclean()

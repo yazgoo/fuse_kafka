@@ -116,6 +116,20 @@ static char* get_command_line(int pid)
     free(command_line);
     return b64;
 }
+#ifdef MINGW_VER
+void set_timezone(char* timestamp, int minutes)
+{
+    long hrs, mins;
+    timestamp[23] = minutes < 0 ? '+' : '-';
+    if(minutes < 0) minutes = -minutes;
+    hrs = minutes / 60;
+    mins = minutes % 60;
+    timestamp[24] += hrs/10;
+    timestamp[25] += hrs%10;
+    timestamp[26] += mins/10;
+    timestamp[27] += mins%10;
+}
+#endif
 /**
  * @brief get a string representing the time in ISO8601 format
  * @param timestamp string to set to the given time
@@ -123,12 +137,79 @@ static char* get_command_line(int pid)
  **/
 void set_timestamp(char* timestamp)
 {
-    struct timeval tv;
     struct tm tm;
-    gettimeofday(&tv, NULL);
+    struct tm* tmp;
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
+#ifdef MINGW_VER
+#define TZ "+0000"
+    time_t ltime;
+    time(&ltime);
+    tmp = localtime(&ltime);
+#else
+#define TZ "%z"
     localtime_r(&tv.tv_sec, &tm);
-    strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000%z", &tm);
+    tmp = &tm;
+#endif
+    size_t size = strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000" TZ, tmp);
+#ifdef MINGW_VER
+    set_timezone(timestamp, tz.tz_minuteswest);
+#endif
 }
+#ifdef MINGW_VER
+/* TODO implement */
+int fnmatch(char* pattern, char* string, int flags)
+{
+    return 0;
+}
+int flock(int fd, int operation)
+{
+    return 0;
+}
+int fchdir(int fd)
+{
+    return 0;
+}
+#include <errno.h>
+/* implementation from 
+http://stackoverflow.com/questions/27369580/codeblocks-and-c-undefined-reference-to-getline
+*/
+ssize_t getdelim(char **linep, size_t *n, int delim, FILE *fp){
+    int ch;
+    size_t i = 0;
+    if(!linep || !n || !fp){
+        errno = EINVAL;
+        return -1;
+    }
+    if(*linep == NULL){
+        if(NULL==(*linep = malloc(*n=128))){
+            *n = 0;
+            errno = ENOMEM;
+            return -1;
+        }
+    }
+    while((ch = fgetc(fp)) != EOF){
+        if(i + 1 >= *n){
+            char *temp = realloc(*linep, *n + 128);
+            if(!temp){
+                errno = ENOMEM;
+                return -1;
+            }
+            *n += 128;
+            *linep = temp;
+        }
+        (*linep)[i++] = ch;
+        if(ch == delim)
+            break;
+    }
+    (*linep)[i] = '\0';
+    return !i && ch == EOF ? -1 : i;
+}
+ssize_t getline(char **linep, size_t *n, FILE *fp){
+    return getdelim(linep, n, '\n', fp);
+}
+#endif
 /**
  * @brief look for the limit "--" in argv
  * @argc argument number
@@ -192,7 +273,8 @@ char* concat(char* a, char* b)
 {
     if(a == NULL || b == NULL) return NULL;
     int length = strlen(a) + strlen(b) + 2;
-    char* result = (char*) malloc(length);
+    char* result = (char*) malloc(length * sizeof(char));
+    if(result == NULL) return NULL;
     result[length - 1] = 0;
     char* middle = result + strlen(a);
     strcpy(result, a);

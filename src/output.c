@@ -6,8 +6,25 @@
 #include "dynamic_configuration.c"
 #include "arguments.c"
 #endif
+#ifdef _WIN32
+struct group {
+    char* gr_name;
+};
+struct passwd {
+    char* pw_name;
+};
+void* getgrgid(int i)
+{
+    return NULL;
+}
+void* getpwuid(int i)
+{
+    return NULL;
+}
+#else
 #include <grp.h>
 #include <pwd.h>
+#endif
 /**
  * @brief actually does the write to kafka of a string with the given
  * file path
@@ -22,7 +39,7 @@ static int actual_kafka_write(const char* prefix, const char *path, const char *
 {
     char* ret = NULL;
     (void) path;
-    char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000";
+    char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000                               ";
     char* text = base64(buf, size);
     struct fuse_context* context = fuse_get_context();
     struct group* sgroup = getgrgid(context->gid);
@@ -235,9 +252,10 @@ int send_kafka(kafka_t* k, char* buf, size_t len)
         continue;*/
     return 0;
 }
-input_setup_internal(int argc, char** argv, void* conf)
+
+void input_setup_internal(int argc, char** argv, void* conf)
 {
-    fuse_get_context()->private_data = output_init((config*) conf);
+    fuse_get_context()->private_data = (void*) output_init((config*) conf);
 #ifndef TEST
     input_setup(argc, argv, conf);
 #endif
