@@ -21,7 +21,7 @@ except:
     canlock = False
 """ CONFIGURATIONS_PATHS is the list of paths where the init script
 will look for configurations """
-CONFIGURATIONS_PATHS = ["./conf/*", "./etc/fuse_kafka.conf", "/etc/fuse_kafka.conf", "/etc/*.txt"]
+CONFIGURATIONS_PATHS = ["./conf/*", "./etc/fuse_kafka.conf", "/etc/fuse_kafka.conf", "/etc/*.txt", "C:/temp/*.txt"]
 class Crontab:
     """ manages a crontab """
     def add_line_if_necessary(self, line):
@@ -210,7 +210,7 @@ class FuseKafkaService:
                 os.makedirs(directory)
         process = subprocess.Popen(
                 self.prefix + self.configuration.args(),
-                    env = env, shell = True)
+                    env = env, shell = (os.sep == '\\'))
         self.do_auditctl_rule(str(process.pid))
         if self.get_status() == 0:
             print("fuse_kafka started")
@@ -313,4 +313,11 @@ class FuseKafkaService:
         Crontab().add_line_if_necessary("* * * * * " + os.path.realpath(__file__) + " cleanup")
         Mountpoints().umount_non_accessible()
 if __name__ == "__main__":
-    FuseKafkaService().do(sys.argv[1])
+    if(len(sys.argv) <= 1):
+        print("Usage: " + sys.argv[0] + " start|stop|status|restart|reload...")
+    else:
+        try:
+            FuseKafkaService().do(sys.argv[1])
+        except AttributeError:
+            print("no action called " + sys.argv[1])
+            exit(1)

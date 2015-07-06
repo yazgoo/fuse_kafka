@@ -612,9 +612,19 @@ For example, to generate an archive for windows, building with mingw:
 This will:
 
 1. download source dependencies into SRCROOT
-2. build them and install them in BUILDROOT
-3. add additional libraries from wine
-3. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+1. build them and install them in BUILDROOT
+1. add additional libraries from wine if we're building for windows
+1. download python if we're building for windows
+1. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+
+
+Verbose tracing
+===============
+
+You can enable verbose mode via
+
+    CFLAGS="-DFK_DEBUG" ./build.py
+
 
 Licensing
 =========

@@ -3,7 +3,7 @@
 #include <dirent.h>
 #include <sys/inotify.h>
 #include <stdio.h>
-target(.*linux.*)
+target(".*linux.*")
 #define EVENT_SIZE  ( sizeof (struct inotify_event) )
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 ;    
@@ -54,7 +54,7 @@ void setup_offset(char* path, fk_hash offsets)
 }
 static inline int is_dir(struct dirent* file)
 {
-    return file->d_type == DT_DIR
+    return file->d_type == DT_DIR;
 }
 void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
 {
