@@ -66,7 +66,7 @@ static char* test_handle_file_modified()
     struct inotify_event* e = malloc(sizeof(struct inotify_event)
             + 42 /* for name flexattr */);
     memset(e, 0, sizeof(struct inotify_event));;
-    handle_file_modified(e, NULL, NULL, NULL);
+    handle_file_modified(NULL, NULL, NULL);
     fk_hash* watches = fk_hash_new();
     char* tmp = "/tmp";
     int fd = opendir(tmp);
@@ -76,9 +76,9 @@ static char* test_handle_file_modified()
     touch(full_path, "test");
     strcpy(e->name, path);
     e->len = strlen(path);
-    handle_file_modified(e, NULL, watches, tmp);
+    handle_file_modified(full_path, NULL, tmp);
     unlink(full_path);
-    handle_file_modified(e, NULL, watches, tmp);
+    handle_file_modified(full_path, NULL, tmp);
     closedir(fd);
     teardown_watches(NULL, fd, watches);
     free(e);
