@@ -628,10 +628,12 @@ You can enable verbose mode via
     CFLAGS="-DFK_DEBUG" ./build.py
 
 
-Docker development environment
-==============================
+Docker environment
+==================
 
-See https://github.com/yazgoo/homeship
+1. Shippable generates https://registry.hub.docker.com/u/yazgoo/fuse_kafka/
+1. For developing, the advised dockerfile is docker/homeship.dockerfile (generated with https://github.com/yazgoo/homeship)
+1. For rpm building, the advised dockerfile is docker/rpmbuild.dockerfile
 
 Zookeeper multithreaded or not
 ==============================
