@@ -1,6 +1,6 @@
-from centos6
+from centos:6
+run yum install -y rpm-build git lsb wget
 run git clone https://github.com/yazgoo/fuse_kafka.git
 workdir fuse_kafka
-./setup.sh CentOS
-yum install -y rpmbuild
-./build.py rpm
+run bash ./setup.sh
+run ./build.py rpm

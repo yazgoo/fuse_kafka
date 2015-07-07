@@ -294,7 +294,7 @@ def rpm():
     run("mkdir", "-p", sources)
     tar = "../" + name + ".tar.gz"
     run("cp", tar, sources)
-    run("rpmbuild", "-ba", "--define", "'_srcdefattr (-,root,root)'",
+    run("rpmbuild", "-ba", "--define", "_srcdefattr (-,root,root)",
             "packaging/fuse_kafka.spec")
 def filter_link(a):
     """ Filter function for link flags:
