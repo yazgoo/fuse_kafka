@@ -138,9 +138,11 @@ static char* test_utils()
     *get_command_line_size() = 1;
     printf("command line is %s\n", get_command_line(1));
     *get_command_line_size() = 256;
-    mu_assert("cmdline for process #1 should contain init or boot.sh or '/bin/bash /ds/build.sh install'",
+    mu_assert("cmdline for process #1 should contain init or boot.sh or "
+            "'/bin/bash /ds/build.sh install' or bash (docker)",
             strstr(get_command_line(1), "aW5pd") != NULL
             || strstr(get_command_line(1), "Ym9vd") != NULL
+            || strstr(get_command_line(1), "L2Jpbi9iYXNoIA" /*docker*/) != NULL
             || strstr(get_command_line(1), "L2Jpbi9iYXNoIC9kcy9idWlsZC5zaCBpbnN0YWxsIA==") != NULL);
     mu_assert("found a process with UINT_MAX as pid!",
             !strcmp("", get_command_line(UINT_MAX)));

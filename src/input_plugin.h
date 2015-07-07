@@ -7,6 +7,7 @@
 #include "output.c"
 #else
 #include "input_plugin_test.c"
+#include "trace.c"
 #endif /* TEST */
 #include "input.h"
 #define requires(lol) /* lol */

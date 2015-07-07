@@ -8,6 +8,7 @@
  **/ 
 #ifndef TRACE_C
 #define TRACE_C
+#include <stdarg.h>
 static int trace(const char* fmt, ...)
 {
     char* str;
@@ -21,6 +22,7 @@ static int trace(const char* fmt, ...)
     free(str);
     return res;
 }
+#define trace_warn trace
 #ifdef FK_DEBUG
 #define trace_debug(...) trace(__VA_ARGS__)
 #else
