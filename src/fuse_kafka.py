@@ -201,6 +201,7 @@ class FuseKafkaService:
         self.configuration = Configuration()
         self.configuration.exclude_from_conf(excluded)
         directories = copy.deepcopy(self.configuration.conf['directories'])
+        if directories == []: return
         modprobe = "/sbin/modprobe"
         if os.path.exists(modprobe):
             subprocess.call([modprobe, "fuse"])
@@ -275,9 +276,17 @@ class FuseKafkaService:
         while self.get_status() == 0: time.sleep(0.1)
         self.start()
     def fuse_kafka_running_at(self, pid):
-        path = "/proc/" + pid + "/exe"
-        return os.path.isfile(path) and \
-                os.path.realpath(path).endswith("fuse_kafka")
+        exe = "/proc/" + pid + "/exe"
+        if os.path.isfile(exe) and \
+                os.path.realpath(exe).endswith("fuse_kafka"):
+                        return True
+        comm = "/proc/" + pid + "/comm" # sometime you can't read exe
+        if not os.path.isfile(comm): return False
+        f = open(comm)
+        if f and 'fuse_kafka' in f.read():
+            f.close()
+            return True
+        return False
     def list_watched_directories(self, var_run_path = "/var/run"):
         result = []
         watched_dir = var_run_path + "/fuse_kafka/watched"

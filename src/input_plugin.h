@@ -23,17 +23,29 @@ void input_is_watching_directory(char* path)
     char* dir = concat(FUSE_KAFKA_WATCHED_DIRS, path);
     if(dir != NULL) mkdir_p(dir);
     char* pid = integer_concat("", getpid(), ".pid");
+    trace_debug("input_is_watching_directory: trying to declare %s",
+            pid);
     *(input_get_last_watching_directory()) = path;
     if(pid != NULL)
     {
         char* pid_path = concat(dir, pid);
+        trace_debug("input_is_watching_directory: trying to touch %s",
+                pid_path);
         if(pid_path != NULL)
         {
-            touch(pid_path, "");
+            if(!touch(pid_path, ""))
+                trace_error("input_is_watching_directory:"
+                        "failed opening %s", pid_path);
             free(pid_path);
         }
+        else
+            trace_error("input_is_watching_directory: no pid found for %s",
+                    path);
         free(pid);
     }
+    else
+        trace_error("input_is_watching_directory: no pid found for %s",
+                path);
     free(dir);
 }
 #endif /* INPUT_H */
