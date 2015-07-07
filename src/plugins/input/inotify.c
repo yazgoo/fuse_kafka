@@ -161,6 +161,7 @@ int input_setup(int argc, char** argv, void* cfg)
     {
         on_event(buffer, length, NULL, fd, offsets, watches);
     }
+    trace("fuse_kafka ended: inotify_runnning == %d, length == %d", *(inotify_runnning()), length);
     fk_hash_delete(offsets, 1, 0);
     fk_hash_delete(watches, 0, 1);
     return 0;
