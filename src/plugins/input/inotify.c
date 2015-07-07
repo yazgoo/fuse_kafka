@@ -157,7 +157,7 @@ int input_setup(int argc, char** argv, void* cfg)
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 
-    while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)))
+    while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)) >= 0)
     {
         on_event(buffer, length, NULL, fd, offsets, watches);
     }

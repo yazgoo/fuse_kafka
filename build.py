@@ -63,8 +63,8 @@ cc = [cc, _flags]
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["m", "dl", "pthread", "jansson"]#, "ulockmgr"]
-libs = ["zookeeper_mt", "rdkafka",  "z"] + common_libs
-default_libs = ["m",  "zookeeper_mt", "rdkafka", "jansson"]
+libs = ["zookeeper_st", "rdkafka",  "z"] + common_libs
+default_libs = ["m",  "zookeeper_st", "rdkafka", "jansson"]
 if "LIBS" in os.environ:
     additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
     default_libs += additional_libs
