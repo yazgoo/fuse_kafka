@@ -628,6 +628,10 @@ You can enable verbose mode via
     CFLAGS="-DFK_DEBUG" ./build.py
 
 
+Docker development environment
+==============================
+
+See https://github.com/yazgoo/homeship
 
 Zookeeper multithreaded or not
 ==============================
