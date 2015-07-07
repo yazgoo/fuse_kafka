@@ -267,7 +267,8 @@ class FuseKafkaService:
                 self.stop_watching_directory(to_stop_watching)
     def stop_watching_directory(self, to_stop_watching):
         """ Stops fuse_kafka process for a specific directory """
-        subprocess.call(["fusermount", "-uz", to_stop_watching])
+        if subprocess.call(["which", "fusermount"]) == 0:
+            subprocess.call(["fusermount", "-uz", to_stop_watching])
         if self.get_status() != 0:
             print("fuse_kafka stoped")
     def restart(self):
