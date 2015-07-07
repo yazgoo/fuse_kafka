@@ -628,6 +628,13 @@ You can enable verbose mode via
     CFLAGS="-DFK_DEBUG" ./build.py
 
 
+
+Zookeeper multithreaded or not
+==============================
+
+You can use either zookeeper_mt (zookeeper multithread, default) or not (zookeeper_st single threaded).
+To use the single threaded version, just set `zookeeper_st=y` environment variable.
+
 Licensing
 =========
 

@@ -59,12 +59,15 @@ _flags = []
 for flag in ["CFLAGS", "LDFLAGS"]:
     if flag in os.environ:
         _flags = _flags + os.environ[flag].split()
+zookeeper_type = "zookeeper_mt"
+if "zookeeper_st" in os.environ:
+    zookeeper_type = "zookeeper_st"
 cc = [cc, _flags]
 sources = ['fuse_kafka']
 binary_name = sources[0]
 common_libs = ["m", "dl", "pthread", "jansson"]#, "ulockmgr"]
-libs = ["zookeeper_st", "rdkafka",  "z"] + common_libs
-default_libs = ["m",  "zookeeper_st", "rdkafka", "jansson"]
+libs = [zookeeper_type, "rdkafka",  "z"] + common_libs
+default_libs = ["m",  zookeeper_type, "rdkafka", "jansson"]
 if "LIBS" in os.environ:
     additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
     default_libs += additional_libs
