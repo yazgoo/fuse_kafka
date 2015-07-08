@@ -37,29 +37,45 @@ void* getpwuid(int i)
 static int actual_kafka_write(const char* prefix, const char *path, const char *buf,
         size_t size, off_t offset)
 {
+    kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
+    config* conf = (config*)private_data->conf;
     char* ret = NULL;
-    (void) path;
+    char* logstash = "logstash";
     char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000                               ";
-    char* text = base64(buf, size);
+    set_timestamp(timestamp);
+    (void) path;
+    char* text = buf;
     struct fuse_context* context = fuse_get_context();
     struct group* sgroup = getgrgid(context->gid);
     struct passwd* suser = getpwuid(context->uid);
     char* user = suser == NULL ? "":suser->pw_name;
     char* group = sgroup == NULL ? "":sgroup->gr_name;
     char* command = get_command_line(context->pid);
-    char* format = "{\"path\": \"%s%s\", \"pid\": %d, \"uid\": %d, "
-        "\"gid\": %d, \"@message\": \"%s\", \"@timestamp\": \"%s\","
-        "\"user\": \"%s\", \"group\": \"%s\", \"command\": \"%s\","
-        "\"@version\": \"%s\", \"@fields\": %s, \"@tags\": %s}";
-    kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
-    config* conf = (config*)private_data->conf;
-    set_timestamp(timestamp);
-    asprintf(&ret, format, prefix,
-            path + 1, context->pid, context->uid, context->gid,
-            text, timestamp, user, group, command, VERSION,
-            conf->fields_s, conf->tags_s);
+    char* encoder = NULL;
+    if(conf->encoder_n > 0) encoder = conf->encoder[0];
+    else encoder = "logstash_base64";
+    trace_debug("actual_kafka_write: encoder is %s", encoder);
+    if(strncmp(encoder, logstash, strlen(logstash)) == 0)
+    {
+        int b64 = 0;
+        if(b64 = (strcmp(encoder, "logstash_base64") == 0))
+            text = base64(buf, size);
+        char* format = "{\"path\": \"%s%s\", \"pid\": %d, \"uid\": %d, "
+            "\"gid\": %d, \"@message\": \"%s\", \"@timestamp\": \"%s\","
+            "\"user\": \"%s\", \"group\": \"%s\", \"command\": \"%s\","
+            "\"@version\": \"%s\", \"@fields\": %s, \"@tags\": %s}";
+        asprintf(&ret, format, prefix,
+                path + 1, context->pid, context->uid, context->gid,
+                text, timestamp, user, group, command, VERSION,
+                conf->fields_s, conf->tags_s);
+        if(b64) free(text);
+    }
+    else if(strcmp(encoder, "text") == 0)
+    {
+        char* format = "%s: %s: %s";
+        asprintf(&ret, format, timestamp, path, text);
+    }
     free(command);
-    free(text);
     if (ret == NULL) {
         fprintf(stderr, "Error in asprintf\n");
         return 1;

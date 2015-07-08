@@ -48,5 +48,7 @@ typedef struct _config {
     CONFIG_ITEM(input)
     /** @brief output plugin */
     CONFIG_ITEM(output)
+    /** @brief output encoder */
+    CONFIG_ITEM(encoder)
 } config;
 #endif

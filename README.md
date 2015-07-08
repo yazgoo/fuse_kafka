@@ -628,6 +628,12 @@ You can enable verbose mode via
     CFLAGS="-DFK_DEBUG" ./build.py
 
 
+Encoding
+========
+
+You can specify how you want the data written to your output.
+See fuse_kafka.properties for possible values.
+
 Docker environment
 ==================
 
