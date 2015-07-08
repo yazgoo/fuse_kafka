@@ -4,9 +4,8 @@
 #include "kafka_client_test.c"
 #include "config.h"
 #include "kafka.c"
-int setup_kafka(kafka_t* k)
+int setup_kafka(kafka_t* k, config* fk_conf)
 {
-    config* fk_conf = NULL;
     return output_setup(k, fk_conf);
 }
 int send_kafka(kafka_t* k, char* buf, size_t len)
@@ -33,34 +32,34 @@ static char* test_setup_kafka()
     k.rk = &rk;
     fuse_get_context()->private_data = (void*) &private_data;
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
-    mu_assert("setup_kafka failed", setup_kafka(&k) == 0);
+    mu_assert("setup_kafka failed", setup_kafka(&k, &private_data) == 0);
     private_data.topic_n = 1;
     private_data.topic = brokers;
     private_data.zookeepers = brokers;
     private_data.zookeepers_n = 1;
     k.conf = NULL;
-    mu_assert("setup_kafka with zookeepers should succeed", setup_kafka(&k) == 0);
+    mu_assert("setup_kafka with zookeepers should succeed", setup_kafka(&k, &private_data) == 0);
     private_data.zookeepers_n = 0;
     test_with()->rd_kafka_conf_set_returns = 0;
-    mu_assert("setup_kafka succeeded", setup_kafka(&k) == 1);
+    mu_assert("setup_kafka succeeded", setup_kafka(&k, &private_data) == 1);
     test_with()->rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
     test_with()->rd_kafka_new_returns_NULL = 1;
     private_data.zookeepers = NULL;
     mu_assert("setup_kafka with kafka "
-            "new returning NULL succeeded", setup_kafka(&k) == 1);
+            "new returning NULL succeeded", setup_kafka(&k, &private_data) == 1);
     private_data.zookeepers = brokers;
     test_with()->rd_kafka_new_returns_NULL = 0;
     test_with()->rd_kafka_brokers_add_returns = 0;
     mu_assert("setup_kafka with kafka rokers add failing",
-            setup_kafka(&k) == 1);
+            setup_kafka(&k, &private_data) == 1);
     test_with()->rd_kafka_brokers_add_returns = 1;
     test_with()->rd_kafka_topic_new_returns_NULL = 1;
     mu_assert("setup_kafka with kafka topic new failing",
-            setup_kafka(&k) == 1);
+            setup_kafka(&k, &private_data) == 1);
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
     test_with()->rd_kafka_conf_set_fails_for = "batch.num.messages";
     mu_assert("setup_kafka should fail here",
-            setup_kafka(&k) == 1);
+            setup_kafka(&k, &private_data) == 1);
     test_with()->rd_kafka_conf_set_fails_for = NULL;
     /* TODO move to a specific unit test
     mu_assert("kafka_init failed", kafka_init(NULL));

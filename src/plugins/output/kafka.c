@@ -36,6 +36,7 @@ static void logger (const rd_kafka_t *rk, int level,
 int output_setup(kafka_t* k, config* fk_conf)
 {
     trace_debug("kafka output_setup: entry");
+    if(fk_conf == NULL) return 1;
     char* brokers = NULL;
     char* zookeepers = NULL;
     char* topic = "logs";

@@ -365,10 +365,13 @@ def run_c_test(source):
     batch = "-batch"
     if os.getenv("NO_BATCH") != None: batch = ""
     if os.path.exists(bin_path):
-        result = os.system("gdb " + batch + " -return-child-result \
+        gdb = "gdb " + batch + " -return-child-result \
                 --eval-command=run --eval-command=where \
-                --eval-command='info locals' --args " + "./" + bin_path)
+                --eval-command='info locals' --args "
+        if os.getenv("NO_GDB") != None: gdb = ""
+        result = os.system(gdb + "./" + bin_path)
         if result != 0:
+            print("failed running " + source)
             exit(result)
     else:
         print("warning: no binary test {}".format(bin_path))
@@ -379,8 +382,8 @@ def c_test():
     for library_source in plugins.libraries_sources:
         run_c_test(plugins.test_of[library_source])
     tests = sources + map(
-                        lambda x: plugins.test_of[library_source],
-                        plugins.libraries_sources)
+            lambda x: plugins.test_of[library_source],
+            plugins.libraries_sources)
     run("gcov", ["src/" + x + ".c" for x in tests] ,"-o", ".")
     if binary_exists("lcov"):
         run("lcov", "--no-external", "--rc", "lcov_branch_coverage=1", "-c", "-d", ".", "-o", "./src/coverage.info")
