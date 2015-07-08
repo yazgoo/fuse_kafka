@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;fuse.h&quot;</code><br/>
 <code>#include &quot;hash.c&quot;</code><br/>
 <code>#include &quot;<a class="el" href="kafka__client_8c_source.html">kafka_client.c</a>&quot;</code><br/>
+<code>#include &quot;test_config.c&quot;</code><br/>
 <code>#include &quot;output.c&quot;</code><br/>
 <code>#include &quot;minunit.h&quot;</code><br/>
 <code>#include &quot;minunit.c&quot;</code><br/>
@@ -97,22 +98,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29e54f30d8fa9fc73e632b7231a556b0"></a><!-- doxytag: member="test.c::fuse_get_context" ref="a29e54f30d8fa9fc73e632b7231a556b0" args="(a)" -->
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>fuse_get_context</b>(a)&#160;&#160;&#160;test_fuse_get_context(a)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6df1d22fb5f09eccc23b9f399670cfd7"></a><!-- doxytag: member="test.c::STRINGIFY" ref="a6df1d22fb5f09eccc23b9f399670cfd7" args="(x)" -->
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>STRINGIFY</b>(x)&#160;&#160;&#160;#x</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>SET_CONFIG</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>b64_assert</b>(a, b)</td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4ce2f2b04dd85332081e4baad92fff"></a><!-- doxytag: member="test.c::get_file_content" ref="abd4ce2f2b04dd85332081e4baad92fff" args="(char *path)" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>get_file_content</b> (char *path)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ed4104e1ca01484a6a1be12608013bf"></a><!-- doxytag: member="test.c::test_setup_kafka" ref="a8ed4104e1ca01484a6a1be12608013bf" args="()" -->
-static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_setup_kafka</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60d55b982a7af6b0a1ce30cc7d5b3846"></a><!-- doxytag: member="test.c::test_parse_arguments" ref="a60d55b982a7af6b0a1ce30cc7d5b3846" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_parse_arguments</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4bfe0fc81afb589287d3710b4971af3"></a><!-- doxytag: member="test.c::test_logging" ref="af4bfe0fc81afb589287d3710b4971af3" args="()" -->
-static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_logging</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcf3349a0c73d983540c56c9d692abdd"></a><!-- doxytag: member="test.c::test_utils" ref="afcf3349a0c73d983540c56c9d692abdd" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_utils</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97ff426783f1f7f47043214462e40606"></a><!-- doxytag: member="test.c::expect_base64" ref="a97ff426783f1f7f47043214462e40606" args="(char *input, char *expected)" -->
@@ -139,12 +133,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>dynamic_configuration
 void&#160;</td><td class="memItemRight" valign="bottom"><b>zktouch</b> (char *path)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06da128ec1670c30352f65fa5f2296ab"></a><!-- doxytag: member="test.c::test_dynamic_configuration" ref="a06da128ec1670c30352f65fa5f2296ab" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_dynamic_configuration</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accca406fc363c65a75f53bc6aef7a209"></a><!-- doxytag: member="test.c::test_output" ref="accca406fc363c65a75f53bc6aef7a209" args="()" -->
-static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_output</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a326e235efbf56b66cd98cdf3b31b847d"></a><!-- doxytag: member="test.c::test_fk_hash" ref="a326e235efbf56b66cd98cdf3b31b847d" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_fk_hash</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ad23873b2c5efe5d9e18422c1eb4d65"></a><!-- doxytag: member="test.c::test_my_input_setup" ref="a4ad23873b2c5efe5d9e18422c1eb4d65" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_my_input_setup</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accca406fc363c65a75f53bc6aef7a209"></a><!-- doxytag: member="test.c::test_output" ref="accca406fc363c65a75f53bc6aef7a209" args="()" -->
+static char *&#160;</td><td class="memItemRight" valign="bottom"><b>test_output</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5778abb510b0149069f4ed1de091f736"></a><!-- doxytag: member="test.c::all_tests" ref="a5778abb510b0149069f4ed1de091f736" args="()" -->
 static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b> ()</td></tr>
 </table>
@@ -182,37 +176,6 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 </pre></div>
 </div>
 </div>
-<a class="anchor" id="a03c9510ad1cf49128f06fbc48bb5a51d"></a><!-- doxytag: member="test.c::SET_CONFIG" ref="a03c9510ad1cf49128f06fbc48bb5a51d" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define SET_CONFIG</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keyword">static</span> <span class="keywordtype">char</span>* directories[] = {<span class="stringliteral">&quot;/lol/&quot;</span>};\
-    static <span class="keywordtype">char</span>* excluded_files[] = {<span class="stringliteral">&quot;xd&quot;</span>};\
-    config <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;\
-    conf.directories = directories;\
-    conf.directory_n = 0;\
-    conf.excluded_files_n = 1;\
-    conf.excluded_files = excluded_files;\
-    conf.fields_s = <span class="stringliteral">&quot;{}&quot;</span>;\
-    conf.tags_s = <span class="stringliteral">&quot;&quot;</span>;\
-    conf.quota_queue = NULL;\
-    conf.quota_n = 0;\
-    struct <a class="code" href="structfuse__context.html">fuse_context</a>* context = fuse_get_context();\
-    context-&gt;pid = getpid();\
-    kafka_t private_data;\
-    private_data.conf = &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;\
-    context-&gt;private_data = (<span class="keywordtype">void</span>*) &amp;private_data;
-</pre></div>
-<p>Definition at line <a class="el" href="test_8c_source.html#l00014">14</a> of file <a class="el" href="test_8c_source.html">test.c</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -231,7 +194,7 @@ static char *&#160;</td><td class="memItemRight" valign="bottom"><b>all_tests</b
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 15:13:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 8 2015 16:02:19 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00008"></a>00008         path = strdup(path);
 <a name="l00009"></a>00009         offset = 0;
 <a name="l00010"></a>00010     }
-<a name="l00011"></a>00011     <span class="comment">// printf(&quot;File %s modified, offset being %ld.\n&quot;, path, offset);</span>
+<a name="l00011"></a>00011     trace_debug(<span class="stringliteral">&quot;handle_file_modified: File %s modified, offset being %ld.&quot;</span>, path, offset);
 <a name="l00012"></a>00012     <span class="keywordtype">char</span>* line = 0;
 <a name="l00013"></a>00013     <span class="keywordtype">size_t</span> length;
 <a name="l00014"></a>00014     FILE* f = fopen(path, <span class="stringliteral">&quot;r&quot;</span>);
@@ -102,22 +102,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00019"></a>00019         ssize_t size;
 <a name="l00020"></a>00020         <span class="keywordflow">while</span>((size = getline(&amp;line, &amp;length, f)) &gt; 0)
 <a name="l00021"></a>00021         {
-<a name="l00022"></a>00022             <span class="comment">// printf(&quot;File %s, writing %s %d\n&quot;, path, line, size);</span>
+<a name="l00022"></a>00022             trace_debug(<span class="stringliteral">&quot;handle_file_modified: File %s, writing %s %d&quot;</span>, path, line, size);
 <a name="l00023"></a>00023             output_write(root, path, line, size, 0);
 <a name="l00024"></a>00024         }
 <a name="l00025"></a>00025         <span class="keywordflow">if</span>(ftell(f) &gt; offset)
 <a name="l00026"></a>00026         {
-<a name="l00027"></a>00027             <span class="comment">// printf(&quot;File %s started reading @%ld, ended @%ld.\n&quot;, path, offset, ftell(f));</span>
-<a name="l00028"></a>00028         }
-<a name="l00029"></a>00029         fk_hash_put(offsets, old_path, (<span class="keywordtype">void</span>*) ftell(f), 1);
-<a name="l00030"></a>00030         fclose(f);
-<a name="l00031"></a>00031     }
-<a name="l00032"></a>00032     <span class="keywordflow">else</span>
-<a name="l00033"></a>00033         <span class="keywordflow">if</span>(old_path != path) free(old_path);
-<a name="l00034"></a>00034     free(path);
-<a name="l00035"></a>00035     free(line);
-<a name="l00036"></a>00036 }
-<a name="l00037"></a>00037 
+<a name="l00027"></a>00027             trace_debug(<span class="stringliteral">&quot;handle_file_modified: File %s started reading @%ld, ended @%ld.&quot;</span>,
+<a name="l00028"></a>00028                     path, offset, ftell(f));
+<a name="l00029"></a>00029         }
+<a name="l00030"></a>00030         fk_hash_put(offsets, old_path, (<span class="keywordtype">void</span>*) ftell(f), 1);
+<a name="l00031"></a>00031         fclose(f);
+<a name="l00032"></a>00032     }
+<a name="l00033"></a>00033     <span class="keywordflow">else</span>
+<a name="l00034"></a>00034         <span class="keywordflow">if</span>(old_path != path) free(old_path);
+<a name="l00035"></a>00035     free(path);
+<a name="l00036"></a>00036     free(line);
+<a name="l00037"></a>00037 }
+<a name="l00038"></a>00038 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -136,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 15:13:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 8 2015 16:02:19 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

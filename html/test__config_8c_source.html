@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>fuse_kafka: rd_kafka_topic_t Struct Reference</title>
+<title>fuse_kafka: src/test_config.c Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -49,8 +49,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -71,24 +71,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
-      <li><a href="classes.html"><span>Data&#160;Structure&#160;Index</span></a></li>
-      <li><a href="functions.html"><span>Data&#160;Fields</span></a></li>
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">rd_kafka_topic_t Struct Reference</div>  </div>
+<div class="title">src/test_config.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="rd_kafka_topic_t" --><hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="kafka__client__test_8c_source.html#l00012">12</a> of file <a class="el" href="kafka__client__test_8c_source.html">kafka_client_test.c</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>src/<a class="el" href="kafka__client__test_8c_source.html">kafka_client_test.c</a></li>
-</ul>
-</div><!-- contents -->
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#define fuse_get_context(a) test_fuse_get_context(a)</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define SET_CONFIG \</span>
+<a name="l00003"></a>00003 <span class="preprocessor">    static char* directories[] = {&quot;/lol/&quot;};\</span>
+<a name="l00004"></a>00004 <span class="preprocessor">    static char* excluded_files[] = {&quot;xd&quot;};\</span>
+<a name="l00005"></a>00005 <span class="preprocessor">    config conf;\</span>
+<a name="l00006"></a>00006 <span class="preprocessor">    conf.directories = directories;\</span>
+<a name="l00007"></a>00007 <span class="preprocessor">    conf.directory_n = 0;\</span>
+<a name="l00008"></a>00008 <span class="preprocessor">    conf.excluded_files_n = 1;\</span>
+<a name="l00009"></a>00009 <span class="preprocessor">    conf.excluded_files = excluded_files;\</span>
+<a name="l00010"></a>00010 <span class="preprocessor">    conf.fields_s = &quot;{}&quot;;\</span>
+<a name="l00011"></a>00011 <span class="preprocessor">    conf.tags_s = &quot;&quot;;\</span>
+<a name="l00012"></a>00012 <span class="preprocessor">    conf.quota_queue = NULL;\</span>
+<a name="l00013"></a>00013 <span class="preprocessor">    conf.quota_n = 0;\</span>
+<a name="l00014"></a>00014 <span class="preprocessor">    struct fuse_context* context = fuse_get_context();\</span>
+<a name="l00015"></a>00015 <span class="preprocessor">    context-&gt;pid = getpid();\</span>
+<a name="l00016"></a>00016 <span class="preprocessor">    kafka_t private_data;\</span>
+<a name="l00017"></a>00017 <span class="preprocessor">    private_data.conf = &amp;conf;\</span>
+<a name="l00018"></a>00018 <span class="preprocessor">    context-&gt;private_data = (void*) &amp;private_data;</span>
+<a name="l00019"></a>00019 <span class="preprocessor"></span>
+</pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"

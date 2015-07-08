@@ -83,77 +83,78 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a href="string__list_8c.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
 <a name="l00007"></a>00007 <span class="preprocessor">#include &quot;string_list.h&quot;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#define SERVER_LIST_DEFAULT_MAX_SIZE 10</span>
-<a name="l00009"></a>00009 <span class="preprocessor"></span>
-<a name="l00015"></a><a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8">00015</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
-<a name="l00016"></a>00016 {
-<a name="l00017"></a>00017     <span class="keywordtype">int</span> i;
-<a name="l00018"></a>00018     <span class="keywordflow">if</span>((*servers) == NULL)
-<a name="l00019"></a>00019         <span class="keywordflow">return</span> 0;
-<a name="l00020"></a>00020     <span class="keywordflow">for</span>(i = 0; i &lt; (*servers)-&gt;size; i++)
-<a name="l00021"></a>00021     {
-<a name="l00022"></a>00022         <span class="keywordflow">if</span>(strcmp((*servers)-&gt;array[i], <span class="keywordtype">string</span>) == 0)
-<a name="l00023"></a>00023             <span class="keywordflow">return</span> 1;
-<a name="l00024"></a>00024     }
-<a name="l00025"></a>00025     <span class="keywordflow">return</span> 0;
-<a name="l00026"></a>00026 }
-<a name="l00030"></a><a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84">00030</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84" title="creates a new string_list">string_list_new</a>(string_list** servers)
-<a name="l00031"></a>00031 {
-<a name="l00032"></a>00032     <span class="keywordflow">if</span>(((*servers) = fmalloc(<span class="keyword">sizeof</span>(string_list))) == NULL)
-<a name="l00033"></a>00033         <span class="keywordflow">return</span> 1;
-<a name="l00034"></a>00034     (*servers)-&gt;max_size = SERVER_LIST_DEFAULT_MAX_SIZE;
-<a name="l00035"></a>00035     (*servers)-&gt;size = 0;
-<a name="l00036"></a>00036     <span class="keywordflow">if</span>(((*servers)-&gt;array = fcalloc((*servers)-&gt;max_size, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*)))
-<a name="l00037"></a>00037             == NULL)
-<a name="l00038"></a>00038         <span class="keywordflow">return</span> 2;
-<a name="l00039"></a>00039     <span class="keywordflow">return</span> 0;
-<a name="l00040"></a>00040 }
-<a name="l00042"></a><a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca">00042</a> <span class="keywordtype">void</span> <a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca" title="deletes the server list">string_list_free</a>(string_list** servers)
-<a name="l00043"></a>00043 {
-<a name="l00044"></a>00044     <span class="keywordtype">int</span> i;
-<a name="l00045"></a>00045     <span class="keywordflow">if</span>((*servers) == NULL)
-<a name="l00046"></a>00046         <span class="keywordflow">return</span>;
-<a name="l00047"></a>00047     <span class="keywordflow">if</span>((*servers)-&gt;array != NULL)
-<a name="l00048"></a>00048         <span class="keywordflow">for</span>(i = 0; i &lt; (*servers)-&gt;size; i++)
-<a name="l00049"></a>00049             free((*servers)-&gt;array[i]);
-<a name="l00050"></a>00050     free((*servers)-&gt;array);
-<a name="l00051"></a>00051     (*servers)-&gt;array = NULL;
-<a name="l00052"></a>00052     free((*servers));
-<a name="l00053"></a>00053 }
-<a name="l00058"></a><a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec">00058</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec" title="resizes the server list">string_list_resize</a>(string_list** servers)
-<a name="l00059"></a>00059 {
-<a name="l00060"></a>00060     <span class="keywordtype">int</span> new_size = (*servers)-&gt;max_size + SERVER_LIST_DEFAULT_MAX_SIZE;
-<a name="l00061"></a>00061     <span class="keywordtype">char</span>** new_array;
-<a name="l00062"></a>00062     <span class="keywordflow">if</span>((new_array = (<span class="keywordtype">char</span>**) frealloc((*servers)-&gt;array,
-<a name="l00063"></a>00063                     new_size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*))) == NULL)
-<a name="l00064"></a>00064         <span class="keywordflow">return</span> 1;
-<a name="l00065"></a>00065     (*servers)-&gt;max_size = new_size;
-<a name="l00066"></a>00066     (*servers)-&gt;array = new_array;
-<a name="l00067"></a>00067     <span class="keywordflow">return</span> 0;
-<a name="l00068"></a>00068 }
-<a name="l00073"></a><a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da">00073</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
-<a name="l00074"></a>00074 {
-<a name="l00075"></a>00075     <span class="keywordtype">char</span>* str;
-<a name="l00076"></a>00076     <span class="keywordflow">if</span>((*servers) == NULL &amp;&amp; <a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84" title="creates a new string_list">string_list_new</a>(servers))
-<a name="l00077"></a>00077         <span class="keywordflow">return</span> 1;
-<a name="l00078"></a>00078     <span class="keywordflow">if</span>((*servers)-&gt;size &gt;= (*servers)-&gt;max_size &amp;&amp;
-<a name="l00079"></a>00079             <a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec" title="resizes the server list">string_list_resize</a>(servers))
-<a name="l00080"></a>00080         <span class="keywordflow">return</span> 2;
-<a name="l00081"></a>00081     <span class="keywordflow">if</span>((str = (<span class="keywordtype">char</span>*) fcalloc(strlen(<span class="keywordtype">string</span>) + 1, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>))) == NULL)
-<a name="l00082"></a>00082         <span class="keywordflow">return</span> 3;
-<a name="l00083"></a>00083     (*servers)-&gt;array[(*servers)-&gt;size] = str;
-<a name="l00084"></a>00084     strcpy((*servers)-&gt;array[(*servers)-&gt;size], <span class="keywordtype">string</span>);
-<a name="l00085"></a>00085     (*servers)-&gt;size++;
-<a name="l00086"></a>00086     <span class="keywordflow">return</span> 0;
-<a name="l00087"></a>00087 }
-<a name="l00095"></a><a class="code" href="string__list_8c.html#a9d5141269959be12e42f1ec2fd93f714">00095</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#a9d5141269959be12e42f1ec2fd93f714" title="add item to list if it is not in it already">string_list_add_once</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
-<a name="l00096"></a>00096 {
-<a name="l00097"></a>00097     <span class="keywordflow">if</span>(<a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(servers, <span class="keywordtype">string</span>))
-<a name="l00098"></a>00098         <span class="keywordflow">return</span> 0;
-<a name="l00099"></a>00099     <span class="keywordflow">if</span>(<a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(servers, <span class="keywordtype">string</span>))
-<a name="l00100"></a>00100         <span class="keywordflow">return</span> 2;
-<a name="l00101"></a>00101     <span class="keywordflow">return</span> 1;
-<a name="l00102"></a>00102 }
+<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;<a class="code" href="util_8c.html" title="utility functions">util.c</a>&quot;</span>
+<a name="l00009"></a>00009 <span class="preprocessor">#define SERVER_LIST_DEFAULT_MAX_SIZE 10</span>
+<a name="l00010"></a>00010 <span class="preprocessor"></span>
+<a name="l00016"></a><a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8">00016</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
+<a name="l00017"></a>00017 {
+<a name="l00018"></a>00018     <span class="keywordtype">int</span> i;
+<a name="l00019"></a>00019     <span class="keywordflow">if</span>((*servers) == NULL)
+<a name="l00020"></a>00020         <span class="keywordflow">return</span> 0;
+<a name="l00021"></a>00021     <span class="keywordflow">for</span>(i = 0; i &lt; (*servers)-&gt;size; i++)
+<a name="l00022"></a>00022     {
+<a name="l00023"></a>00023         <span class="keywordflow">if</span>(strcmp((*servers)-&gt;array[i], <span class="keywordtype">string</span>) == 0)
+<a name="l00024"></a>00024             <span class="keywordflow">return</span> 1;
+<a name="l00025"></a>00025     }
+<a name="l00026"></a>00026     <span class="keywordflow">return</span> 0;
+<a name="l00027"></a>00027 }
+<a name="l00031"></a><a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84">00031</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84" title="creates a new string_list">string_list_new</a>(string_list** servers)
+<a name="l00032"></a>00032 {
+<a name="l00033"></a>00033     <span class="keywordflow">if</span>(((*servers) = (string_list*) fmalloc(<span class="keyword">sizeof</span>(string_list))) == NULL)
+<a name="l00034"></a>00034         <span class="keywordflow">return</span> 1;
+<a name="l00035"></a>00035     (*servers)-&gt;max_size = SERVER_LIST_DEFAULT_MAX_SIZE;
+<a name="l00036"></a>00036     (*servers)-&gt;size = 0;
+<a name="l00037"></a>00037     <span class="keywordflow">if</span>(((*servers)-&gt;array = fcalloc((*servers)-&gt;max_size, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*)))
+<a name="l00038"></a>00038             == NULL)
+<a name="l00039"></a>00039         <span class="keywordflow">return</span> 2;
+<a name="l00040"></a>00040     <span class="keywordflow">return</span> 0;
+<a name="l00041"></a>00041 }
+<a name="l00043"></a><a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca">00043</a> <span class="keywordtype">void</span> <a class="code" href="string__list_8c.html#af41acd10b654ef8a1b7ec19016365dca" title="deletes the server list">string_list_free</a>(string_list** servers)
+<a name="l00044"></a>00044 {
+<a name="l00045"></a>00045     <span class="keywordtype">int</span> i;
+<a name="l00046"></a>00046     <span class="keywordflow">if</span>((*servers) == NULL)
+<a name="l00047"></a>00047         <span class="keywordflow">return</span>;
+<a name="l00048"></a>00048     <span class="keywordflow">if</span>((*servers)-&gt;array != NULL)
+<a name="l00049"></a>00049         <span class="keywordflow">for</span>(i = 0; i &lt; (*servers)-&gt;size; i++)
+<a name="l00050"></a>00050             free((*servers)-&gt;array[i]);
+<a name="l00051"></a>00051     free((*servers)-&gt;array);
+<a name="l00052"></a>00052     (*servers)-&gt;array = NULL;
+<a name="l00053"></a>00053     free((*servers));
+<a name="l00054"></a>00054 }
+<a name="l00059"></a><a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec">00059</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec" title="resizes the server list">string_list_resize</a>(string_list** servers)
+<a name="l00060"></a>00060 {
+<a name="l00061"></a>00061     <span class="keywordtype">int</span> new_size = (*servers)-&gt;max_size + SERVER_LIST_DEFAULT_MAX_SIZE;
+<a name="l00062"></a>00062     <span class="keywordtype">char</span>** new_array;
+<a name="l00063"></a>00063     <span class="keywordflow">if</span>((new_array = (<span class="keywordtype">char</span>**) frealloc((*servers)-&gt;array,
+<a name="l00064"></a>00064                     new_size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*))) == NULL)
+<a name="l00065"></a>00065         <span class="keywordflow">return</span> 1;
+<a name="l00066"></a>00066     (*servers)-&gt;max_size = new_size;
+<a name="l00067"></a>00067     (*servers)-&gt;array = new_array;
+<a name="l00068"></a>00068     <span class="keywordflow">return</span> 0;
+<a name="l00069"></a>00069 }
+<a name="l00074"></a><a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da">00074</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
+<a name="l00075"></a>00075 {
+<a name="l00076"></a>00076     <span class="keywordtype">char</span>* str;
+<a name="l00077"></a>00077     <span class="keywordflow">if</span>((*servers) == NULL &amp;&amp; <a class="code" href="string__list_8c.html#a26054d043b2c75dbd7feaeb9fce46a84" title="creates a new string_list">string_list_new</a>(servers))
+<a name="l00078"></a>00078         <span class="keywordflow">return</span> 1;
+<a name="l00079"></a>00079     <span class="keywordflow">if</span>((*servers)-&gt;size &gt;= (*servers)-&gt;max_size &amp;&amp;
+<a name="l00080"></a>00080             <a class="code" href="string__list_8c.html#ad73d745e2f4af42084cddba9f21825ec" title="resizes the server list">string_list_resize</a>(servers))
+<a name="l00081"></a>00081         <span class="keywordflow">return</span> 2;
+<a name="l00082"></a>00082     <span class="keywordflow">if</span>((str = (<span class="keywordtype">char</span>*) fcalloc(strlen(<span class="keywordtype">string</span>) + 1, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>))) == NULL)
+<a name="l00083"></a>00083         <span class="keywordflow">return</span> 3;
+<a name="l00084"></a>00084     (*servers)-&gt;array[(*servers)-&gt;size] = str;
+<a name="l00085"></a>00085     strcpy((*servers)-&gt;array[(*servers)-&gt;size], <span class="keywordtype">string</span>);
+<a name="l00086"></a>00086     (*servers)-&gt;size++;
+<a name="l00087"></a>00087     <span class="keywordflow">return</span> 0;
+<a name="l00088"></a>00088 }
+<a name="l00096"></a><a class="code" href="string__list_8c.html#a9d5141269959be12e42f1ec2fd93f714">00096</a> <span class="keywordtype">int</span> <a class="code" href="string__list_8c.html#a9d5141269959be12e42f1ec2fd93f714" title="add item to list if it is not in it already">string_list_add_once</a>(string_list** servers, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>)
+<a name="l00097"></a>00097 {
+<a name="l00098"></a>00098     <span class="keywordflow">if</span>(<a class="code" href="string__list_8c.html#acfc154add66caeef5109e12ef7b6cad8" title="Public: checks if the list contains a string.">string_list_contains</a>(servers, <span class="keywordtype">string</span>))
+<a name="l00099"></a>00099         <span class="keywordflow">return</span> 0;
+<a name="l00100"></a>00100     <span class="keywordflow">if</span>(<a class="code" href="string__list_8c.html#ad339e7e85d8b6bb769c96373866ca8da" title="adds a string to the servers list">string_list_add</a>(servers, <span class="keywordtype">string</span>))
+<a name="l00101"></a>00101         <span class="keywordflow">return</span> 2;
+<a name="l00102"></a>00102     <span class="keywordflow">return</span> 1;
+<a name="l00103"></a>00103 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -172,7 +173,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 15:13:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 8 2015 16:02:19 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

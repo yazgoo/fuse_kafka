@@ -83,147 +83,149 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a href="kafka__client__test_8c.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
 <a name="l00002"></a>00002 <span class="comment">// LCOV_EXCL_START</span>
-<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;limits.h&gt;</span>
-<a name="l00004"></a>00004 <span class="keyword">static</span> <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* test_fuse_get_context()
-<a name="l00005"></a>00005 {
-<a name="l00006"></a>00006     <span class="keyword">static</span> <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> ctx = { 0 };
-<a name="l00007"></a>00007     <span class="keywordflow">return</span> &amp;ctx;
-<a name="l00008"></a>00008 }
-<a name="l00009"></a><a class="code" href="structrd__kafka__t.html">00009</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a>;
-<a name="l00010"></a><a class="code" href="structrd__kafka__topic__t.html">00010</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a>;
-<a name="l00011"></a><a class="code" href="structrd__kafka__conf__t.html">00011</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a>;
-<a name="l00012"></a><a class="code" href="structrd__kafka__topic__conf__t.html">00012</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a>;
-<a name="l00013"></a>00013 <span class="keyword">typedef</span> <span class="keywordtype">int</span> rd_kafka_conf_res_t;
-<a name="l00014"></a>00014 <span class="keyword">typedef</span> <span class="keywordtype">int</span> rd_kafka_type_t;
-<a name="l00015"></a>00015 <span class="preprocessor">#define RD_KAFKA_CONF_OK 1</span>
-<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_PRODUCER 42</span>
-<a name="l00017"></a>00017 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_PARTITION_UA 42</span>
-<a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_MSG_F_COPY 42</span>
-<a name="l00019"></a>00019 <span class="preprocessor"></span><a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *rd_kafka_conf_new () { <span class="keywordflow">return</span> 0; }
-<a name="l00020"></a>00020 <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *rd_kafka_topic_conf_new () { <span class="keywordflow">return</span> 0; }
-<a name="l00021"></a>00021 <span class="keywordtype">void</span> rd_kafka_conf_set_dr_cb (<a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>, <span class="keywordtype">void</span> *f) { }
-<a name="l00022"></a><a class="code" href="structtest__config.html">00022</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
-<a name="l00023"></a>00023 {
-<a name="l00024"></a>00024     <span class="keywordtype">int</span> setup;
-<a name="l00025"></a>00025     rd_kafka_conf_res_t rd_kafka_conf_set_returns;
-<a name="l00026"></a>00026     <span class="keywordtype">char</span>* rd_kafka_conf_set_fails_for;
-<a name="l00027"></a>00027     <span class="keywordtype">int</span> rd_kafka_new_returns_NULL;
-<a name="l00028"></a>00028     <span class="keywordtype">int</span> rd_kafka_topic_new_returns_NULL;
-<a name="l00029"></a>00029     <span class="keywordtype">int</span> rd_kafka_brokers_add_returns;
-<a name="l00030"></a>00030     <span class="keywordtype">int</span> rd_kafka_produce_returns;
-<a name="l00031"></a>00031     <span class="keywordtype">int</span> zoo_get_children_returns;
-<a name="l00032"></a>00032     <span class="keywordtype">int</span> asprintf_sets_NULL;
-<a name="l00033"></a>00033 } <a class="code" href="structtest__config.html">test_config</a>;
-<a name="l00034"></a>00034 <span class="keyword">static</span> <a class="code" href="structtest__config.html">test_config</a>* test_with()
-<a name="l00035"></a>00035 {
-<a name="l00036"></a>00036     <span class="keyword">static</span> <a class="code" href="structtest__config.html">test_config</a> <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
-<a name="l00037"></a>00037     <span class="keywordflow">if</span>(!conf.setup)
-<a name="l00038"></a>00038     {
-<a name="l00039"></a>00039         conf.rd_kafka_brokers_add_returns = 1;
-<a name="l00040"></a>00040         conf.zoo_get_children_returns = 1;
-<a name="l00041"></a>00041         conf.setup = 1;
-<a name="l00042"></a>00042     }
-<a name="l00043"></a>00043     <span class="keywordflow">return</span> &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
-<a name="l00044"></a>00044 }
-<a name="l00045"></a>00045 <span class="preprocessor">#define asprintf(x, ...) (test_with()-&gt;asprintf_sets_NULL? (*x = NULL) == NULL : asprintf(x, __VA_ARGS__))</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span>rd_kafka_conf_res_t rd_kafka_conf_set (<a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *conf,
-<a name="l00047"></a>00047                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-<a name="l00048"></a>00048                        <span class="keyword">const</span> <span class="keywordtype">char</span> *value,
-<a name="l00049"></a>00049                        <span class="keywordtype">char</span> *errstr, <span class="keywordtype">size_t</span> errstr_size)
-<a name="l00050"></a>00050 {
-<a name="l00051"></a>00051     <span class="keywordflow">if</span>(test_with()-&gt;rd_kafka_conf_set_fails_for == NULL)
-<a name="l00052"></a>00052             <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_conf_set_returns;
-<a name="l00053"></a>00053     <span class="keywordflow">else</span>
-<a name="l00054"></a>00054         <span class="keywordflow">return</span> strcmp(test_with()-&gt;rd_kafka_conf_set_fails_for,
-<a name="l00055"></a>00055                 name) == 0?0:RD_KAFKA_CONF_OK;
-<a name="l00056"></a>00056 }
-<a name="l00057"></a>00057 <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rd_kafka_new (rd_kafka_type_t type, <a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *conf,
-<a name="l00058"></a>00058               <span class="keywordtype">char</span> *errstr, <span class="keywordtype">size_t</span> errstr_size)
-<a name="l00059"></a>00059 {
-<a name="l00060"></a>00060     <span class="keyword">static</span> <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> rk;
-<a name="l00061"></a>00061     <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_new_returns_NULL ? NULL:&amp;rk;
-<a name="l00062"></a>00062 }
-<a name="l00063"></a>00063 <span class="keywordtype">void</span> rd_kafka_destroy(<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a>* to_destroy)
-<a name="l00064"></a>00064 {
-<a name="l00065"></a>00065 }
-<a name="l00066"></a>00066 <span class="keywordtype">void</span> rd_kafka_wait_destroyed(<span class="keywordtype">int</span> timeout_ms)
-<a name="l00067"></a>00067 {
-<a name="l00068"></a>00068 }
-<a name="l00069"></a>00069 <span class="keywordtype">void</span> rd_kafka_topic_destroy (<a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rkt)
-<a name="l00070"></a>00070 {
-<a name="l00071"></a>00071 }
-<a name="l00072"></a>00072 <span class="keywordtype">void</span> rd_kafka_set_logger (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">void</span> *f) { }
-<a name="l00073"></a>00073 <span class="keywordtype">void</span> rd_kafka_set_log_level (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">int</span> level) { }
-<a name="l00074"></a>00074 <span class="keywordtype">int</span> rd_kafka_brokers_add (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keyword">const</span> <span class="keywordtype">char</span> *brokerlist)
-<a name="l00075"></a>00075 { <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_brokers_add_returns; }
-<a name="l00076"></a>00076 <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rd_kafka_topic_new (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keyword">const</span> <span class="keywordtype">char</span> *topic,
-<a name="l00077"></a>00077                       <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *conf)
-<a name="l00078"></a>00078                                       {
-<a name="l00079"></a>00079                                           <span class="keyword">static</span> <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> t;
-<a name="l00080"></a>00080                                           <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_topic_new_returns_NULL ? NULL:&amp;t;
-<a name="l00081"></a>00081                                       }
-<a name="l00082"></a>00082 <span class="keywordtype">int</span> rd_kafka_produce (<a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rkt, int32_t partitition,
-<a name="l00083"></a>00083               <span class="keywordtype">int</span> msgflags,
-<a name="l00084"></a>00084               <span class="keywordtype">void</span> *payload, <span class="keywordtype">size_t</span> len,
-<a name="l00085"></a>00085               <span class="keyword">const</span> <span class="keywordtype">void</span> *key, <span class="keywordtype">size_t</span> keylen,
-<a name="l00086"></a>00086               <span class="keywordtype">void</span> *msg_opaque)
-<a name="l00087"></a>00087 { <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_produce_returns; }
-<a name="l00088"></a>00088 <span class="keywordtype">int</span> rd_kafka_poll (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">int</span> timeout_ms)
-<a name="l00089"></a>00089 {
-<a name="l00090"></a>00090     <span class="keywordflow">return</span> 0;
-<a name="l00091"></a>00091 }
-<a name="l00092"></a><a class="code" href="struct__zhandle__t.html">00092</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct__zhandle__t.html">_zhandle_t</a> {
-<a name="l00093"></a>00093     <span class="keywordtype">int</span> i;
-<a name="l00094"></a>00094 } <a class="code" href="struct__zhandle__t.html">zhandle_t</a>;
-<a name="l00095"></a><a class="code" href="structString__vector.html">00095</a> <span class="keyword">struct </span><a class="code" href="structString__vector.html">String_vector</a> {
-<a name="l00096"></a>00096         int32_t count;
-<a name="l00097"></a>00097         <span class="keywordtype">char</span>** data;
-<a name="l00098"></a>00098 };
-<a name="l00099"></a>00099 <span class="preprocessor">#define ZOK 1</span>
-<a name="l00100"></a>00100 <span class="preprocessor"></span><span class="preprocessor">#define ZOO_CHILD_EVENT 4</span>
-<a name="l00101"></a>00101 <span class="preprocessor"></span><span class="preprocessor">#define ZOO_LOG_LEVEL_ERROR 1</span>
-<a name="l00102"></a>00102 <span class="preprocessor"></span><span class="keywordtype">void</span> zoo_set_debug_level(<span class="keywordtype">int</span> level)
-<a name="l00103"></a>00103 {
-<a name="l00104"></a>00104 }
-<a name="l00105"></a>00105 <span class="keyword">typedef</span> void (*watcher_fn)(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keywordtype">int</span> type, 
-<a name="l00106"></a>00106         <span class="keywordtype">int</span> state, <span class="keyword">const</span> <span class="keywordtype">char</span> *path,<span class="keywordtype">void</span> *watcherCtx);
-<a name="l00107"></a>00107 <a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zookeeper_init(<span class="keyword">const</span> <span class="keywordtype">char</span> *host, watcher_fn fn,
-<a name="l00108"></a>00108   <span class="keywordtype">int</span> recv_timeout, <span class="keywordtype">void</span> *clientid, <span class="keywordtype">void</span> *context, <span class="keywordtype">int</span> flags)
-<a name="l00109"></a>00109 {
-<a name="l00110"></a>00110     <span class="keywordflow">if</span>(host == NULL) <span class="keywordflow">return</span> NULL;
-<a name="l00111"></a>00111     <a class="code" href="struct__zhandle__t.html">zhandle_t</a>* zh = (<a class="code" href="struct__zhandle__t.html">zhandle_t</a>*) malloc(<span class="keyword">sizeof</span>(<a class="code" href="struct__zhandle__t.html">zhandle_t</a>));
-<a name="l00112"></a>00112     fn(zh, ZOO_CHILD_EVENT, 0, <span class="stringliteral">&quot;/brokers/ids&quot;</span>, context);
-<a name="l00113"></a>00113     <span class="keywordflow">return</span> zh;
-<a name="l00114"></a>00114 }
-<a name="l00115"></a>00115 <span class="keywordtype">int</span> zookeeper_close(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh)
-<a name="l00116"></a>00116 {
-<a name="l00117"></a>00117     <span class="keywordflow">return</span> 0;
-<a name="l00118"></a>00118 }
-<a name="l00119"></a>00119 <span class="keywordtype">int</span> zoo_get_children(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> watch,
-<a name="l00120"></a>00120                             <span class="keyword">struct</span> <a class="code" href="structString__vector.html">String_vector</a> *strings)
-<a name="l00121"></a>00121 {
-<a name="l00122"></a>00122     strings-&gt;count = 2;
-<a name="l00123"></a>00123     <span class="keywordtype">char</span>* i = (<span class="keywordtype">char</span>*) malloc(2 * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*));
-<a name="l00124"></a>00124     i[0] = <span class="charliteral">&#39;1&#39;</span>;
-<a name="l00125"></a>00125     i[1] = 0;
-<a name="l00126"></a>00126     strings-&gt;data = (<span class="keywordtype">char</span>**) malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>**));
-<a name="l00127"></a>00127     strings-&gt;data[0] = i;
-<a name="l00128"></a>00128     strings-&gt;data[1] = i;
-<a name="l00129"></a>00129     <span class="keywordflow">return</span> test_with()-&gt;zoo_get_children_returns;
-<a name="l00130"></a>00130 }
-<a name="l00131"></a>00131 <span class="keywordtype">int</span> zoo_get(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> watch, <span class="keywordtype">char</span> *buffer,   
-<a name="l00132"></a>00132                    <span class="keywordtype">int</span>* buffer_len, <span class="keywordtype">void</span> *stat)
-<a name="l00133"></a>00133 {
-<a name="l00134"></a>00134     strcpy(buffer, <span class="stringliteral">&quot;{\&quot;host\&quot;: \&quot;a\&quot;, \&quot;port\&quot;: 2181}&quot;</span>);
-<a name="l00135"></a>00135     <span class="keywordflow">return</span> 1;
-<a name="l00136"></a>00136 }
-<a name="l00137"></a>00137 <span class="keywordtype">int</span> deallocate_String_vector(<span class="keyword">struct</span> <a class="code" href="structString__vector.html">String_vector</a> *v)
-<a name="l00138"></a>00138 {
-<a name="l00139"></a>00139     free(v-&gt;data[0]);
-<a name="l00140"></a>00140     free(v-&gt;data);
-<a name="l00141"></a>00141     <span class="keywordflow">return</span> 1;
-<a name="l00142"></a>00142 }
-<a name="l00143"></a>00143 <span class="comment">// LCOV_EXCL_STOP</span>
+<a name="l00003"></a>00003 <span class="preprocessor">#include &lt;string.h&gt;</span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &lt;limits.h&gt;</span>
+<a name="l00006"></a>00006 <span class="keyword">static</span> <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* test_fuse_get_context()
+<a name="l00007"></a>00007 {
+<a name="l00008"></a>00008     <span class="keyword">static</span> <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> ctx = { 0 };
+<a name="l00009"></a>00009     <span class="keywordflow">return</span> &amp;ctx;
+<a name="l00010"></a>00010 }
+<a name="l00011"></a><a class="code" href="structrd__kafka__t.html">00011</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a>;
+<a name="l00012"></a><a class="code" href="structrd__kafka__topic__t.html">00012</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a>;
+<a name="l00013"></a><a class="code" href="structrd__kafka__conf__t.html">00013</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a>;
+<a name="l00014"></a><a class="code" href="structrd__kafka__topic__conf__t.html">00014</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>{ } <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a>;
+<a name="l00015"></a>00015 <span class="keyword">typedef</span> <span class="keywordtype">int</span> rd_kafka_conf_res_t;
+<a name="l00016"></a>00016 <span class="keyword">typedef</span> <span class="keywordtype">int</span> rd_kafka_type_t;
+<a name="l00017"></a>00017 <span class="preprocessor">#define RD_KAFKA_CONF_OK 1</span>
+<a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_PRODUCER 42</span>
+<a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_PARTITION_UA 42</span>
+<a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define RD_KAFKA_MSG_F_COPY 42</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span><a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *rd_kafka_conf_new () { <span class="keywordflow">return</span> 0; }
+<a name="l00022"></a>00022 <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *rd_kafka_topic_conf_new () { <span class="keywordflow">return</span> 0; }
+<a name="l00023"></a>00023 <span class="keywordtype">void</span> rd_kafka_conf_set_dr_cb (<a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>, <span class="keywordtype">void</span> *f) { }
+<a name="l00024"></a><a class="code" href="structtest__config.html">00024</a> <span class="keyword">typedef</span> <span class="keyword">struct</span>
+<a name="l00025"></a>00025 {
+<a name="l00026"></a>00026     <span class="keywordtype">int</span> setup;
+<a name="l00027"></a>00027     rd_kafka_conf_res_t rd_kafka_conf_set_returns;
+<a name="l00028"></a>00028     <span class="keywordtype">char</span>* rd_kafka_conf_set_fails_for;
+<a name="l00029"></a>00029     <span class="keywordtype">int</span> rd_kafka_new_returns_NULL;
+<a name="l00030"></a>00030     <span class="keywordtype">int</span> rd_kafka_topic_new_returns_NULL;
+<a name="l00031"></a>00031     <span class="keywordtype">int</span> rd_kafka_brokers_add_returns;
+<a name="l00032"></a>00032     <span class="keywordtype">int</span> rd_kafka_produce_returns;
+<a name="l00033"></a>00033     <span class="keywordtype">int</span> zoo_get_children_returns;
+<a name="l00034"></a>00034     <span class="keywordtype">int</span> asprintf_sets_NULL;
+<a name="l00035"></a>00035 } <a class="code" href="structtest__config.html">test_config</a>;
+<a name="l00036"></a>00036 <span class="keyword">static</span> <a class="code" href="structtest__config.html">test_config</a>* test_with()
+<a name="l00037"></a>00037 {
+<a name="l00038"></a>00038     <span class="keyword">static</span> <a class="code" href="structtest__config.html">test_config</a> <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
+<a name="l00039"></a>00039     <span class="keywordflow">if</span>(!conf.setup)
+<a name="l00040"></a>00040     {
+<a name="l00041"></a>00041         conf.rd_kafka_brokers_add_returns = 1;
+<a name="l00042"></a>00042         conf.zoo_get_children_returns = 1;
+<a name="l00043"></a>00043         conf.setup = 1;
+<a name="l00044"></a>00044     }
+<a name="l00045"></a>00045     <span class="keywordflow">return</span> &amp;<a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>;
+<a name="l00046"></a>00046 }
+<a name="l00047"></a>00047 <span class="preprocessor">#define asprintf(x, ...) (test_with()-&gt;asprintf_sets_NULL? (*x = NULL) == NULL : asprintf(x, __VA_ARGS__))</span>
+<a name="l00048"></a>00048 <span class="preprocessor"></span>rd_kafka_conf_res_t rd_kafka_conf_set (<a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *conf,
+<a name="l00049"></a>00049                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+<a name="l00050"></a>00050                        <span class="keyword">const</span> <span class="keywordtype">char</span> *value,
+<a name="l00051"></a>00051                        <span class="keywordtype">char</span> *errstr, <span class="keywordtype">size_t</span> errstr_size)
+<a name="l00052"></a>00052 {
+<a name="l00053"></a>00053     <span class="keywordflow">if</span>(test_with()-&gt;rd_kafka_conf_set_fails_for == NULL)
+<a name="l00054"></a>00054             <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_conf_set_returns;
+<a name="l00055"></a>00055     <span class="keywordflow">else</span>
+<a name="l00056"></a>00056         <span class="keywordflow">return</span> strcmp(test_with()-&gt;rd_kafka_conf_set_fails_for,
+<a name="l00057"></a>00057                 name) == 0?0:RD_KAFKA_CONF_OK;
+<a name="l00058"></a>00058 }
+<a name="l00059"></a>00059 <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rd_kafka_new (rd_kafka_type_t type, <a class="code" href="structrd__kafka__conf__t.html">rd_kafka_conf_t</a> *conf,
+<a name="l00060"></a>00060               <span class="keywordtype">char</span> *errstr, <span class="keywordtype">size_t</span> errstr_size)
+<a name="l00061"></a>00061 {
+<a name="l00062"></a>00062     <span class="keyword">static</span> <a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> rk;
+<a name="l00063"></a>00063     <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_new_returns_NULL ? NULL:&amp;rk;
+<a name="l00064"></a>00064 }
+<a name="l00065"></a>00065 <span class="keywordtype">void</span> rd_kafka_destroy(<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a>* to_destroy)
+<a name="l00066"></a>00066 {
+<a name="l00067"></a>00067 }
+<a name="l00068"></a>00068 <span class="keywordtype">void</span> rd_kafka_wait_destroyed(<span class="keywordtype">int</span> timeout_ms)
+<a name="l00069"></a>00069 {
+<a name="l00070"></a>00070 }
+<a name="l00071"></a>00071 <span class="keywordtype">void</span> rd_kafka_topic_destroy (<a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rkt)
+<a name="l00072"></a>00072 {
+<a name="l00073"></a>00073 }
+<a name="l00074"></a>00074 <span class="keywordtype">void</span> rd_kafka_set_logger (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">void</span> *f) { }
+<a name="l00075"></a>00075 <span class="keywordtype">void</span> rd_kafka_set_log_level (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">int</span> level) { }
+<a name="l00076"></a>00076 <span class="keywordtype">int</span> rd_kafka_brokers_add (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keyword">const</span> <span class="keywordtype">char</span> *brokerlist)
+<a name="l00077"></a>00077 { <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_brokers_add_returns; }
+<a name="l00078"></a>00078 <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rd_kafka_topic_new (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keyword">const</span> <span class="keywordtype">char</span> *topic,
+<a name="l00079"></a>00079                       <a class="code" href="structrd__kafka__topic__conf__t.html">rd_kafka_topic_conf_t</a> *conf)
+<a name="l00080"></a>00080                                       {
+<a name="l00081"></a>00081                                           <span class="keyword">static</span> <a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> t;
+<a name="l00082"></a>00082                                           <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_topic_new_returns_NULL ? NULL:&amp;t;
+<a name="l00083"></a>00083                                       }
+<a name="l00084"></a>00084 <span class="keywordtype">int</span> rd_kafka_produce (<a class="code" href="structrd__kafka__topic__t.html">rd_kafka_topic_t</a> *rkt, int32_t partitition,
+<a name="l00085"></a>00085               <span class="keywordtype">int</span> msgflags,
+<a name="l00086"></a>00086               <span class="keywordtype">void</span> *payload, <span class="keywordtype">size_t</span> len,
+<a name="l00087"></a>00087               <span class="keyword">const</span> <span class="keywordtype">void</span> *key, <span class="keywordtype">size_t</span> keylen,
+<a name="l00088"></a>00088               <span class="keywordtype">void</span> *msg_opaque)
+<a name="l00089"></a>00089 { <span class="keywordflow">return</span> test_with()-&gt;rd_kafka_produce_returns; }
+<a name="l00090"></a>00090 <span class="keywordtype">int</span> rd_kafka_poll (<a class="code" href="structrd__kafka__t.html">rd_kafka_t</a> *rk, <span class="keywordtype">int</span> timeout_ms)
+<a name="l00091"></a>00091 {
+<a name="l00092"></a>00092     <span class="keywordflow">return</span> 0;
+<a name="l00093"></a>00093 }
+<a name="l00094"></a><a class="code" href="struct__zhandle__t.html">00094</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct__zhandle__t.html">_zhandle_t</a> {
+<a name="l00095"></a>00095     <span class="keywordtype">int</span> i;
+<a name="l00096"></a>00096 } <a class="code" href="struct__zhandle__t.html">zhandle_t</a>;
+<a name="l00097"></a><a class="code" href="structString__vector.html">00097</a> <span class="keyword">struct </span><a class="code" href="structString__vector.html">String_vector</a> {
+<a name="l00098"></a>00098         int32_t count;
+<a name="l00099"></a>00099         <span class="keywordtype">char</span>** data;
+<a name="l00100"></a>00100 };
+<a name="l00101"></a>00101 <span class="preprocessor">#define ZOK 1</span>
+<a name="l00102"></a>00102 <span class="preprocessor"></span><span class="preprocessor">#define ZOO_CHILD_EVENT 4</span>
+<a name="l00103"></a>00103 <span class="preprocessor"></span><span class="preprocessor">#define ZOO_LOG_LEVEL_ERROR 1</span>
+<a name="l00104"></a>00104 <span class="preprocessor"></span><span class="keywordtype">void</span> zoo_set_debug_level(<span class="keywordtype">int</span> level)
+<a name="l00105"></a>00105 {
+<a name="l00106"></a>00106 }
+<a name="l00107"></a>00107 <span class="keyword">typedef</span> void (*watcher_fn)(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keywordtype">int</span> type, 
+<a name="l00108"></a>00108         <span class="keywordtype">int</span> state, <span class="keyword">const</span> <span class="keywordtype">char</span> *path,<span class="keywordtype">void</span> *watcherCtx);
+<a name="l00109"></a>00109 <a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zookeeper_init(<span class="keyword">const</span> <span class="keywordtype">char</span> *host, watcher_fn fn,
+<a name="l00110"></a>00110   <span class="keywordtype">int</span> recv_timeout, <span class="keywordtype">void</span> *clientid, <span class="keywordtype">void</span> *context, <span class="keywordtype">int</span> flags)
+<a name="l00111"></a>00111 {
+<a name="l00112"></a>00112     <span class="keywordflow">if</span>(host == NULL) <span class="keywordflow">return</span> NULL;
+<a name="l00113"></a>00113     <a class="code" href="struct__zhandle__t.html">zhandle_t</a>* zh = (<a class="code" href="struct__zhandle__t.html">zhandle_t</a>*) malloc(<span class="keyword">sizeof</span>(<a class="code" href="struct__zhandle__t.html">zhandle_t</a>));
+<a name="l00114"></a>00114     fn(zh, ZOO_CHILD_EVENT, 0, <span class="stringliteral">&quot;/brokers/ids&quot;</span>, context);
+<a name="l00115"></a>00115     <span class="keywordflow">return</span> zh;
+<a name="l00116"></a>00116 }
+<a name="l00117"></a>00117 <span class="keywordtype">int</span> zookeeper_close(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh)
+<a name="l00118"></a>00118 {
+<a name="l00119"></a>00119     <span class="keywordflow">return</span> 0;
+<a name="l00120"></a>00120 }
+<a name="l00121"></a>00121 <span class="keywordtype">int</span> zoo_get_children(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> watch,
+<a name="l00122"></a>00122                             <span class="keyword">struct</span> <a class="code" href="structString__vector.html">String_vector</a> *strings)
+<a name="l00123"></a>00123 {
+<a name="l00124"></a>00124     strings-&gt;count = 2;
+<a name="l00125"></a>00125     <span class="keywordtype">char</span>* i = (<span class="keywordtype">char</span>*) malloc(2 * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*));
+<a name="l00126"></a>00126     i[0] = <span class="charliteral">&#39;1&#39;</span>;
+<a name="l00127"></a>00127     i[1] = 0;
+<a name="l00128"></a>00128     strings-&gt;data = (<span class="keywordtype">char</span>**) malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>**));
+<a name="l00129"></a>00129     strings-&gt;data[0] = i;
+<a name="l00130"></a>00130     strings-&gt;data[1] = i;
+<a name="l00131"></a>00131     <span class="keywordflow">return</span> test_with()-&gt;zoo_get_children_returns;
+<a name="l00132"></a>00132 }
+<a name="l00133"></a>00133 <span class="keywordtype">int</span> zoo_get(<a class="code" href="struct__zhandle__t.html">zhandle_t</a> *zh, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">int</span> watch, <span class="keywordtype">char</span> *buffer,   
+<a name="l00134"></a>00134                    <span class="keywordtype">int</span>* buffer_len, <span class="keywordtype">void</span> *stat)
+<a name="l00135"></a>00135 {
+<a name="l00136"></a>00136     strcpy(buffer, <span class="stringliteral">&quot;{\&quot;host\&quot;: \&quot;a\&quot;, \&quot;port\&quot;: 2181}&quot;</span>);
+<a name="l00137"></a>00137     <span class="keywordflow">return</span> 1;
+<a name="l00138"></a>00138 }
+<a name="l00139"></a>00139 <span class="keywordtype">int</span> deallocate_String_vector(<span class="keyword">struct</span> <a class="code" href="structString__vector.html">String_vector</a> *v)
+<a name="l00140"></a>00140 {
+<a name="l00141"></a>00141     free(v-&gt;data[0]);
+<a name="l00142"></a>00142     free(v-&gt;data);
+<a name="l00143"></a>00143     <span class="keywordflow">return</span> 1;
+<a name="l00144"></a>00144 }
+<a name="l00145"></a>00145 <span class="comment">// LCOV_EXCL_STOP</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -242,7 +244,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 7 2015 15:13:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jul 8 2015 16:02:19 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
