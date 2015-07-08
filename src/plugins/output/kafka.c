@@ -1,7 +1,8 @@
+#ifndef TEST
 #include <librdkafka/rdkafka.h>
 #include <output.h>
+#endif
 #include "zookeeper.c"
-#include "context.c"
 char errstr[512];
 /**
  * @brief a librdkafka callback called when a message is delivered
@@ -34,11 +35,11 @@ static void logger (const rd_kafka_t *rk, int level,
  **/
 int output_setup(kafka_t* k, config* fk_conf)
 {
-    trace_debug("output_setup: entry");
+    trace_debug("kafka output_setup: entry");
     char* brokers = NULL;
     char* zookeepers = NULL;
     char* topic = "logs";
-    trace_debug("output_setup: fk_conf %d", (int) fk_conf);
+    trace_debug("kafka output_setup: fk_conf %x", fk_conf);
     if(fk_conf->zookeepers_n > 0) zookeepers = fk_conf->zookeepers[0];
     if(fk_conf->brokers_n > 0) brokers = fk_conf->brokers[0];
     if(fk_conf->topic_n > 0) topic = fk_conf->topic[0];
@@ -61,8 +62,10 @@ int output_setup(kafka_t* k, config* fk_conf)
                 errstr);
         return(1);
     }
+    trace_debug("kafka output_setup: before set_logger");
     rd_kafka_set_logger(k->rk, logger);
     rd_kafka_set_log_level(k->rk, 7);
+    trace_debug("kafka output_setup: zookeepers: %s, brokers %s", zookeepers, brokers);
     if (zookeepers != NULL)
     {
         k->zhandle = initialize_zookeeper(zookeepers, k);

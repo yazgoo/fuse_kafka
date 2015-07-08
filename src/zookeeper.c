@@ -41,8 +41,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 #include <output.h>
+#ifndef TEST
 #include <librdkafka/rdkafka.h>
 #include <zookeeper/zookeeper.h>
+#endif
 #ifndef FUSE_KAFKA_ZOOKEEPER_C
 #define FUSE_KAFKA_ZOOKEEPER_C
 #include <jansson.h>

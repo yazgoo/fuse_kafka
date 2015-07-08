@@ -1,5 +1,7 @@
 /** @file */ 
 // LCOV_EXCL_START
+#include <string.h>
+#include <stdlib.h>
 #include <limits.h>
 static struct fuse_context* test_fuse_get_context()
 {

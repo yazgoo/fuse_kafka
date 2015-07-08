@@ -106,13 +106,39 @@ void output_write(const char *prefix, const char *path, const char *buf,
     if(should_write_to_kafka(path, size))
         actual_kafka_write(prefix, path, buf, size, offset);
 }
+#define PLUGIN_FUNCTION_GETTER(name)\
+name##_t* get_##name()\
+{\
+    static name##_t function_ptr = 0; \
+    return &function_ptr;\
+}
+#define PLUGIN_FUNCTION(name)\
+    trace_debug("PLUGIN_FUNCTION: getting " STR(name));\
+    name##_t ptr = *(get_##name());\
+    trace_debug("PLUGIN_FUNCTION: got " STR(name) ": %x", ptr);\
+    if(ptr == NULL) return 1; return (*ptr)
+#define PLUGIN_FUNCTION_LOAD(name)\
+    trace_debug("my_output_setup: load_function_from_plugin("STR(name)\
+            ") result %x", f);\
+    *(get_##name()) = (name##_t) load_function_from_plugin(\
+            handle, STR(name));\
+    trace_debug("my_output_setup: load_function_from_plugin("STR(name)\
+            ") result %x",\
+            get_output_send());
+PLUGIN_FUNCTION_GETTER(output_send)
+PLUGIN_FUNCTION_GETTER(output_clean)
+PLUGIN_FUNCTION_GETTER(output_update)
+int my_output_send(kafka_t* k, char* buf, size_t len)
+{ PLUGIN_FUNCTION(output_send)(k, buf, len); }
+int my_output_clean(kafka_t* k) { PLUGIN_FUNCTION(output_clean)(k); }
+int my_output_update() { PLUGIN_FUNCTION(output_update)(); }
 void output_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
     if(k == NULL) return;
     if(k->conf->quota_n > 0) time_queue_delete(k->conf->quota_queue);
     if(k->zhandle != NULL) zookeeper_close(k->zhandle);
-    output_clean(k);
+    my_output_clean(k);
     free(k);
     dynamic_configuration_watch_stop();
 }
@@ -126,18 +152,7 @@ void setup_from_dynamic_configuration(int argc, char** argv, void* context)
         zookeeper_close(k->zhandle);
         k->zhandle = NULL;
     }
-    output_update();
-}
-output_send_t** get_outuput_send()
-{
-    static output_send_t* function_ptr = 0; 
-    return &function_ptr;
-}
-int my_output_send(kafka_t* k, char* buf, size_t len)
-{
-    output_send_t* ptr = get_outuput_send();
-    if(ptr == NULL) return 1;
-    return (*ptr)(k, buf, len);
+    my_output_update();
 }
 int my_output_setup(config* conf, void* k)
 {
@@ -147,24 +162,26 @@ int my_output_setup(config* conf, void* k)
     void* handle = load_plugin(OUTPUT_PLUGIN_PREFIX, output);
     trace_debug("my_output_setup: load_plugin result %x", handle);
     output_setup_t f = (output_setup_t*) load_function_from_plugin(handle, "output_setup");
-    trace_debug("my_output_setup: load_function_from_plugin(output_setup) result %x", f);
-    *(get_outuput_send()) = (output_send_t*) load_function_from_plugin(handle, "output_send");
-    trace_debug("my_output_setup: load_function_from_plugin(output_send) result %x",
-            get_outuput_send());
+    PLUGIN_FUNCTION_LOAD(output_send)
+    PLUGIN_FUNCTION_LOAD(output_update)
+    PLUGIN_FUNCTION_LOAD(output_clean)
     if(f != NULL) return f(k, conf);
     trace_debug("my_output_setup: output_setup is NULL");
     return 1;
 }
 void* output_init(config* conf)
 {
+    trace_debug("output_init: entry");
     fuse_get_context()->private_data = (void*) conf;
     dynamic_configuration_watch(&setup_from_dynamic_configuration);
+    trace_debug("output_init: watching dynamic configuration");
     int directory_fd = conf->directory_fd;
     int time_queue_size;
     fchdir(directory_fd);
     close(directory_fd);
     kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
     memset(k, 0, sizeof(kafka_t));
+    trace_debug("output_init: calling my_output_setup");
     if(my_output_setup(conf, (void*) k))
     {
         printf("output_init: output_setup failed\n");

@@ -28,4 +28,6 @@ typedef struct _kafka_t
 } kafka_t;
 typedef int (*output_setup_t)(kafka_t* k, config* fk_conf);
 typedef int (*output_send_t)(kafka_t* k, char* buf, size_t len);
+typedef int (*output_clean_t)(kafka_t* k);
+typedef int (*output_update_t)();
 #endif
