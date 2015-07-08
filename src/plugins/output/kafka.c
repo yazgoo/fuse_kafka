@@ -46,6 +46,13 @@ int output_setup(kafka_t* k, config* fk_conf)
     rd_kafka_conf_t *conf;
     conf = rd_kafka_conf_new();
     rd_kafka_conf_set_dr_cb(conf, msg_delivered);
+    if(fk_conf->zookeepers_n > 0) zookeepers = fk_conf->zookeepers[0];
+    if(fk_conf->brokers_n > 0) brokers = fk_conf->brokers[0];
+    if(fk_conf->topic_n > 0) topic = fk_conf->topic[0];
+    rd_kafka_topic_conf_t *topic_conf;
+    rd_kafka_conf_t *conf;
+    conf = rd_kafka_conf_new();
+    rd_kafka_conf_set_dr_cb(conf, msg_delivered);
     if(rd_kafka_conf_set(conf, "debug", "all",
                 errstr, sizeof(errstr)) != RD_KAFKA_CONF_OK || 
             rd_kafka_conf_set(conf, "batch.num.messages", "1",
