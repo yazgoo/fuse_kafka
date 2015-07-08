@@ -52,6 +52,7 @@
 #include <string.h>
 static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
 {
+    trace_debug("set_brokerlist_from_zookeeper: entry");
     if (zzh)
     {
         struct String_vector brokerlist;
@@ -109,10 +110,12 @@ static void watcher(zhandle_t *zh, int type,
         return;
     }
     topic = k->conf->topic[0];
+    trace_debug("zookeeper_init: topic: %s, path: %s", topic, path);
     if (k->no_brokers || type == ZOO_CHILD_EVENT && strncmp(
                 path, BROKER_PATH, sizeof(BROKER_PATH) - 1) == 0)
     {
         brokers[0] = '\0';
+        trace_debug("zookeeper_init: calling set_brokerlist_from_zookeeper()");
         set_brokerlist_from_zookeeper(zh, brokers);
         if (brokers[0] != '\0' && k->rk != NULL &&
                 server_list_add_once(&(k->broker_list), brokers))
@@ -133,6 +136,7 @@ static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
     ((kafka_t*) param)->no_brokers = 1;
     ((kafka_t*) param)->broker_list = NULL;
     zhandle_t *zh;
+    trace_debug("initialize_zookeeper: calling zookeeper_init(%s)", zookeeper);
     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
     if (zh == NULL)
     {

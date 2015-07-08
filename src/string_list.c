@@ -5,6 +5,7 @@
  * In the future there might be (to handle server lists) ala zookeeper
  **/
 #include "string_list.h"
+#include "util.c"
 #define SERVER_LIST_DEFAULT_MAX_SIZE 10
 /** @brief Public: checks if the list contains a string
  *
@@ -29,7 +30,7 @@ int string_list_contains(string_list** servers, char* string)
  **/
 int string_list_new(string_list** servers)
 {
-    if(((*servers) = fmalloc(sizeof(string_list))) == NULL)
+    if(((*servers) = (string_list*) fmalloc(sizeof(string_list))) == NULL)
         return 1;
     (*servers)->max_size = SERVER_LIST_DEFAULT_MAX_SIZE;
     (*servers)->size = 0;

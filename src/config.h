@@ -46,5 +46,7 @@ typedef struct _config {
     CONFIG_ITEM(quota)
     /** @brief input plugin */
     CONFIG_ITEM(input)
+    /** @brief output plugin */
+    CONFIG_ITEM(output)
 } config;
 #endif

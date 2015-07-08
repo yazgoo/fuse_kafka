@@ -58,15 +58,17 @@ static inline int is_dir(struct dirent* file)
 }
 void setup_watches(char* directory, int fd, fk_hash watches, fk_hash offsets)
 {
+    trace_debug("setup_watches: %s", directory);
     if(directory == NULL) return;
     watch_directory(directory, fd, watches);
     DIR* dir = opendir(directory);
+    trace_debug("setup_watches: opendir %x", dir);
     if(dir == NULL) return;
     struct dirent* file;
-    // printf("reading %s\n", directory);
+    trace_debug("setup_watches: reading %s", directory);
     while(file = readdir(dir))
     {
-        // printf("%s %d\n", file->d_name, file->d_type);
+        trace_debug("setup_watches: file %s type %d", file->d_name, file->d_type);
         char* path = concat(directory, file->d_name);
         if(is_dir(file) && strcmp(".", file->d_name) && strcmp("..", file->d_name))
         {
@@ -91,7 +93,7 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
     if ( event->len ) {
         if ( event->mask & IN_CREATE ) {
             if ( event->mask & IN_ISDIR ) {
-                // printf( "New directory %s created.\n", event->name );
+                trace_debug( "handle_event: New directory %s created.", event->name );
 #ifndef INOTIFY_NONRECURSIVE
                 char* path = get_event_path(event, watches);
                 setup_watches(path, fd, watches, offsets);
@@ -103,20 +105,21 @@ handle_event(struct inotify_event* event, int fd, fk_hash offsets, fk_hash watch
         }
         if ( event->mask & IN_DELETE ) {
             if ( event->mask & IN_ISDIR ) {
-                // printf( "New directory %s deleted.\n", event->name );
+                trace_debug( "handle_event: New directory %s deleted.", event->name );
                 char* path = get_event_path(event, watches);
                 teardown_watches(path, fd, watches);
             }
             else {
-                // printf( "New file %s deleted.\n", event->name );
+                trace_debug( "handle_event: New file %s deleted.", event->name );
                 handle_file_deleted(event, offsets, watches, root);
             }
         }
         if ( event->mask & IN_MODIFY ) {
             if ( event->mask & IN_ISDIR ) {
-                // printf( "Directory %s modified.\n", event->name );
+                trace_debug( "handle_event: Directory %s modified.", event->name );
             }
             else {
+                trace_debug( "handle_event: File %s modified.", event->name );
                 char* path = get_event_path(event, watches);
                 handle_file_modified(path, offsets, "/");
             }
@@ -140,6 +143,7 @@ int* inotify_runnning()
 }
 int input_setup(int argc, char** argv, void* cfg)
 {
+    trace_debug("inotify input_setup: entry");
     config* conf = (config*) cfg;
     fk_hash offsets = fk_hash_new();
     fk_hash watches = fk_hash_new();
@@ -157,8 +161,10 @@ int input_setup(int argc, char** argv, void* cfg)
     struct inotify_event event;
     char buffer[EVENT_BUF_LEN];
     int length; 
+    trace_debug("inotify input_setup: launching main loop");
     while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)) >= 0)
     {
+        trace_debug("inotify input_setup: calling on_event()");
         on_event(buffer, length, NULL, fd, offsets, watches);
     }
     trace_warn("inotify input_setup: "

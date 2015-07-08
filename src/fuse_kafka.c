@@ -1,7 +1,6 @@
 /** @file 
  * @brief main fuse_kafka source
  **/ 
-#include <dlfcn.h>
 #include "version.h"
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -26,6 +25,9 @@
  * and a number of those */
 #include "arguments.c"
 #include "trace.c"
+#include "output.h"
+#include "plugin.c"
+#include "input.h"
 // global variable used in atexit
 config conf;
 void configuration_clean()
@@ -35,35 +37,10 @@ void configuration_clean()
 int my_input_setup(int argc, char** argv, int limit)
 {
     char* input = "overlay";
-    trace_debug("my_input_setup: starting, with %d inputs", conf.input_n);
     if(conf.input_n > 0) input = conf.input[0];
-    char*  lib = malloc(strlen(INPUT_PLUGIN_PREFIX) + strlen(input) + 4);
-    strcpy(lib, INPUT_PLUGIN_PREFIX);
-    strcpy(lib + strlen(INPUT_PLUGIN_PREFIX), input);
-    strcpy(lib + strlen(INPUT_PLUGIN_PREFIX) + strlen(input), ".so");
-    trace_debug("my_input_setup: trying to open %s", lib);
-    void* handle = dlopen(lib, RTLD_LAZY);
-    //void* handle = LoadLibraryA(lib);
-    free(lib);
-    if(handle == NULL)
-    {
-        printf("%s\n", dlerror());
-        return 1;
-    }
-    else
-    {
-        trace_debug("my_input_setup: loading input_setup_internal()");
-        input_setup_t f = dlsym(handle, "input_setup_internal");
-        //input_setup_t f = GetProcAddress(handle, "input_setup_internal");
-        if(f == NULL)
-        {
-            trace_debug("my_input_setup: loading setup function failed");
-            printf("%s\n", dlerror());
-            return 1;
-        }
-        trace_debug("my_input_setup: calling setup function");
-        return f(limit, argv, &conf);
-    }
+    input_setup_t f = (input_setup_t*) load_plugin_function(INPUT_PLUGIN_PREFIX, input, "input_setup_internal");
+    if(f != NULL) return f(limit, argv, &conf);
+    return 1;
 }
 int fuse_kafka_main(int argc, char *argv[])
 {

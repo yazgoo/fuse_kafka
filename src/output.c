@@ -5,6 +5,7 @@
 #include "dynamic_configuration.c"
 #include "arguments.c"
 #endif
+#include "plugin.c"
 #ifdef _WIN32
 struct group {
     char* gr_name;
@@ -63,7 +64,9 @@ static int actual_kafka_write(const char* prefix, const char *path, const char *
         fprintf(stderr, "Error in asprintf\n");
         return 1;
     }
-    output_send(context->private_data, ret, strlen(ret));
+    trace_debug("actual_kafka_write: calling my_output_send()");
+    int r = my_output_send(context->private_data, ret, strlen(ret));
+    trace_debug("actual_kafka_write: my_output_send result == %d", r);
     free(ret);
     return 0;
 }
@@ -77,7 +80,10 @@ static int actual_kafka_write(const char* prefix, const char *path, const char *
 static int should_write_to_kafka(const char* path, size_t size)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
-    if(private_data == NULL || private_data->rkt == NULL) return 0;
+    trace_debug("should_write_to_kafka: private_data %x", private_data);
+    if(private_data == NULL) return 0;
+    trace_debug("should_write_to_kafka: private_data->rkt %x", private_data->rkt);
+    if(private_data->rkt == NULL) return 0;
     config* conf = (config*)private_data->conf;
     int i = 0;
     for(i = 0; i < conf->excluded_files_n; i++)
@@ -122,6 +128,33 @@ void setup_from_dynamic_configuration(int argc, char** argv, void* context)
     }
     output_update();
 }
+output_send_t** get_outuput_send()
+{
+    static output_send_t* function_ptr = 0; 
+    return &function_ptr;
+}
+int my_output_send(kafka_t* k, char* buf, size_t len)
+{
+    output_send_t* ptr = get_outuput_send();
+    if(ptr == NULL) return 1;
+    return (*ptr)(k, buf, len);
+}
+int my_output_setup(config* conf, void* k)
+{
+    char* output = "kafka";
+    if(conf->output_n > 0) output = conf->output[0];
+    trace_debug("my_output_setup: loading output plugin %s", output);
+    void* handle = load_plugin(OUTPUT_PLUGIN_PREFIX, output);
+    trace_debug("my_output_setup: load_plugin result %x", handle);
+    output_setup_t f = (output_setup_t*) load_function_from_plugin(handle, "output_setup");
+    trace_debug("my_output_setup: load_function_from_plugin(output_setup) result %x", f);
+    *(get_outuput_send()) = (output_send_t*) load_function_from_plugin(handle, "output_send");
+    trace_debug("my_output_setup: load_function_from_plugin(output_send) result %x",
+            get_outuput_send());
+    if(f != NULL) return f(k, conf);
+    trace_debug("my_output_setup: output_setup is NULL");
+    return 1;
+}
 void* output_init(config* conf)
 {
     fuse_get_context()->private_data = (void*) conf;
@@ -132,7 +165,7 @@ void* output_init(config* conf)
     close(directory_fd);
     kafka_t* k = (kafka_t*) malloc(sizeof(kafka_t));
     memset(k, 0, sizeof(kafka_t));
-    if(output_setup((void*) k))
+    if(my_output_setup(conf, (void*) k))
     {
         printf("output_init: output_setup failed\n");
         return NULL;

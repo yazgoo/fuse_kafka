@@ -26,4 +26,6 @@ typedef struct _kafka_t
     void* zhandle;
     server_list* broker_list;
 } kafka_t;
+typedef int (*output_setup_t)(kafka_t* k, config* fk_conf);
+typedef int (*output_send_t)(kafka_t* k, char* buf, size_t len);
 #endif

@@ -8,7 +8,7 @@ void handle_file_modified(char* path, fk_hash offsets, char* root)
         path = strdup(path);
         offset = 0;
     }
-    // printf("File %s modified, offset being %ld.\n", path, offset);
+    trace_debug("handle_file_modified: File %s modified, offset being %ld.", path, offset);
     char* line = 0;
     size_t length;
     FILE* f = fopen(path, "r");
@@ -19,12 +19,13 @@ void handle_file_modified(char* path, fk_hash offsets, char* root)
         ssize_t size;
         while((size = getline(&line, &length, f)) > 0)
         {
-            // printf("File %s, writing %s %d\n", path, line, size);
+            trace_debug("handle_file_modified: File %s, writing %s %d", path, line, size);
             output_write(root, path, line, size, 0);
         }
         if(ftell(f) > offset)
         {
-            // printf("File %s started reading @%ld, ended @%ld.\n", path, offset, ftell(f));
+            trace_debug("handle_file_modified: File %s started reading @%ld, ended @%ld.",
+                    path, offset, ftell(f));
         }
         fk_hash_put(offsets, old_path, (void*) ftell(f), 1);
         fclose(f);

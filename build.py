@@ -83,7 +83,7 @@ if "LIBS" in os.environ:
     additional_libs = [a.replace("-l", "") for a in os.environ["LIBS"].split()]
     default_libs += additional_libs
     libs += additional_libs
-plugins = Plugins()
+plugins = Plugins(cc)
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -407,7 +407,7 @@ def target_matched(target):
     return len(os.popen(cmd).read().split()) > 0
 def compile_plugins():
     for library_source in plugins.libraries_sources:
-        if not target_matched(input_plugins.targets_of[library_source]):
+        if not target_matched(plugins.targets_of[library_source]):
             print("skipping " + library_source + " plugin because not compiling for target")
             continue
         run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(plugins.includes_of[library_source]), "./src/plugins/" + plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', plugins.objects[library_source])

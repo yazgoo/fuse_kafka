@@ -50,6 +50,7 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(tags)
             else CONFIG_CURRENT(quota)
             else CONFIG_CURRENT(input)
+            else CONFIG_CURRENT(output)
             else
             {
                 printf("unknown option %s\n", argv[i]);
