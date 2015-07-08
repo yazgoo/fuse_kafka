@@ -129,6 +129,17 @@ When you're done, you can stop fuse\_kafka:
     $ src/fuse_kafka.py stop
 
 
+Using fuse_kafka as a machine tail
+==================================
+
+If you want to tail all logs from /var/log 
+
+    $ ./build.py
+    $ LD_LIBRARY_PATH=. ./fuse_kafka -- --directories /var/log --output stdout --input inotify --encoder text
+
+This is pretty usefull to quickly see what is currently going on on a machine.
+
+
 Quota option test
 =================
 
