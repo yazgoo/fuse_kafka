@@ -84,14 +84,6 @@ if "LIBS" in os.environ:
     default_libs += additional_libs
     libs += additional_libs
 plugins = Plugins(cc)
-=======
-sources = ['fuse_kafka']
-binary_name = sources[0]
-common_libs = ["crypto", "fuse", "dl", "pthread", "jansson"]#, "ulockmgr"]
-libs = ["zookeeper_mt", "rdkafka",  "z", "rt"] + common_libs
-default_libs = ["zookeeper_mt", "rdkafka", "jansson", "crypto"]
-plugins = Plugins()
->>>>>>> d90ac9c1c562ea70490c221ea6937dc87c1d5278
 flags = ['-D_FILE_OFFSET_BITS=64']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
@@ -418,10 +410,6 @@ def compile_plugins():
         if not target_matched(plugins.targets_of[library_source]):
             print("skipping " + library_source + " plugin because not compiling for target")
             continue
-=======
-def compile_plugins():
-    for library_source in plugins.libraries_sources:
->>>>>>> d90ac9c1c562ea70490c221ea6937dc87c1d5278
         run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(plugins.includes_of[library_source]), "./src/plugins/" + plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', plugins.objects[library_source])
         run('gcc', '-shared', '-o', plugins.shareds_objects[library_source], plugins.objects[library_source], flags, to_links(plugins.libs_of[library_source]))
 def compile():

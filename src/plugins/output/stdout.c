@@ -8,6 +8,6 @@ int output_setup(kafka_t* k, config* fk_conf)
 }
 int output_send(kafka_t* k, char* buf, size_t len)
 {
-    trace("%s\n", buf);
+    trace("%s", buf);
     return 0;
 }

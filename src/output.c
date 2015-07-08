@@ -127,7 +127,6 @@ void setup_from_dynamic_configuration(int argc, char** argv, void* context)
         k->zhandle = NULL;
     }
     output_update();
-<<<<<<< HEAD
 }
 output_send_t** get_outuput_send()
 {
