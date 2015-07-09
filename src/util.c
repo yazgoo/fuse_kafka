@@ -26,14 +26,6 @@ int touch(char* path, char* str)
     fclose(f);
     return 1;
 }
-char* integer_concat(char* prefix, int i, char* suffix)
-{
-    int size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*sizeof(char);
-    char *str = (char*) malloc((int)(size) + 1);
-    if(str != NULL)
-        snprintf(str, size, "%s%d%s", prefix, i, suffix);
-    return str;
-}
 #define BASE64_CHARS \
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 /**
@@ -265,6 +257,14 @@ void* frealloc(void* ptr, size_t size)
 {
     if(*falloc_fails()) return NULL;
     return realloc(ptr, size);
+}
+char* integer_concat(char* prefix, int i, char* suffix)
+{
+    int size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*sizeof(char);
+    char *str = (char*) fmalloc((int)(size) + 1);
+    if(str != NULL)
+        snprintf(str, size, "%s%d%s", prefix, i, suffix);
+    return str;
 }
 /**
  * @return null if a or b is null, a + "/" + b otherwise

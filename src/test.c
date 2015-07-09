@@ -375,6 +375,7 @@ static char* test_output()
     conf.quota_n = 1;
     conf.quota = &quota;
     conf.topic_n = 0;
+    conf.encoder_n = 0;
     ((kafka_t*) output)->rkt = (void*) 1;
     fuse_get_context()->private_data = output;
     mu_assert("should not write to kafka excluded file",
@@ -387,6 +388,12 @@ static char* test_output()
     output_write("", "", "", 0, 0);
     mu_assert("actual_kafka_write should return 0 if asprintf is not failing",
             actual_kafka_write("", "", "", 0, 0) == 0);
+    conf.encoder_n = 1;
+    char* encoder[] = {"text"};
+    conf.encoder = encoder;
+    mu_assert("actual_kafka_write should return 0 if asprintf is not failing",
+            actual_kafka_write("", "", "", 0, 0) == 0);
+    conf.encoder_n = 0;
     conf.zookeepers_n = conf.brokers_n = 0;
     input_setup_internal(0, NULL, &conf);
     ((kafka_t*)output)->zhandle = (void*) 1;

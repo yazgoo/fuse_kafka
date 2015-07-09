@@ -7,6 +7,10 @@ static char* test_other_functions()
     *(fk_sleep_enabled()) = 0;
     *(fk_sleep_return_value()) = -1;
     mu_assert("input_setup should return 1", input_setup(0, NULL, NULL) == 1);
+    input_is_watching_directory(NULL);
+    *(falloc_fails()) = 1;
+    input_is_watching_directory(NULL);
+    *(falloc_fails()) = 0;
     return 0;
 }
 static char* all_tests()

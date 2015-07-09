@@ -8,6 +8,9 @@ target(".*linux.*")
 #define EVENT_BUF_LEN     ( 1024 * ( EVENT_SIZE + 16 ) )
 ;    
 #include <handle_file_modified.c>
+#ifndef inotify_read
+#define inotify_read read
+#endif
 char* get_event_path(struct inotify_event* event, fk_hash watches)
 {
     // printf("new event on %d\n", event->wd);
@@ -162,7 +165,7 @@ int input_setup(int argc, char** argv, void* cfg)
     char buffer[EVENT_BUF_LEN];
     int length; 
     trace_debug("inotify input_setup: launching main loop");
-    while(*(inotify_runnning()) && (length = read(fd, buffer, EVENT_BUF_LEN)) >= 0)
+    while(*(inotify_runnning()) && (length = inotify_read(fd, buffer, EVENT_BUF_LEN)) >= 0)
     {
         trace_debug("inotify input_setup: calling on_event()");
         on_event(buffer, length, NULL, fd, offsets, watches);

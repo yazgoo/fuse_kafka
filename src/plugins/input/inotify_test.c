@@ -7,6 +7,7 @@ int inotify_init_test()
     return open(INOTIFY_INIT_PATH);
 }
 #define inotify_init inotify_init_test
+#define inotify_read(a, b, c) (c)
 #include "inotify.c"
 static char* test_input_setup()
 {

@@ -12,7 +12,9 @@
 #include "input.h"
 #define requires(lol) /* lol */
 #define target(lol) /* lol */
+#ifndef FUSE_KAFKA_WATCHED_DIRS
 #define FUSE_KAFKA_WATCHED_DIRS "/var/run/fuse_kafka/watched"
+#endif
 static inline char** input_get_last_watching_directory()
 {
     static char* path;
