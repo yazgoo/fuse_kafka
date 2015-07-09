@@ -15,17 +15,33 @@
 #include "util.c"
 void add_fields_and_tags(config* conf)
 {
-    if(conf->fields_s != NULL) free(conf->fields_s);
+    if(conf->fields_s != NULL)
+    {
+        free(conf->fields_s);
+        conf->fields_s = NULL;
+    }
     conf->fields_s = array_to_container_string(
             conf->fields, conf->fields_n, '{', '}', ':', ',');
-    if(conf->tags_s != NULL) free(conf->tags_s);
+    if(conf->tags_s != NULL)
+    {
+        free(conf->tags_s);
+        conf->tags_s = NULL;
+    }
     conf->tags_s = array_to_container_string(
             conf->tags, conf->tags_n, '[', ']', ',', ',');
 }
 void free_fields_and_tags(config* conf)
 {
-    if(conf->fields_s != NULL) free(conf->fields_s);
-    if(conf->tags_s != NULL) free(conf->tags_s);
+    if(conf->fields_s != NULL)
+    {
+        free(conf->fields_s);
+        conf->fields_s = NULL;
+    }
+    if(conf->tags_s != NULL)
+    {
+        free(conf->tags_s);
+        conf->tags_s = NULL;
+    }
 }
 int parse_arguments(int argc, char** argv, config* conf)
 {

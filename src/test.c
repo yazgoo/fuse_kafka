@@ -47,6 +47,7 @@ static char* test_utils()
 {
     char* args[] = {"lol", "xd", "pdtr"};
     char* args2[] = {"xd", "--", "--lol"};
+    char* args3[] = {"xd", "--", "--topic", "test"};
     char* container;
     *get_command_line_size() = 1;
     printf("command line is %s\n", get_command_line(1));
@@ -63,6 +64,8 @@ static char* test_utils()
     container = array_to_container_string(args, 3, '[', ']', ',', ',');
     mu_assert("parsing argument should have failed",
             !fuse_kafka_main(3, args2));
+    mu_assert("parsing argument should have succeed",
+            fuse_kafka_main(4, args3) == 0);
     free(container);
     char* result = concat(args[0], args[1]);
     mu_assert("concatenation result should not be null",
@@ -235,6 +238,20 @@ static char* test_zookeeper()
     rd_kafka_wait_destroyed(42);
     rd_kafka_topic_destroy(NULL);
     zookeeper_close(NULL);
+    set_brokerlist_from_zookeeper(NULL, NULL);
+    zhandle_t zzh;
+    set_brokerlist_from_zookeeper(&zzh, NULL);
+    test_with()->zoo_get_children_returns = 1;
+    set_brokerlist_from_zookeeper(&zzh, NULL);
+    char* b = (char*) malloc(20);
+    set_brokerlist_from_zookeeper(&zzh, b);
+#define test_output_expected "a:2181,a:2181"
+    mu_assert("b should equal " test_output_expected, strcmp(test_output_expected, b) == 0);
+    free(b);
+    k.conf->topic_n = 1;
+    watcher(NULL, 0, 0, 0, &k);
+    k.conf->brokers = topics;
+    watcher(NULL, 0, 0, 0, &k);
     return 0;
 }
 static char* test_trace()
@@ -380,6 +397,14 @@ static char* test_output()
     output_destroy(output);
     return 0;
 }
+static char* test_plugin()
+{
+    void* f = load_plugin_function(OUTPUT_PLUGIN_PREFIX, "kafka", "blah");
+    mu_assert("function should not be loaded", f == NULL);
+    f = load_plugin_function(OUTPUT_PLUGIN_PREFIX, "kafka", "output_setup");
+    mu_assert("function should be loaded", f != NULL);
+    return 0;
+}
 static char* all_tests()
 {
     *(fk_sleep_enabled()) = 0;
@@ -397,6 +422,7 @@ static char* all_tests()
     mu_run_test(test_dynamic_configuration);
     mu_run_test(test_fk_hash);
     mu_run_test(test_my_input_setup);
+    mu_run_test(test_plugin);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

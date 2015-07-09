@@ -65,6 +65,7 @@ static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
         }
         int i;
         char *brokerptr = brokers;
+        if(brokerptr == NULL) return;
         for (i = 0; i < brokerlist.count; i++)
         {
             char path[255], cfg[1024];
@@ -84,6 +85,7 @@ static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
                     {
                         const char *host = json_string_value(jhost);
                         const int port = json_integer_value(jport);
+                        trace_debug("set_brokerlist_from_zookeeper: %s %d", host, port);
                         sprintf(brokerptr, "%s:%d", host, port);
                         brokerptr += strlen(brokerptr);
                         if (i < brokerlist.count - 1)
