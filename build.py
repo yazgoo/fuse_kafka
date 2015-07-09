@@ -371,7 +371,7 @@ def run_c_test(source):
         if os.getenv("NO_GDB") != None: gdb = ""
         result = os.system(gdb + "./" + bin_path)
         if result != 0:
-            print("failed running " + source)
+            print("failed running {}, RC: {}".format(source, result))
             exit(result)
     else:
         print("warning: no binary test {}".format(bin_path))

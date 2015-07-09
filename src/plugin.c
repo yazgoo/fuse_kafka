@@ -35,6 +35,7 @@ void* load_function_from_plugin(void* handle, char* function_name)
 void* load_plugin_function(char* plugin_prefix, char* plugin_name, char* function_name)
 {
     void* handle = load_plugin(plugin_prefix, plugin_name);
+    if(handle == NULL) return NULL;
     load_function_from_plugin(handle, function_name);
 }
 #endif

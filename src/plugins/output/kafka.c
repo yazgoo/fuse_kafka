@@ -26,7 +26,7 @@ static void logger (const rd_kafka_t *rk, int level,
                 (int)tv.tv_sec, (int)(tv.tv_usec / 1000),
                 level, fac, rd_kafka_name(rk), buf);*/
         trace_debug("logger: RDKAFKA-%i-%s: %s: %s\n",
-                level, fac, rd_kafka_name(rk), buf);
+                level, fac, rk == 0 ? NULL : rd_kafka_name(rk), buf);
 }
 /**
  * @brief setup_kafka initialises librdkafka based on the config
@@ -102,7 +102,8 @@ int output_send(kafka_t* k, char* buf, size_t len)
 {
     int r = 0;
     static int i = 0;
-    if((r = rd_kafka_produce(k->rkt, RD_KAFKA_PARTITION_UA,
+    trace_debug("output_send: k = %x k->rkt = %x", k, k == 0 ? 0: k->rkt);
+    if(k != 0 && k->rkt > 1 && (r = rd_kafka_produce(k->rkt, RD_KAFKA_PARTITION_UA,
             RD_KAFKA_MSG_F_COPY,
             buf, len,
             NULL, 0, NULL)))
@@ -112,7 +113,8 @@ int output_send(kafka_t* k, char* buf, size_t len)
     }
     else i = 0;
     trace_debug("%% Sent %zd bytes to topic "
-            "%s\n", len, rd_kafka_topic_name(k->rkt));
+            "%s\n", len, k ==  0 || k->rkt <= 1 ?
+            0 : rd_kafka_topic_name(k->rkt));
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/
     /*while(rd_kafka_poll(k->rk, 1000) != -1)
@@ -121,7 +123,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
 }
 void output_clean(kafka_t* k)
 {
-    if(k->rkt != NULL) rd_kafka_topic_destroy(k->rkt);
+    if(k->rkt > 1) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
 }

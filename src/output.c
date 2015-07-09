@@ -43,7 +43,6 @@ static int actual_kafka_write(const char* prefix, const char *path, const char *
     char* logstash = "logstash";
     char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000                               ";
     set_timestamp(timestamp);
-    (void) path;
     char* text = buf;
     struct fuse_context* context = fuse_get_context();
     struct group* sgroup = getgrgid(context->gid);
@@ -147,7 +146,7 @@ PLUGIN_FUNCTION_GETTER(output_update)
 int my_output_send(kafka_t* k, char* buf, size_t len)
 { PLUGIN_FUNCTION(output_send)(k, buf, len); }
 int my_output_clean(kafka_t* k) { PLUGIN_FUNCTION(output_clean)(k); }
-int my_output_update() { PLUGIN_FUNCTION(output_update)(); }
+int my_output_update(kafka_t* k) { PLUGIN_FUNCTION(output_update)(k); }
 void output_destroy(void* untyped)
 {
     kafka_t* k = (kafka_t*) untyped;
@@ -168,7 +167,7 @@ void setup_from_dynamic_configuration(int argc, char** argv, void* context)
         zookeeper_close(k->zhandle);
         k->zhandle = NULL;
     }
-    my_output_update();
+    my_output_update(k);
 }
 int my_output_setup(config* conf, void* k)
 {
@@ -188,6 +187,7 @@ int my_output_setup(config* conf, void* k)
 void* output_init(config* conf)
 {
     trace_debug("output_init: entry");
+    if(conf == NULL) return NULL;
     fuse_get_context()->private_data = (void*) conf;
     dynamic_configuration_watch(&setup_from_dynamic_configuration);
     trace_debug("output_init: watching dynamic configuration");
