@@ -352,7 +352,7 @@ def binary_exists(name):
     return True
 def test():
     """ Compile, Run unit tests generating reports in out directory """
-    run('rm', '-rf', 'out')
+    run('rm', '-rf', 'out/*')
     for d in ["c", "python"]: run('mkdir', '-p', 'out/' + d)
     compile_test()
     test_run()

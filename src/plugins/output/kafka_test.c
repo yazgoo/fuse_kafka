@@ -84,10 +84,27 @@ static char* test_logging()
     logger(NULL, 0, NULL, NULL);
     return 0;
 }
+static char* test_output_update_clean()
+{
+    char zk[] = "";
+    output_update(NULL);
+    output_clean(NULL);
+    kafka_t k;
+    memset(&k, 0, sizeof(kafka_t));
+    output_clean(&k);
+    output_update(&k);
+    config c;
+    c.zookeepers_n = 1;
+    c.zookeepers = &zk;
+    k.conf = &c;
+    output_update(&k);
+    return 0;
+}
 static char* all_tests()
 {
     mu_run_test(test_setup_kafka);
     mu_run_test(test_logging);
+    mu_run_test(test_output_update_clean);
     return 0;
 }
 #include "minunit.c"

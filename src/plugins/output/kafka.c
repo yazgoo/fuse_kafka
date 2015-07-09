@@ -89,7 +89,7 @@ int output_setup(kafka_t* k, config* fk_conf)
 }
 int output_update(kafka_t* k)
 {
-    if(k->conf->zookeepers_n > 0)
+    if(k != NULL && k->conf != NULL && k->conf->zookeepers_n > 0)
         k->zhandle = initialize_zookeeper(k->conf->zookeepers[0], k);
 }
 /**
@@ -108,8 +108,8 @@ int output_send(kafka_t* k, char* buf, size_t len)
             buf, len,
             NULL, 0, NULL)))
     {
-        if(i++ % 100 == 0)
-            printf("=========== rd_kafka_produce: failed %d\n", r);
+        if(i++ % 100 == 0) trace_error("output_send: "
+                "rd_kafka_produce: failed %d times (last rc %d) ", i, r);
     }
     else i = 0;
     trace_debug("%% Sent %zd bytes to topic "
@@ -123,6 +123,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
 }
 void output_clean(kafka_t* k)
 {
+    if(k == NULL) return;
     if(k->rkt > 1) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
