@@ -108,12 +108,13 @@ int output_send(kafka_t* k, char* buf, size_t len)
             buf, len,
             NULL, 0, NULL)))
     {
+        trace_debug("rd_kafka_produce failed");
         if(i++ % 100 == 0) trace_error("output_send: "
                 "rd_kafka_produce: failed %d times (last rc %d) ", i, r);
     }
     else i = 0;
     trace_debug("%% Sent %zd bytes to topic "
-            "%s\n", len, k ==  0 || k->rkt <= 1 ?
+            "%s\n", len, k ==  0 || k->rkt <= 2 ?
             0 : rd_kafka_topic_name(k->rkt));
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/

@@ -67,14 +67,16 @@ static char* test_setup_kafka()
     mu_assert("kafka_init succeeded", !kafka_init(NULL));
     */
     test_with()->rd_kafka_topic_new_returns_NULL = 0;
-    /* TODO uncomment
-    mu_assert("fuse kafka main error",
-            !fuse_kafka_main(argc, argv));
-            */
     test_with()->rd_kafka_produce_returns = 1;
     mu_assert("send_kafka return something other than 0",
             !send_kafka(&k, NULL, 0));
+    k.rkt = 2;
+    mu_assert("send_kafka return something other than 0",
+            !send_kafka(&k, NULL, 0));
     test_with()->rd_kafka_produce_returns = 0;
+    private_data.zookeepers = private_data.brokers = NULL;
+    private_data.zookeepers_n = private_data.brokers_n = 0;
+    mu_assert("setup_kafka with zookeepers should succeed", setup_kafka(&k, &private_data) == 0);
     return 0;
 }
 static char* test_logging()
