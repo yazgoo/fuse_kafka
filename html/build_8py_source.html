@@ -454,7 +454,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00371"></a>00371         <span class="keywordflow">if</span> os.getenv(<span class="stringliteral">&quot;NO_GDB&quot;</span>) != <span class="keywordtype">None</span>: gdb = <span class="stringliteral">&quot;&quot;</span>
 <a name="l00372"></a>00372         result = os.system(gdb + <span class="stringliteral">&quot;./&quot;</span> + bin_path)
 <a name="l00373"></a>00373         <span class="keywordflow">if</span> result != 0:
-<a name="l00374"></a>00374             print(<span class="stringliteral">&quot;failed running &quot;</span> + source)
+<a name="l00374"></a>00374             print(<span class="stringliteral">&quot;failed running {}, RC: {}&quot;</span>.format(source, result))
 <a name="l00375"></a>00375             exit(result)
 <a name="l00376"></a>00376     <span class="keywordflow">else</span>:
 <a name="l00377"></a>00377         print(<span class="stringliteral">&quot;warning: no binary test {}&quot;</span>.format(bin_path))
@@ -982,7 +982,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 8 2015 21:20:45 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 9 2015 10:54:54 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

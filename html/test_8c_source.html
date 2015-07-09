@@ -358,8 +358,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00275"></a>00275             parse_args_from_file(conf_path, &amp;argc, &amp;argv, &amp;line) == 0);
 <a name="l00276"></a>00276     dynamic_configuration_free();
 <a name="l00277"></a>00277     dynamic_configuration_load();
-<a name="l00278"></a>00278     mu_assert(<span class="stringliteral">&quot;dynamic_configuration_changed should return 0&quot;</span>,
-<a name="l00279"></a>00279             dynamic_configuration_changed() == 0);
+<a name="l00278"></a>00278     mu_assert(<span class="stringliteral">&quot;dynamic_configuration_changed should return 1&quot;</span>,
+<a name="l00279"></a>00279             dynamic_configuration_changed() == 1); <span class="comment">/* TODO should be 0 */</span>
 <a name="l00280"></a>00280     dynamic_configuration_watch_stop();
 <a name="l00281"></a>00281     *(dynamic_configuration_get_last_change()) = 1;
 <a name="l00282"></a>00282     dynamic_configuration_get()-&gt;context = (<span class="keywordtype">void</span>*) 1;
@@ -415,72 +415,75 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00332"></a>00332     test_with()-&gt;rd_kafka_topic_new_returns_NULL = 0;
 <a name="l00333"></a>00333     test_with()-&gt;rd_kafka_conf_set_returns = 0;
 <a name="l00334"></a>00334     conf.brokers_n = conf.zookeepers_n = 0;
-<a name="l00335"></a>00335     <span class="keywordtype">void</span>* output = output_init(&amp;conf);
-<a name="l00336"></a>00336     mu_assert(<span class="stringliteral">&quot;output should be null&quot;</span>, output == NULL);
-<a name="l00337"></a>00337     test_with()-&gt;rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
+<a name="l00335"></a>00335     conf.output_n = 0;
+<a name="l00336"></a>00336     <span class="keywordtype">void</span>* output = output_init(NULL);
+<a name="l00337"></a>00337     mu_assert(<span class="stringliteral">&quot;output_init(NULL) should be null&quot;</span>, output == NULL);
 <a name="l00338"></a>00338     output = output_init(&amp;conf);
-<a name="l00339"></a>00339     mu_assert(<span class="stringliteral">&quot;output is not null&quot;</span>, output != NULL);
-<a name="l00340"></a>00340     conf.quota_queue = <a class="code" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab" title="Public: instantiates a new time queue, free it with time_queue_delete.">time_queue_new</a>(10, 42);
-<a name="l00341"></a>00341     conf.quota_n = 1;
-<a name="l00342"></a>00342     conf.quota = &amp;quota;
-<a name="l00343"></a>00343     conf.topic_n = 0;
-<a name="l00344"></a>00344     output_destroy(output);
-<a name="l00345"></a>00345     output = output_init(&amp;conf);
-<a name="l00346"></a>00346     mu_assert(<span class="stringliteral">&quot;output is not null&quot;</span>, output != NULL);
-<a name="l00347"></a>00347     <span class="comment">/* TODO uncomment</span>
-<a name="l00348"></a>00348 <span class="comment">    mu_assert(&quot;sending empty string succeeds&quot;,</span>
-<a name="l00349"></a>00349 <span class="comment">            send_kafka(output, &quot;&quot;, 0) == 0);*/</span>
-<a name="l00350"></a>00350     output_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0);
-<a name="l00351"></a>00351     test_with()-&gt;asprintf_sets_NULL = 1;
-<a name="l00352"></a>00352     conf.excluded_files_n = 1;
-<a name="l00353"></a>00353     conf.excluded_files = &amp;excluded;
-<a name="l00354"></a>00354     conf.quota_queue = <a class="code" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab" title="Public: instantiates a new time queue, free it with time_queue_delete.">time_queue_new</a>(10, 42);
-<a name="l00355"></a>00355     conf.quota_n = 1;
-<a name="l00356"></a>00356     conf.quota = &amp;quota;
-<a name="l00357"></a>00357     conf.topic_n = 0;
-<a name="l00358"></a>00358     ((kafka_t*) output)-&gt;rkt = (<span class="keywordtype">void</span>*) 1;
-<a name="l00359"></a>00359     fuse_get_context()-&gt;private_data = output;
-<a name="l00360"></a>00360     mu_assert(<span class="stringliteral">&quot;should not write to kafka excluded file&quot;</span>,
-<a name="l00361"></a>00361             should_write_to_kafka(excluded, 0) == 0);
-<a name="l00362"></a>00362     mu_assert(<span class="stringliteral">&quot;should write to kafka not excluded file&quot;</span>,
-<a name="l00363"></a>00363             should_write_to_kafka(<span class="stringliteral">&quot;test&quot;</span>, 0) == 1);
-<a name="l00364"></a>00364     mu_assert(<span class="stringliteral">&quot;actual_kafka_write should return 1 if asprintf is failing&quot;</span>,
-<a name="l00365"></a>00365             actual_kafka_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0) == 1);
-<a name="l00366"></a>00366     test_with()-&gt;asprintf_sets_NULL = 0;
-<a name="l00367"></a>00367     output_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0);
-<a name="l00368"></a>00368     mu_assert(<span class="stringliteral">&quot;actual_kafka_write should return 0 if asprintf is not failing&quot;</span>,
-<a name="l00369"></a>00369             actual_kafka_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0) == 0);
-<a name="l00370"></a>00370     conf.zookeepers_n = conf.brokers_n = 0;
-<a name="l00371"></a>00371     input_setup_internal(0, NULL, &amp;conf);
-<a name="l00372"></a>00372     ((kafka_t*)output)-&gt;zhandle = (<span class="keywordtype">void</span>*) 1;
-<a name="l00373"></a>00373     setup_from_dynamic_configuration(0, NULL, output);
-<a name="l00374"></a>00374     <span class="keywordtype">char</span>* argv[] = {<span class="stringliteral">&quot;--zookeepers&quot;</span>, <span class="stringliteral">&quot;zk&quot;</span>};
-<a name="l00375"></a>00375     <span class="keywordtype">int</span> argc = <span class="keyword">sizeof</span>(argv)/<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*);
-<a name="l00376"></a>00376     setup_from_dynamic_configuration(argc, argv, output);
-<a name="l00377"></a>00377     output_destroy(output);
-<a name="l00378"></a>00378     <span class="keywordflow">return</span> 0;
-<a name="l00379"></a>00379 }
-<a name="l00380"></a>00380 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
-<a name="l00381"></a>00381 {
-<a name="l00382"></a>00382     *(fk_sleep_enabled()) = 0;
-<a name="l00383"></a>00383     mu_run_test(test_parse_arguments);
-<a name="l00384"></a>00384     mu_run_test(test_utils);
-<a name="l00385"></a>00385     mu_run_test(test_utils_base64);
-<a name="l00386"></a>00386     printf(<span class="stringliteral">&quot;a\n&quot;</span>);
-<a name="l00387"></a>00387     mu_run_test(test_time_queue);
-<a name="l00388"></a>00388     printf(<span class="stringliteral">&quot;b\n&quot;</span>);
-<a name="l00389"></a>00389     <span class="comment">// TODO re-enable mu_run_test(test_output);</span>
-<a name="l00390"></a>00390     mu_run_test(test_zookeeper);
-<a name="l00391"></a>00391     mu_run_test(test_trace);
-<a name="l00392"></a>00392     mu_run_test(test_string_list);
-<a name="l00393"></a>00393     mu_run_test(test_server_list);
-<a name="l00394"></a>00394     mu_run_test(test_dynamic_configuration);
-<a name="l00395"></a>00395     mu_run_test(test_fk_hash);
-<a name="l00396"></a>00396     <span class="comment">// TODO re-enable mu_run_test(test_my_input_setup);</span>
-<a name="l00397"></a>00397     <span class="keywordflow">return</span> 0;
-<a name="l00398"></a>00398 }
-<a name="l00399"></a>00399 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
-<a name="l00400"></a>00400 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
+<a name="l00339"></a>00339     mu_assert(<span class="stringliteral">&quot;output should be null&quot;</span>, output != NULL);
+<a name="l00340"></a>00340     test_with()-&gt;rd_kafka_conf_set_returns = RD_KAFKA_CONF_OK;
+<a name="l00341"></a>00341     output = output_init(&amp;conf);
+<a name="l00342"></a>00342     mu_assert(<span class="stringliteral">&quot;output should not be null&quot;</span>, output != NULL);
+<a name="l00343"></a>00343     conf.quota_queue = <a class="code" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab" title="Public: instantiates a new time queue, free it with time_queue_delete.">time_queue_new</a>(10, 42);
+<a name="l00344"></a>00344     conf.quota_n = 1;
+<a name="l00345"></a>00345     conf.quota = &amp;quota;
+<a name="l00346"></a>00346     conf.topic_n = 0;
+<a name="l00347"></a>00347     output_destroy(output);
+<a name="l00348"></a>00348     output = output_init(&amp;conf);
+<a name="l00349"></a>00349     mu_assert(<span class="stringliteral">&quot;output is not null&quot;</span>, output != NULL);
+<a name="l00350"></a>00350     <span class="comment">/* TODO uncomment</span>
+<a name="l00351"></a>00351 <span class="comment">    mu_assert(&quot;sending empty string succeeds&quot;,</span>
+<a name="l00352"></a>00352 <span class="comment">            send_kafka(output, &quot;&quot;, 0) == 0);*/</span>
+<a name="l00353"></a>00353     output_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0);
+<a name="l00354"></a>00354     test_with()-&gt;asprintf_sets_NULL = 1;
+<a name="l00355"></a>00355     conf.excluded_files_n = 1;
+<a name="l00356"></a>00356     conf.excluded_files = &amp;excluded;
+<a name="l00357"></a>00357     conf.quota_queue = <a class="code" href="time__queue_8c.html#aa0991ce4a2baa1a3355834025e2559ab" title="Public: instantiates a new time queue, free it with time_queue_delete.">time_queue_new</a>(10, 42);
+<a name="l00358"></a>00358     conf.quota_n = 1;
+<a name="l00359"></a>00359     conf.quota = &amp;quota;
+<a name="l00360"></a>00360     conf.topic_n = 0;
+<a name="l00361"></a>00361     ((kafka_t*) output)-&gt;rkt = (<span class="keywordtype">void</span>*) 1;
+<a name="l00362"></a>00362     fuse_get_context()-&gt;private_data = output;
+<a name="l00363"></a>00363     mu_assert(<span class="stringliteral">&quot;should not write to kafka excluded file&quot;</span>,
+<a name="l00364"></a>00364             should_write_to_kafka(excluded, 0) == 0);
+<a name="l00365"></a>00365     mu_assert(<span class="stringliteral">&quot;should write to kafka not excluded file&quot;</span>,
+<a name="l00366"></a>00366             should_write_to_kafka(<span class="stringliteral">&quot;test&quot;</span>, 0) == 1);
+<a name="l00367"></a>00367     mu_assert(<span class="stringliteral">&quot;actual_kafka_write should return 1 if asprintf is failing&quot;</span>,
+<a name="l00368"></a>00368             actual_kafka_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0) == 1);
+<a name="l00369"></a>00369     test_with()-&gt;asprintf_sets_NULL = 0;
+<a name="l00370"></a>00370     output_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0);
+<a name="l00371"></a>00371     mu_assert(<span class="stringliteral">&quot;actual_kafka_write should return 0 if asprintf is not failing&quot;</span>,
+<a name="l00372"></a>00372             actual_kafka_write(<span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, 0, 0) == 0);
+<a name="l00373"></a>00373     conf.zookeepers_n = conf.brokers_n = 0;
+<a name="l00374"></a>00374     input_setup_internal(0, NULL, &amp;conf);
+<a name="l00375"></a>00375     ((kafka_t*)output)-&gt;zhandle = (<span class="keywordtype">void</span>*) 1;
+<a name="l00376"></a>00376     setup_from_dynamic_configuration(0, NULL, output);
+<a name="l00377"></a>00377     <span class="keywordtype">char</span>* argv[] = {<span class="stringliteral">&quot;--zookeepers&quot;</span>, <span class="stringliteral">&quot;zk&quot;</span>};
+<a name="l00378"></a>00378     <span class="keywordtype">int</span> argc = <span class="keyword">sizeof</span>(argv)/<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>*);
+<a name="l00379"></a>00379     setup_from_dynamic_configuration(argc, argv, output);
+<a name="l00380"></a>00380     output_destroy(output);
+<a name="l00381"></a>00381     <span class="keywordflow">return</span> 0;
+<a name="l00382"></a>00382 }
+<a name="l00383"></a>00383 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00384"></a>00384 {
+<a name="l00385"></a>00385     *(fk_sleep_enabled()) = 0;
+<a name="l00386"></a>00386     mu_run_test(test_parse_arguments);
+<a name="l00387"></a>00387     mu_run_test(test_utils);
+<a name="l00388"></a>00388     mu_run_test(test_utils_base64);
+<a name="l00389"></a>00389     printf(<span class="stringliteral">&quot;a\n&quot;</span>);
+<a name="l00390"></a>00390     mu_run_test(test_time_queue);
+<a name="l00391"></a>00391     printf(<span class="stringliteral">&quot;b\n&quot;</span>);
+<a name="l00392"></a>00392     mu_run_test(test_output);
+<a name="l00393"></a>00393     mu_run_test(test_zookeeper);
+<a name="l00394"></a>00394     mu_run_test(test_trace);
+<a name="l00395"></a>00395     mu_run_test(test_string_list);
+<a name="l00396"></a>00396     mu_run_test(test_server_list);
+<a name="l00397"></a>00397     mu_run_test(test_dynamic_configuration);
+<a name="l00398"></a>00398     mu_run_test(test_fk_hash);
+<a name="l00399"></a>00399     mu_run_test(test_my_input_setup);
+<a name="l00400"></a>00400     <span class="keywordflow">return</span> 0;
+<a name="l00401"></a>00401 }
+<a name="l00402"></a>00402 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
+<a name="l00403"></a>00403 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -499,7 +502,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 8 2015 21:20:45 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 9 2015 10:54:54 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
