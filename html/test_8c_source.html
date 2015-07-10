@@ -392,25 +392,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00309"></a>00309 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_fk_hash()
 <a name="l00310"></a>00310 {
 <a name="l00311"></a>00311     <a class="code" href="struct__fk__hash__list.html">fk_hash</a> hash = fk_hash_new();
-<a name="l00312"></a>00312     fk_hash_put(hash, <span class="stringliteral">&quot;test&quot;</span>, 42, 1);
-<a name="l00313"></a>00313     printf(<span class="stringliteral">&quot;test value: %d\n&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1));
-<a name="l00314"></a>00314     mu_assert(<span class="stringliteral">&quot;test should be 42&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == 42);
+<a name="l00312"></a>00312     fk_hash_put(hash, <span class="stringliteral">&quot;test&quot;</span>, (<span class="keywordtype">void</span>*)42, 1);
+<a name="l00313"></a>00313     printf(<span class="stringliteral">&quot;test value: %p\n&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1));
+<a name="l00314"></a>00314     mu_assert(<span class="stringliteral">&quot;test should be 42&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == (<span class="keywordtype">void</span>*)42);
 <a name="l00315"></a>00315     <span class="comment">// teest hashes the same</span>
-<a name="l00316"></a>00316     fk_hash_put(hash, <span class="stringliteral">&quot;teest&quot;</span>, 43, 1);
-<a name="l00317"></a>00317     mu_assert(<span class="stringliteral">&quot;teest should be 43&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == 43);
-<a name="l00318"></a>00318     mu_assert(<span class="stringliteral">&quot;test #2 should be 42&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == 42);
-<a name="l00319"></a>00319     fk_hash_put(hash, <span class="stringliteral">&quot;test&quot;</span>, 40, 1);
-<a name="l00320"></a>00320     mu_assert(<span class="stringliteral">&quot;test #3 should be 40&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == 40);
+<a name="l00316"></a>00316     fk_hash_put(hash, <span class="stringliteral">&quot;teest&quot;</span>, (<span class="keywordtype">void</span>*)43, 1);
+<a name="l00317"></a>00317     mu_assert(<span class="stringliteral">&quot;teest should be 43&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == (<span class="keywordtype">void</span>*)43);
+<a name="l00318"></a>00318     mu_assert(<span class="stringliteral">&quot;test #2 should be 42&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == (<span class="keywordtype">void</span>*)42);
+<a name="l00319"></a>00319     fk_hash_put(hash, <span class="stringliteral">&quot;test&quot;</span>, (<span class="keywordtype">void</span>*)40, 1);
+<a name="l00320"></a>00320     mu_assert(<span class="stringliteral">&quot;test #3 should be 40&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == (<span class="keywordtype">void</span>*)40);
 <a name="l00321"></a>00321     fk_hash_remove(hash, <span class="stringliteral">&quot;test&quot;</span>, 1, 0, 0);
-<a name="l00322"></a>00322     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == -1);
-<a name="l00323"></a>00323     fk_hash_put(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 44, 1);
-<a name="l00324"></a>00324     mu_assert(<span class="stringliteral">&quot;teeest should be 44&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == 44);
+<a name="l00322"></a>00322     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == (<span class="keywordtype">void</span>*)-1);
+<a name="l00323"></a>00323     fk_hash_put(hash, <span class="stringliteral">&quot;teeest&quot;</span>, (<span class="keywordtype">void</span>*)44, 1);
+<a name="l00324"></a>00324     mu_assert(<span class="stringliteral">&quot;teeest should be 44&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == (<span class="keywordtype">void</span>*)44);
 <a name="l00325"></a>00325     fk_hash_remove(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1, 0, 0);
-<a name="l00326"></a>00326     mu_assert(<span class="stringliteral">&quot;teeest should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == -1);
+<a name="l00326"></a>00326     mu_assert(<span class="stringliteral">&quot;teeest should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teeest&quot;</span>, 1) == (<span class="keywordtype">void</span>*)-1);
 <a name="l00327"></a>00327     fk_hash_remove(hash, <span class="stringliteral">&quot;test&quot;</span>, 1, 0, 0);
-<a name="l00328"></a>00328     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == -1);
+<a name="l00328"></a>00328     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;test&quot;</span>, 1) == (<span class="keywordtype">void</span>*)-1);
 <a name="l00329"></a>00329     fk_hash_remove(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1, 0, 0);
-<a name="l00330"></a>00330     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == -1);
+<a name="l00330"></a>00330     mu_assert(<span class="stringliteral">&quot;test should be -1&quot;</span>, fk_hash_get(hash, <span class="stringliteral">&quot;teest&quot;</span>, 1) == (<span class="keywordtype">void</span>*)-1);
 <a name="l00331"></a>00331     fk_hash_delete(hash, 0, 0);
 <a name="l00332"></a>00332     fk_hash_list_delete(fk_hash_list_new(0, 0), 0, 0);
 <a name="l00333"></a>00333     <span class="keywordflow">return</span> 0;
@@ -421,7 +421,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00338"></a>00338     <span class="keywordtype">char</span>* argv[] = {<span class="stringliteral">&quot;nonexisting&quot;</span>};
 <a name="l00339"></a>00339     conf.input = argv;
 <a name="l00340"></a>00340     mu_assert(<span class="stringliteral">&quot;test_my_input_setup should return 1&quot;</span>, 
-<a name="l00341"></a>00341             my_input_setup(0, NULL, argv) == 1);
+<a name="l00341"></a>00341             my_input_setup(0, argv, 1) == 1);
 <a name="l00342"></a>00342     <span class="keywordflow">return</span> 0;
 <a name="l00343"></a>00343 }
 <a name="l00344"></a>00344 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_output()
@@ -541,7 +541,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 10 2015 09:37:58 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 10 2015 09:45:02 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
