@@ -195,7 +195,7 @@ class FuseKafkaService:
         env = os.environ.copy()
         env["PATH"] = "." + os.pathsep + env["PATH"]
         prefix = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))+ os.sep
-        for relative in ["usr" + os.sep + "bin", "usr" + os.sep + "lib", "lib"]:
+        for relative in ["usr" + os.sep + "bin", "usr" + os.sep + "lib", "lib", "bin"]:
         	env["PATH"] = prefix + relative + os.pathsep + env["PATH"]
         env["LD_LIBRARY_PATH"] = os.pathsep + os.sep + "usr" + os.sep + "lib"
         self.configuration = Configuration()

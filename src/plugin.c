@@ -8,13 +8,11 @@ void* load_plugin(char* plugin_prefix, char* plugin_name)
     strcpy(lib, plugin_prefix);
     strcpy(lib + strlen(plugin_prefix), plugin_name);
     strcpy(lib + strlen(plugin_prefix) + strlen(plugin_name), ".so");
-    trace_debug("load_plugin_function: trying to open %s", lib);
+    trace_debug("load_plugin: trying to open %s", lib);
     void* handle = dlopen(lib, RTLD_LAZY);
     free(lib);
-    if(handle == NULL)
-    {
-        printf("%s\n", dlerror());
-    }
+    trace_debug("load_plugin: got handle %p", handle);
+    if(handle == NULL) trace_error("load_plugin: %s", dlerror());
     return handle;
 }
 void* load_function_from_plugin(void* handle, char* function_name)
