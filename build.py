@@ -503,6 +503,7 @@ def install_dependencies():
                 'pre'   :   {'cwd': 'zookeeper', 'action':  ["ant", "compile_jute"]},
                 'url'   :   'https://github.com/fuse-kafka/zookeeper.git',
                 'branch':   'mingw',
+                'append':    '--host=mingw32'
                 },
             {
                 'name'  :   'zlib',
