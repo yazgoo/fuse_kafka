@@ -107,221 +107,221 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00026"></a>00026     fclose(f);
 <a name="l00027"></a>00027     <span class="keywordflow">return</span> 1;
 <a name="l00028"></a>00028 }
-<a name="l00029"></a>00029 <span class="keywordtype">char</span>* integer_concat(<span class="keywordtype">char</span>* prefix, <span class="keywordtype">int</span> i, <span class="keywordtype">char</span>* suffix)
-<a name="l00030"></a>00030 {
-<a name="l00031"></a>00031     <span class="keywordtype">int</span> size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>);
-<a name="l00032"></a>00032     <span class="keywordtype">char</span> *str = (<span class="keywordtype">char</span>*) malloc((<span class="keywordtype">int</span>)(size) + 1);
-<a name="l00033"></a>00033     <span class="keywordflow">if</span>(str != NULL)
-<a name="l00034"></a>00034         snprintf(str, size, <span class="stringliteral">&quot;%s%d%s&quot;</span>, prefix, i, suffix);
-<a name="l00035"></a>00035     <span class="keywordflow">return</span> str;
-<a name="l00036"></a>00036 }
-<a name="l00037"></a>00037 <span class="preprocessor">#define BASE64_CHARS \</span>
-<a name="l00038"></a>00038 <span class="preprocessor">    &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span>
-<a name="l00046"></a><a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999">00046</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* str, <span class="keywordtype">int</span> n)
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* base64chars = BASE64_CHARS;
-<a name="l00049"></a>00049     <span class="keywordflow">if</span>(str == NULL) <span class="keywordflow">return</span> NULL;
-<a name="l00050"></a>00050     <span class="keywordtype">int</span> i = 0, j, k;
-<a name="l00051"></a>00051     <span class="keywordtype">int</span> added = n % 3;
-<a name="l00052"></a>00052     added = (added == 0? 0: (added == 1? 2 : 1));
-<a name="l00053"></a>00053     <span class="keywordtype">int</span> size = (n + added) * 8 / 6;
-<a name="l00054"></a>00054     <span class="keywordtype">char</span>* result = (<span class="keywordtype">char</span>*) calloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), size + added + 1);
-<a name="l00055"></a>00055     result[size] = 0;
-<a name="l00056"></a>00056     <span class="keywordflow">for</span>(j = 0; j &lt; (n + added); j++)
-<a name="l00057"></a>00057     {
-<a name="l00058"></a>00058         <span class="keywordtype">char</span> c = j &lt; size ? str[j] : 0;
-<a name="l00059"></a>00059         <span class="keywordflow">for</span>(k = 0; k &lt; 8; k++)
-<a name="l00060"></a>00060         {
-<a name="l00061"></a>00061             <span class="keywordtype">int</span> i_k = i + k;
-<a name="l00062"></a>00062             <span class="keywordtype">int</span> i_k_6 = i_k / 6;
-<a name="l00063"></a>00063             <span class="keywordflow">if</span>((i_k % 6) == 0)
-<a name="l00064"></a>00064             {
-<a name="l00065"></a>00065                 <span class="keywordflow">if</span>(i_k_6 &gt;= 1) result[i_k_6 - 1] = base64chars[result[i_k_6 - 1]];
-<a name="l00066"></a>00066                 result[i_k_6] = 0;
-<a name="l00067"></a>00067             }
-<a name="l00068"></a>00068             result[i_k_6] = (result[i_k_6] &lt;&lt; 1) | ((c &gt;&gt; (7 - k)) &amp; 1);
-<a name="l00069"></a>00069         }
-<a name="l00070"></a>00070         i += 8;
-<a name="l00071"></a>00071     }
-<a name="l00072"></a>00072     <span class="comment">/* for last char, base64chars might not have been called: */</span>
-<a name="l00073"></a>00073     <span class="keywordflow">if</span>(added == 0 &amp;&amp; size &gt; (added + 1)) result[size - 1 - added] = base64chars[result[size - 1 - added]];
-<a name="l00074"></a>00074     <span class="keywordflow">for</span>(j = 0; j &lt; added; j++) result[size - 1 - j] = <span class="charliteral">&#39;=&#39;</span>;
-<a name="l00075"></a>00075     <span class="keywordflow">return</span> result;
-<a name="l00076"></a>00076 }
-<a name="l00077"></a>00077 <span class="keywordtype">int</span>* get_command_line_size()
-<a name="l00078"></a>00078 {
-<a name="l00079"></a>00079     <span class="keyword">static</span> <span class="keywordtype">int</span> command_line_size = 256;
-<a name="l00080"></a>00080     <span class="keywordflow">return</span> &amp;command_line_size;
-<a name="l00081"></a>00081 }
-<a name="l00088"></a><a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">00088</a> <span class="keyword">static</span> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(<span class="keywordtype">int</span> pid)
-<a name="l00089"></a>00089 {
-<a name="l00090"></a>00090     <span class="keywordtype">size_t</span> size = *get_command_line_size();;
-<a name="l00091"></a>00091     <span class="keywordtype">size_t</span> i = 0;
-<a name="l00092"></a>00092     <span class="keywordtype">char</span>* path;
-<a name="l00093"></a>00093     FILE* f;
-<a name="l00094"></a>00094     <span class="keywordtype">char</span> c;
-<a name="l00095"></a>00095     <span class="keywordtype">char</span>* command_line = (<span class="keywordtype">char</span>*) malloc(size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
-<a name="l00096"></a>00096     <span class="keywordtype">char</span>* b64;
-<a name="l00097"></a>00097     asprintf(&amp;path, <span class="stringliteral">&quot;/proc/%d/cmdline&quot;</span>, pid);
-<a name="l00098"></a>00098     <span class="keywordflow">if</span>((f = fopen(path, <span class="stringliteral">&quot;r&quot;</span>)) != NULL)
-<a name="l00099"></a>00099     {
-<a name="l00100"></a>00100         <span class="keywordflow">while</span>((c = fgetc(f)) != EOF)
-<a name="l00101"></a>00101         {
-<a name="l00102"></a>00102             <span class="keywordflow">if</span>(c == 0) c = <span class="charliteral">&#39; &#39;</span>;
-<a name="l00103"></a>00103             <span class="keywordflow">if</span>(i &gt;= (size - 1))
-<a name="l00104"></a>00104             {
-<a name="l00105"></a>00105                 size += *get_command_line_size();
-<a name="l00106"></a>00106                 command_line = (<span class="keywordtype">char</span>*) realloc(
-<a name="l00107"></a>00107                         command_line, size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
-<a name="l00108"></a>00108             }
-<a name="l00109"></a>00109             command_line[i++] = c;
-<a name="l00110"></a>00110         }
-<a name="l00111"></a>00111         fclose(f);
-<a name="l00112"></a>00112     }
-<a name="l00113"></a>00113     command_line[i] = 0;
-<a name="l00114"></a>00114     free(path);
-<a name="l00115"></a>00115     b64 = <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(command_line, strlen(command_line));
-<a name="l00116"></a>00116     free(command_line);
-<a name="l00117"></a>00117     <span class="keywordflow">return</span> b64;
-<a name="l00118"></a>00118 }
-<a name="l00119"></a>00119 <span class="preprocessor">#ifdef MINGW_VER</span>
-<a name="l00120"></a>00120 <span class="preprocessor"></span><span class="keywordtype">void</span> set_timezone(<span class="keywordtype">char</span>* timestamp, <span class="keywordtype">int</span> minutes)
-<a name="l00121"></a>00121 {
-<a name="l00122"></a>00122     <span class="keywordtype">long</span> hrs, mins;
-<a name="l00123"></a>00123     timestamp[23] = minutes &lt; 0 ? <span class="charliteral">&#39;+&#39;</span> : <span class="charliteral">&#39;-&#39;</span>;
-<a name="l00124"></a>00124     <span class="keywordflow">if</span>(minutes &lt; 0) minutes = -minutes;
-<a name="l00125"></a>00125     hrs = minutes / 60;
-<a name="l00126"></a>00126     mins = minutes % 60;
-<a name="l00127"></a>00127     timestamp[24] += hrs/10;
-<a name="l00128"></a>00128     timestamp[25] += hrs%10;
-<a name="l00129"></a>00129     timestamp[26] += mins/10;
-<a name="l00130"></a>00130     timestamp[27] += mins%10;
-<a name="l00131"></a>00131 }
-<a name="l00132"></a>00132 <span class="preprocessor">#endif</span>
-<a name="l00133"></a>00133 <span class="preprocessor"></span>
-<a name="l00138"></a><a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">00138</a> <span class="keywordtype">void</span> <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(<span class="keywordtype">char</span>* timestamp)
-<a name="l00139"></a>00139 {
-<a name="l00140"></a>00140     <span class="keyword">struct </span>tm tm;
-<a name="l00141"></a>00141     <span class="keyword">struct </span>tm* tmp;
-<a name="l00142"></a>00142     <span class="keyword">struct </span>timeval tv;
-<a name="l00143"></a>00143     <span class="keyword">struct </span>timezone tz;
-<a name="l00144"></a>00144     gettimeofday(&amp;tv, &amp;tz);
-<a name="l00145"></a>00145 <span class="preprocessor">#ifdef MINGW_VER</span>
-<a name="l00146"></a>00146 <span class="preprocessor"></span><span class="preprocessor">#define TZ &quot;+0000&quot;</span>
-<a name="l00147"></a>00147 <span class="preprocessor"></span>    time_t ltime;
-<a name="l00148"></a>00148     time(&amp;ltime);
-<a name="l00149"></a>00149     tmp = localtime(&amp;ltime);
-<a name="l00150"></a>00150 <span class="preprocessor">#else</span>
-<a name="l00151"></a>00151 <span class="preprocessor"></span><span class="preprocessor">#define TZ &quot;%z&quot;</span>
-<a name="l00152"></a>00152 <span class="preprocessor"></span>    localtime_r(&amp;tv.tv_sec, &amp;tm);
-<a name="l00153"></a>00153     tmp = &amp;tm;
-<a name="l00154"></a>00154 <span class="preprocessor">#endif</span>
-<a name="l00155"></a>00155 <span class="preprocessor"></span>    <span class="keywordtype">size_t</span> size = strftime(timestamp, strlen(timestamp), <span class="stringliteral">&quot;%Y-%m-%dT%H:%M:%S.000&quot;</span> TZ, tmp);
-<a name="l00156"></a>00156 <span class="preprocessor">#ifdef MINGW_VER</span>
-<a name="l00157"></a>00157 <span class="preprocessor"></span>    set_timezone(timestamp, tz.tz_minuteswest);
-<a name="l00158"></a>00158 <span class="preprocessor">#endif</span>
-<a name="l00159"></a>00159 <span class="preprocessor"></span>}
-<a name="l00160"></a>00160 <span class="preprocessor">#ifdef MINGW_VER</span>
-<a name="l00161"></a>00161 <span class="preprocessor"></span><span class="comment">/* TODO implement */</span>
-<a name="l00162"></a>00162 <span class="keywordtype">int</span> fnmatch(<span class="keywordtype">char</span>* pattern, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>, <span class="keywordtype">int</span> flags)
+<a name="l00029"></a>00029 <span class="preprocessor">#define BASE64_CHARS \</span>
+<a name="l00030"></a>00030 <span class="preprocessor">    &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&quot;</span>
+<a name="l00031"></a>00031 <span class="preprocessor"></span>
+<a name="l00038"></a><a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999">00038</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* str, <span class="keywordtype">int</span> n)
+<a name="l00039"></a>00039 {
+<a name="l00040"></a>00040     <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* base64chars = BASE64_CHARS;
+<a name="l00041"></a>00041     <span class="keywordflow">if</span>(str == NULL) <span class="keywordflow">return</span> NULL;
+<a name="l00042"></a>00042     <span class="keywordtype">int</span> i = 0, j, k;
+<a name="l00043"></a>00043     <span class="keywordtype">int</span> added = n % 3;
+<a name="l00044"></a>00044     added = (added == 0? 0: (added == 1? 2 : 1));
+<a name="l00045"></a>00045     <span class="keywordtype">int</span> size = (n + added) * 8 / 6;
+<a name="l00046"></a>00046     <span class="keywordtype">char</span>* result = (<span class="keywordtype">char</span>*) calloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), size + added + 1);
+<a name="l00047"></a>00047     result[size] = 0;
+<a name="l00048"></a>00048     <span class="keywordflow">for</span>(j = 0; j &lt; (n + added); j++)
+<a name="l00049"></a>00049     {
+<a name="l00050"></a>00050         <span class="keywordtype">char</span> c = j &lt; size ? str[j] : 0;
+<a name="l00051"></a>00051         <span class="keywordflow">for</span>(k = 0; k &lt; 8; k++)
+<a name="l00052"></a>00052         {
+<a name="l00053"></a>00053             <span class="keywordtype">int</span> i_k = i + k;
+<a name="l00054"></a>00054             <span class="keywordtype">int</span> i_k_6 = i_k / 6;
+<a name="l00055"></a>00055             <span class="keywordflow">if</span>((i_k % 6) == 0)
+<a name="l00056"></a>00056             {
+<a name="l00057"></a>00057                 <span class="keywordflow">if</span>(i_k_6 &gt;= 1) result[i_k_6 - 1] = base64chars[result[i_k_6 - 1]];
+<a name="l00058"></a>00058                 result[i_k_6] = 0;
+<a name="l00059"></a>00059             }
+<a name="l00060"></a>00060             result[i_k_6] = (result[i_k_6] &lt;&lt; 1) | ((c &gt;&gt; (7 - k)) &amp; 1);
+<a name="l00061"></a>00061         }
+<a name="l00062"></a>00062         i += 8;
+<a name="l00063"></a>00063     }
+<a name="l00064"></a>00064     <span class="comment">/* for last char, base64chars might not have been called: */</span>
+<a name="l00065"></a>00065     <span class="keywordflow">if</span>(added == 0 &amp;&amp; size &gt; (added + 1)) result[size - 1 - added] = base64chars[result[size - 1 - added]];
+<a name="l00066"></a>00066     <span class="keywordflow">for</span>(j = 0; j &lt; added; j++) result[size - 1 - j] = <span class="charliteral">&#39;=&#39;</span>;
+<a name="l00067"></a>00067     <span class="keywordflow">return</span> result;
+<a name="l00068"></a>00068 }
+<a name="l00069"></a>00069 <span class="keywordtype">int</span>* get_command_line_size()
+<a name="l00070"></a>00070 {
+<a name="l00071"></a>00071     <span class="keyword">static</span> <span class="keywordtype">int</span> command_line_size = 256;
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> &amp;command_line_size;
+<a name="l00073"></a>00073 }
+<a name="l00080"></a><a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">00080</a> <span class="keyword">static</span> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c" title="get the command line corresponding to a process">get_command_line</a>(<span class="keywordtype">int</span> pid)
+<a name="l00081"></a>00081 {
+<a name="l00082"></a>00082     <span class="keywordtype">size_t</span> size = *get_command_line_size();;
+<a name="l00083"></a>00083     <span class="keywordtype">size_t</span> i = 0;
+<a name="l00084"></a>00084     <span class="keywordtype">char</span>* path;
+<a name="l00085"></a>00085     FILE* f;
+<a name="l00086"></a>00086     <span class="keywordtype">char</span> c;
+<a name="l00087"></a>00087     <span class="keywordtype">char</span>* command_line = (<span class="keywordtype">char</span>*) malloc(size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
+<a name="l00088"></a>00088     <span class="keywordtype">char</span>* b64;
+<a name="l00089"></a>00089     asprintf(&amp;path, <span class="stringliteral">&quot;/proc/%d/cmdline&quot;</span>, pid);
+<a name="l00090"></a>00090     <span class="keywordflow">if</span>((f = fopen(path, <span class="stringliteral">&quot;r&quot;</span>)) != NULL)
+<a name="l00091"></a>00091     {
+<a name="l00092"></a>00092         <span class="keywordflow">while</span>((c = fgetc(f)) != EOF)
+<a name="l00093"></a>00093         {
+<a name="l00094"></a>00094             <span class="keywordflow">if</span>(c == 0) c = <span class="charliteral">&#39; &#39;</span>;
+<a name="l00095"></a>00095             <span class="keywordflow">if</span>(i &gt;= (size - 1))
+<a name="l00096"></a>00096             {
+<a name="l00097"></a>00097                 size += *get_command_line_size();
+<a name="l00098"></a>00098                 command_line = (<span class="keywordtype">char</span>*) realloc(
+<a name="l00099"></a>00099                         command_line, size * <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>));
+<a name="l00100"></a>00100             }
+<a name="l00101"></a>00101             command_line[i++] = c;
+<a name="l00102"></a>00102         }
+<a name="l00103"></a>00103         fclose(f);
+<a name="l00104"></a>00104     }
+<a name="l00105"></a>00105     command_line[i] = 0;
+<a name="l00106"></a>00106     free(path);
+<a name="l00107"></a>00107     b64 = <a class="code" href="util_8c.html#ac89e3426b68975922920ac2502257999" title="convert the input to base64">base64</a>(command_line, strlen(command_line));
+<a name="l00108"></a>00108     free(command_line);
+<a name="l00109"></a>00109     <span class="keywordflow">return</span> b64;
+<a name="l00110"></a>00110 }
+<a name="l00111"></a>00111 <span class="preprocessor">#ifdef MINGW_VER</span>
+<a name="l00112"></a>00112 <span class="preprocessor"></span><span class="keywordtype">void</span> set_timezone(<span class="keywordtype">char</span>* timestamp, <span class="keywordtype">int</span> minutes)
+<a name="l00113"></a>00113 {
+<a name="l00114"></a>00114     <span class="keywordtype">long</span> hrs, mins;
+<a name="l00115"></a>00115     timestamp[23] = minutes &lt; 0 ? <span class="charliteral">&#39;+&#39;</span> : <span class="charliteral">&#39;-&#39;</span>;
+<a name="l00116"></a>00116     <span class="keywordflow">if</span>(minutes &lt; 0) minutes = -minutes;
+<a name="l00117"></a>00117     hrs = minutes / 60;
+<a name="l00118"></a>00118     mins = minutes % 60;
+<a name="l00119"></a>00119     timestamp[24] += hrs/10;
+<a name="l00120"></a>00120     timestamp[25] += hrs%10;
+<a name="l00121"></a>00121     timestamp[26] += mins/10;
+<a name="l00122"></a>00122     timestamp[27] += mins%10;
+<a name="l00123"></a>00123 }
+<a name="l00124"></a>00124 <span class="preprocessor">#endif</span>
+<a name="l00125"></a>00125 <span class="preprocessor"></span>
+<a name="l00130"></a><a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">00130</a> <span class="keywordtype">void</span> <a class="code" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0" title="get a string representing the time in ISO8601 format">set_timestamp</a>(<span class="keywordtype">char</span>* timestamp)
+<a name="l00131"></a>00131 {
+<a name="l00132"></a>00132     <span class="keyword">struct </span>tm tm;
+<a name="l00133"></a>00133     <span class="keyword">struct </span>tm* tmp;
+<a name="l00134"></a>00134     <span class="keyword">struct </span>timeval tv;
+<a name="l00135"></a>00135     <span class="keyword">struct </span>timezone tz;
+<a name="l00136"></a>00136     gettimeofday(&amp;tv, &amp;tz);
+<a name="l00137"></a>00137 <span class="preprocessor">#ifdef MINGW_VER</span>
+<a name="l00138"></a>00138 <span class="preprocessor"></span><span class="preprocessor">#define TZ &quot;+0000&quot;</span>
+<a name="l00139"></a>00139 <span class="preprocessor"></span>    time_t ltime;
+<a name="l00140"></a>00140     time(&amp;ltime);
+<a name="l00141"></a>00141     tmp = localtime(&amp;ltime);
+<a name="l00142"></a>00142 <span class="preprocessor">#else</span>
+<a name="l00143"></a>00143 <span class="preprocessor"></span><span class="preprocessor">#define TZ &quot;%z&quot;</span>
+<a name="l00144"></a>00144 <span class="preprocessor"></span>    localtime_r(&amp;tv.tv_sec, &amp;tm);
+<a name="l00145"></a>00145     tmp = &amp;tm;
+<a name="l00146"></a>00146 <span class="preprocessor">#endif</span>
+<a name="l00147"></a>00147 <span class="preprocessor"></span>    <span class="keywordtype">size_t</span> size = strftime(timestamp, strlen(timestamp), <span class="stringliteral">&quot;%Y-%m-%dT%H:%M:%S.000&quot;</span> TZ, tmp);
+<a name="l00148"></a>00148 <span class="preprocessor">#ifdef MINGW_VER</span>
+<a name="l00149"></a>00149 <span class="preprocessor"></span>    set_timezone(timestamp, tz.tz_minuteswest);
+<a name="l00150"></a>00150 <span class="preprocessor">#endif</span>
+<a name="l00151"></a>00151 <span class="preprocessor"></span>}
+<a name="l00152"></a>00152 <span class="preprocessor">#ifdef MINGW_VER</span>
+<a name="l00153"></a>00153 <span class="preprocessor"></span><span class="comment">/* TODO implement */</span>
+<a name="l00154"></a>00154 <span class="keywordtype">int</span> fnmatch(<span class="keywordtype">char</span>* pattern, <span class="keywordtype">char</span>* <span class="keywordtype">string</span>, <span class="keywordtype">int</span> flags)
+<a name="l00155"></a>00155 {
+<a name="l00156"></a>00156     <span class="keywordflow">return</span> 0;
+<a name="l00157"></a>00157 }
+<a name="l00158"></a>00158 <span class="keywordtype">int</span> flock(<span class="keywordtype">int</span> fd, <span class="keywordtype">int</span> operation)
+<a name="l00159"></a>00159 {
+<a name="l00160"></a>00160     <span class="keywordflow">return</span> 0;
+<a name="l00161"></a>00161 }
+<a name="l00162"></a>00162 <span class="keywordtype">int</span> fchdir(<span class="keywordtype">int</span> fd)
 <a name="l00163"></a>00163 {
 <a name="l00164"></a>00164     <span class="keywordflow">return</span> 0;
 <a name="l00165"></a>00165 }
-<a name="l00166"></a>00166 <span class="keywordtype">int</span> flock(<span class="keywordtype">int</span> fd, <span class="keywordtype">int</span> operation)
-<a name="l00167"></a>00167 {
-<a name="l00168"></a>00168     <span class="keywordflow">return</span> 0;
-<a name="l00169"></a>00169 }
-<a name="l00170"></a>00170 <span class="keywordtype">int</span> fchdir(<span class="keywordtype">int</span> fd)
-<a name="l00171"></a>00171 {
-<a name="l00172"></a>00172     <span class="keywordflow">return</span> 0;
-<a name="l00173"></a>00173 }
-<a name="l00174"></a>00174 <span class="preprocessor">#include &lt;errno.h&gt;</span>
-<a name="l00175"></a>00175 <span class="comment">/* implementation from </span>
-<a name="l00176"></a>00176 <span class="comment">http://stackoverflow.com/questions/27369580/codeblocks-and-c-undefined-reference-to-getline</span>
-<a name="l00177"></a>00177 <span class="comment">*/</span>
-<a name="l00178"></a>00178 ssize_t getdelim(<span class="keywordtype">char</span> **linep, <span class="keywordtype">size_t</span> *n, <span class="keywordtype">int</span> delim, FILE *fp){
-<a name="l00179"></a>00179     <span class="keywordtype">int</span> ch;
-<a name="l00180"></a>00180     <span class="keywordtype">size_t</span> i = 0;
-<a name="l00181"></a>00181     <span class="keywordflow">if</span>(!linep || !n || !fp){
-<a name="l00182"></a>00182         errno = EINVAL;
-<a name="l00183"></a>00183         <span class="keywordflow">return</span> -1;
-<a name="l00184"></a>00184     }
-<a name="l00185"></a>00185     <span class="keywordflow">if</span>(*linep == NULL){
-<a name="l00186"></a>00186         <span class="keywordflow">if</span>(NULL==(*linep = malloc(*n=128))){
-<a name="l00187"></a>00187             *n = 0;
-<a name="l00188"></a>00188             errno = ENOMEM;
-<a name="l00189"></a>00189             <span class="keywordflow">return</span> -1;
-<a name="l00190"></a>00190         }
-<a name="l00191"></a>00191     }
-<a name="l00192"></a>00192     <span class="keywordflow">while</span>((ch = fgetc(fp)) != EOF){
-<a name="l00193"></a>00193         <span class="keywordflow">if</span>(i + 1 &gt;= *n){
-<a name="l00194"></a>00194             <span class="keywordtype">char</span> *temp = realloc(*linep, *n + 128);
-<a name="l00195"></a>00195             <span class="keywordflow">if</span>(!temp){
-<a name="l00196"></a>00196                 errno = ENOMEM;
-<a name="l00197"></a>00197                 <span class="keywordflow">return</span> -1;
-<a name="l00198"></a>00198             }
-<a name="l00199"></a>00199             *n += 128;
-<a name="l00200"></a>00200             *linep = temp;
-<a name="l00201"></a>00201         }
-<a name="l00202"></a>00202         (*linep)[i++] = ch;
-<a name="l00203"></a>00203         <span class="keywordflow">if</span>(ch == delim)
-<a name="l00204"></a>00204             <span class="keywordflow">break</span>;
-<a name="l00205"></a>00205     }
-<a name="l00206"></a>00206     (*linep)[i] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00207"></a>00207     <span class="keywordflow">return</span> !i &amp;&amp; ch == EOF ? -1 : i;
-<a name="l00208"></a>00208 }
-<a name="l00209"></a>00209 ssize_t getline(<span class="keywordtype">char</span> **linep, <span class="keywordtype">size_t</span> *n, FILE *fp){
-<a name="l00210"></a>00210     <span class="keywordflow">return</span> getdelim(linep, n, <span class="charliteral">&#39;\n&#39;</span>, fp);
-<a name="l00211"></a>00211 }
-<a name="l00212"></a>00212 <span class="preprocessor">#endif</span>
-<a name="l00213"></a>00213 <span class="preprocessor"></span>
-<a name="l00219"></a><a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa">00219</a> <span class="keywordtype">int</span> <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
-<a name="l00220"></a>00220 {
-<a name="l00221"></a>00221     <span class="keywordtype">int</span> i = 0;
-<a name="l00222"></a>00222     <span class="keywordflow">for</span>(; i &lt; argc; i++) <span class="keywordflow">if</span>(!strcmp(argv[i], <span class="stringliteral">&quot;--&quot;</span>)) <span class="keywordflow">break</span>;
-<a name="l00223"></a>00223     <span class="keywordflow">return</span> i;
-<a name="l00224"></a>00224 }
-<a name="l00228"></a><a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd">00228</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(<span class="keywordtype">char</span>** array, <span class="keywordtype">size_t</span> n, <span class="keywordtype">char</span> open_char,
-<a name="l00229"></a>00229         <span class="keywordtype">char</span> close_char, <span class="keywordtype">char</span> sep1, <span class="keywordtype">char</span> sep2)
-<a name="l00230"></a>00230 {
-<a name="l00231"></a>00231     <span class="keywordtype">int</span> i = 0;
-<a name="l00232"></a>00232     <span class="keywordtype">char</span>* str = (<span class="keywordtype">char</span>*) malloc(3);
-<a name="l00233"></a>00233     <span class="keywordtype">int</span> k = sprintf(str, <span class="stringliteral">&quot;%c&quot;</span>, open_char);
-<a name="l00234"></a>00234     <span class="keywordflow">if</span>(array != NULL)
-<a name="l00235"></a>00235         <span class="keywordflow">for</span>(i = 0; i &lt; n; i++)
-<a name="l00236"></a>00236         {
-<a name="l00237"></a>00237             str = realloc(str, k + 1 + strlen(array[i]) + 2 + 2);
-<a name="l00238"></a>00238             k += sprintf(str + k, <span class="stringliteral">&quot;\&quot;%s\&quot;&quot;</span>, array[i]);
-<a name="l00239"></a>00239             <span class="keywordflow">if</span>(i != n-1) k += sprintf(str + k, <span class="stringliteral">&quot;%c &quot;</span>, i % 2 ? sep2 : sep1);
-<a name="l00240"></a>00240         }
-<a name="l00241"></a>00241     sprintf(str + k, <span class="stringliteral">&quot;%c&quot;</span>, close_char);
-<a name="l00242"></a>00242     <span class="keywordflow">return</span> str;
-<a name="l00243"></a>00243 }
-<a name="l00244"></a>00244 <span class="keywordtype">int</span>* falloc_fails()
-<a name="l00245"></a>00245 {
-<a name="l00246"></a>00246     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
-<a name="l00247"></a>00247     <span class="keywordflow">return</span> &amp;result;
-<a name="l00248"></a>00248 }
-<a name="l00249"></a>00249 <span class="keywordtype">int</span>* fcalloc_fails()
-<a name="l00250"></a>00250 {
-<a name="l00251"></a>00251     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
-<a name="l00252"></a>00252     <span class="keywordflow">return</span> &amp;result;
-<a name="l00253"></a>00253 }
-<a name="l00254"></a>00254 <span class="keywordtype">void</span>* fmalloc(<span class="keywordtype">size_t</span> size)
-<a name="l00255"></a>00255 {
-<a name="l00256"></a>00256     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00257"></a>00257     <span class="keywordflow">return</span> malloc(size);
-<a name="l00258"></a>00258 }
-<a name="l00259"></a>00259 <span class="keywordtype">void</span>* fcalloc(<span class="keywordtype">size_t</span> nmemb, <span class="keywordtype">size_t</span> size)
-<a name="l00260"></a>00260 {
-<a name="l00261"></a>00261     <span class="keywordflow">if</span>(*falloc_fails() || *fcalloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00262"></a>00262     <span class="keywordflow">return</span> calloc(nmemb, size);
-<a name="l00263"></a>00263 }
-<a name="l00264"></a>00264 <span class="keywordtype">void</span>* frealloc(<span class="keywordtype">void</span>* ptr, <span class="keywordtype">size_t</span> size)
-<a name="l00265"></a>00265 {
-<a name="l00266"></a>00266     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
-<a name="l00267"></a>00267     <span class="keywordflow">return</span> realloc(ptr, size);
+<a name="l00166"></a>00166 <span class="preprocessor">#include &lt;errno.h&gt;</span>
+<a name="l00167"></a>00167 <span class="comment">/* implementation from </span>
+<a name="l00168"></a>00168 <span class="comment">http://stackoverflow.com/questions/27369580/codeblocks-and-c-undefined-reference-to-getline</span>
+<a name="l00169"></a>00169 <span class="comment">*/</span>
+<a name="l00170"></a>00170 ssize_t getdelim(<span class="keywordtype">char</span> **linep, <span class="keywordtype">size_t</span> *n, <span class="keywordtype">int</span> delim, FILE *fp){
+<a name="l00171"></a>00171     <span class="keywordtype">int</span> ch;
+<a name="l00172"></a>00172     <span class="keywordtype">size_t</span> i = 0;
+<a name="l00173"></a>00173     <span class="keywordflow">if</span>(!linep || !n || !fp){
+<a name="l00174"></a>00174         errno = EINVAL;
+<a name="l00175"></a>00175         <span class="keywordflow">return</span> -1;
+<a name="l00176"></a>00176     }
+<a name="l00177"></a>00177     <span class="keywordflow">if</span>(*linep == NULL){
+<a name="l00178"></a>00178         <span class="keywordflow">if</span>(NULL==(*linep = malloc(*n=128))){
+<a name="l00179"></a>00179             *n = 0;
+<a name="l00180"></a>00180             errno = ENOMEM;
+<a name="l00181"></a>00181             <span class="keywordflow">return</span> -1;
+<a name="l00182"></a>00182         }
+<a name="l00183"></a>00183     }
+<a name="l00184"></a>00184     <span class="keywordflow">while</span>((ch = fgetc(fp)) != EOF){
+<a name="l00185"></a>00185         <span class="keywordflow">if</span>(i + 1 &gt;= *n){
+<a name="l00186"></a>00186             <span class="keywordtype">char</span> *temp = realloc(*linep, *n + 128);
+<a name="l00187"></a>00187             <span class="keywordflow">if</span>(!temp){
+<a name="l00188"></a>00188                 errno = ENOMEM;
+<a name="l00189"></a>00189                 <span class="keywordflow">return</span> -1;
+<a name="l00190"></a>00190             }
+<a name="l00191"></a>00191             *n += 128;
+<a name="l00192"></a>00192             *linep = temp;
+<a name="l00193"></a>00193         }
+<a name="l00194"></a>00194         (*linep)[i++] = ch;
+<a name="l00195"></a>00195         <span class="keywordflow">if</span>(ch == delim)
+<a name="l00196"></a>00196             <span class="keywordflow">break</span>;
+<a name="l00197"></a>00197     }
+<a name="l00198"></a>00198     (*linep)[i] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00199"></a>00199     <span class="keywordflow">return</span> !i &amp;&amp; ch == EOF ? -1 : i;
+<a name="l00200"></a>00200 }
+<a name="l00201"></a>00201 ssize_t getline(<span class="keywordtype">char</span> **linep, <span class="keywordtype">size_t</span> *n, FILE *fp){
+<a name="l00202"></a>00202     <span class="keywordflow">return</span> getdelim(linep, n, <span class="charliteral">&#39;\n&#39;</span>, fp);
+<a name="l00203"></a>00203 }
+<a name="l00204"></a>00204 <span class="preprocessor">#endif</span>
+<a name="l00205"></a>00205 <span class="preprocessor"></span>
+<a name="l00211"></a><a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa">00211</a> <span class="keywordtype">int</span> <a class="code" href="util_8c.html#adb849059403e0b01c44605d63d205daa" title="look for the limit &quot;--&quot; in argv  argument number  arguments">get_limit</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>** argv)
+<a name="l00212"></a>00212 {
+<a name="l00213"></a>00213     <span class="keywordtype">int</span> i = 0;
+<a name="l00214"></a>00214     <span class="keywordflow">for</span>(; i &lt; argc; i++) <span class="keywordflow">if</span>(!strcmp(argv[i], <span class="stringliteral">&quot;--&quot;</span>)) <span class="keywordflow">break</span>;
+<a name="l00215"></a>00215     <span class="keywordflow">return</span> i;
+<a name="l00216"></a>00216 }
+<a name="l00220"></a><a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd">00220</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#ad16fa3fb65df7353e0eecd8964ed23fd" title="get a concatenated string from an array of string">array_to_container_string</a>(<span class="keywordtype">char</span>** array, <span class="keywordtype">size_t</span> n, <span class="keywordtype">char</span> open_char,
+<a name="l00221"></a>00221         <span class="keywordtype">char</span> close_char, <span class="keywordtype">char</span> sep1, <span class="keywordtype">char</span> sep2)
+<a name="l00222"></a>00222 {
+<a name="l00223"></a>00223     <span class="keywordtype">int</span> i = 0;
+<a name="l00224"></a>00224     <span class="keywordtype">char</span>* str = (<span class="keywordtype">char</span>*) malloc(3);
+<a name="l00225"></a>00225     <span class="keywordtype">int</span> k = sprintf(str, <span class="stringliteral">&quot;%c&quot;</span>, open_char);
+<a name="l00226"></a>00226     <span class="keywordflow">if</span>(array != NULL)
+<a name="l00227"></a>00227         <span class="keywordflow">for</span>(i = 0; i &lt; n; i++)
+<a name="l00228"></a>00228         {
+<a name="l00229"></a>00229             str = realloc(str, k + 1 + strlen(array[i]) + 2 + 2);
+<a name="l00230"></a>00230             k += sprintf(str + k, <span class="stringliteral">&quot;\&quot;%s\&quot;&quot;</span>, array[i]);
+<a name="l00231"></a>00231             <span class="keywordflow">if</span>(i != n-1) k += sprintf(str + k, <span class="stringliteral">&quot;%c &quot;</span>, i % 2 ? sep2 : sep1);
+<a name="l00232"></a>00232         }
+<a name="l00233"></a>00233     sprintf(str + k, <span class="stringliteral">&quot;%c&quot;</span>, close_char);
+<a name="l00234"></a>00234     <span class="keywordflow">return</span> str;
+<a name="l00235"></a>00235 }
+<a name="l00236"></a>00236 <span class="keywordtype">int</span>* falloc_fails()
+<a name="l00237"></a>00237 {
+<a name="l00238"></a>00238     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
+<a name="l00239"></a>00239     <span class="keywordflow">return</span> &amp;result;
+<a name="l00240"></a>00240 }
+<a name="l00241"></a>00241 <span class="keywordtype">int</span>* fcalloc_fails()
+<a name="l00242"></a>00242 {
+<a name="l00243"></a>00243     <span class="keyword">static</span> <span class="keywordtype">int</span> result = 0;
+<a name="l00244"></a>00244     <span class="keywordflow">return</span> &amp;result;
+<a name="l00245"></a>00245 }
+<a name="l00246"></a>00246 <span class="keywordtype">void</span>* fmalloc(<span class="keywordtype">size_t</span> size)
+<a name="l00247"></a>00247 {
+<a name="l00248"></a>00248     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00249"></a>00249     <span class="keywordflow">return</span> malloc(size);
+<a name="l00250"></a>00250 }
+<a name="l00251"></a>00251 <span class="keywordtype">void</span>* fcalloc(<span class="keywordtype">size_t</span> nmemb, <span class="keywordtype">size_t</span> size)
+<a name="l00252"></a>00252 {
+<a name="l00253"></a>00253     <span class="keywordflow">if</span>(*falloc_fails() || *fcalloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00254"></a>00254     <span class="keywordflow">return</span> calloc(nmemb, size);
+<a name="l00255"></a>00255 }
+<a name="l00256"></a>00256 <span class="keywordtype">void</span>* frealloc(<span class="keywordtype">void</span>* ptr, <span class="keywordtype">size_t</span> size)
+<a name="l00257"></a>00257 {
+<a name="l00258"></a>00258     <span class="keywordflow">if</span>(*falloc_fails()) <span class="keywordflow">return</span> NULL;
+<a name="l00259"></a>00259     <span class="keywordflow">return</span> realloc(ptr, size);
+<a name="l00260"></a>00260 }
+<a name="l00261"></a>00261 <span class="keywordtype">char</span>* integer_concat(<span class="keywordtype">char</span>* prefix, <span class="keywordtype">int</span> i, <span class="keywordtype">char</span>* suffix)
+<a name="l00262"></a>00262 {
+<a name="l00263"></a>00263     <span class="keywordtype">int</span> size = (strlen(prefix) + ceil(log10(i))+1 + strlen(suffix))*<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>);
+<a name="l00264"></a>00264     <span class="keywordtype">char</span> *str = (<span class="keywordtype">char</span>*) fmalloc((<span class="keywordtype">int</span>)(size) + 1);
+<a name="l00265"></a>00265     <span class="keywordflow">if</span>(str != NULL)
+<a name="l00266"></a>00266         snprintf(str, size, <span class="stringliteral">&quot;%s%d%s&quot;</span>, prefix, i, suffix);
+<a name="l00267"></a>00267     <span class="keywordflow">return</span> str;
 <a name="l00268"></a>00268 }
 <a name="l00272"></a><a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">00272</a> <span class="keywordtype">char</span>* <a class="code" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a>(<span class="keywordtype">char</span>* a, <span class="keywordtype">char</span>* b)
 <a name="l00273"></a>00273 {
@@ -399,7 +399,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 9 2015 16:41:46 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 10 2015 09:26:31 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

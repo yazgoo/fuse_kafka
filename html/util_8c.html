@@ -114,8 +114,6 @@ Functions</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>strcmp</b> (const char *s1, const char *s2)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73ce5cc4cbf435f763393006e53e4530"></a><!-- doxytag: member="util.c::touch" ref="a73ce5cc4cbf435f763393006e53e4530" args="(char *path, char *str)" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (char *path, char *str)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a897d860e91288b12319e16aec82cf4b1"></a><!-- doxytag: member="util.c::integer_concat" ref="a897d860e91288b12319e16aec82cf4b1" args="(char *prefix, int i, char *suffix)" -->
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>integer_concat</b> (char *prefix, int i, char *suffix)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ac89e3426b68975922920ac2502257999">base64</a> (const unsigned char *str, int n)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert the input to base64  <a href="#ac89e3426b68975922920ac2502257999"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc47fc1477875c66eb440867da1c3cdf"></a><!-- doxytag: member="util.c::get_command_line_size" ref="afc47fc1477875c66eb440867da1c3cdf" args="()" -->
@@ -139,6 +137,8 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><b>fmalloc</b> (size_t
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>fcalloc</b> (size_t nmemb, size_t size)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a254cadff829d59e06bf85fffaa41799d"></a><!-- doxytag: member="util.c::frealloc" ref="a254cadff829d59e06bf85fffaa41799d" args="(void *ptr, size_t size)" -->
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>frealloc</b> (void *ptr, size_t size)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a897d860e91288b12319e16aec82cf4b1"></a><!-- doxytag: member="util.c::integer_concat" ref="a897d860e91288b12319e16aec82cf4b1" args="(char *prefix, int i, char *suffix)" -->
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>integer_concat</b> (char *prefix, int i, char *suffix)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#a595bb2010e077b76450c9c04e2b25e16">concat</a> (char *a, char *b)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad90feff5ba4ef7c3fbbc8ce001ab0e1c"></a><!-- doxytag: member="util.c::fk_sleep_return_value" ref="ad90feff5ba4ef7c3fbbc8ce001ab0e1c" args="()" -->
 int *&#160;</td><td class="memItemRight" valign="bottom"><b>fk_sleep_return_value</b> ()</td></tr>
@@ -217,7 +217,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a newly allocated string with the base64 data which should be free'd by the user </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00046">46</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00038">38</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -275,7 +275,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a base64 encoded string with the process command line, or an empty string if it could not be extrcated </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00088">88</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00080">80</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -307,7 +307,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00219">219</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00211">211</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -335,7 +335,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00138">138</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00130">130</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -357,7 +357,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 9 2015 16:41:46 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 10 2015 09:26:31 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
