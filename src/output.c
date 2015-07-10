@@ -34,7 +34,7 @@ void* getpwuid(int i)
  * @param offset starting point in the buffer
  * @return 0 if the write succeeded, 1 otherwise
  **/
-static int actual_kafka_write(const char* prefix, const char *path, const char *buf,
+static int actual_kafka_write(const char* prefix, const char *path, char *buf,
         size_t size, off_t offset)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
@@ -115,7 +115,7 @@ static int should_write_to_kafka(const char* path, size_t size)
     time_queue_set(conf->quota_queue, (char*)path);
     return i;
 }
-void output_write(const char *prefix, const char *path, const char *buf,
+void output_write(const char *prefix, const char *path, char *buf,
         size_t size, off_t offset)
 {
     if(should_write_to_kafka(path, size))
@@ -176,7 +176,7 @@ int my_output_setup(config* conf, void* k)
     trace_debug("my_output_setup: loading output plugin %s", output);
     void* handle = load_plugin(OUTPUT_PLUGIN_PREFIX, output);
     trace_debug("my_output_setup: load_plugin result %x", handle);
-    output_setup_t f = (output_setup_t*) load_function_from_plugin(handle, "output_setup");
+    output_setup_t f = (output_setup_t) load_function_from_plugin(handle, "output_setup");
     PLUGIN_FUNCTION_LOAD(output_send)
     PLUGIN_FUNCTION_LOAD(output_update)
     PLUGIN_FUNCTION_LOAD(output_clean)

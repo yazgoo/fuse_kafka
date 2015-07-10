@@ -38,7 +38,7 @@ int my_input_setup(int argc, char** argv, int limit)
 {
     char* input = "overlay";
     if(conf.input_n > 0) input = conf.input[0];
-    input_setup_t f = (input_setup_t*) load_plugin_function(INPUT_PLUGIN_PREFIX, input, "input_setup_internal");
+    input_setup_t f = (input_setup_t) load_plugin_function(INPUT_PLUGIN_PREFIX, input, "input_setup_internal");
     if(f != NULL) return f(limit, argv, &conf);
     return 1;
 }

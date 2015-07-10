@@ -25,7 +25,7 @@ static int kafka_write(const char *path, const char *buf,
 {
     int res;
     output_write(*(input_get_last_watching_directory()),
-            path, buf, size, offset);
+            path, (char*) buf, size, offset);
     DO_AS_CALLER(
             res = pwrite(fi->fh, buf, size, offset);
     )

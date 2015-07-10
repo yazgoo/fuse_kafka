@@ -103,7 +103,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
     int r = 0;
     static int i = 0;
     trace_debug("output_send: k = %x k->rkt = %x", k, k == 0 ? 0: k->rkt);
-    if(k != 0 && k->rkt > 1 && (r = rd_kafka_produce(k->rkt, RD_KAFKA_PARTITION_UA,
+    if(k != 0 && k->rkt > (void*) 1 && (r = rd_kafka_produce(k->rkt, RD_KAFKA_PARTITION_UA,
             RD_KAFKA_MSG_F_COPY,
             buf, len,
             NULL, 0, NULL)))
@@ -125,7 +125,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
 void output_clean(kafka_t* k)
 {
     if(k == NULL) return;
-    if(k->rkt > 1) rd_kafka_topic_destroy(k->rkt);
+    if(k->rkt > (void*) 1) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
 }
