@@ -93,7 +93,8 @@ static char* test_on_event()
     memset(&e, 0, sizeof(struct inotify_event));;
     on_event(NULL, 0, NULL, 0, NULL, NULL);
     e.len = 1;
-    on_event(&e, 1, NULL, 0, NULL, NULL);
+    char buffer[1024];
+    on_event(buffer, 1, NULL, 0, NULL, NULL);
     return 0;
 }
 static char* all_tests()

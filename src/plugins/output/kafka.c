@@ -26,7 +26,7 @@ static void logger (const rd_kafka_t *rk, int level,
                 (int)tv.tv_sec, (int)(tv.tv_usec / 1000),
                 level, fac, rd_kafka_name(rk), buf);*/
         trace_debug("logger: RDKAFKA-%i-%s: %s: %s\n",
-                level, fac, rk == 0 ? NULL : rd_kafka_name(rk), buf);
+                level, fac, rk == (void*) 0 ? 0 : rd_kafka_name(rk), buf);
 }
 /**
  * @brief setup_kafka initialises librdkafka based on the config
@@ -114,7 +114,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
     }
     else i = 0;
     trace_debug("%% Sent %zd bytes to topic "
-            "%s\n", len, k ==  0 || k->rkt <= 2 ?
+            "%s\n", len, k ==  0 || k->rkt <= (void*) 2 ?
             0 : rd_kafka_topic_name(k->rkt));
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/

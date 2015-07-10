@@ -70,7 +70,7 @@ static char* test_setup_kafka()
     test_with()->rd_kafka_produce_returns = 1;
     mu_assert("send_kafka return something other than 0",
             !send_kafka(&k, NULL, 0));
-    k.rkt = 2;
+    k.rkt = (void*) 2;
     mu_assert("send_kafka return something other than 0",
             !send_kafka(&k, NULL, 0));
     test_with()->rd_kafka_produce_returns = 0;
@@ -88,7 +88,7 @@ static char* test_logging()
 }
 static char* test_output_update_clean()
 {
-    char zk[] = "";
+    char* zk[] = {""};
     output_update(NULL);
     output_clean(NULL);
     kafka_t k;
@@ -97,7 +97,7 @@ static char* test_output_update_clean()
     output_update(&k);
     config c;
     c.zookeepers_n = 1;
-    c.zookeepers = &zk;
+    c.zookeepers = zk;
     k.conf = &c;
     output_update(&k);
     return 0;
