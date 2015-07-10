@@ -252,6 +252,7 @@ static char* test_zookeeper()
     watcher(NULL, 0, 0, 0, &k);
     k.conf->brokers = topics;
     watcher(NULL, 0, 0, 0, &k);
+    watcher_add_brokers(&k, "brokers", "topic");
     return 0;
 }
 static char* test_trace()
@@ -362,6 +363,11 @@ static char* test_output()
     conf.quota = &quota;
     conf.topic_n = 0;
     output_destroy(output);
+    conf.output = &quota;
+    conf.output_n = 1;
+    output = output_init(&conf);
+    mu_assert("output should be null with wrong output plugin pecified", output == NULL);
+    conf.output_n = 0;
     output = output_init(&conf);
     mu_assert("output is not null", output != NULL);
     /* TODO uncomment
