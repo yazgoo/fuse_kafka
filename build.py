@@ -413,8 +413,8 @@ def compile_plugins():
         if not target_matched(plugins.targets_of[library_source]):
             print("skipping " + library_source + " plugin because not compiling for target")
             continue
-        run('gcc', '-g', '-c', '-fpic', '-I', 'src', to_includes(plugins.includes_of[library_source]), "./src/plugins/" + plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', plugins.objects[library_source])
-        run('gcc', '-shared', '-o', plugins.shareds_objects[library_source], plugins.objects[library_source], flags, to_links(plugins.libs_of[library_source]))
+        run(cc, '-g', '-c', '-fpic', '-I', 'src', to_includes(plugins.includes_of[library_source]), "./src/plugins/" + plugins.kind_of[library_source] + "/" + library_source +'.c', flags, '-o', plugins.objects[library_source])
+        run(cc, '-shared', '-o', plugins.shareds_objects[library_source], plugins.objects[library_source], flags, to_links(plugins.libs_of[library_source]))
 def compile():
     """ Compiles *.c files in source directory """
     compile_plugins()
