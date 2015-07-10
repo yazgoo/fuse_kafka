@@ -538,6 +538,42 @@ Also, you should exclude your test file from code coverage, using:
 // LCOV_EXCL_STOP
 ````
 
+
+Output plugin
+=============
+
+You can write your own output plugins in `src/plugins/output`.
+An example input plugin is available in `src/plugins/output/stdout.c`.
+A plugin should include:
+
+````c
+#include <output.h>
+````
+
+it must define the following function:
+
+````c
+int output_setup(kafka_t* k, config* fk_conf)
+````
+
+It must set r->rkt to 1 upon success;
+
+It must also define:
+
+````c
+int output_send(kafka_t* k, char* buf, size_t len)
+````
+
+It can define:
+
+````c
+void output_clean(kafka_t* k)
+int output_update(kafka_t* k)
+````
+
+Unit testing is done the same way as for input plugin.
+
+
 Write tests
 ===========
 
