@@ -161,7 +161,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00078"></a>00078 binary_name = sources[0]
 <a name="l00079"></a>00079 common_libs = [<span class="stringliteral">&quot;m&quot;</span>, <span class="stringliteral">&quot;dl&quot;</span>, <span class="stringliteral">&quot;pthread&quot;</span>, <span class="stringliteral">&quot;jansson&quot;</span>]<span class="comment">#, &quot;ulockmgr&quot;]</span>
 <a name="l00080"></a>00080 libs = [zookeeper_type, <span class="stringliteral">&quot;rdkafka&quot;</span>,  <span class="stringliteral">&quot;z&quot;</span>] + common_libs
-<a name="l00081"></a>00081 default_libs = [<span class="stringliteral">&quot;m&quot;</span>,  zookeeper_type, <span class="stringliteral">&quot;rdkafka&quot;</span>, <span class="stringliteral">&quot;jansson&quot;</span>]
+<a name="l00081"></a>00081 default_libs = [<span class="stringliteral">&quot;m&quot;</span>,  zookeeper_type, <span class="stringliteral">&quot;rdkafka&quot;</span>, <span class="stringliteral">&quot;jansson&quot;</span>, <span class="stringliteral">&quot;dl&quot;</span>]
 <a name="l00082"></a>00082 <span class="keywordflow">if</span> <span class="stringliteral">&quot;LIBS&quot;</span> <span class="keywordflow">in</span> os.environ:
 <a name="l00083"></a>00083     additional_libs = [a.replace(<span class="stringliteral">&quot;-l&quot;</span>, <span class="stringliteral">&quot;&quot;</span>) <span class="keywordflow">for</span> a <span class="keywordflow">in</span> os.environ[<span class="stringliteral">&quot;LIBS&quot;</span>].split()]
 <a name="l00084"></a>00084     default_libs += additional_libs
@@ -984,7 +984,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 10 2015 12:29:29 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 10 2015 13:06:26 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
