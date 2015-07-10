@@ -71,7 +71,8 @@ static char* test_handle_file_modified()
     fk_hash watches = fk_hash_new();
     char* tmp = "/tmp";
     DIR* fd = opendir(tmp);
-    e->wd = watch_directory(tmp, fd, watches);
+    int inotify = 42;
+    e->wd = (int) watch_directory(tmp, inotify, watches);
     char* path = "inotify_test_tmp";
     char* full_path = concat(tmp, path);
     touch(full_path, "test");
@@ -81,7 +82,7 @@ static char* test_handle_file_modified()
     unlink(full_path);
     handle_file_modified(full_path, NULL, tmp);
     closedir(fd);
-    teardown_watches(NULL, 42, watches);
+    teardown_watches(NULL, inotify, watches);
     free(e);
     free(full_path);
     return 0;
