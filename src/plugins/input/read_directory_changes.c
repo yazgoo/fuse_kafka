@@ -62,7 +62,8 @@ typedef struct _name_and_conf
 }name_and_conf;
 void start_watching_directory(name_and_conf* tuple)
 {
-	trace_debug("rdc input setup: watching dir %s", tuple->name );
+	trace_debug("rdc input setup: watching dir %s with conf %p",
+			tuple->name, tuple->conf); 
 	input_is_watching_directory(tuple->name);
 	trace_debug("rdc input setup: launching watch_dir %s", tuple->name );
 	watch_directory(tuple->name, tuple->conf);
@@ -82,11 +83,20 @@ int input_setup(int argc, char** argv, void* cfg)
 	pthread_create(threads + conf->directory_n,
 			NULL, start_watching_directory, (void*) tuple);
     }
+    trace_debug("rdc input setup: waiting for threads to end");
     for(conf->directory_n = 0; conf->directory_n < conf->directories_n;
             conf->directory_n++)
     {
-	    pthread_join(threads + conf->directories_n, NULL);
+    	    trace_debug("waiting for thread %d", conf->directory_n);
+	    int result = 0;
+	    while(result == 0) {
+		    result = pthread_join(threads + conf->directory_n, NULL);
+		    trace_debug("waiting for thread %d result: %d", conf->directory_n, result);
+		    if(result != 0) sleep(100);
+	    }
+	
     }
+    trace_debug("rdc input setup: threads ended");
     free(threads);
     free(tuples);
     return 0;

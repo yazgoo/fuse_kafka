@@ -25,7 +25,7 @@ void* load_function_from_plugin(void* handle, char* function_name)
         if(f == NULL)
         {
             trace_debug("load_plugin_function: loading setup function failed");
-            printf("%s\n", dlerror());
+            trace_error("load_plugin_function: %s", dlerror());
         }
     }
     return f;

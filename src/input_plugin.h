@@ -22,6 +22,8 @@ static inline char** input_get_last_watching_directory()
 }
 void input_is_watching_directory(char* path)
 {
+    trace_debug("input_is_watching_directory: entry with %s",
+            path);
     char* dir = concat(FUSE_KAFKA_WATCHED_DIRS, path);
     if(dir != NULL) mkdir_p(dir);
     char* pid = integer_concat("", getpid(), ".pid");

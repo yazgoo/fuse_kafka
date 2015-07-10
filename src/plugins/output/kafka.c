@@ -128,4 +128,5 @@ int output_clean(kafka_t* k)
     if(k->rkt > (void*) 1) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
+    return 1;
 }
