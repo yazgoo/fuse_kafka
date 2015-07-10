@@ -496,8 +496,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00413"></a>00413         <span class="keywordflow">if</span> <span class="keywordflow">not</span> target_matched(plugins.targets_of[library_source]):
 <a name="l00414"></a>00414             print(<span class="stringliteral">&quot;skipping &quot;</span> + library_source + <span class="stringliteral">&quot; plugin because not compiling for target&quot;</span>)
 <a name="l00415"></a>00415             <span class="keywordflow">continue</span>
-<a name="l00416"></a>00416         run(<span class="stringliteral">&#39;gcc&#39;</span>, <span class="stringliteral">&#39;-g&#39;</span>, <span class="stringliteral">&#39;-c&#39;</span>, <span class="stringliteral">&#39;-fpic&#39;</span>, <span class="stringliteral">&#39;-I&#39;</span>, <span class="stringliteral">&#39;src&#39;</span>, to_includes(plugins.includes_of[library_source]), <span class="stringliteral">&quot;./src/plugins/&quot;</span> + plugins.kind_of[library_source] + <span class="stringliteral">&quot;/&quot;</span> + library_source +<span class="stringliteral">&#39;.c&#39;</span>, flags, <span class="stringliteral">&#39;-o&#39;</span>, plugins.objects[library_source])
-<a name="l00417"></a>00417         run(<span class="stringliteral">&#39;gcc&#39;</span>, <span class="stringliteral">&#39;-shared&#39;</span>, <span class="stringliteral">&#39;-o&#39;</span>, plugins.shareds_objects[library_source], plugins.objects[library_source], flags, to_links(plugins.libs_of[library_source]))
+<a name="l00416"></a>00416         run(cc, <span class="stringliteral">&#39;-g&#39;</span>, <span class="stringliteral">&#39;-c&#39;</span>, <span class="stringliteral">&#39;-fpic&#39;</span>, <span class="stringliteral">&#39;-I&#39;</span>, <span class="stringliteral">&#39;src&#39;</span>, to_includes(plugins.includes_of[library_source]), <span class="stringliteral">&quot;./src/plugins/&quot;</span> + plugins.kind_of[library_source] + <span class="stringliteral">&quot;/&quot;</span> + library_source +<span class="stringliteral">&#39;.c&#39;</span>, flags, <span class="stringliteral">&#39;-o&#39;</span>, plugins.objects[library_source])
+<a name="l00417"></a>00417         run(cc, <span class="stringliteral">&#39;-shared&#39;</span>, <span class="stringliteral">&#39;-o&#39;</span>, plugins.shareds_objects[library_source], plugins.objects[library_source], flags, to_links(plugins.libs_of[library_source]))
 <a name="l00418"></a>00418 <span class="keyword">def </span>compile():
 <a name="l00419"></a>00419     <span class="stringliteral">&quot;&quot;&quot; Compiles *.c files in source directory &quot;&quot;&quot;</span>
 <a name="l00420"></a>00420     compile_plugins()
@@ -984,7 +984,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 10 2015 12:16:15 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jul 10 2015 12:29:29 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
