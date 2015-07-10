@@ -68,9 +68,9 @@ static char* test_handle_file_modified()
             + 42 /* for name flexattr */);
     memset(e, 0, sizeof(struct inotify_event));;
     handle_file_modified(NULL, NULL, NULL);
-    fk_hash* watches = fk_hash_new();
+    fk_hash watches = fk_hash_new();
     char* tmp = "/tmp";
-    int fd = opendir(tmp);
+    DIR* fd = opendir(tmp);
     e->wd = watch_directory(tmp, fd, watches);
     char* path = "inotify_test_tmp";
     char* full_path = concat(tmp, path);
@@ -81,7 +81,7 @@ static char* test_handle_file_modified()
     unlink(full_path);
     handle_file_modified(full_path, NULL, tmp);
     closedir(fd);
-    teardown_watches(NULL, fd, watches);
+    teardown_watches(NULL, 42, watches);
     free(e);
     free(full_path);
     return 0;
