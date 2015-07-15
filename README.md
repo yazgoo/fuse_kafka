@@ -647,6 +647,20 @@ For testing purposes, you can run fuse_kafka with wine:
     FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
 
 
+Tail
+====
+
+It is possible to tail events in kafka using logstash, by doing:
+
+````sh
+https_proxy=http://user:password@host:port FUSE_KAFKA_ZK_CONNECT="your zk address" ./build.py tail
+````
+
+This will download logstash, and launch src/logstash/inputs/fuse_kafka.rb,
+     using conf/logstash.conf as configuration.
+
+
+
 Generating self contained archive from sources
 ==============================================
 

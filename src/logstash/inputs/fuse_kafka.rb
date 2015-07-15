@@ -3,10 +3,10 @@ require "logstash/inputs/base"
 require "logstash/namespace"
 require "json"
 class LogStash::Inputs::Kafka < LogStash::Inputs::Base
-    config_name "kafka"
+    config_name "fuse_kafka"
     milestone 1
     config :load, :validate => :array
-    config :zk_connect, :validate => :string, :required => true
+    config :zk_connect, :validate => :string
     config :group_id, :validate => :string, :required => true
     config :topic, :validate => :string, :required => true
     config :num_threads, :validate => :string, :required => true
@@ -27,6 +27,7 @@ class LogStash::Inputs::Kafka < LogStash::Inputs::Base
         begin
             @logger.info "registering kafka logger"
             properties = Properties.new
+            @zk_connect = ENV["FUSE_KAFKA_ZK_CONNECT"] if @zk_connect.nil?
             properties.put "zookeeper.connect", @zk_connect
             properties.put "group.id", @group_id
             consumer = Consumer.createJavaConsumerConnector(
