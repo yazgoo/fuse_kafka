@@ -1,6 +1,6 @@
 #ifndef TEST
 #include <librdkafka/rdkafka.h>
-#include <output.h>
+#include <output_plugin.h>
 #endif
 #include "zookeeper.c"
 char errstr[512];
@@ -122,10 +122,11 @@ int output_send(kafka_t* k, char* buf, size_t len)
         continue;*/
     return 0;
 }
-void output_clean(kafka_t* k)
+int output_clean(kafka_t* k)
 {
     if(k == NULL) return;
     if(k->rkt > (void*) 1) rd_kafka_topic_destroy(k->rkt);
     rd_kafka_destroy(k->rk);
     rd_kafka_wait_destroyed(1000);
+    return 1;
 }

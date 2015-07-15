@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #define CONFIG_ITEM(name) char** name; size_t name ## _n;
 #include "time_queue.h"
+#include "server_list.h"
 /**
  * @brief fuse_kafka configuration
  **/
@@ -51,4 +52,18 @@ typedef struct _config {
     /** @brief output encoder */
     CONFIG_ITEM(encoder)
 } config;
+/**
+ * @brief a wrapping structure for kafka client and fuse_kafka
+ * configuration
+ **/
+typedef struct _kafka_t
+{
+    void* rk;
+    void* rkt;
+    config* conf;
+    /* were brokers given added to kafka (in zk mode): */
+    char no_brokers;
+    void* zhandle;
+    server_list* broker_list;
+} kafka_t;
 #endif

@@ -11,21 +11,6 @@ __declspec(dllexport)
 #include <zookeeper/zookeeper.h>
 #include "config.h"
 #endif
-#include "server_list.h"
-/**
- * @brief a wrapping structure for kafka client and fuse_kafka
- * configuration
- **/
-typedef struct _kafka_t
-{
-    void* rk;
-    void* rkt;
-    config* conf;
-    /* were brokers given added to kafka (in zk mode): */
-    char no_brokers;
-    void* zhandle;
-    server_list* broker_list;
-} kafka_t;
 typedef int (*output_setup_t)(kafka_t* k, config* fk_conf);
 typedef int (*output_send_t)(kafka_t* k, char* buf, size_t len);
 typedef int (*output_clean_t)(kafka_t* k);
