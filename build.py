@@ -549,7 +549,7 @@ def binary_archive():
     tar = package_name + ".tar.gz"
     if target_matched("mingw"):
         _zip = "IronPython-2.7.5.zip"
-        run("wget", "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=ironpython&DownloadId=970326&FileTime=130623736032830000&Build=21024", "-O", _zip)
+        run("wget", "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=ironpython&DownloadId=970326&FileTime=130623736032830000&Build=21028", "-O", _zip)
         run("unzip", "-o", _zip, "-d", root)
     run("tar", "czf", tar, root,  "-C", root)
     run("zip", "-r", os.getcwd() + "/" + package_name + ".zip", os.path.basename(os.path.dirname(root)), cwd = root + "/..")
