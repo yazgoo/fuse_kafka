@@ -45,7 +45,7 @@ fi
 /etc/init.d/fuse_kafka
 /etc/init.d/fuse_kafka_umounter
 /etc/fuse_kafka.conf
-/usr/lib/fuse_kafka_input_plugin_*.so
+/usr/lib/fuse_kafka_*_plugin_*.so
 
 %changelog
 * Thu Sep 11 2014 yazgoo <yazgoo@nospam.org> 0.1.3
