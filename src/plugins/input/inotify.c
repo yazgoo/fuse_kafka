@@ -147,6 +147,9 @@ int* inotify_runnning()
 int input_setup(int argc, char** argv, void* cfg)
 {
     trace_debug("inotify input_setup: entry");
+    struct inotify_event event;
+    char buffer[EVENT_BUF_LEN];
+    int length; 
     config* conf = (config*) cfg;
     fk_hash offsets = fk_hash_new();
     fk_hash watches = fk_hash_new();
@@ -161,14 +164,12 @@ int input_setup(int argc, char** argv, void* cfg)
         }
         conf->directories[conf->directory_n] = "/"; /* TODO fix this bypass in output.c */
     }
-    struct inotify_event event;
-    char buffer[EVENT_BUF_LEN];
-    int length; 
     trace_debug("inotify input_setup: launching main loop");
-    while(*(inotify_runnning()) && (length = inotify_read(fd, buffer, EVENT_BUF_LEN)) >= 0)
+    while(*(inotify_runnning()))
     {
         trace_debug("inotify input_setup: calling on_event()");
-        on_event(buffer, length, NULL, fd, offsets, watches);
+        if((length = inotify_read(fd, buffer, EVENT_BUF_LEN)) >= 0)
+            on_event(buffer, length, NULL, fd, offsets, watches);
     }
     trace_warn("inotify input_setup: "
             "fuse_kafka ended: inotify_runnning == %d, length == %d",
