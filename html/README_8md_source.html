@@ -786,43 +786,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00703"></a>00703 1. For rpm building, the advised dockerfile is docker/rpmbuild.dockerfile
 <a name="l00704"></a>00704 
 <a name="l00705"></a>00705 
-<a name="l00706"></a>00706 Logging
-<a name="l00707"></a>00707 =======
+<a name="l00706"></a>00706 Zookeeper multithreaded or not
+<a name="l00707"></a>00707 ==============================
 <a name="l00708"></a>00708 
-<a name="l00709"></a>00709 By <span class="keywordflow">default</span>, `fuse_kafka` will trace to stdout.
-<a name="l00710"></a>00710 You can specify a file to log to via `--log /my/log/path.log`.
-<a name="l00711"></a>00711 You can enable debug (verbose) logging via `--debug <span class="keyword">true</span>`.
-<a name="l00712"></a>00712 If you <span class="keywordflow">do</span> so, just <span class="keywordflow">do</span> not write output to a watched directory,
-<a name="l00713"></a>00713    otherwise you<span class="stringliteral">&#39;d end up with a retroaction.</span>
-<a name="l00714"></a>00714 <span class="stringliteral"></span>
-<a name="l00715"></a>00715 <span class="stringliteral"></span>
-<a name="l00716"></a>00716 <span class="stringliteral">Zookeeper multithreaded or not</span>
-<a name="l00717"></a>00717 <span class="stringliteral">==============================</span>
-<a name="l00718"></a>00718 <span class="stringliteral"></span>
-<a name="l00719"></a>00719 <span class="stringliteral">You can use either zookeeper_mt (zookeeper multithread, default) or not (zookeeper_st single threaded).</span>
-<a name="l00720"></a>00720 <span class="stringliteral">To use the single threaded version, just set `zookeeper_st=y` environment variable.</span>
-<a name="l00721"></a>00721 <span class="stringliteral"></span>
-<a name="l00722"></a>00722 <span class="stringliteral">Licensing</span>
-<a name="l00723"></a>00723 <span class="stringliteral">=========</span>
-<a name="l00724"></a>00724 <span class="stringliteral"></span>
-<a name="l00725"></a>00725 <span class="stringliteral">licensed under Apache v 2.0, see LICENSE file</span>
-<a name="l00726"></a>00726 <span class="stringliteral"></span>
-<a name="l00727"></a>00727 <span class="stringliteral"></span>
-<a name="l00728"></a>00728 <span class="stringliteral">Tagging</span>
-<a name="l00729"></a>00729 <span class="stringliteral">=======</span>
-<a name="l00730"></a>00730 <span class="stringliteral"></span>
-<a name="l00731"></a>00731 <span class="stringliteral">- for versions, use github release tags, for example 0.1.4</span>
-<a name="l00732"></a>00732 <span class="stringliteral">- for OBS source release number, we use ligthweight tag: for example the package </span>
-<a name="l00733"></a>00733 <span class="stringliteral">    fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)</span>
-<a name="l00734"></a>00734 <span class="stringliteral"></span>
-<a name="l00735"></a>00735 <span class="stringliteral"></span>
-<a name="l00736"></a>00736 <span class="stringliteral">Code of conduct</span>
-<a name="l00737"></a>00737 <span class="stringliteral">===============</span>
-<a name="l00738"></a>00738 <span class="stringliteral"></span>
-<a name="l00739"></a>00739 <span class="stringliteral">Please note that this project is released with a Contributor Code of Conduct.</span>
-<a name="l00740"></a>00740 <span class="stringliteral">By participating in this project you agree to abide by its terms.</span>
-<a name="l00741"></a>00741 <span class="stringliteral">See CODE OF CONDUCT file.</span>
-<a name="l00742"></a>00742 <span class="stringliteral"></span>
+<a name="l00709"></a>00709 You can use either zookeeper_mt (zookeeper multithread, <span class="keywordflow">default</span>) or not (zookeeper_st single threaded).
+<a name="l00710"></a>00710 To use the single threaded version, just <span class="keyword">set</span> `zookeeper_st=y` environment variable.
+<a name="l00711"></a>00711 
+<a name="l00712"></a>00712 Licensing
+<a name="l00713"></a>00713 =========
+<a name="l00714"></a>00714 
+<a name="l00715"></a>00715 licensed under Apache v 2.0, see LICENSE file
+<a name="l00716"></a>00716 
+<a name="l00717"></a>00717 
+<a name="l00718"></a>00718 Tagging
+<a name="l00719"></a>00719 =======
+<a name="l00720"></a>00720 
+<a name="l00721"></a>00721 - <span class="keywordflow">for</span> versions, use github release tags, <span class="keywordflow">for</span> example 0.1.4
+<a name="l00722"></a>00722 - <span class="keywordflow">for</span> OBS source release number, we use ligthweight tag: <span class="keywordflow">for</span> example the package 
+<a name="l00723"></a>00723     fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
+<a name="l00724"></a>00724 
+<a name="l00725"></a>00725 
+<a name="l00726"></a>00726 Code of conduct
+<a name="l00727"></a>00727 ===============
+<a name="l00728"></a>00728 
+<a name="l00729"></a>00729 Please note that <span class="keyword">this</span> project is released with a Contributor Code of Conduct.
+<a name="l00730"></a>00730 By participating in <span class="keyword">this</span> project you agree to abide by its terms.
+<a name="l00731"></a>00731 See CODE OF CONDUCT file.
+<a name="l00732"></a>00732 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -841,7 +831,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 23 2015 04:02:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 23 2015 04:23:23 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
