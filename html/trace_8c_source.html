@@ -85,20 +85,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00009"></a>00009 <span class="preprocessor">#ifndef TRACE_C</span>
 <a name="l00010"></a><a class="code" href="trace_8c.html#a8aabf7ed36d73699f43004ac1d72daa9">00010</a> <span class="preprocessor"></span><span class="preprocessor">#define TRACE_C</span>
 <a name="l00011"></a>00011 <span class="preprocessor"></span><span class="preprocessor">#include &quot;trace.h&quot;</span> 
-<a name="l00012"></a>00012 <span class="keyword">static</span> <span class="keywordtype">int</span> trace(<span class="keyword">const</span> <span class="keywordtype">char</span>* fmt, ...)
-<a name="l00013"></a>00013 {
-<a name="l00014"></a>00014     <span class="keywordtype">char</span>* str;
-<a name="l00015"></a>00015     <span class="keywordtype">int</span> res;
-<a name="l00016"></a>00016     va_list ap;
-<a name="l00017"></a>00017     va_start(ap, fmt);
-<a name="l00018"></a>00018     vasprintf(&amp;str, fmt, ap);
-<a name="l00019"></a>00019     va_end(ap);
-<a name="l00020"></a>00020     <span class="comment">//res = actual_kafka_write(&quot;./fuse_kafka.log&quot;, str, strlen(str), 0);</span>
-<a name="l00021"></a>00021     printf(<span class="stringliteral">&quot;%s\n&quot;</span>, str);
-<a name="l00022"></a>00022     free(str);
-<a name="l00023"></a>00023     <span class="keywordflow">return</span> res;
-<a name="l00024"></a>00024 }
-<a name="l00025"></a>00025 <span class="preprocessor">#endif</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &quot;context.c&quot;</span>
+<a name="l00013"></a>00013 <span class="keywordtype">int</span> trace_debug_enabled()
+<a name="l00014"></a>00014 {
+<a name="l00015"></a>00015     kafka_t *private_data = (kafka_t*) fuse_get_context()-&gt;private_data;
+<a name="l00016"></a>00016     <span class="keywordflow">if</span>(private_data == NULL) <span class="keywordflow">return</span> 0;
+<a name="l00017"></a>00017     config* <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a> = (config*)private_data-&gt;conf;
+<a name="l00018"></a>00018     return (conf-&gt;debug_n &gt; 0);
+<a name="l00019"></a>00019 }
+<a name="l00020"></a>00020 <span class="keywordtype">char</span>* trace_log_path_get()
+<a name="l00021"></a>00021 {
+<a name="l00022"></a>00022     kafka_t *private_data = (kafka_t*) fuse_get_context()-&gt;private_data;
+<a name="l00023"></a>00023     <span class="keywordflow">if</span>(private_data == NULL) <span class="keywordflow">return</span> NULL;
+<a name="l00024"></a>00024     config* <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a> = (config*)private_data-&gt;conf;
+<a name="l00025"></a>00025     <span class="keywordflow">if</span>(conf-&gt;log_n &lt;= 0) <span class="keywordflow">return</span> NULL;
+<a name="l00026"></a>00026     <span class="keywordflow">return</span> conf-&gt;log[0];
+<a name="l00027"></a>00027 }
+<a name="l00028"></a>00028 <span class="keyword">static</span> <span class="keywordtype">int</span> trace(<span class="keyword">const</span> <span class="keywordtype">char</span>* fmt, ...)
+<a name="l00029"></a>00029 {
+<a name="l00030"></a>00030     <span class="keywordtype">char</span>* str;
+<a name="l00031"></a>00031     <span class="keywordtype">int</span> res;
+<a name="l00032"></a>00032     va_list ap;
+<a name="l00033"></a>00033     va_start(ap, fmt);
+<a name="l00034"></a>00034     vasprintf(&amp;str, fmt, ap);
+<a name="l00035"></a>00035     va_end(ap);
+<a name="l00036"></a>00036     <span class="comment">//res = actual_kafka_write(&quot;./fuse_kafka.log&quot;, str, strlen(str), 0);</span>
+<a name="l00037"></a>00037     <span class="keywordtype">char</span>* path = trace_log_path_get();
+<a name="l00038"></a>00038     <span class="keywordflow">if</span>(path == NULL)
+<a name="l00039"></a>00039     {
+<a name="l00040"></a>00040         printf(<span class="stringliteral">&quot;%s\n&quot;</span>, str);
+<a name="l00041"></a>00041     }
+<a name="l00042"></a>00042     <span class="keywordflow">else</span>
+<a name="l00043"></a>00043     {
+<a name="l00044"></a>00044         FILE* f = fopen(path, <span class="stringliteral">&quot;a+&quot;</span>);
+<a name="l00045"></a>00045         <span class="keywordflow">if</span>(f != NULL)
+<a name="l00046"></a>00046         {
+<a name="l00047"></a>00047             fprintf(f, <span class="stringliteral">&quot;%u %s\n&quot;</span>, (<span class="keywordtype">unsigned</span>)time(NULL), str);
+<a name="l00048"></a>00048             fclose(f);
+<a name="l00049"></a>00049         }
+<a name="l00050"></a>00050     }
+<a name="l00051"></a>00051     free(str);
+<a name="l00052"></a>00052     <span class="keywordflow">return</span> res;
+<a name="l00053"></a>00053 }
+<a name="l00054"></a>00054 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -117,7 +146,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 22 2015 17:08:25 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 23 2015 04:02:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

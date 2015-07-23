@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Utility to send trace from fuse_kafka into kafka.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;trace.h&quot;</code><br/>
+<code>#include &quot;context.c&quot;</code><br/>
 </div>
 <p><a href="trace_8c_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -97,6 +98,10 @@ Defines</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">formats and send traces to kafka, behaving like printf  <a href="#a8aabf7ed36d73699f43004ac1d72daa9"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0bae2ba0c31618cd832101463cdbc3aa"></a><!-- doxytag: member="trace.c::trace_debug_enabled" ref="a0bae2ba0c31618cd832101463cdbc3aa" args="()" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>trace_debug_enabled</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab893e5d14c1273ae419305ac018de020"></a><!-- doxytag: member="trace.c::trace_log_path_get" ref="ab893e5d14c1273ae419305ac018de020" args="()" -->
+char *&#160;</td><td class="memItemRight" valign="bottom"><b>trace_log_path_get</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad94abf599a8e0299bcb5088c87ebbdb8"></a><!-- doxytag: member="trace.c::trace" ref="ad94abf599a8e0299bcb5088c87ebbdb8" args="(const char *fmt,...)" -->
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (const char *fmt,...)</td></tr>
 </table>
@@ -147,7 +152,7 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>trace</b> (cons
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 22 2015 17:08:25 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 23 2015 04:02:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

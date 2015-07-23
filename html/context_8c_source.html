@@ -82,18 +82,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef _FUSE_H_</span>
-<a name="l00002"></a><a class="code" href="structfuse__context.html">00002</a> <span class="preprocessor"></span><span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> {
-<a name="l00003"></a>00003     <span class="keywordtype">int</span> uid;
-<a name="l00004"></a>00004     <span class="keywordtype">int</span> gid;
-<a name="l00005"></a>00005     <span class="keywordtype">int</span> pid;
-<a name="l00006"></a>00006     <span class="keywordtype">void</span> *private_data;
-<a name="l00007"></a>00007 };
-<a name="l00008"></a>00008 <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> context;
-<a name="l00009"></a>00009 <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* fuse_get_context()
-<a name="l00010"></a>00010 {
-<a name="l00011"></a>00011     <span class="keywordflow">return</span> &amp;context;
-<a name="l00012"></a>00012 }
-<a name="l00013"></a>00013 <span class="preprocessor">#endif</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define _FUSE_H_</span>
+<a name="l00003"></a><a class="code" href="structfuse__context.html">00003</a> <span class="preprocessor"></span><span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> {
+<a name="l00004"></a>00004     <span class="keywordtype">int</span> uid;
+<a name="l00005"></a>00005     <span class="keywordtype">int</span> gid;
+<a name="l00006"></a>00006     <span class="keywordtype">int</span> pid;
+<a name="l00007"></a>00007     <span class="keywordtype">void</span> *private_data;
+<a name="l00008"></a>00008 };
+<a name="l00009"></a>00009 <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a> context;
+<a name="l00010"></a>00010 <span class="keyword">struct </span><a class="code" href="structfuse__context.html">fuse_context</a>* fuse_get_context()
+<a name="l00011"></a>00011 {
+<a name="l00012"></a>00012     <span class="keywordflow">return</span> &amp;context;
+<a name="l00013"></a>00013 }
+<a name="l00014"></a>00014 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -112,7 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 22 2015 17:08:25 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jul 23 2015 04:02:51 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
