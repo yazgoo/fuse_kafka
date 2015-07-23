@@ -703,16 +703,6 @@ Docker environment
 1. For rpm building, the advised dockerfile is docker/rpmbuild.dockerfile
 
 
-Logging
-=======
-
-By default, `fuse_kafka` will trace to stdout.
-You can specify a file to log to via `--log /my/log/path.log`.
-You can enable debug (verbose) logging via `--debug true`.
-If you do so, just do not write output to a watched directory,
-   otherwise you'd end up with a retroaction.
-
-
 Zookeeper multithreaded or not
 ==============================
 
