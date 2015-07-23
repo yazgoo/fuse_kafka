@@ -6,12 +6,14 @@
  * current_size pointer to the size of the matched configuration and
  * sets the address of the string array for that configuration to next
  * item in argv list */
-#define CONFIG_CURRENT(expected) \
+#define CONFIG_CURRENT_DO(expected, action) \
     if(!strcmp(name, STR(expected))) { \
         trace_debug("parsing config item " STR(expected)); \
         current_size = &(conf->expected ## _n); \
         conf->expected = argv + i + 1; \
+        action; \
     }
+#define CONFIG_CURRENT(expected) CONFIG_CURRENT_DO(expected, 1)
 #include "util.c"
 void add_fields_and_tags(config* conf)
 {
@@ -68,6 +70,8 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(input)
             else CONFIG_CURRENT(output)
             else CONFIG_CURRENT(encoder)
+            else CONFIG_CURRENT(debug)
+            else CONFIG_CURRENT(log)
             else
             {
                 printf("unknown option %s\n", argv[i]);

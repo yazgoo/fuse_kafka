@@ -51,6 +51,10 @@ typedef struct _config {
     CONFIG_ITEM(output)
     /** @brief output encoder */
     CONFIG_ITEM(encoder)
+    /** @brief is debug mode enabled */
+    CONFIG_ITEM(debug)
+    /** @brief path where to log */
+    CONFIG_ITEM(log)
 } config;
 /**
  * @brief a wrapping structure for kafka client and fuse_kafka

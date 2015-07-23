@@ -1,4 +1,5 @@
 #ifndef _FUSE_H_
+#define _FUSE_H_
 struct fuse_context {
 	int uid;
 	int gid;
