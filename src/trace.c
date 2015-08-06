@@ -22,7 +22,8 @@ char* trace_log_path_get()
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
     if(private_data == NULL) return NULL;
     config* conf = (config*)private_data->conf;
-    if(conf->log_n <= 0) return NULL;
+    printf("%d\n", (int) conf->log_n);
+    if(conf->log_n != 1) return NULL;
     return conf->log[0];
 }
 static int trace(const char* fmt, ...)

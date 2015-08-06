@@ -1,5 +1,6 @@
 #include "version.h"
 #include "output.h"
+#include "queue.c"
 #include "time_queue.c"
 #ifndef TEST
 #include "dynamic_configuration.c"
@@ -95,10 +96,6 @@ static int actual_kafka_write(const char* prefix, const char *path, char *buf,
 static int should_write_to_kafka(const char* path, size_t size)
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
-    trace_debug("should_write_to_kafka: private_data %x", private_data);
-    if(private_data == NULL) return 0;
-    trace_debug("should_write_to_kafka: private_data->rkt %x", private_data->rkt);
-    if(private_data->rkt == NULL) return 0;
     config* conf = (config*)private_data->conf;
     int i = 0;
     for(i = 0; i < conf->excluded_files_n; i++)
@@ -115,11 +112,35 @@ static int should_write_to_kafka(const char* path, size_t size)
     time_queue_set(conf->quota_queue, (char*)path);
     return i;
 }
-void output_write(const char *prefix, const char *path, char *buf,
+int ready_to_write()
+{
+    kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
+    trace_debug("should_write_to_kafka: private_data %x", private_data);
+    if(private_data == NULL) return 0;
+    trace_debug("should_write_to_kafka: private_data->rkt %x", private_data->rkt);
+    if(private_data->rkt == NULL) return 0;
+    return 1;
+}
+void output_write_without_queue(const char *prefix, const char *path, char *buf,
         size_t size, off_t offset)
 {
     if(should_write_to_kafka(path, size))
         actual_kafka_write(prefix, path, buf, size, offset);
+}
+void output_write(const char *prefix, const char *path, char *buf,
+        size_t size, off_t offset)
+{
+    if(ready_to_write())
+    {
+        trace_debug("output_write: calling events_dequeue");
+        events_dequeue(output_write_without_queue);
+        output_write_without_queue(prefix, path, buf, size, offset);
+    }
+    else
+    {
+        trace_debug("output_write: calling events_enqueue with %s", path);
+        event_enqueue((char*) prefix, (char*) path, buf, size, offset);
+    }
 }
 #define PLUGIN_FUNCTION_GETTER(name)\
 name##_t* get_##name()\

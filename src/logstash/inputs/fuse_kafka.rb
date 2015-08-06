@@ -28,6 +28,7 @@ class LogStash::Inputs::Kafka < LogStash::Inputs::Base
             @logger.info "registering kafka logger"
             properties = Properties.new
             @zk_connect = ENV["FUSE_KAFKA_ZK_CONNECT"] if @zk_connect.nil?
+            @zk_connect = "127.0.0.1" if @zk_connect.nil?
             properties.put "zookeeper.connect", @zk_connect
             properties.put "group.id", @group_id
             consumer = Consumer.createJavaConsumerConnector(
