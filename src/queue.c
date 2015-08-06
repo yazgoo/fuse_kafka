@@ -12,6 +12,30 @@ queue_event** event_last_get()
     static queue_event* last = NULL;
     return &last;
 }
+int* event_queue_size()
+{
+    static int n = 0;
+    return &n;
+}
+int* event_queue_max_size()
+{
+    static int n = 10000;
+    return &n;
+}
+void events_drop_first()
+{
+    queue_event* current = *event_last_get();
+    while(current != NULL)
+    {
+        if(current->next != NULL && current->next->next == NULL)
+        {
+            free(current->next);
+            current->next = NULL;
+            return;
+        }
+        current = current->next;
+    }
+}
 void event_enqueue(char *prefix, char *path, char *buf,
         size_t size, off_t offset)
 {
@@ -24,6 +48,16 @@ void event_enqueue(char *prefix, char *path, char *buf,
     new->offset = offset;
     new->next = *last;
     *last = new;
+    if((*event_queue_size())++ >= *(event_queue_max_size()))
+        events_drop_first();
+}
+void event_delete(queue_event* event)
+{
+    free(event->prefix);
+    free(event->path);
+    free(event->buf);
+    free(event);
+    (*event_queue_size())--;
 }
 void events_dequeue(void (*writer)(const char *prefix, const char *path, char *buf,
         size_t size, off_t offset))
@@ -32,11 +66,8 @@ void events_dequeue(void (*writer)(const char *prefix, const char *path, char *b
     while(*last != NULL)
     {
         writer((*last)->prefix, (*last)->path, (*last)->buf, (*last)->size, (*last)->offset);
-        free((*last)->prefix);
-        free((*last)->path);
-        free((*last)->buf);
         queue_event* to_free = *last;
         *last = (*last)->next;
-        free(to_free);
+        event_delete(to_free);
     }
 }
