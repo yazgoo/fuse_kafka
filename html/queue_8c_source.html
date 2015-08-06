@@ -95,34 +95,65 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00012"></a>00012     <span class="keyword">static</span> <a class="code" href="struct__queue__event.html">queue_event</a>* last = NULL;
 <a name="l00013"></a>00013     <span class="keywordflow">return</span> &amp;last;
 <a name="l00014"></a>00014 }
-<a name="l00015"></a>00015 <span class="keywordtype">void</span> event_enqueue(<span class="keywordtype">char</span> *prefix, <span class="keywordtype">char</span> *path, <span class="keywordtype">char</span> *buf,
-<a name="l00016"></a>00016         <span class="keywordtype">size_t</span> size, off_t offset)
-<a name="l00017"></a>00017 {
-<a name="l00018"></a>00018     <a class="code" href="struct__queue__event.html">queue_event</a>** last = event_last_get();
-<a name="l00019"></a>00019     <a class="code" href="struct__queue__event.html">queue_event</a>* <span class="keyword">new</span> = malloc(<span class="keyword">sizeof</span>(<a class="code" href="struct__queue__event.html">queue_event</a>));
-<a name="l00020"></a>00020     <span class="keyword">new</span>-&gt;prefix = strdup(prefix);
-<a name="l00021"></a>00021     <span class="keyword">new</span>-&gt;path = strdup(path);
-<a name="l00022"></a>00022     <span class="keyword">new</span>-&gt;buf = strdup(buf);
-<a name="l00023"></a>00023     <span class="keyword">new</span>-&gt;size = size;
-<a name="l00024"></a>00024     <span class="keyword">new</span>-&gt;offset = offset;
-<a name="l00025"></a>00025     <span class="keyword">new</span>-&gt;next = *last;
-<a name="l00026"></a>00026     *last = <span class="keyword">new</span>;
-<a name="l00027"></a>00027 }
-<a name="l00028"></a>00028 <span class="keywordtype">void</span> events_dequeue(<span class="keywordtype">void</span> (*writer)(<span class="keyword">const</span> <span class="keywordtype">char</span> *prefix, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">char</span> *buf,
-<a name="l00029"></a>00029         <span class="keywordtype">size_t</span> size, off_t offset))
-<a name="l00030"></a>00030 {
-<a name="l00031"></a>00031     <a class="code" href="struct__queue__event.html">queue_event</a>** last = event_last_get();
-<a name="l00032"></a>00032     <span class="keywordflow">while</span>(*last != NULL)
-<a name="l00033"></a>00033     {
-<a name="l00034"></a>00034         writer((*last)-&gt;prefix, (*last)-&gt;path, (*last)-&gt;buf, (*last)-&gt;size, (*last)-&gt;offset);
-<a name="l00035"></a>00035         free((*last)-&gt;prefix);
-<a name="l00036"></a>00036         free((*last)-&gt;path);
-<a name="l00037"></a>00037         free((*last)-&gt;buf);
-<a name="l00038"></a>00038         <a class="code" href="struct__queue__event.html">queue_event</a>* to_free = *last;
-<a name="l00039"></a>00039         *last = (*last)-&gt;next;
-<a name="l00040"></a>00040         free(to_free);
-<a name="l00041"></a>00041     }
-<a name="l00042"></a>00042 }
+<a name="l00015"></a>00015 <span class="keywordtype">int</span>* event_queue_size()
+<a name="l00016"></a>00016 {
+<a name="l00017"></a>00017     <span class="keyword">static</span> <span class="keywordtype">int</span> n = 0;
+<a name="l00018"></a>00018     <span class="keywordflow">return</span> &amp;n;
+<a name="l00019"></a>00019 }
+<a name="l00020"></a>00020 <span class="keywordtype">int</span>* event_queue_max_size()
+<a name="l00021"></a>00021 {
+<a name="l00022"></a>00022     <span class="keyword">static</span> <span class="keywordtype">int</span> n = 10000;
+<a name="l00023"></a>00023     <span class="keywordflow">return</span> &amp;n;
+<a name="l00024"></a>00024 }
+<a name="l00025"></a>00025 <span class="keywordtype">void</span> events_drop_first()
+<a name="l00026"></a>00026 {
+<a name="l00027"></a>00027     <a class="code" href="struct__queue__event.html">queue_event</a>* current = *event_last_get();
+<a name="l00028"></a>00028     <span class="keywordflow">while</span>(current != NULL)
+<a name="l00029"></a>00029     {
+<a name="l00030"></a>00030         <span class="keywordflow">if</span>(current-&gt;next != NULL &amp;&amp; current-&gt;next-&gt;next == NULL)
+<a name="l00031"></a>00031         {
+<a name="l00032"></a>00032             free(current-&gt;next);
+<a name="l00033"></a>00033             current-&gt;next = NULL;
+<a name="l00034"></a>00034             <span class="keywordflow">return</span>;
+<a name="l00035"></a>00035         }
+<a name="l00036"></a>00036         current = current-&gt;next;
+<a name="l00037"></a>00037     }
+<a name="l00038"></a>00038 }
+<a name="l00039"></a>00039 <span class="keywordtype">void</span> event_enqueue(<span class="keywordtype">char</span> *prefix, <span class="keywordtype">char</span> *path, <span class="keywordtype">char</span> *buf,
+<a name="l00040"></a>00040         <span class="keywordtype">size_t</span> size, off_t offset)
+<a name="l00041"></a>00041 {
+<a name="l00042"></a>00042     <a class="code" href="struct__queue__event.html">queue_event</a>** last = event_last_get();
+<a name="l00043"></a>00043     <a class="code" href="struct__queue__event.html">queue_event</a>* <span class="keyword">new</span> = malloc(<span class="keyword">sizeof</span>(<a class="code" href="struct__queue__event.html">queue_event</a>));
+<a name="l00044"></a>00044     <span class="keyword">new</span>-&gt;prefix = strdup(prefix);
+<a name="l00045"></a>00045     <span class="keyword">new</span>-&gt;path = strdup(path);
+<a name="l00046"></a>00046     <span class="keyword">new</span>-&gt;buf = strdup(buf);
+<a name="l00047"></a>00047     <span class="keyword">new</span>-&gt;size = size;
+<a name="l00048"></a>00048     <span class="keyword">new</span>-&gt;offset = offset;
+<a name="l00049"></a>00049     <span class="keyword">new</span>-&gt;next = *last;
+<a name="l00050"></a>00050     *last = <span class="keyword">new</span>;
+<a name="l00051"></a>00051     <span class="keywordflow">if</span>((*event_queue_size())++ &gt;= *(event_queue_max_size()))
+<a name="l00052"></a>00052         events_drop_first();
+<a name="l00053"></a>00053 }
+<a name="l00054"></a>00054 <span class="keywordtype">void</span> event_delete(<a class="code" href="struct__queue__event.html">queue_event</a>* event)
+<a name="l00055"></a>00055 {
+<a name="l00056"></a>00056     free(event-&gt;prefix);
+<a name="l00057"></a>00057     free(event-&gt;path);
+<a name="l00058"></a>00058     free(event-&gt;buf);
+<a name="l00059"></a>00059     free(event);
+<a name="l00060"></a>00060     (*event_queue_size())--;
+<a name="l00061"></a>00061 }
+<a name="l00062"></a>00062 <span class="keywordtype">void</span> events_dequeue(<span class="keywordtype">void</span> (*writer)(<span class="keyword">const</span> <span class="keywordtype">char</span> *prefix, <span class="keyword">const</span> <span class="keywordtype">char</span> *path, <span class="keywordtype">char</span> *buf,
+<a name="l00063"></a>00063         <span class="keywordtype">size_t</span> size, off_t offset))
+<a name="l00064"></a>00064 {
+<a name="l00065"></a>00065     <a class="code" href="struct__queue__event.html">queue_event</a>** last = event_last_get();
+<a name="l00066"></a>00066     <span class="keywordflow">while</span>(*last != NULL)
+<a name="l00067"></a>00067     {
+<a name="l00068"></a>00068         writer((*last)-&gt;prefix, (*last)-&gt;path, (*last)-&gt;buf, (*last)-&gt;size, (*last)-&gt;offset);
+<a name="l00069"></a>00069         <a class="code" href="struct__queue__event.html">queue_event</a>* to_free = *last;
+<a name="l00070"></a>00070         *last = (*last)-&gt;next;
+<a name="l00071"></a>00071         event_delete(to_free);
+<a name="l00072"></a>00072     }
+<a name="l00073"></a>00073 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -141,7 +172,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 6 2015 10:08:54 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 6 2015 14:23:11 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
