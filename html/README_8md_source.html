@@ -709,110 +709,117 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00626"></a>00626 .pid will be deleted.
 <a name="l00627"></a>00627 
 <a name="l00628"></a>00628 
-<a name="l00629"></a>00629 Windows (mingw)
-<a name="l00630"></a>00630 ===============
+<a name="l00629"></a>00629 Queue
+<a name="l00630"></a>00630 =====
 <a name="l00631"></a>00631 
-<a name="l00632"></a>00632 You need to build jansson, zookeeper and librdkafka separately
-<a name="l00633"></a>00633 Then:
-<a name="l00634"></a>00634 
-<a name="l00635"></a>00635     cd src
-<a name="l00636"></a>00636     ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
-<a name="l00637"></a>00637     ln -s  ../../librdkafka/src librdkafka
-<a name="l00638"></a>00638     cd -
-<a name="l00639"></a>00639     CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/&quot;</span> LIBS=<span class="stringliteral">&quot;-lws2_32 -lpsapi&quot;</span> ./build.py
-<a name="l00640"></a>00640 
-<a name="l00641"></a>00641 For testing purposes, you can run fuse_kafka with wine:
-<a name="l00642"></a>00642 
-<a name="l00643"></a>00643     ln -s fuse_kafka fuse_kafka.exe
-<a name="l00644"></a>00644     cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll  .
-<a name="l00645"></a>00645     cp ../librdkafka/src/librdkafka.so.1 .
-<a name="l00646"></a>00646     cp /usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll .
-<a name="l00647"></a>00647     FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
-<a name="l00648"></a>00648 
+<a name="l00632"></a>00632 When the output plugin is not initialized, some events may be lost.
+<a name="l00633"></a>00633 A queue was added to store events and to send them as soon as
+<a name="l00634"></a>00634 the output gets initialized (see queue.c and output_write in output.c).
+<a name="l00635"></a>00635 
+<a name="l00636"></a>00636 Windows (mingw)
+<a name="l00637"></a>00637 ===============
+<a name="l00638"></a>00638 
+<a name="l00639"></a>00639 You need to build jansson, zookeeper and librdkafka separately
+<a name="l00640"></a>00640 Then:
+<a name="l00641"></a>00641 
+<a name="l00642"></a>00642     cd src
+<a name="l00643"></a>00643     ln -s  ../../win32/zookeeper-3.4.6/src/c/include zookeeper
+<a name="l00644"></a>00644     ln -s  ../../librdkafka/src librdkafka
+<a name="l00645"></a>00645     cd -
+<a name="l00646"></a>00646     CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I../win32/dlfcn-win32 -I../win32/zookeeper-3.4.6/src/c/include -I../win32/zookeeper-3.4.6/src/c/generated -I../win32/jansson-2.4/src -DMINGW_VER -D_X86INTRIN_H_INCLUDED&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L../win32/jansson-2.4/src -w -L../librdkafka/src -L../win32/zookeeper-3.4.6/src/c/.libs -L/home/yazgoo/dev/win32/jansson-2.4/src/.libs/ -L../win32/dlfcn-win32 -L../win32/zlib-1.2.8/&quot;</span> LIBS=<span class="stringliteral">&quot;-lws2_32 -lpsapi&quot;</span> ./build.py
+<a name="l00647"></a>00647 
+<a name="l00648"></a>00648 For testing purposes, you can run fuse_kafka with wine:
 <a name="l00649"></a>00649 
-<a name="l00650"></a>00650 Tail
-<a name="l00651"></a>00651 ====
-<a name="l00652"></a>00652 
-<a name="l00653"></a>00653 It is possible to tail events in kafka <span class="keyword">using</span> logstash, by doing:
-<a name="l00654"></a>00654 
-<a name="l00655"></a>00655 ````sh
-<a name="l00656"></a>00656 https_proxy=http:<span class="comment">//user:password@host:port FUSE_KAFKA_ZK_CONNECT=&quot;your zk address&quot; ./build.py tail</span>
-<a name="l00657"></a>00657 ````
-<a name="l00658"></a>00658 
-<a name="l00659"></a>00659 This will download logstash, and launch src/logstash/inputs/fuse_kafka.rb,
-<a name="l00660"></a>00660      <span class="keyword">using</span> <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>/logstash.conf as configuration.
+<a name="l00650"></a>00650     ln -s fuse_kafka fuse_kafka.exe
+<a name="l00651"></a>00651     cp /usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll  .
+<a name="l00652"></a>00652     cp ../librdkafka/src/librdkafka.so.1 .
+<a name="l00653"></a>00653     cp /usr/lib/gcc/x86_64-w64-mingw32/4.8/libgcc_s_sjlj-1.dll .
+<a name="l00654"></a>00654     FUSE_KAFKA_PREFIX=wine ./src/fuse_kafka.py start
+<a name="l00655"></a>00655 
+<a name="l00656"></a>00656 
+<a name="l00657"></a>00657 Tail
+<a name="l00658"></a>00658 ====
+<a name="l00659"></a>00659 
+<a name="l00660"></a>00660 It is possible to tail events in kafka <span class="keyword">using</span> logstash, by doing:
 <a name="l00661"></a>00661 
-<a name="l00662"></a>00662 
-<a name="l00663"></a>00663 
-<a name="l00664"></a>00664 Generating <span class="keyword">self</span> contained archive from sources
-<a name="l00665"></a>00665 ==============================================
-<a name="l00666"></a>00666 
-<a name="l00667"></a>00667 You can generate an archive with all dependencies with binary_archive target.
+<a name="l00662"></a>00662 ````sh
+<a name="l00663"></a>00663 https_proxy=http:<span class="comment">//user:password@host:port FUSE_KAFKA_ZK_CONNECT=&quot;your zk address&quot; ./build.py tail</span>
+<a name="l00664"></a>00664 ````
+<a name="l00665"></a>00665 
+<a name="l00666"></a>00666 This will download logstash, and launch src/logstash/inputs/fuse_kafka.rb,
+<a name="l00667"></a>00667      <span class="keyword">using</span> <a class="code" href="fuse__kafka_8c.html#adf331e5eb0c6c05b3c9b84b2118cda46" title="declare a configuration item, which is a list of string an and a number of those">conf</a>/logstash.conf as configuration.
 <a name="l00668"></a>00668 
-<a name="l00669"></a>00669 For example, to generate an archive <span class="keywordflow">for</span> windows, building with mingw:
+<a name="l00669"></a>00669 
 <a name="l00670"></a>00670 
-<a name="l00671"></a>00671     SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L$PWD/../out/lib&quot;</span> LIBS=<span class="stringliteral">&quot;-lwsock32 -lws2_32 -lpsapi&quot;</span> archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
-<a name="l00672"></a>00672 
-<a name="l00673"></a>00673     SRCROOT=/tmp/lolo BUILDROOT=$PWD/../out/ CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L$PWD/../out/lib -Xlinker --no-undefined -Xlinker --enable-runtime-pseudo-reloc&quot;</span> LIBS=<span class="stringliteral">&quot;-lwsock32 -lws2_32 -lpsapi&quot;</span> archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
-<a name="l00674"></a>00674 
-<a name="l00675"></a>00675 This will:
-<a name="l00676"></a>00676 
-<a name="l00677"></a>00677 1. download source dependencies into SRCROOT
-<a name="l00678"></a>00678 1. build them and install them in BUILDROOT
-<a name="l00679"></a>00679 1. add additional libraries from wine <span class="keywordflow">if</span> we<span class="stringliteral">&#39;re building for windows</span>
-<a name="l00680"></a>00680 <span class="stringliteral">1. download python if we&#39;</span>re building <span class="keywordflow">for</span> windows
-<a name="l00681"></a>00681 1. create an archive in __../fuse_kafka-$version-bin.tar.gz__
-<a name="l00682"></a>00682 
+<a name="l00671"></a>00671 Generating <span class="keyword">self</span> contained archive from sources
+<a name="l00672"></a>00672 ==============================================
+<a name="l00673"></a>00673 
+<a name="l00674"></a>00674 You can generate an archive with all dependencies with binary_archive target.
+<a name="l00675"></a>00675 
+<a name="l00676"></a>00676 For example, to generate an archive <span class="keywordflow">for</span> windows, building with mingw:
+<a name="l00677"></a>00677 
+<a name="l00678"></a>00678     SRCROOT=/tmp/sources BUILDROOT=/tmp/output CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L$PWD/../out/lib&quot;</span> LIBS=<span class="stringliteral">&quot;-lwsock32 -lws2_32 -lpsapi&quot;</span> archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+<a name="l00679"></a>00679 
+<a name="l00680"></a>00680     SRCROOT=/tmp/lolo BUILDROOT=$PWD/../out/ CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc CFLAGS=<span class="stringliteral">&quot;-I$PWD/../out/include -DMINGW_VER -D_X86INTRIN_H_INCLUDED -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DZOOKEEPER_EXPORTS -DDLL_EXPORT -w -fpermissive -D_X86INTRIN_H_INCLUDED -DLIBRDKAFKA_EXPORTS -DInterlockedAdd=_InterlockedAdd -DMINGW_VER -D_WIN32_WINNT=0x0760&quot;</span> LDFLAGS=<span class="stringliteral">&quot;-L$PWD/../out/lib -Xlinker --no-undefined -Xlinker --enable-runtime-pseudo-reloc&quot;</span> LIBS=<span class="stringliteral">&quot;-lwsock32 -lws2_32 -lpsapi&quot;</span> archive_cmds_need_lc=no LDSHAREDLIBC= ./build.py binary_archive
+<a name="l00681"></a>00681 
+<a name="l00682"></a>00682 This will:
 <a name="l00683"></a>00683 
-<a name="l00684"></a>00684 Verbose tracing
-<a name="l00685"></a>00685 ===============
-<a name="l00686"></a>00686 
-<a name="l00687"></a>00687 You can enable verbose mode via
-<a name="l00688"></a>00688 
-<a name="l00689"></a>00689     CFLAGS=<span class="stringliteral">&quot;-DFK_DEBUG&quot;</span> ./build.py
+<a name="l00684"></a>00684 1. download source dependencies into SRCROOT
+<a name="l00685"></a>00685 1. build them and install them in BUILDROOT
+<a name="l00686"></a>00686 1. add additional libraries from wine <span class="keywordflow">if</span> we<span class="stringliteral">&#39;re building for windows</span>
+<a name="l00687"></a>00687 <span class="stringliteral">1. download python if we&#39;</span>re building <span class="keywordflow">for</span> windows
+<a name="l00688"></a>00688 1. create an archive in __../fuse_kafka-$version-bin.tar.gz__
+<a name="l00689"></a>00689 
 <a name="l00690"></a>00690 
-<a name="l00691"></a>00691 
-<a name="l00692"></a>00692 Encoding
-<a name="l00693"></a>00693 ========
-<a name="l00694"></a>00694 
-<a name="l00695"></a>00695 You can specify how you want the data written to your output.
-<a name="l00696"></a>00696 See fuse_kafka.properties <span class="keywordflow">for</span> possible values.
+<a name="l00691"></a>00691 Verbose tracing
+<a name="l00692"></a>00692 ===============
+<a name="l00693"></a>00693 
+<a name="l00694"></a>00694 You can enable verbose mode via
+<a name="l00695"></a>00695 
+<a name="l00696"></a>00696     CFLAGS=<span class="stringliteral">&quot;-DFK_DEBUG&quot;</span> ./build.py
 <a name="l00697"></a>00697 
-<a name="l00698"></a>00698 Docker environment
-<a name="l00699"></a>00699 ==================
-<a name="l00700"></a>00700 
-<a name="l00701"></a>00701 1. Shippable generates https:<span class="comment">//registry.hub.docker.com/u/yazgoo/fuse_kafka/</span>
-<a name="l00702"></a>00702 1. For developing, the advised dockerfile is docker/homeship.dockerfile (generated with https:<span class="comment">//github.com/yazgoo/homeship)</span>
-<a name="l00703"></a>00703 1. For rpm building, the advised dockerfile is docker/rpmbuild.dockerfile
+<a name="l00698"></a>00698 
+<a name="l00699"></a>00699 Encoding
+<a name="l00700"></a>00700 ========
+<a name="l00701"></a>00701 
+<a name="l00702"></a>00702 You can specify how you want the data written to your output.
+<a name="l00703"></a>00703 See fuse_kafka.properties <span class="keywordflow">for</span> possible values.
 <a name="l00704"></a>00704 
-<a name="l00705"></a>00705 
-<a name="l00706"></a>00706 Zookeeper multithreaded or not
-<a name="l00707"></a>00707 ==============================
-<a name="l00708"></a>00708 
-<a name="l00709"></a>00709 You can use either zookeeper_mt (zookeeper multithread, <span class="keywordflow">default</span>) or not (zookeeper_st single threaded).
-<a name="l00710"></a>00710 To use the single threaded version, just <span class="keyword">set</span> `zookeeper_st=y` environment variable.
+<a name="l00705"></a>00705 Docker environment
+<a name="l00706"></a>00706 ==================
+<a name="l00707"></a>00707 
+<a name="l00708"></a>00708 1. Shippable generates https:<span class="comment">//registry.hub.docker.com/u/yazgoo/fuse_kafka/</span>
+<a name="l00709"></a>00709 1. For developing, the advised dockerfile is docker/homeship.dockerfile (generated with https:<span class="comment">//github.com/yazgoo/homeship)</span>
+<a name="l00710"></a>00710 1. For rpm building, the advised dockerfile is docker/rpmbuild.dockerfile
 <a name="l00711"></a>00711 
-<a name="l00712"></a>00712 Licensing
-<a name="l00713"></a>00713 =========
-<a name="l00714"></a>00714 
-<a name="l00715"></a>00715 licensed under Apache v 2.0, see LICENSE file
-<a name="l00716"></a>00716 
-<a name="l00717"></a>00717 
-<a name="l00718"></a>00718 Tagging
-<a name="l00719"></a>00719 =======
-<a name="l00720"></a>00720 
-<a name="l00721"></a>00721 - <span class="keywordflow">for</span> versions, use github release tags, <span class="keywordflow">for</span> example 0.1.4
-<a name="l00722"></a>00722 - <span class="keywordflow">for</span> OBS source release number, we use ligthweight tag: <span class="keywordflow">for</span> example the package 
-<a name="l00723"></a>00723     fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
+<a name="l00712"></a>00712 
+<a name="l00713"></a>00713 Zookeeper multithreaded or not
+<a name="l00714"></a>00714 ==============================
+<a name="l00715"></a>00715 
+<a name="l00716"></a>00716 You can use either zookeeper_mt (zookeeper multithread, <span class="keywordflow">default</span>) or not (zookeeper_st single threaded).
+<a name="l00717"></a>00717 To use the single threaded version, just <span class="keyword">set</span> `zookeeper_st=y` environment variable.
+<a name="l00718"></a>00718 
+<a name="l00719"></a>00719 Licensing
+<a name="l00720"></a>00720 =========
+<a name="l00721"></a>00721 
+<a name="l00722"></a>00722 licensed under Apache v 2.0, see LICENSE file
+<a name="l00723"></a>00723 
 <a name="l00724"></a>00724 
-<a name="l00725"></a>00725 
-<a name="l00726"></a>00726 Code of conduct
-<a name="l00727"></a>00727 ===============
-<a name="l00728"></a>00728 
-<a name="l00729"></a>00729 Please note that <span class="keyword">this</span> project is released with a Contributor Code of Conduct.
-<a name="l00730"></a>00730 By participating in <span class="keyword">this</span> project you agree to abide by its terms.
-<a name="l00731"></a>00731 See CODE OF CONDUCT file.
+<a name="l00725"></a>00725 Tagging
+<a name="l00726"></a>00726 =======
+<a name="l00727"></a>00727 
+<a name="l00728"></a>00728 - <span class="keywordflow">for</span> versions, use github release tags, <span class="keywordflow">for</span> example 0.1.4
+<a name="l00729"></a>00729 - <span class="keywordflow">for</span> OBS source release number, we use ligthweight tag: <span class="keywordflow">for</span> example the package 
+<a name="l00730"></a>00730     fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
+<a name="l00731"></a>00731 
 <a name="l00732"></a>00732 
+<a name="l00733"></a>00733 Code of conduct
+<a name="l00734"></a>00734 ===============
+<a name="l00735"></a>00735 
+<a name="l00736"></a>00736 Please note that <span class="keyword">this</span> project is released with a Contributor Code of Conduct.
+<a name="l00737"></a>00737 By participating in <span class="keyword">this</span> project you agree to abide by its terms.
+<a name="l00738"></a>00738 See CODE OF CONDUCT file.
+<a name="l00739"></a>00739 
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -831,7 +838,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 7 2015 09:07:33 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 7 2015 09:23:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
