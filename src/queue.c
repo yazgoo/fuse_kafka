@@ -5,6 +5,7 @@ typedef struct _queue_event
     char* buf;
     size_t size;
     off_t offset;
+    struct _queue_event* previous;
     struct _queue_event* next;
 } queue_event;
 queue_event** event_last_get()
@@ -27,13 +28,14 @@ void events_drop_first()
     queue_event* current = *event_last_get();
     while(current != NULL)
     {
-        if(current->next != NULL && current->next->next == NULL)
+        if(current->previous != NULL && current->previous->previous == NULL)
         {
-            free(current->next);
-            current->next = NULL;
+            free(current->previous);
+            current->previous = NULL;
+            (*event_queue_size())--;
             return;
         }
-        current = current->next;
+        current = current->previous;
     }
 }
 void event_enqueue(char *prefix, char *path, char *buf,
@@ -46,7 +48,9 @@ void event_enqueue(char *prefix, char *path, char *buf,
     new->buf = strdup(buf);
     new->size = size;
     new->offset = offset;
-    new->next = *last;
+    new->previous = *last;
+    if(new->previous != NULL) new->previous->next = new;
+    new->next = NULL;
     *last = new;
     if((*event_queue_size())++ >= *(event_queue_max_size()))
         events_drop_first();
@@ -59,15 +63,25 @@ void event_delete(queue_event* event)
     free(event);
     (*event_queue_size())--;
 }
-void events_dequeue(void (*writer)(const char *prefix, const char *path, char *buf,
-        size_t size, off_t offset))
+void events_queue_empty()
 {
     queue_event** last = event_last_get();
     while(*last != NULL)
     {
-        writer((*last)->prefix, (*last)->path, (*last)->buf, (*last)->size, (*last)->offset);
         queue_event* to_free = *last;
-        *last = (*last)->next;
+        *last = (*last)->previous;
         event_delete(to_free);
     }
+}
+void events_dequeue(void (*writer)(const char *prefix, const char *path, char *buf,
+        size_t size, off_t offset))
+{
+    queue_event* current = *event_last_get();
+    while(current->previous != NULL) current = current->previous;
+    for(; current != NULL; current = current->next)
+    {
+        writer(current->prefix, current->path,
+                current->buf, current->size, current->offset);
+    }
+    events_queue_empty();
 }

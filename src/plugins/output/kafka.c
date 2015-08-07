@@ -12,8 +12,8 @@ static void msg_delivered (rd_kafka_t *rk,
                          int error_code,
                          void *opaque, void *msg_opaque) {
 
-    trace_debug("msg_delivered: %s\n",
-            (char*) payload);
+    /*trace_debug("msg_delivered: %s\n",
+            (char*) payload);*/
 }
 /**
  * @brief a librdkafka callback called to log stuff from librdkafka
@@ -25,8 +25,8 @@ static void logger (const rd_kafka_t *rk, int level,
         fprintf(stderr, "%u.%03u UGUU RDKAFKA-%i-%s: %s: %s\n",
                 (int)tv.tv_sec, (int)(tv.tv_usec / 1000),
                 level, fac, rd_kafka_name(rk), buf);*/
-        trace_debug("logger: RDKAFKA-%i-%s: %s: %s\n",
-                level, fac, rk == (void*) 0 ? 0 : rd_kafka_name(rk), buf);
+        /*trace_debug("logger: RDKAFKA-%i-%s: %s: %s\n",
+                level, fac, rk == (void*) 0 ? 0 : rd_kafka_name(rk), buf);*/
 }
 /**
  * @brief setup_kafka initialises librdkafka based on the config
@@ -35,12 +35,12 @@ static void logger (const rd_kafka_t *rk, int level,
  **/
 int output_setup(kafka_t* k, config* fk_conf)
 {
-    trace_debug("kafka output_setup: entry");
+    //trace_debug("kafka output_setup: entry");
     if(fk_conf == NULL) return 1;
     char* brokers = NULL;
     char* zookeepers = NULL;
     char* topic = "logs";
-    trace_debug("kafka output_setup: fk_conf %x", fk_conf);
+    //trace_debug("kafka output_setup: fk_conf %x", fk_conf);
     if(fk_conf->zookeepers_n > 0) zookeepers = fk_conf->zookeepers[0];
     if(fk_conf->brokers_n > 0) brokers = fk_conf->brokers[0];
     if(fk_conf->topic_n > 0) topic = fk_conf->topic[0];
@@ -63,14 +63,14 @@ int output_setup(kafka_t* k, config* fk_conf)
                 errstr);
         return(1);
     }
-    trace_debug("kafka output_setup: before set_logger");
+    //trace_debug("kafka output_setup: before set_logger");
     rd_kafka_set_logger(k->rk, logger);
     rd_kafka_set_log_level(k->rk, 7);
-    trace_debug("kafka output_setup: zookeepers: %s, brokers %s", zookeepers, brokers);
+    //trace_debug("kafka output_setup: zookeepers: %s, brokers %s", zookeepers, brokers);
     if (zookeepers != NULL)
     {
         k->zhandle = initialize_zookeeper(zookeepers, k);
-        trace_debug("output_setup: initialize_zookeeper done");
+        //trace_debug("output_setup: initialize_zookeeper done");
         return 0;
     }
     else if(brokers != NULL)
@@ -102,20 +102,20 @@ int output_send(kafka_t* k, char* buf, size_t len)
 {
     int r = 0;
     static int i = 0;
-    trace_debug("output_send: k = %x k->rkt = %x", k, k == 0 ? 0: k->rkt);
+    //trace_debug("output_send: k = %x k->rkt = %x", k, k == 0 ? 0: k->rkt);
     if(k != 0 && k->rkt > (void*) 1 && (r = rd_kafka_produce(k->rkt, RD_KAFKA_PARTITION_UA,
             RD_KAFKA_MSG_F_COPY,
             buf, len,
             NULL, 0, NULL)))
     {
-        trace_debug("rd_kafka_produce failed");
+        /*trace_debug("rd_kafka_produce failed");
         if(i++ % 100 == 0) trace_error("output_send: "
-                "rd_kafka_produce: failed %d times (last rc %d) ", i, r);
+                "rd_kafka_produce: failed %d times (last rc %d) ", i, r);*/
     }
     else i = 0;
-    trace_debug("%% Sent %zd bytes to topic "
+    /*trace_debug("%% Sent %zd bytes to topic "
             "%s\n", len, k ==  0 || k->rkt <= (void*) 2 ?
-            0 : rd_kafka_topic_name(k->rkt));
+            0 : rd_kafka_topic_name(k->rkt));*/
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/
     /*while(rd_kafka_poll(k->rk, 1000) != -1)

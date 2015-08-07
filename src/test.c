@@ -418,6 +418,18 @@ static char* test_plugin()
     mu_assert("function should be loaded", f != NULL);
     return 0;
 }
+static char* test_queue()
+{
+    *(event_queue_max_size()) = 2;
+    event_enqueue("a", "a", "a", 1, 0);
+    event_enqueue("b", "b", "b", 1, 0);
+    mu_assert("size should be 2", *(event_queue_size()) == 2);
+    event_enqueue("c", "c", "c", 1, 0);
+    mu_assert("size should still be 2", *(event_queue_size()) == 2);
+    event_enqueue("d", "d", "d", 1, 0);
+    mu_assert("size should again still be 2", *(event_queue_size()) == 2);
+    return 0;
+}
 static char* all_tests()
 {
     *(fk_sleep_enabled()) = 0;
@@ -436,6 +448,7 @@ static char* all_tests()
     mu_run_test(test_fk_hash);
     mu_run_test(test_my_input_setup);
     mu_run_test(test_plugin);
+    mu_run_test(test_queue);
     return 0;
 }
 // LCOV_EXCL_STOP because we don't want coverage on unit tests

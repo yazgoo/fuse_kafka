@@ -54,7 +54,7 @@
 #include <string.h>
 static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
 {
-    trace_debug("set_brokerlist_from_zookeeper: entry");
+    //trace_debug("set_brokerlist_from_zookeeper: entry");
     if (zzh)
     {
         struct String_vector brokerlist;
@@ -85,7 +85,7 @@ static void set_brokerlist_from_zookeeper(zhandle_t *zzh, char *brokers)
                     {
                         const char *host = json_string_value(jhost);
                         const int port = json_integer_value(jport);
-                        trace_debug("set_brokerlist_from_zookeeper: %s %d", host, port);
+                        //trace_debug("set_brokerlist_from_zookeeper: %s %d", host, port);
                         sprintf(brokerptr, "%s:%d", host, port);
                         brokerptr += strlen(brokerptr);
                         if (i < brokerlist.count - 1)
@@ -128,13 +128,13 @@ static void watcher(zhandle_t *zh, int type,
         return;
     }
     topic = k->conf->topic[0];
-    trace_debug("zookeeper_init: topic: %s, path: %s", topic, path);
+    //trace_debug("zookeeper_init: topic: %s, path: %s", topic, path);
     if (k->no_brokers || type == ZOO_CHILD_EVENT && strncmp(
                 path, BROKER_PATH, sizeof(BROKER_PATH) - 1) == 0)
     {
         brokers[0] = '\0';
-        trace_debug("zookeeper_init: "
-                "calling set_brokerlist_from_zookeeper(\"%s\")", brokers);
+        /*trace_debug("zookeeper_init: "
+                "calling set_brokerlist_from_zookeeper(\"%s\")", brokers);*/
         set_brokerlist_from_zookeeper(zh, brokers);
         watcher_add_brokers(k, brokers, topic);
     }
@@ -145,7 +145,7 @@ static zhandle_t* initialize_zookeeper(const char * zookeeper, void* param)
     ((kafka_t*) param)->no_brokers = 1;
     ((kafka_t*) param)->broker_list = NULL;
     zhandle_t *zh;
-    trace_debug("initialize_zookeeper: calling zookeeper_init(%s)", zookeeper);
+    //trace_debug("initialize_zookeeper: calling zookeeper_init(%s)", zookeeper);
     zh = zookeeper_init(zookeeper, watcher, 10000, 0, param, 0);
     if (zh == NULL)
     {
