@@ -418,6 +418,13 @@ static char* test_plugin()
     mu_assert("function should be loaded", f != NULL);
     return 0;
 }
+int test_queue_n;
+char test_queue_chars[] = {0, 0};
+void test_queue_callback(const char *prefix, const char *path, char *buf,
+        size_t size, off_t offset)
+{
+    test_queue_chars[test_queue_n++] = path[0];
+}
 static char* test_queue()
 {
     *(event_queue_max_size()) = 2;
@@ -428,6 +435,11 @@ static char* test_queue()
     mu_assert("size should still be 2", *(event_queue_size()) == 2);
     event_enqueue("d", "d", "d", 1, 0);
     mu_assert("size should again still be 2", *(event_queue_size()) == 2);
+    test_queue_n = 0;
+    events_dequeue(test_queue_callback);
+    mu_assert("enqueued n should be 2", test_queue_n == 2);
+    mu_assert("enqueued first char should be 'c'", test_queue_chars[0] == 'c');
+    mu_assert("enqueued second char should be 'd'", test_queue_chars[1] == 'd');
     return 0;
 }
 static char* all_tests()
