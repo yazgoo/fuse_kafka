@@ -160,14 +160,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00077"></a>00077         <span class="keywordtype">size_t</span> size, off_t offset))
 <a name="l00078"></a>00078 {
 <a name="l00079"></a>00079     <a class="code" href="struct__queue__event.html">queue_event</a>* current = *event_last_get();
-<a name="l00080"></a>00080     <span class="keywordflow">while</span>(current-&gt;previous != NULL) current = current-&gt;previous;
-<a name="l00081"></a>00081     <span class="keywordflow">for</span>(; current != NULL; current = current-&gt;next)
-<a name="l00082"></a>00082     {
-<a name="l00083"></a>00083         writer(current-&gt;prefix, current-&gt;path,
-<a name="l00084"></a>00084                 current-&gt;buf, current-&gt;size, current-&gt;offset);
-<a name="l00085"></a>00085     }
-<a name="l00086"></a>00086     events_queue_empty();
-<a name="l00087"></a>00087 }
+<a name="l00080"></a>00080     <span class="keywordflow">if</span>(current == NULL) <span class="keywordflow">return</span>;
+<a name="l00081"></a>00081     <span class="keywordflow">while</span>(current-&gt;previous != NULL) current = current-&gt;previous;
+<a name="l00082"></a>00082     <span class="keywordflow">for</span>(; current != NULL; current = current-&gt;next)
+<a name="l00083"></a>00083     {
+<a name="l00084"></a>00084         writer(current-&gt;prefix, current-&gt;path,
+<a name="l00085"></a>00085                 current-&gt;buf, current-&gt;size, current-&gt;offset);
+<a name="l00086"></a>00086     }
+<a name="l00087"></a>00087     events_queue_empty();
+<a name="l00088"></a>00088 }
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -186,7 +187,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 7 2015 09:23:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 7 2015 14:09:15 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

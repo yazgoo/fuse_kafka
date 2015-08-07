@@ -510,44 +510,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00427"></a>00427 }
 <a name="l00428"></a>00428 <span class="keyword">static</span> <span class="keywordtype">char</span>* test_queue()
 <a name="l00429"></a>00429 {
-<a name="l00430"></a>00430     *(event_queue_max_size()) = 2;
-<a name="l00431"></a>00431     event_enqueue(<span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;a&quot;</span>, 1, 0);
-<a name="l00432"></a>00432     event_enqueue(<span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, 1, 0);
-<a name="l00433"></a>00433     mu_assert(<span class="stringliteral">&quot;size should be 2&quot;</span>, *(event_queue_size()) == 2);
-<a name="l00434"></a>00434     event_enqueue(<span class="stringliteral">&quot;c&quot;</span>, <span class="stringliteral">&quot;c&quot;</span>, <span class="stringliteral">&quot;c&quot;</span>, 1, 0);
-<a name="l00435"></a>00435     mu_assert(<span class="stringliteral">&quot;size should still be 2&quot;</span>, *(event_queue_size()) == 2);
-<a name="l00436"></a>00436     event_enqueue(<span class="stringliteral">&quot;d&quot;</span>, <span class="stringliteral">&quot;d&quot;</span>, <span class="stringliteral">&quot;d&quot;</span>, 1, 0);
-<a name="l00437"></a>00437     mu_assert(<span class="stringliteral">&quot;size should again still be 2&quot;</span>, *(event_queue_size()) == 2);
-<a name="l00438"></a>00438     test_queue_n = 0;
-<a name="l00439"></a>00439     events_dequeue(test_queue_callback);
-<a name="l00440"></a>00440     mu_assert(<span class="stringliteral">&quot;enqueued n should be 2&quot;</span>, test_queue_n == 2);
-<a name="l00441"></a>00441     mu_assert(<span class="stringliteral">&quot;enqueued first char should be &#39;c&#39;&quot;</span>, test_queue_chars[0] == <span class="charliteral">&#39;c&#39;</span>);
-<a name="l00442"></a>00442     mu_assert(<span class="stringliteral">&quot;enqueued second char should be &#39;d&#39;&quot;</span>, test_queue_chars[1] == <span class="charliteral">&#39;d&#39;</span>);
-<a name="l00443"></a>00443     <span class="keywordflow">return</span> 0;
-<a name="l00444"></a>00444 }
-<a name="l00445"></a>00445 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
-<a name="l00446"></a>00446 {
-<a name="l00447"></a>00447     *(fk_sleep_enabled()) = 0;
-<a name="l00448"></a>00448     mu_run_test(test_parse_arguments);
-<a name="l00449"></a>00449     mu_run_test(test_utils);
-<a name="l00450"></a>00450     mu_run_test(test_utils_base64);
-<a name="l00451"></a>00451     printf(<span class="stringliteral">&quot;a\n&quot;</span>);
-<a name="l00452"></a>00452     mu_run_test(test_time_queue);
-<a name="l00453"></a>00453     printf(<span class="stringliteral">&quot;b\n&quot;</span>);
-<a name="l00454"></a>00454     mu_run_test(test_output);
-<a name="l00455"></a>00455     mu_run_test(test_zookeeper);
-<a name="l00456"></a>00456     mu_run_test(test_trace);
-<a name="l00457"></a>00457     mu_run_test(test_string_list);
-<a name="l00458"></a>00458     mu_run_test(test_server_list);
-<a name="l00459"></a>00459     mu_run_test(test_dynamic_configuration);
-<a name="l00460"></a>00460     mu_run_test(test_fk_hash);
-<a name="l00461"></a>00461     mu_run_test(test_my_input_setup);
-<a name="l00462"></a>00462     mu_run_test(test_plugin);
-<a name="l00463"></a>00463     mu_run_test(test_queue);
-<a name="l00464"></a>00464     <span class="keywordflow">return</span> 0;
-<a name="l00465"></a>00465 }
-<a name="l00466"></a>00466 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
-<a name="l00467"></a>00467 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
+<a name="l00430"></a>00430     events_dequeue(test_queue_callback);
+<a name="l00431"></a>00431     *(event_queue_max_size()) = 2;
+<a name="l00432"></a>00432     event_enqueue(<span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;a&quot;</span>, 1, 0);
+<a name="l00433"></a>00433     event_enqueue(<span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, 1, 0);
+<a name="l00434"></a>00434     mu_assert(<span class="stringliteral">&quot;size should be 2&quot;</span>, *(event_queue_size()) == 2);
+<a name="l00435"></a>00435     event_enqueue(<span class="stringliteral">&quot;c&quot;</span>, <span class="stringliteral">&quot;c&quot;</span>, <span class="stringliteral">&quot;c&quot;</span>, 1, 0);
+<a name="l00436"></a>00436     mu_assert(<span class="stringliteral">&quot;size should still be 2&quot;</span>, *(event_queue_size()) == 2);
+<a name="l00437"></a>00437     event_enqueue(<span class="stringliteral">&quot;d&quot;</span>, <span class="stringliteral">&quot;d&quot;</span>, <span class="stringliteral">&quot;d&quot;</span>, 1, 0);
+<a name="l00438"></a>00438     mu_assert(<span class="stringliteral">&quot;size should again still be 2&quot;</span>, *(event_queue_size()) == 2);
+<a name="l00439"></a>00439     test_queue_n = 0;
+<a name="l00440"></a>00440     events_dequeue(test_queue_callback);
+<a name="l00441"></a>00441     mu_assert(<span class="stringliteral">&quot;enqueued n should be 2&quot;</span>, test_queue_n == 2);
+<a name="l00442"></a>00442     mu_assert(<span class="stringliteral">&quot;enqueued first char should be &#39;c&#39;&quot;</span>, test_queue_chars[0] == <span class="charliteral">&#39;c&#39;</span>);
+<a name="l00443"></a>00443     mu_assert(<span class="stringliteral">&quot;enqueued second char should be &#39;d&#39;&quot;</span>, test_queue_chars[1] == <span class="charliteral">&#39;d&#39;</span>);
+<a name="l00444"></a>00444     <span class="keywordflow">return</span> 0;
+<a name="l00445"></a>00445 }
+<a name="l00446"></a>00446 <span class="keyword">static</span> <span class="keywordtype">char</span>* all_tests()
+<a name="l00447"></a>00447 {
+<a name="l00448"></a>00448     *(fk_sleep_enabled()) = 0;
+<a name="l00449"></a>00449     mu_run_test(test_parse_arguments);
+<a name="l00450"></a>00450     mu_run_test(test_utils);
+<a name="l00451"></a>00451     mu_run_test(test_utils_base64);
+<a name="l00452"></a>00452     printf(<span class="stringliteral">&quot;a\n&quot;</span>);
+<a name="l00453"></a>00453     mu_run_test(test_time_queue);
+<a name="l00454"></a>00454     printf(<span class="stringliteral">&quot;b\n&quot;</span>);
+<a name="l00455"></a>00455     mu_run_test(test_output);
+<a name="l00456"></a>00456     mu_run_test(test_zookeeper);
+<a name="l00457"></a>00457     mu_run_test(test_trace);
+<a name="l00458"></a>00458     mu_run_test(test_string_list);
+<a name="l00459"></a>00459     mu_run_test(test_server_list);
+<a name="l00460"></a>00460     mu_run_test(test_dynamic_configuration);
+<a name="l00461"></a>00461     mu_run_test(test_fk_hash);
+<a name="l00462"></a>00462     mu_run_test(test_my_input_setup);
+<a name="l00463"></a>00463     mu_run_test(test_plugin);
+<a name="l00464"></a>00464     mu_run_test(test_queue);
+<a name="l00465"></a>00465     <span class="keywordflow">return</span> 0;
+<a name="l00466"></a>00466 }
+<a name="l00467"></a>00467 <span class="comment">// LCOV_EXCL_STOP because we don&#39;t want coverage on unit tests</span>
+<a name="l00468"></a>00468 <span class="preprocessor">#include &quot;minunit.c&quot;</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -566,7 +567,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 7 2015 09:23:07 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 7 2015 14:09:15 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
