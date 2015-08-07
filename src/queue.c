@@ -77,6 +77,7 @@ void events_dequeue(void (*writer)(const char *prefix, const char *path, char *b
         size_t size, off_t offset))
 {
     queue_event* current = *event_last_get();
+    if(current == NULL) return;
     while(current->previous != NULL) current = current->previous;
     for(; current != NULL; current = current->next)
     {

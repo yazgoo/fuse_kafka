@@ -427,6 +427,7 @@ void test_queue_callback(const char *prefix, const char *path, char *buf,
 }
 static char* test_queue()
 {
+    events_dequeue(test_queue_callback);
     *(event_queue_max_size()) = 2;
     event_enqueue("a", "a", "a", 1, 0);
     event_enqueue("b", "b", "b", 1, 0);
