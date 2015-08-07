@@ -626,6 +626,13 @@ If there is no process running or the process is not fuse_kafka, the
 .pid will be deleted.
 
 
+Queue
+=====
+
+When the output plugin is not initialized, some events may be lost.
+A queue was added to store events and to send them as soon as
+the output gets initialized (see queue.c and output_write in output.c).
+
 Windows (mingw)
 ===============
 

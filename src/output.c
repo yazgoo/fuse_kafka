@@ -132,13 +132,11 @@ void output_write(const char *prefix, const char *path, char *buf,
 {
     if(ready_to_write())
     {
-        trace_debug("output_write: calling events_dequeue");
         events_dequeue(output_write_without_queue);
         output_write_without_queue(prefix, path, buf, size, offset);
     }
     else
     {
-        trace_debug("output_write: calling events_enqueue with %s", path);
         event_enqueue((char*) prefix, (char*) path, buf, size, offset);
     }
 }
