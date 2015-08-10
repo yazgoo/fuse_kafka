@@ -122,6 +122,12 @@ void set_timezone(char* timestamp, int minutes)
     timestamp[27] += mins%10;
 }
 #endif
+void set_usec(char* timestamp, suseconds_t usec)
+{
+    timestamp[22] = '0' + usec % 10;
+    timestamp[21] = '0' + (usec % 100) / 10;
+    timestamp[20] = '0' + (usec % 1000) / 100;
+}
 /**
  * @brief get a string representing the time in ISO8601 format
  * @param timestamp string to set to the given time
@@ -145,6 +151,7 @@ void set_timestamp(char* timestamp)
     tmp = &tm;
 #endif
     size_t size = strftime(timestamp, strlen(timestamp), "%Y-%m-%dT%H:%M:%S.000" TZ, tmp);
+    set_usec(timestamp, tv.tv_usec);
 #ifdef MINGW_VER
     set_timezone(timestamp, tz.tz_minuteswest);
 #endif
