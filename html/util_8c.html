@@ -120,6 +120,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>touch</b> (char *path,
 int *&#160;</td><td class="memItemRight" valign="bottom"><b>get_command_line_size</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#ad0e8a9673662b67246c1af0ce7e7b06c">get_command_line</a> (int pid)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get the command line corresponding to a process  <a href="#ad0e8a9673662b67246c1af0ce7e7b06c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a40737bf0cbc3f6d71cdaa1947014b9bf"></a><!-- doxytag: member="util.c::set_usec" ref="a40737bf0cbc3f6d71cdaa1947014b9bf" args="(char *timestamp, suseconds_t usec)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_usec</b> (char *timestamp, suseconds_t usec)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#a9cc3c9ae892455a66de3012f5b6fb8e0">set_timestamp</a> (char *timestamp)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get a string representing the time in ISO8601 format  <a href="#a9cc3c9ae892455a66de3012f5b6fb8e0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="util_8c.html#adb849059403e0b01c44605d63d205daa">get_limit</a> (int argc, char **argv)</td></tr>
@@ -177,7 +179,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
     seteuid(__uid); \
     setegid(__gid);
 </pre></div>
-<p>Definition at line <a class="el" href="util_8c_source.html#l00320">320</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00327">327</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -247,7 +249,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <div class="memdoc">
 <dl class="return"><dt><b>Returns:</b></dt><dd>null if a or b is null, a + "/" + b otherwise </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00272">272</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00279">279</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -307,7 +309,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 <p>look for the limit "--" in argv  argument number  arguments </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the index of the limit, argc if it is not found </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00211">211</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00218">218</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -335,7 +337,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>void </dd></dl>
 
-<p>Definition at line <a class="el" href="util_8c_source.html#l00130">130</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
+<p>Definition at line <a class="el" href="util_8c_source.html#l00136">136</a> of file <a class="el" href="util_8c_source.html">util.c</a>.</p>
 
 </div>
 </div>
@@ -357,7 +359,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>mkdir_p</b> (c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Aug 10 2015 12:22:57 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 10 2015 15:08:15 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
