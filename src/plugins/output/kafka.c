@@ -116,6 +116,7 @@ int output_send(kafka_t* k, char* buf, size_t len)
     /*trace_debug("%% Sent %zd bytes to topic "
             "%s\n", len, k ==  0 || k->rkt <= (void*) 2 ?
             0 : rd_kafka_topic_name(k->rkt));*/
+    if(k != 0 && k->rk != 0) rd_kafka_poll(k->rk, 0);
     /*if((r = rd_kafka_poll(k->rk, 10)) != 1)
         printf("============= rd_kafka_poll: failed %d\n", r);*/
     /*while(rd_kafka_poll(k->rk, 1000) != -1)
