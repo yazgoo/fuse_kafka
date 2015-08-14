@@ -298,7 +298,6 @@ def package():
     name = binary_name + "-" + get_version()
     tar = "../" + name + ".tar.gz"
     run("tar", "--transform", "s,^.," + name + ",",
-            "--exclude=.git", 
             "--exclude=.nfs*",
             "--exclude=out", "-czf", tar , ".")
 def rpm():
