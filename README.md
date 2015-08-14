@@ -730,6 +730,13 @@ Tagging
     fuse_kafka-0.1.4-20.1.x86_64.rpm will have a tag 0.1.4-20 (20 being the release number)
 
 
+Version
+=======
+
+To get the version of fuse_kafka you're running, just issue a:
+
+    fuse_kafka -- --version
+
 Code of conduct
 ===============
 

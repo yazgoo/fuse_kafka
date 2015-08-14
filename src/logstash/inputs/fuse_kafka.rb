@@ -48,6 +48,12 @@ class LogStash::Inputs::Kafka < LogStash::Inputs::Base
             raise e
         end
     end
+    def decode packet
+        packet.message.length.times do |i|
+            packet.message[i] = ((packet.message[i] ^ 0xff %  2**7) + 2**7 - 1) - 2**7 
+        end if packet.message[0] != '{'
+        String.from_java_bytes(packet.message)
+    end
     public
     def run queue
         threads = []
@@ -55,7 +61,7 @@ class LogStash::Inputs::Kafka < LogStash::Inputs::Base
             threads << Thread.new do
                 stream.each do |packet|
                     begin
-                        json = String.from_java_bytes(packet.message).gsub("\n", "\n").gsub("\t", "\t")
+                        json = decode(packet).gsub("\n", "\n").gsub("\t", "\t")
                         hash = ::JSON.parse(json)
                         {"command" => [">=0.1.2"], "@message" => [">=0.1.2", "0.2"]}.each do |f, vs|
                             if vs.collect { |x| Gem::Dependency.new("", x).match? "", hash["@version"] }.reduce { |x, y| x | y }

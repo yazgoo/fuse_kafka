@@ -72,6 +72,11 @@ int parse_arguments(int argc, char** argv, config* conf)
             else CONFIG_CURRENT(encoder)
             else CONFIG_CURRENT(debug)
             else CONFIG_CURRENT(log)
+            else if(!strcmp(name, "version"))
+            {
+                printf("fuse_kafka " VERSION ", commit " COMMIT "\n") ;
+                return 0;
+            }
             else
             {
                 printf("unknown option %s\n", argv[i]);
@@ -87,4 +92,3 @@ int parse_arguments(int argc, char** argv, config* conf)
     add_fields_and_tags(conf);
     return 1;
 }
-

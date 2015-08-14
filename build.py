@@ -84,7 +84,7 @@ if "LIBS" in os.environ:
     default_libs += additional_libs
     libs += additional_libs
 plugins = Plugins(cc)
-flags = ['-D_FILE_OFFSET_BITS=64']
+flags = ['-D_FILE_OFFSET_BITS=64', '-DCOMMIT="' + os.popen("git log --format=%H -n 1").read().rstrip() + '"']
 if "CFLAGS" in os.environ:
     flags = os.environ["CFLAGS"].split() + flags
 test_flags = ['-fprofile-arcs', '-ftest-coverage', '-DTEST="out"']
