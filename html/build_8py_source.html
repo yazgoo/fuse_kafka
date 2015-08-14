@@ -167,7 +167,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00084"></a>00084     default_libs += additional_libs
 <a name="l00085"></a>00085     libs += additional_libs
 <a name="l00086"></a>00086 plugins = <a class="code" href="classbuild_1_1Plugins.html">Plugins</a>(cc)
-<a name="l00087"></a>00087 flags = [<span class="stringliteral">&#39;-D_FILE_OFFSET_BITS=64&#39;</span>]
+<a name="l00087"></a>00087 flags = [<span class="stringliteral">&#39;-D_FILE_OFFSET_BITS=64&#39;</span>, <span class="stringliteral">&#39;-DCOMMIT=&quot;&#39;</span> + os.popen(<span class="stringliteral">&quot;git log --format=%H -n 1&quot;</span>).read().rstrip() + <span class="stringliteral">&#39;&quot;&#39;</span>]
 <a name="l00088"></a>00088 <span class="keywordflow">if</span> <span class="stringliteral">&quot;CFLAGS&quot;</span> <span class="keywordflow">in</span> os.environ:
 <a name="l00089"></a>00089     flags = os.environ[<span class="stringliteral">&quot;CFLAGS&quot;</span>].split() + flags
 <a name="l00090"></a>00090 test_flags = [<span class="stringliteral">&#39;-fprofile-arcs&#39;</span>, <span class="stringliteral">&#39;-ftest-coverage&#39;</span>, <span class="stringliteral">&#39;-DTEST=&quot;out&quot;&#39;</span>]
@@ -996,7 +996,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 14 2015 11:20:38 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 14 2015 14:39:14 for fuse_kafka by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
