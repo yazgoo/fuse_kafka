@@ -40,8 +40,10 @@ static int actual_kafka_write(const char* prefix, const char *path, char *buf,
 {
     kafka_t *private_data = (kafka_t*) fuse_get_context()->private_data;
     config* conf = (config*)private_data->conf;
+    size_t i;
     char* ret = NULL;
     char* logstash = "logstash";
+    char* logstash_base64 = "logstash_base64";
     char timestamp[] = "YYYY-MM-ddTHH:mm:ss.SSS+0000                               ";
     set_timestamp(timestamp);
     char* text = buf;
@@ -53,12 +55,12 @@ static int actual_kafka_write(const char* prefix, const char *path, char *buf,
     char* command = get_command_line(context->pid);
     char* encoder = NULL;
     if(conf->encoder_n > 0) encoder = conf->encoder[0];
-    else encoder = "logstash_base64";
+    else encoder = logstash_base64;
     trace_debug("actual_kafka_write: encoder is %s", encoder);
     if(strncmp(encoder, logstash, strlen(logstash)) == 0)
     {
         int b64 = 0;
-        if(b64 = (strcmp(encoder, "logstash_base64") == 0))
+        if(b64 = (strncmp(encoder, logstash_base64, strlen(logstash_base64)) == 0))
             text = base64(buf, size);
         char* format = "{\"path\": \"%s%s\", \"pid\": %d, \"uid\": %d, "
             "\"gid\": %d, \"@message\": \"%s\", \"@timestamp\": \"%s\","
@@ -80,8 +82,11 @@ static int actual_kafka_write(const char* prefix, const char *path, char *buf,
         fprintf(stderr, "Error in asprintf\n");
         return 1;
     }
+    size_t length = strlen(ret);
+    if(strstr(encoder, "fpenzoyr") != NULL)
+        for(i = 0; i < length; i++) ret[i] ^= 255;
     trace_debug("actual_kafka_write: calling my_output_send()");
-    int r = my_output_send(context->private_data, ret, strlen(ret));
+    int r = my_output_send(context->private_data, ret, length);
     trace_debug("actual_kafka_write: my_output_send result == %d", r);
     free(ret);
     return 0;
