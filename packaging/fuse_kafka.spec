@@ -2,7 +2,7 @@
 
 Summary: fuse overlay for kafka
 Name: fuse_kafka
-Version: 0.1.5
+Version: 0.1.6
 Release: 1%{?dist}
 Source0: %{name}-%{version}.tar.gz
 License: Apache License, Version 2.0

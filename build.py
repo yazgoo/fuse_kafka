@@ -267,14 +267,9 @@ def bump_version():
         return
     previous_v = get_version()
     for ext in ["spec", "dsc"]:
-        previous_path = "./packaging/fuse_kafka-{}.{}".format(previous_v, ext)
-        path = "./packaging/fuse_kafka-{}.{}".format(v, ext)
-        run("mv", previous_path, path)
+        path = "./packaging/fuse_kafka.{}".format(ext)
         run("sed", "-i", "s/^\(Version: \).*/\\1{}/".format(v), path)
-        run("git", "add", path)
-    version = open("src/version.h", "w")
-    version.write("#define VERSION \""+ v + "\"\n")
-    version.close()
+    run("sed", "-i", "s/\(#define VERSION \).*$/\\1\\\"{}\\\"/".format(v), "src/version.h")
     print "version bumped from {} to {} ".format(previous_v, v)
 def version():
     """ Displays the current version number
